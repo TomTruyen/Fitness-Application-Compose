@@ -6,10 +6,12 @@ plugins {
 }
 
 sonarqube {
-    properties { 
+    properties {
         property("sonar.projectKey", "tom-truyen_fitness-application")
         property("sonar.organization", "tom-truyen")
         property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.language", "kotlin")
+        property("sonar.sources", "app/src/")
     }
 }
 
