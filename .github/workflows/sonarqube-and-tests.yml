@@ -38,6 +38,4 @@ jobs:
     - name: SonarQube Scan
       env:
         SONAR_TOKEN: ${{ secrets.SONARQUBE_AUTH_TOKEN }}
-      with:
-        projectBaseDir: app/src
       run: ./gradlew build sonar --info
