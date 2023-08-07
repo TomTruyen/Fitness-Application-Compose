@@ -2,7 +2,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.sonarqube) apply false
+    alias(libs.plugins.sonarqube)
 }
 
 sonarqube {
