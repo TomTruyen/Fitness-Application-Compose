@@ -31,5 +31,5 @@ leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", v
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-sonarqube = { id = org.sonarqube, version.ref = "sonarqube" }
+sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 
