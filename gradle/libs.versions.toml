@@ -9,6 +9,7 @@ lifecycle-runtime-ktx = "2.6.1"
 activity-compose = "1.7.2"
 compose-bom = "2023.06.01"
 leakcanary = "2.12"
+sonarqube = "4.2.1.3168"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -30,4 +31,5 @@ leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", v
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+sonarqube = { id = org.sonarqube, version.ref = "sonarqube" }
 

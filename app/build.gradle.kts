@@ -2,6 +2,15 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.sonarqube) apply false
+}
+
+sonar {
+    properties { 
+        property("sonar.projectKey", "tom-truyen_fitness-application")
+        property("sonar.organization", "tom-truyen")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
 }
 
 android {
