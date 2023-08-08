@@ -33,6 +33,4 @@ jobs:
       uses: jinguji/sonarcloud-gradle-github-action@v2
       with:
         sonar-token: ${{ secrets.SONAR_TOKEN }}
-        sonar-organization: 'tom-truyen'
-        sonar-project-key: 'tom-truyen_fitness-application'
         gradle-cli-opts: '--info'

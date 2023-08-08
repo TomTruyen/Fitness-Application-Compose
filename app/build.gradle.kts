@@ -2,18 +2,15 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
-//    alias(libs.plugins.sonarqube)
+    alias(libs.plugins.sonarqube)
 }
 
-//sonarqube {
-//    properties {
-//        property("sonar.projectKey", "tom-truyen_fitness-application")
-//        property("sonar.organization", "tom-truyen")
-//        property("sonar.host.url", "https://sonarcloud.io")
-//        property("sonar.language", "kotlin")
-//        property("sonar.sources", "src/main/")
-//    }
-//}
+sonarqube {
+    properties {
+        property("sonar.projectKey", "tom-truyen_fitness-application")
+        property("sonar.organization", "tom-truyen")
+    }
+}
 
 android {
     namespace = "com.tomtruyen.fitnessapplication"
