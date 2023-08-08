@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.sonarqube)
 }
 
-sonarqube {
+sonar {
     properties {
         property("sonar.projectKey", "tom-truyen_fitness-application")
         property("sonar.organization", "tom-truyen")
