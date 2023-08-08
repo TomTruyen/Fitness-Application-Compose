@@ -29,14 +29,10 @@ jobs:
     - name: Build and run tests
       run: ./gradlew test
     
-    - name: Cache SonarCloud packages
-      uses: actions/cache@v3
+    - name: SonarCloud Scan
+      uses: jinguji/sonarcloud-gradle-github-action@v2
       with:
-        path: ~/.sonar/cache
-        key: ${{ runner.os }}-sonar
-        restore-keys: ${{ runner.os }}-sonar
-
-    - name: SonarQube Scan
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: ./gradlew build sonar --info
+        sonar-token: ${{ secrets.SONAR_TOKEN }}
+        sonar-organization: 'tom-truyen'
+        sonar-project-key: 'tom-truyen_fitness-application'
+        gradle-cli-opts: '--info'
