@@ -12,6 +12,8 @@ leakcanary = "2.12"
 sonarqube = "4.2.1.3168"
 koin-android-compose = "3.4.6"
 koin-test-junit = "3.4.3"
+google-services = "4.3.15"
+firebase-bom = "32.2.2"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -31,9 +33,15 @@ material3 = { group = "androidx.compose.material3", name = "material3" }
 leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
 koin = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin-android-compose" }
 koin-test-junit = { group = "io.insert-koin", name = "koin-test-junit4", version.ref = "koin-test-junit" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth-ktx" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore-ktx" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "google-services" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 

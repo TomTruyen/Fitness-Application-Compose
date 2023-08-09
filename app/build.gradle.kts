@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.sonarqube)
+    alias(libs.plugins.googleServices)
 }
 
 sonar {
@@ -11,6 +12,13 @@ sonar {
         property("sonar.organization", "tom-truyen")
         property("sonar.host.url", "https://sonarcloud.io")
     }
+}
+
+// Signing Configuration for Keystore
+if(file(rootProject.projectDir.absolutePath + "/signing.gradle").exists()) {
+    apply(
+        from = rootProject.projectDir.absolutePath + "/signing.gradle"
+    )
 }
 
 android {
@@ -31,7 +39,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            signingConfig = signingConfigs["release"]
+        }
+
         release {
+            signingConfig = signingConfigs["release"]
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
@@ -57,6 +70,7 @@ android {
 }
 
 dependencies {
+    // Compose + Material3
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
@@ -65,16 +79,28 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+
+    // Koin
     implementation(libs.koin)
 
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.crashlytics)
+
+    // Unit Testing
     testImplementation(libs.junit)
     testImplementation(libs.koin.test.junit)
 
+    // Android Testing
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
 
+    // Debug Only
     debugImplementation(libs.leakcanary)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
