@@ -1,24 +1,47 @@
 package com.tomtruyen.fitnessapplication.repositories
 
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.tomtruyen.fitnessapplication.extensions.handleCompletionResult
+import com.tomtruyen.fitnessapplication.helpers.ContextProvider
+import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 
-class UserRepositoryImpl: UserRepository {
+class UserRepositoryImpl(
+    contextProvider: ContextProvider
+): UserRepository {
+    private val context = contextProvider.context
+
     private val auth = Firebase.auth
-    override fun login() {
-        TODO("Not yet implemented")
+    override fun login(email: String, password: String, callback: FirebaseCallback<FirebaseUser?>) {
+        auth.signInWithEmailAndPassword(email, password)
+            .handleCompletionResult(context, callback) { result ->
+                callback.onSuccess(result.user)
+            }
     }
 
-    override fun register() {
-        TODO("Not yet implemented")
+    override fun register(email: String, password: String, callback: FirebaseCallback<FirebaseUser?>) {
+        auth.createUserWithEmailAndPassword(email, password)
+            .handleCompletionResult(context, callback) { result ->
+                callback.onSuccess(result.user)
+            }
     }
 
-    override fun loginWithGoogle() {
-        TODO("Not yet implemented")
+    override fun loginWithGoogle(idToken: String, callback: FirebaseCallback<FirebaseUser?>) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .handleCompletionResult(context, callback) { result ->
+                callback.onSuccess(result.user)
+            }
     }
 
     override fun logout() {
         auth.signOut()
     }
+
+    override fun isLoggedIn() = auth.currentUser != null
+
+    override fun getUser() = auth.currentUser
 }

@@ -89,6 +89,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.crashlytics)
+    implementation(libs.play.services.auth)
 
     // Unit Testing
     testImplementation(libs.junit)
