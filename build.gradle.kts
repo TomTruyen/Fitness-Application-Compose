@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid) apply false
     alias(libs.plugins.googleServices) apply false
     alias(libs.plugins.secretsGradle) apply false
+    alias(libs.plugins.crashlytics) apply false
 }
 
 true // Needed to make the Suppress annotation work for the plugins block

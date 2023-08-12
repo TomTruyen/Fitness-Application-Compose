@@ -15,5 +15,5 @@ object GoogleSignInHelper {
                 .setServerClientId(BuildConfig.GOOGLE_SERVER_CLIENT_ID)
                 .setFilterByAuthorizedAccounts(false)
                 .build()
-        )
+        ).build()
 }

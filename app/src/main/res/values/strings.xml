@@ -1,11 +1,25 @@
 <resources>
     <string name="app_name">Fitness Application</string>
 
+    <!-- Errors -->
     <string name="error_weak_password">Password is too weak</string>
     <string name="error_wrong_credentials">Invalid credentials</string>
     <string name="error_email_already_exists">Email is already used</string>
-    <string name="error_google_sign_in_cancelled">Google sign in cancelled</string>
     <string name="error_invalid_email">Email is invalid</string>
     <string name="error_required">This field is required</string>
     <string name="error_passwords_match">Passwords don\'t match</string>
+    <string name="error_google_sign_in_failed">Google sign in failed</string>
+
+    <!-- Content Descriptions -->
+    <string name="content_description_hide_password">Hide password</string>
+    <string name="content_description_show_password">Show password</string>
+
+    <!-- App Content -->
+    <string name="title_login">Welcome back!</string>
+    <string name="subtitle_login">Sign in to continue on your path</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="login">Sign in</string>
+    <string name="button_login_google">Sign in with Google</string>
+    <string name="need_account">Need an account?</string>
 </resources>
