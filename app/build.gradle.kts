@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.sonarqube)
     alias(libs.plugins.googleServices)
+    alias(libs.plugins.secretsGradle)
     alias(libs.plugins.ksp)
 }
 
@@ -24,12 +25,12 @@ if(file(rootProject.projectDir.absolutePath + "/signing.gradle").exists()) {
 
 android {
     namespace = "com.tomtruyen.fitnessapplication"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.tomtruyen.fitnessapplication"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -59,9 +60,10 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
     packaging {
         resources {

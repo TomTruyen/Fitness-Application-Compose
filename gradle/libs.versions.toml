@@ -1,6 +1,6 @@
 [versions]
 agp = "8.2.0-alpha15"
-kotlin = "1.8.10"
+kotlin = "1.9.0"
 core-ktx = "1.10.1"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
@@ -15,8 +15,9 @@ koin-test-junit = "3.4.3"
 google-services = "4.3.15"
 firebase-bom = "32.2.2"
 play-services-auth = "20.6.0"
-ksp = "1.8.20-1.0.10"
+ksp = "1.9.0-1.0.13"
 raamcosta-compose-destinations = "1.9.51"
+secrets-gradle = "2.0.1"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -51,3 +52,4 @@ kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "google-services" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+secretsGradle = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets-gradle" }

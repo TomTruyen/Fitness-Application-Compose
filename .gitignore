@@ -294,3 +294,6 @@ obj/
 # Ignore Keystore + Credentials
 signing.gradle
 key.jks
+
+# Ignore Local Properties
+local.properties
