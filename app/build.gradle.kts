@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.sonarqube)
     alias(libs.plugins.googleServices)
+    alias(libs.plugins.ksp)
 }
 
 sonar {
@@ -90,6 +91,10 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.crashlytics)
     implementation(libs.play.services.auth)
+
+    // Raamcosta Compose Navigation
+    implementation(libs.raamcosta.compose.destinations)
+    ksp(libs.raamcosta.compose.destinations.ksp)
 
     // Unit Testing
     testImplementation(libs.junit)

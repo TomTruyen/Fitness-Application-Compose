@@ -15,6 +15,8 @@ koin-test-junit = "3.4.3"
 google-services = "4.3.15"
 firebase-bom = "32.2.2"
 play-services-auth = "20.6.0"
+ksp = "1.8.20-1.0.10"
+raamcosta-compose-destinations = "1.9.51"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -40,10 +42,12 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth-ktx" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore-ktx" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-services-auth" }
+raamcosta-compose-destinations = { group = "io.github.raamcosta.compose-destinations", name = "animations-core", version.ref = "raamcosta-compose-destinations" }
+raamcosta-compose-destinations-ksp = { group = "io.github.raamcosta.compose-destinations", name = "ksp", version.ref = "raamcosta-compose-destinations" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "google-services" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
-
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
