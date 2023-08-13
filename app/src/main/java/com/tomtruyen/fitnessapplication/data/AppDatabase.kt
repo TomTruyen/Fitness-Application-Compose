@@ -5,9 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.tomtruyen.fitnessapplication.R
+import com.tomtruyen.fitnessapplication.data.entities.Exercise
 
 @Database(
-    entities = [],
+    entities = [Exercise::class],
     version = 1,
     exportSchema = false
 )

@@ -86,6 +86,9 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.material.icons.extended)
 
+    // Gson
+    implementation(libs.gson)
+
     // Koin
     implementation(libs.koin)
 
