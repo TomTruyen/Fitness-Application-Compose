@@ -19,6 +19,9 @@ val appModule = module {
     // Database
     single { AppDatabase.createDatabase(androidContext()) }
 
+    // Dao
+    single { get<AppDatabase>().exerciseDao() }
+
     // Repositories
     single<UserRepository> { UserRepositoryImpl(get()) }
 
