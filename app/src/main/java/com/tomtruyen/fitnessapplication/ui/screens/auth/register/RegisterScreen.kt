@@ -111,13 +111,13 @@ fun RegisterScreenLayout(
         snackbarHost = snackbarHost
     ) {
         BoxWithLoader(
-            loading = loading
+            loading = loading,
+            modifier = Modifier.padding(it)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .padding(it)
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
                     .padding(Dimens.Normal)

@@ -6,20 +6,28 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = Exercise.TABLE_NAME)
 data class Exercise(
-    @PrimaryKey val id: String,
-    val name: String,
-    val category: String,
-    val equipment: String,
-    val image: String?,
+    @PrimaryKey var id: String = "",
+    var name: String = "",
+    var category: String = "",
+    var equipment: String? = null,
+    var image: String? = null,
     @SerializedName("image_detail")
-    val imageDetail: String?,
-    val type: String
+    var imageDetail: String? = null,
+    var type: String = ExerciseType.WEIGHT.value,
+    var isUserCreated: Boolean = false
 ) {
-    enum class Type {
-        @SerializedName("weight")
-        WEIGHT,
-        @SerializedName("time")
-        TIME
+    val displayName get() = buildString {
+        append(name)
+        if(!equipment.isNullOrBlank()) {
+            append(" ($equipment)")
+        }
+    }
+
+    val typeEnum get() = ExerciseType.values().firstOrNull { it.value == type } ?: ExerciseType.WEIGHT
+
+    enum class ExerciseType(val value: String) {
+        WEIGHT("weight"),
+        TIME("time")
     }
     companion object {
         const val TABLE_NAME = "exercises"

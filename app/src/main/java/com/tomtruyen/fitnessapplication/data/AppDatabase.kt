@@ -15,12 +15,4 @@ import com.tomtruyen.fitnessapplication.data.entities.Exercise
 )
 abstract class AppDatabase: RoomDatabase() {
     abstract fun exerciseDao(): ExerciseDao
-
-    companion object {
-        fun createDatabase(context: Context) = Room.databaseBuilder(
-            context,
-            AppDatabase::class.java,
-            name = context.getString(R.string.app_name)
-        ).build()
-    }
 }

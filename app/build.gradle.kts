@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.secretsGradle)
     alias(libs.plugins.ksp)
     alias(libs.plugins.crashlytics)
+    alias(libs.plugins.kapt)
 }
 
 sonar {
@@ -102,7 +103,7 @@ dependencies {
 
     // Room
     implementation(libs.room)
-    annotationProcessor(libs.room.compiler)
+    kapt(libs.room.compiler)
 
     // Raamcosta Compose Navigation
     implementation(libs.raamcosta.compose.destinations)

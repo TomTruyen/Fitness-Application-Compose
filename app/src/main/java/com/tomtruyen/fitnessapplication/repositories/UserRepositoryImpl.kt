@@ -11,7 +11,7 @@ import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 
 class UserRepositoryImpl(
     contextProvider: ContextProvider,
-): UserRepository {
+): UserRepository() {
     private val context = contextProvider.context
 
     private val auth = Firebase.auth

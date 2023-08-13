@@ -50,7 +50,7 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-services-auth" }
 raamcosta-compose-destinations = { group = "io.github.raamcosta.compose-destinations", name = "animations-core", version.ref = "raamcosta-compose-destinations" }
 raamcosta-compose-destinations-ksp = { group = "io.github.raamcosta.compose-destinations", name = "ksp", version.ref = "raamcosta-compose-destinations" }
-room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
@@ -62,3 +62,4 @@ crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlyti
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 secretsGradle = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets-gradle" }
+kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
