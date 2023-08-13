@@ -5,14 +5,11 @@ import com.ramcosta.composedestinations.spec.Direction
 
 fun NavController.navigateAndClearBackStack(
     destination: Direction,
+    popUpTo: Direction,
 ) {
-    val currentDestination = currentDestination?.route
-
     navigate(destination.route) {
-        currentDestination?.let {
-            popUpTo(it) {
-                inclusive = true
-            }
+        popUpTo(popUpTo.route) {
+            inclusive = true
         }
     }
 }

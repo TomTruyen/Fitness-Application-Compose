@@ -46,7 +46,10 @@ class MainActivity : ComponentActivity() {
 
                 LaunchedEffect(Unit) {
                     if(userRepository.isLoggedIn()) {
-                        navController.navigateAndClearBackStack(WorkoutOverviewScreenDestination)
+                        navController.navigateAndClearBackStack(
+                            destination = WorkoutOverviewScreenDestination,
+                            popUpTo = LoginScreenDestination
+                        )
                     }
                 }
 

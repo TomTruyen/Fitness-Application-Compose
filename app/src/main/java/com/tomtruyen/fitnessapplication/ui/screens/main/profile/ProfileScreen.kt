@@ -18,14 +18,11 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.extensions.navigateAndClearBackStack
-import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
-import com.tomtruyen.fitnessapplication.ui.screens.auth.login.LoginUiEvent
-import com.tomtruyen.fitnessapplication.ui.screens.auth.login.LoginUiState
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.LoginScreenDestination
+import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutOverviewScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
-import org.koin.java.KoinJavaComponent.inject
 
 @RootNavGraph
 @Destination
@@ -42,7 +39,10 @@ fun ProfileScreen(
         viewModel.navigation.collectLatest { navigationType ->
             when(navigationType) {
                 is ProfileNavigationType.Logout -> {
-                    navController.navigateAndClearBackStack(LoginScreenDestination)
+                    navController.navigateAndClearBackStack(
+                        destination = LoginScreenDestination,
+                        popUpTo = WorkoutOverviewScreenDestination
+                    )
                 }
             }
         }
