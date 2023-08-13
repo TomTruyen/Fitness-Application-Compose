@@ -10,7 +10,7 @@ import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 
 class UserRepositoryImpl(
-    contextProvider: ContextProvider
+    contextProvider: ContextProvider,
 ): UserRepository {
     private val context = contextProvider.context
 

@@ -97,6 +97,10 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.play.services.auth)
 
+    // Room
+    implementation(libs.room)
+    annotationProcessor(libs.room.compiler)
+
     // Raamcosta Compose Navigation
     implementation(libs.raamcosta.compose.destinations)
     ksp(libs.raamcosta.compose.destinations.ksp)

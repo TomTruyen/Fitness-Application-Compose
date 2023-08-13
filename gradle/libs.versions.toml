@@ -19,6 +19,7 @@ play-services-auth = "20.6.0"
 ksp = "1.9.0-1.0.13"
 raamcosta-compose-destinations = "1.9.51"
 secrets-gradle = "2.0.1"
+room = "2.5.2"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -48,6 +49,8 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-services-auth" }
 raamcosta-compose-destinations = { group = "io.github.raamcosta.compose-destinations", name = "animations-core", version.ref = "raamcosta-compose-destinations" }
 raamcosta-compose-destinations-ksp = { group = "io.github.raamcosta.compose-destinations", name = "ksp", version.ref = "raamcosta-compose-destinations" }
+room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
