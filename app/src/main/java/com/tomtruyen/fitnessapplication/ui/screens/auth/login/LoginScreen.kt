@@ -62,16 +62,10 @@ fun LoginScreen(
         viewModel.navigation.collectLatest { navigationType ->
             when(navigationType) {
                 is LoginNavigationType.Home -> {
-                    navController.navigateAndClearBackStack(
-                        destination = WorkoutOverviewScreenDestination,
-                        popUntilDestination = LoginScreenDestination
-                    )
+                    navController.navigateAndClearBackStack(WorkoutOverviewScreenDestination)
                 }
                 is LoginNavigationType.Register -> {
-                    navController.navigateAndClearBackStack(
-                        destination = RegisterScreenDestination,
-                        popUntilDestination = LoginScreenDestination
-                    )
+                    navController.navigateAndClearBackStack(RegisterScreenDestination)
                 }
             }
         }
