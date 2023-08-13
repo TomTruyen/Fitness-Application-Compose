@@ -2,7 +2,9 @@ package com.tomtruyen.fitnessapplication.di
 
 import com.tomtruyen.fitnessapplication.data.AppDatabase
 import com.tomtruyen.fitnessapplication.helpers.ContextProvider
+import com.tomtruyen.fitnessapplication.repositories.ExerciseRepositoryImpl
 import com.tomtruyen.fitnessapplication.repositories.UserRepositoryImpl
+import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import com.tomtruyen.fitnessapplication.ui.screens.auth.login.LoginViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.auth.register.RegisterViewModel
@@ -24,6 +26,7 @@ val appModule = module {
 
     // Repositories
     single<UserRepository> { UserRepositoryImpl(get()) }
+    single<ExerciseRepository> { ExerciseRepositoryImpl(get()) }
 
     // ViewModels
     viewModelOf(::LoginViewModel)
