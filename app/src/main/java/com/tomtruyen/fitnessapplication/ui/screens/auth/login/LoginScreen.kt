@@ -54,7 +54,7 @@ fun LoginScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val loading by viewModel.loading.collectAsStateWithLifecycle()
 
-    LaunchedEffect(state) {
+    LaunchedEffect(state.email) {
         state.validateEmail(context)
     }
 
@@ -188,7 +188,8 @@ fun LoginScreenLayout(
                     enabled = !loading,
                     onClick = {
                         onEvent(LoginUiEvent.OnRegisterClicked)
-                    }
+                    },
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
