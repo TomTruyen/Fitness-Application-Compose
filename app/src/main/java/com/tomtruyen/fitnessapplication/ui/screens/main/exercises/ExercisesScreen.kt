@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -160,7 +161,15 @@ fun ExercisesScreenLayout(
                     Column(
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        ExerciseListItem(exercise)
+                        if(index == 0) {
+                            Divider(
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
+                            )
+                        }
+
+                        ExerciseListItem(exercise) {
+
+                        }
 
                         if(index < exercises.lastIndex) {
                             Divider(
@@ -175,10 +184,13 @@ fun ExercisesScreenLayout(
 }
 
 @Composable
-fun ExerciseListItem(exercise: Exercise) {
+fun ExerciseListItem(exercise: Exercise, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable {
+                onClick()
+            }
             .padding(Dimens.Normal),
         verticalAlignment = Alignment.CenterVertically
     ) {
