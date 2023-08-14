@@ -36,7 +36,13 @@ object Buttons {
             onClick = onClick,
             enabled = enabled,
             shape = shape,
-            modifier = modifier
+            modifier = modifier,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                disabledContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f)
+            )
         ) {
             Text(
                 text = text
