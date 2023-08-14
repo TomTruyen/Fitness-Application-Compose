@@ -113,8 +113,16 @@ fun ExerciseListItem(exercise: Exercise) {
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            Text(text = exercise.displayName)
-            Text(text = exercise.category)
+            Text(
+                text = exercise.displayName,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Text(
+                text = exercise.category,
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                ),
+            )
         }
 
         Icon(
