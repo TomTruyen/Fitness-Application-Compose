@@ -13,6 +13,7 @@
     <!-- Content Descriptions -->
     <string name="content_description_hide_password">Hide password</string>
     <string name="content_description_show_password">Show password</string>
+    <string name="content_description_back">Back</string>
 
     <!-- Bottom Navigation -->
     <string name="workouts">Workouts</string>
@@ -32,5 +33,6 @@
     <string name="subtitle_register">Create an account to get started</string>
     <string name="register">Sign up</string>
     <string name="have_an_account">Already have an account?</string>
-    <string name="logout">Logout</string>\
+    <string name="logout">Logout</string>
+
 </resources>

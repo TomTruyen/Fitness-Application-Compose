@@ -8,13 +8,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,16 +31,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.ui.screens.auth.login.LoginUiEvent
 import com.tomtruyen.fitnessapplication.ui.screens.auth.login.LoginUiState
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
+import com.tomtruyen.fitnessapplication.ui.shared.CollapsingToolbar
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
@@ -59,6 +71,7 @@ fun ExercisesScreen(
 
     ExercisesScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
+        navController = navController,
         state = state,
         exercises = exercises,
         loading = loading,
@@ -66,23 +79,36 @@ fun ExercisesScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExercisesScreenLayout(
     snackbarHost: @Composable () -> Unit,
+    navController: NavController,
     state: ExercisesUiState,
     exercises: List<Exercise>,
     loading: Boolean,
     onEvent: (ExercisesUiEvent) -> Unit
 ) {
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
     Scaffold(
-        snackbarHost = snackbarHost
+        snackbarHost = snackbarHost,
+        topBar = {
+            CollapsingToolbar(
+                title = stringResource(id = R.string.exercises),
+                navController = navController,
+                scrollBehavior = scrollBehavior
+            )
+        },
+        // nestedScroll modifier is required for the scroll behavior to work
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
         BoxWithLoader(
             loading = loading,
             modifier = Modifier.padding(it)
         ) {
             LazyColumn(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             ) {
                 itemsIndexed(exercises) { index, exercise ->
                     Column(
