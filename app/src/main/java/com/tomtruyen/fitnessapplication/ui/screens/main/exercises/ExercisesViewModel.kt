@@ -39,6 +39,7 @@ class ExercisesViewModel(
             is ExercisesUiEvent.OnToggleSearch -> state.value = state.value.copy(
                 searching = !state.value.searching
             )
+            is ExercisesUiEvent.OnAddClicked -> navigate(ExercisesNavigationType.Add)
             is ExercisesUiEvent.OnSearchQueryChanged -> state.value = state.value.copy(
                 search = event.query
             )
