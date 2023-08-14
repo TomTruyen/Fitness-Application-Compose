@@ -85,7 +85,7 @@ object SocialButtons {
                 .padding(top = Dimens.Tiny)
                 .clip(MaterialTheme.shapes.medium),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White
+                containerColor = MaterialTheme.colorScheme.onBackground
             )
         ) {
             Image(
@@ -97,7 +97,7 @@ object SocialButtons {
             Text(
                 text = text,
                 style = TextStyle(
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.background
                 )
             )
         }

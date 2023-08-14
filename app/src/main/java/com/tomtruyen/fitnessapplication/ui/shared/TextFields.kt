@@ -37,9 +37,9 @@ object TextFields {
         search: Boolean = false,
         keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
         colors: TextFieldColors = TextFieldDefaults.colors(
-            focusedContainerColor = ChineseWhite,
-            unfocusedContainerColor = ChineseWhite,
-            errorContainerColor = ChineseWhite,
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            errorContainerColor = MaterialTheme.colorScheme.surface,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             errorIndicatorColor = Color.Transparent,
