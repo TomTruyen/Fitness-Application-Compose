@@ -1,18 +1,23 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Divider
@@ -35,6 +40,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.annotation.Destination
@@ -47,6 +53,7 @@ import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesFilterScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.CollapsingToolbar
+import com.tomtruyen.fitnessapplication.ui.shared.ExerciseFilterChip
 import com.tomtruyen.fitnessapplication.ui.shared.SearchToolbar
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 import kotlinx.coroutines.flow.collectLatest
@@ -171,27 +178,57 @@ fun ExercisesScreenLayout(
             loading = loading,
             modifier = Modifier.padding(it)
         ) {
-            LazyColumn(
+            Column(
                 modifier = Modifier.fillMaxSize(),
             ) {
-                itemsIndexed(exercises) { index, exercise ->
-                    Column(
+                if(state.filter.categories.isNotEmpty() || state.filter.equipment.isNotEmpty()) {
+                    LazyRow(
                         modifier = Modifier.fillMaxWidth()
+                            .padding(bottom = Dimens.Tiny),
+                        horizontalArrangement = Arrangement.spacedBy(Dimens.Small)
                     ) {
-                        if(index == 0) {
-                            Divider(
-                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
-                            )
+                        itemsIndexed(state.filter.categories + state.filter.equipment) { index, filter ->
+                            ExerciseFilterChip(
+                                modifier = Modifier.padding(start = if(index == 0) Dimens.Normal else 0.dp),
+                                text = filter,
+                                selected = true,
+                                trailingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Filled.Clear,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onTertiary,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+                            ) {
+                                onEvent(ExercisesUiEvent.OnRemoveFilterClicked(filter))
+                            }
                         }
+                    }
+                }
 
-                        ExerciseListItem(exercise) {
+                LazyColumn(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    itemsIndexed(exercises) { index, exercise ->
+                        Column(
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            if (index == 0) {
+                                Divider(
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
+                                )
+                            }
 
-                        }
+                            ExerciseListItem(exercise) {
 
-                        if(index < exercises.lastIndex) {
-                            Divider(
-                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
-                            )
+                            }
+
+                            if (index < exercises.lastIndex) {
+                                Divider(
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
+                                )
+                            }
                         }
                     }
                 }

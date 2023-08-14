@@ -36,6 +36,7 @@ import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesNavig
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiEvent
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiState
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesViewModel
+import com.tomtruyen.fitnessapplication.ui.shared.ExerciseFilterChip
 import com.tomtruyen.fitnessapplication.ui.shared.Toolbar
 import kotlinx.coroutines.flow.collectLatest
 
@@ -148,24 +149,4 @@ fun ExercisesFilterScreenLayout(
             }
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ExerciseFilterChip(
-    text: String,
-    selected: Boolean,
-    onClick: () -> Unit
-) {
-    FilterChip(
-        selected = selected,
-        onClick = onClick,
-        label = {
-            Text(text = text)
-        },
-        colors = FilterChipDefaults.filterChipColors(
-            selectedContainerColor = MaterialTheme.colorScheme.tertiary,
-            selectedLabelColor = MaterialTheme.colorScheme.onTertiary,
-        )
-    )
 }

@@ -8,4 +8,5 @@ sealed class ExercisesUiEvent {
     data class OnCategoryFilterChanged(val category: String) : ExercisesUiEvent()
     data class OnEquipmentFilterChanged(val equipment: String) : ExercisesUiEvent()
     data object OnClearFilterClicked : ExercisesUiEvent()
+    data class OnRemoveFilterClicked(val filter: String) : ExercisesUiEvent()
 }

@@ -60,6 +60,16 @@ class ExercisesViewModel(
             is ExercisesUiEvent.OnClearFilterClicked -> state.value = state.value.copy(
                 filter = ExerciseFilter()
             )
+            is ExercisesUiEvent.OnRemoveFilterClicked -> state.value = state.value.copy(
+                filter = state.value.filter.copy().apply {
+                    categories = categories.toMutableList().apply {
+                        remove(event.filter)
+                    }
+                    equipment = equipment.toMutableList().apply {
+                        remove(event.filter)
+                    }
+                }
+            )
         }
     }
 }
