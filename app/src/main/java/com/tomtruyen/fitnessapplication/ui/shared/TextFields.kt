@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.ui.theme.DarkGunMetal
+import com.tomtruyen.fitnessapplication.ui.theme.ChineseWhite
 
 
 object TextFields {
@@ -35,9 +35,9 @@ object TextFields {
         obscureText: Boolean = false,
         keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
         colors: TextFieldColors = TextFieldDefaults.colors(
-            focusedContainerColor = DarkGunMetal,
-            unfocusedContainerColor = DarkGunMetal,
-            errorContainerColor = DarkGunMetal,
+            focusedContainerColor = ChineseWhite,
+            unfocusedContainerColor = ChineseWhite,
+            errorContainerColor = ChineseWhite,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             errorIndicatorColor = Color.Transparent,
