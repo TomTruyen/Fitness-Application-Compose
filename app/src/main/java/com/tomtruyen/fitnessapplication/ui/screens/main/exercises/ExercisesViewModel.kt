@@ -3,6 +3,7 @@ package com.tomtruyen.fitnessapplication.ui.screens.main.exercises
 import com.tomtruyen.fitnessapplication.base.BaseViewModel
 import com.tomtruyen.fitnessapplication.base.SnackbarMessage
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
+import com.tomtruyen.fitnessapplication.model.ExerciseFilter
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,8 +17,11 @@ class ExercisesViewModel(
     val state = MutableStateFlow(ExercisesUiState())
 
     val exercises = state.flatMapLatest {
-        exerciseRepository.findExercises(it.search)
+        exerciseRepository.findExercises(it.search, it.filter)
     }
+
+    val categories = exerciseRepository.findCategories()
+    val equipment = exerciseRepository.findEquipment()
 
     init {
         getExercises()
@@ -42,6 +46,19 @@ class ExercisesViewModel(
             is ExercisesUiEvent.OnAddClicked -> navigate(ExercisesNavigationType.Add)
             is ExercisesUiEvent.OnSearchQueryChanged -> state.value = state.value.copy(
                 search = event.query
+            )
+            is ExercisesUiEvent.OnCategoryFilterChanged -> state.value = state.value.copy(
+                filter = state.value.filter.copy().apply {
+                    tryAddCategory(event.category)
+                }
+            )
+            is ExercisesUiEvent.OnEquipmentFilterChanged -> state.value = state.value.copy(
+                filter = state.value.filter.copy().apply {
+                    tryAddEquipment(event.equipment)
+                }
+            )
+            is ExercisesUiEvent.OnClearFilterClicked -> state.value = state.value.copy(
+                filter = ExerciseFilter()
             )
         }
     }

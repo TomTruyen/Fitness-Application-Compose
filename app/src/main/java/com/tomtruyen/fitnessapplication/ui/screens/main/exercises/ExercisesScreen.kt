@@ -39,9 +39,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.navigate
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
+import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
+import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesFilterScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.CollapsingToolbar
 import com.tomtruyen.fitnessapplication.ui.shared.SearchToolbar
@@ -49,12 +52,12 @@ import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
-@RootNavGraph
+@ExercisesNavGraph(start = true)
 @Destination
 @Composable
 fun ExercisesScreen(
     navController: NavController,
-    viewModel: ExercisesViewModel = koinViewModel()
+    viewModel: ExercisesViewModel
 ) {
     val context = LocalContext.current
 
@@ -65,8 +68,9 @@ fun ExercisesScreen(
     LaunchedEffect(viewModel, context) {
         viewModel.navigation.collectLatest { navigationType ->
             when(navigationType) {
-                is ExercisesNavigationType.Filter -> TODO()
+                is ExercisesNavigationType.Filter -> navController.navigate(ExercisesFilterScreenDestination)
                 is ExercisesNavigationType.Add -> TODO()
+                else -> Unit
             }
         }
     }

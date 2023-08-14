@@ -7,6 +7,7 @@ import com.tomtruyen.fitnessapplication.data.dao.ExerciseDao
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.extensions.handleCompletionResult
 import com.tomtruyen.fitnessapplication.helpers.ContextProvider
+import com.tomtruyen.fitnessapplication.model.ExerciseFilter
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.networking.ExercisesResponse
 import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
@@ -20,7 +21,15 @@ class ExerciseRepositoryImpl(
     private val contextProvider: ContextProvider,
     private val exerciseDao: ExerciseDao
 ): ExerciseRepository() {
-    override fun findExercises(query: String) = exerciseDao.findAllAsync(query)
+    override fun findExercises(query: String, filter: ExerciseFilter) = exerciseDao.findAllAsync(
+        query = query,
+        categories = filter.categories,
+        equipment = filter.equipment
+    )
+
+    override fun findCategories() = exerciseDao.findCategories()
+
+    override fun findEquipment() = exerciseDao.findEquipment()
 
     override fun getExercises(callback: FirebaseCallback<List<Exercise>>) = tryRequestWhenNotFetched {
         db.collection(COLLECTION_NAME)

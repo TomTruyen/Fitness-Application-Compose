@@ -30,8 +30,10 @@ import com.tomtruyen.fitnessapplication.ui.screens.NavGraphs
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.LoginScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.RegisterScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutOverviewScreenDestination
+import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesViewModel
 import com.tomtruyen.fitnessapplication.ui.theme.FitnessApplicationTheme
 import org.koin.android.ext.android.inject
+import org.koin.androidx.compose.getViewModel
 
 @OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
 class MainActivity : ComponentActivity() {
@@ -86,6 +88,15 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         dependenciesContainerBuilder = {
                             dependency(navController)
+
+                            // Required to have a SharedViewModel
+                            dependency(NavGraphs.exercises) {
+                                val parentEntry = remember(navBackStackEntry) {
+                                    navController.getBackStackEntry(NavGraphs.exercises.route)
+                                }
+
+                                getViewModel<ExercisesViewModel>(viewModelStoreOwner = parentEntry)
+                            }
                         },
                         modifier = Modifier.padding(it)
                     )

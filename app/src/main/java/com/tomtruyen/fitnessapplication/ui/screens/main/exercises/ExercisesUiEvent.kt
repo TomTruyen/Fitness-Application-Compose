@@ -4,6 +4,8 @@ sealed class ExercisesUiEvent {
     data object OnToggleSearch : ExercisesUiEvent()
     data object OnFilterClicked : ExercisesUiEvent()
     data object OnAddClicked: ExercisesUiEvent()
-
     data class OnSearchQueryChanged(val query: String) : ExercisesUiEvent()
+    data class OnCategoryFilterChanged(val category: String) : ExercisesUiEvent()
+    data class OnEquipmentFilterChanged(val equipment: String) : ExercisesUiEvent()
+    data object OnClearFilterClicked : ExercisesUiEvent()
 }
