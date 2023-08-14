@@ -2,18 +2,22 @@ package com.tomtruyen.fitnessapplication.data.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
+import com.google.firebase.firestore.PropertyName
 
 @Entity(tableName = Exercise.TABLE_NAME)
 data class Exercise(
     @PrimaryKey var id: String = "",
     var name: String = "",
     var category: String = "",
-    var equipment: String? = null,
-    var image: String? = null,
-    @SerializedName("image_detail")
+    var equipment: String = "",
+    var image: String = "",
+    @get:PropertyName("image_detail")
+    @set:PropertyName("image_detail")
     var imageDetail: String? = null,
     var type: String = ExerciseType.WEIGHT.value,
+    @get:PropertyName("description")
+    @set:PropertyName("description")
+    var steps: List<String> = emptyList(),
     var isUserCreated: Boolean = false
 ) {
     val displayName get() = buildString {
