@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.FilterList
@@ -65,6 +66,7 @@ fun ExercisesScreen(
         viewModel.navigation.collectLatest { navigationType ->
             when(navigationType) {
                 is ExercisesNavigationType.Filter -> TODO()
+                is ExercisesNavigationType.Add -> TODO()
             }
         }
     }
@@ -141,6 +143,17 @@ fun ExercisesScreenLayout(
                             Icon(
                                 imageVector = Icons.Filled.FilterList,
                                 contentDescription = stringResource(id = R.string.content_description_filter)
+                            )
+                        }
+
+                        IconButton(
+                            onClick = {
+                                onEvent(ExercisesUiEvent.OnAddClicked)
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Add,
+                                contentDescription = stringResource(id = R.string.content_description_create_exercise)
                             )
                         }
                     }

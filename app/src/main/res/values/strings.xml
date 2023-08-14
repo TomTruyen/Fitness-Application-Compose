@@ -17,6 +17,7 @@
     <string name="content_description_filter">Filter</string>
     <string name="content_description_search">Search</string>
     <string name="content_description_clear">Clear</string>
+    <string name="content_description_create_exercise">Create exercise</string>
 
     <!-- Bottom Navigation -->
     <string name="workouts">Workouts</string>
@@ -38,5 +39,6 @@
     <string name="have_an_account">Already have an account?</string>
     <string name="logout">Logout</string>
     <string name="search">Search</string>
+
 
 </resources>
