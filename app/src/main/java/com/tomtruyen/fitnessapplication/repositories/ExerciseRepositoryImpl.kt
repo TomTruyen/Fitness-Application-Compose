@@ -20,7 +20,7 @@ class ExerciseRepositoryImpl(
     private val contextProvider: ContextProvider,
     private val exerciseDao: ExerciseDao
 ): ExerciseRepository() {
-    override fun findExercises() = exerciseDao.findAllAsync()
+    override fun findExercises(query: String) = exerciseDao.findAllAsync(query)
 
     override fun getExercises(callback: FirebaseCallback<List<Exercise>>) = tryRequestWhenNotFetched {
         db.collection(COLLECTION_NAME)

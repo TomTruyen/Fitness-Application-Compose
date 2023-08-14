@@ -27,7 +27,6 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ramcosta.composedestinations.navigation.navigate
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.extensions.navigateAndClearBackStack

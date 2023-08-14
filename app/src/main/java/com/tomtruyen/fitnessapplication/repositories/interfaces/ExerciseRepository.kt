@@ -7,6 +7,6 @@ import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import kotlinx.coroutines.flow.Flow
 
 abstract class ExerciseRepository: BaseRepository(FetchedData.Type.EXERCISES) {
-    abstract fun findExercises(): Flow<List<Exercise>>
+    abstract fun findExercises(query: String): Flow<List<Exercise>>
     abstract fun getExercises(callback: FirebaseCallback<List<Exercise>>)
 }

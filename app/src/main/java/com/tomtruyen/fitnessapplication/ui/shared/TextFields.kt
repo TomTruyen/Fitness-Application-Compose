@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -33,6 +34,7 @@ object TextFields {
         placeholder: String = "",
         error: String? = null,
         obscureText: Boolean = false,
+        search: Boolean = false,
         keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
         colors: TextFieldColors = TextFieldDefaults.colors(
             focusedContainerColor = ChineseWhite,
@@ -50,6 +52,8 @@ object TextFields {
     ) {
         val focusManager = LocalFocusManager.current
 
+        val textStyle = MaterialTheme.typography.bodyMedium
+
         var obscureTextVisible by rememberSaveable { mutableStateOf(false) }
 
         Column(modifier = modifier) {
@@ -57,10 +61,11 @@ object TextFields {
                 value = value ?: "",
                 onValueChange = onValueChange,
                 visualTransformation = if (!obscureText || obscureTextVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                textStyle = textStyle,
                 placeholder = {
                     Text(
                         text = placeholder,
-                        style = MaterialTheme.typography.bodyMedium.copy(
+                        style = textStyle.copy(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
                     )
@@ -76,7 +81,8 @@ object TextFields {
                 colors = colors,
                 shape = shape,
                 modifier = if(!error.isNullOrEmpty()) {
-                    Modifier.fillMaxWidth()
+                    Modifier
+                        .fillMaxWidth()
                         .border(
                             width = 1.dp,
                             color = MaterialTheme.colorScheme.error,
@@ -105,6 +111,15 @@ object TextFields {
                             )
                         }
                     }
+
+                    if (search && !value.isNullOrBlank()) {
+                        IconButton(onClick = { onValueChange("") }) {
+                            Icon(
+                                imageVector = Icons.Filled.Clear,
+                                contentDescription = stringResource(id = R.string.content_description_clear),
+                            )
+                        }
+                    }
                 }
             )
 
@@ -125,7 +140,8 @@ object TextFields {
                         text = error,
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .wrapContentHeight()
                             .padding(start = Dimens.Tiny)
                     )

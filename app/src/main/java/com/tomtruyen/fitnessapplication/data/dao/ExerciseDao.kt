@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class ExerciseDao {
-    @Query("SELECT * FROM ${Exercise.TABLE_NAME}")
-    abstract fun findAllAsync(): Flow<List<Exercise>>
+    @Query("SELECT * FROM ${Exercise.TABLE_NAME} WHERE name LIKE '%' || :query || '%'")
+    abstract fun findAllAsync(query: String): Flow<List<Exercise>>
 
     @Upsert
     abstract fun saveAll(exercises: List<Exercise>): List<Long>

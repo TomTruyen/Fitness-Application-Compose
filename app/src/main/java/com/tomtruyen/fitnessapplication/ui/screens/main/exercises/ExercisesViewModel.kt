@@ -7,13 +7,17 @@ import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ExercisesViewModel(
     private val exerciseRepository: ExerciseRepository
 ): BaseViewModel<ExercisesNavigationType>() {
     val state = MutableStateFlow(ExercisesUiState())
 
-    val exercises = exerciseRepository.findExercises()
+    val exercises = state.flatMapLatest {
+        exerciseRepository.findExercises(it.search)
+    }
 
     init {
         getExercises()
@@ -31,7 +35,13 @@ class ExercisesViewModel(
 
     fun onEvent(event: ExercisesUiEvent) {
         when(event) {
-            else -> Unit
+            is ExercisesUiEvent.OnFilterClicked -> navigate(ExercisesNavigationType.Filter)
+            is ExercisesUiEvent.OnToggleSearch -> state.value = state.value.copy(
+                searching = !state.value.searching
+            )
+            is ExercisesUiEvent.OnSearchQueryChanged -> state.value = state.value.copy(
+                search = event.query
+            )
         }
     }
 }
