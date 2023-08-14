@@ -22,11 +22,15 @@ class ExerciseRepositoryImpl(
 ): ExerciseRepository() {
     override fun findExercises() = exerciseDao.findAllAsync()
 
-    override fun getExercises(callback: FirebaseCallback<List<Exercise>>) {
+    override fun getExercises(callback: FirebaseCallback<List<Exercise>>) = tryRequestWhenNotFetched {
         db.collection(COLLECTION_NAME)
             .document(DOCUMENT_NAME)
             .get()
-            .handleCompletionResult(contextProvider.context, callback) {
+            .handleCompletionResult(
+                context = contextProvider.context,
+                setFetchSuccessful = ::setFetchSuccessful,
+                callback = callback
+            ) {
                 val exercises = it.toObject(ExercisesResponse::class.java)?.data ?: emptyList()
 
                 scope.launch {

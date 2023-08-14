@@ -17,14 +17,20 @@ class UserRepositoryImpl(
     private val auth = Firebase.auth
     override fun login(email: String, password: String, callback: FirebaseCallback<FirebaseUser?>) {
         auth.signInWithEmailAndPassword(email, password)
-            .handleCompletionResult(context, callback) { result ->
+            .handleCompletionResult(
+                context = context,
+                callback = callback
+            ) { result ->
                 callback.onSuccess(result.user)
             }
     }
 
     override fun register(email: String, password: String, callback: FirebaseCallback<FirebaseUser?>) {
         auth.createUserWithEmailAndPassword(email, password)
-            .handleCompletionResult(context, callback) { result ->
+            .handleCompletionResult(
+                context = context,
+                callback = callback
+            ) { result ->
                 callback.onSuccess(result.user)
             }
     }
@@ -32,7 +38,10 @@ class UserRepositoryImpl(
     override fun loginWithGoogle(idToken: String, callback: FirebaseCallback<FirebaseUser?>) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
-            .handleCompletionResult(context, callback) { result ->
+            .handleCompletionResult(
+                context = context,
+                callback = callback
+            ) { result ->
                 callback.onSuccess(result.user)
             }
     }

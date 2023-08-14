@@ -1,6 +1,7 @@
 package com.tomtruyen.fitnessapplication.di
 
 import androidx.room.Room
+import com.tomtruyen.fitnessapplication.AppGlobals
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.AppDatabase
 import com.tomtruyen.fitnessapplication.helpers.ContextProvider
@@ -20,6 +21,9 @@ import org.koin.dsl.module
 val appModule = module {
     // ContextProvider - Used to provide context to non-activity classes
     single { ContextProvider(androidContext()) }
+
+    // Globals
+    single { AppGlobals() }
 
     // Database
     single<AppDatabase> {

@@ -7,6 +7,7 @@ import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 
 fun <TResult, TEntity> Task<TResult>.handleCompletionResult(
     context: Context,
+    setFetchSuccessful: (() -> Unit)? = null,
     callback: FirebaseCallback<TEntity>,
     onSuccess: (TResult) -> Unit
 ) {
@@ -20,6 +21,8 @@ fun <TResult, TEntity> Task<TResult>.handleCompletionResult(
             callback.onError(FirebaseExceptionHelper.format(context, exception))
             return@addOnCompleteListener
         }
+
+        setFetchSuccessful?.invoke()
 
         onSuccess(task.result)
     }
