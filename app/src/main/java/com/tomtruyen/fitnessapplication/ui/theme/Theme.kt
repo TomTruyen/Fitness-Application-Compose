@@ -55,7 +55,7 @@ fun FitnessApplicationTheme(
         SideEffect {
             currentWindow.statusBarColor = colorScheme.background.toArgb()
             currentWindow.navigationBarColor = colorScheme.background.toArgb()
-            WindowCompat.getInsetsController(currentWindow, view)?.isAppearanceLightStatusBars = false
+            WindowCompat.getInsetsController(currentWindow, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 
