@@ -33,6 +33,10 @@ class ExercisesViewModel(
             override fun onError(error: String?) {
                 showSnackbar(SnackbarMessage.Error(error))
             }
+
+            override fun onStopLoading() {
+                isLoading(false)
+            }
         }
     }
 
@@ -41,7 +45,8 @@ class ExercisesViewModel(
 
     }
 
-    private fun getExercises() = launchLoading {
+    private fun getExercises() {
+        isLoading(true)
         exerciseRepository.getExercises(callback)
 
         userRepository.getUser()?.let {

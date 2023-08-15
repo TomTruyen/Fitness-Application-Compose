@@ -38,10 +38,16 @@ open class BaseViewModel<TNavigationType>: ViewModel() {
 
     private var snackbarMessage by mutableStateOf<SnackbarMessage>(SnackbarMessage.Empty)
 
+    protected fun isLoading(loading: Boolean) = this.loading.tryEmit(loading)
+
     protected fun launchLoading(block: suspend CoroutineScope.() -> Unit) = vmScope.launch(Dispatchers.IO) {
-        loading.tryEmit(true)
+        isLoading(true)
         block()
-        loading.tryEmit(false)
+        isLoading(false)
+    }
+
+    protected fun launchIO(block: suspend CoroutineScope.() -> Unit) = vmScope.launch(Dispatchers.IO) {
+        block()
     }
 
     protected fun navigate(navigationType: TNavigationType) = vmScope.launch {

@@ -39,7 +39,10 @@ class ExerciseRepositoryImpl(
     override fun findEquipment() = exerciseDao.findEquipment()
 
     override fun getExercises(callback: FirebaseCallback<List<Exercise>>) = tryRequestWhenNotFetched(
-        type = FetchedData.Type.EXERCISES
+        type = FetchedData.Type.EXERCISES,
+        onStopLoading = {
+            callback.onStopLoading()
+        }
     ) {
         db.collection(COLLECTION_NAME)
             .document(DOCUMENT_NAME)
@@ -62,7 +65,10 @@ class ExerciseRepositoryImpl(
     }
 
     override fun getUserExercises(userId: String, callback: FirebaseCallback<List<Exercise>>) = tryRequestWhenNotFetched(
-        type = FetchedData.Type.USER_EXERCISES
+        type = FetchedData.Type.USER_EXERCISES,
+        onStopLoading = {
+            callback.onStopLoading()
+        }
     ) {
         db.collection(USER_EXERCISE_COLLECTION_NAME)
             .document(userId)

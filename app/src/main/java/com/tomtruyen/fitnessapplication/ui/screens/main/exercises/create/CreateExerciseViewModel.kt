@@ -9,6 +9,7 @@ import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import java.util.UUID
 
 class CreateExerciseViewModel(
@@ -42,8 +43,11 @@ class CreateExerciseViewModel(
         }
     }
 
-    private fun save() = launchLoading {
-        val userId = userRepository.getUser()?.uid ?: return@launchLoading
+    private fun save() = launchIO {
+        val userId = userRepository.getUser()?.uid ?: return@launchIO
+
+        isLoading(true)
+
         val exercises = exerciseRepository.findUserExercises().toMutableList()
 
         val exercise = state.value.exercise
@@ -72,6 +76,10 @@ class CreateExerciseViewModel(
 
                 override fun onError(error: String?) {
                     showSnackbar(SnackbarMessage.Error(error))
+                }
+
+                override fun onStopLoading() {
+                    isLoading(false)
                 }
             }
         )

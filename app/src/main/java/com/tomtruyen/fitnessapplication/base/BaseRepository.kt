@@ -18,7 +18,7 @@ open class BaseRepository {
 
     // This function is used to check if we have already made a request to Firebase.
     // If we have, we don't need to make another request --> Reduces the amount of Reads on Firebase
-    protected fun tryRequestWhenNotFetched(type: FetchedData.Type? = null, force: Boolean = false, block: () -> Unit) {
+    protected fun tryRequestWhenNotFetched(type: FetchedData.Type? = null, onStopLoading: () -> Unit, force: Boolean = false, block: () -> Unit) {
         if(type == null || force) {
             block()
             return
@@ -26,7 +26,10 @@ open class BaseRepository {
 
         if(!globals.fetchedData.hasFetched(type)) {
             block()
+            return
         }
+
+        onStopLoading()
     }
 
     protected fun setFetchSuccessful(type: FetchedData.Type?) {

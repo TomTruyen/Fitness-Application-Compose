@@ -7,7 +7,6 @@ import androidx.room.Upsert
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
-import com.tomtruyen.fitnessapplication.extensions.toInt
 import com.tomtruyen.fitnessapplication.model.ExerciseFilter
 import kotlinx.coroutines.flow.Flow
 

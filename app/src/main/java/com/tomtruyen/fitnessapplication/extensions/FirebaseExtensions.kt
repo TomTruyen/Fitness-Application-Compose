@@ -12,6 +12,8 @@ fun <TResult, TEntity> Task<TResult>.handleCompletionResult(
     onSuccess: (TResult) -> Unit
 ) {
     addOnCompleteListener { task ->
+        callback.onStopLoading()
+
         if(task.isCanceled) {
             callback.onCancel()
             return@addOnCompleteListener

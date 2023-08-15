@@ -13,7 +13,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -57,6 +59,10 @@ fun LoginScreen(
         state.validateEmail(context)
     }
 
+    LaunchedEffect(state.password) {
+        state.validatePassword(context)
+    }
+
     LaunchedEffect(viewModel, context) {
         viewModel.navigation.collectLatest { navigationType ->
             when(navigationType) {
@@ -91,6 +97,12 @@ fun LoginScreenLayout(
     loading: Boolean,
     onEvent: (LoginUiEvent) -> Unit
 ) {
+    val isValid by remember(state) {
+        derivedStateOf {
+            state.emailValidationResult.isValid() && state.passwordValidationResult.isValid()
+        }
+    }
+
     val focusManager = LocalFocusManager.current
 
     Scaffold(
@@ -148,6 +160,7 @@ fun LoginScreenLayout(
                         onEvent(LoginUiEvent.PasswordChanged(password))
                     },
                     placeholder = stringResource(id = R.string.password),
+                    error = state.passwordValidationResult.errorMessage(),
                     obscureText = true,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password,
@@ -160,7 +173,7 @@ fun LoginScreenLayout(
 
                 Buttons.Default(
                     text = stringResource(id = R.string.login),
-                    enabled = state.emailValidationResult.isValid() && !loading,
+                    enabled = isValid && !loading,
                     onClick = {
                         focusManager.clearFocus()
                         onEvent(LoginUiEvent.OnLoginClicked)

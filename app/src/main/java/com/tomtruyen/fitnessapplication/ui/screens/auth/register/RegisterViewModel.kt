@@ -12,7 +12,8 @@ class RegisterViewModel(
 ): BaseViewModel<RegisterNavigationType>() {
     val state = MutableStateFlow(RegisterUiState())
 
-    fun register() = launchLoading {
+    fun register() {
+        isLoading(true)
         userRepository.register(
             email = state.value.email ?: "",
             password = state.value.password ?: "",
@@ -23,6 +24,10 @@ class RegisterViewModel(
 
                 override fun onError(error: String?) {
                     showSnackbar(SnackbarMessage.Error(error))
+                }
+
+                override fun onStopLoading() {
+                    isLoading(false)
                 }
             }
         )

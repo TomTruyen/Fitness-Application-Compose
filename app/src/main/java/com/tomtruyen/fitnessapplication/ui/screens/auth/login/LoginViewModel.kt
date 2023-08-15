@@ -21,10 +21,15 @@ class LoginViewModel(
             override fun onError(error: String?) {
                 showSnackbar(SnackbarMessage.Error(error))
             }
+
+            override fun onStopLoading() {
+                isLoading(false)
+            }
         }
     }
 
-    private fun login() = launchLoading {
+    private fun login() {
+        isLoading(true)
         userRepository.login(
             email = state.value.email ?: "",
             password = state.value.password ?: "",
@@ -32,7 +37,8 @@ class LoginViewModel(
         )
     }
 
-    private fun loginWithGoogle(idToken: String) = launchLoading {
+    private fun loginWithGoogle(idToken: String) {
+        isLoading(true)
         userRepository.loginWithGoogle(idToken, callback)
     }
 
