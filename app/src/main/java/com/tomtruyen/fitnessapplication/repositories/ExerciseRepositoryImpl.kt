@@ -55,5 +55,7 @@ class ExerciseRepositoryImpl(
     companion object {
         private const val COLLECTION_NAME = "metadata"
         private const val DOCUMENT_NAME = "exercises"
+        
+        private const val USER_EXERCISE_COLLECTION_NAME = "exercises"
     }
 }
