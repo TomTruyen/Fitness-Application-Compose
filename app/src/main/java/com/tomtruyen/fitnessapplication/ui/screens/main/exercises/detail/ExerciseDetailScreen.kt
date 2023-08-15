@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,6 +30,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -49,6 +53,7 @@ import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.CreateExerciseScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiEvent
+import com.tomtruyen.fitnessapplication.ui.shared.ConfirmationDialog
 import com.tomtruyen.fitnessapplication.ui.shared.ExerciseFilterChip
 import com.tomtruyen.fitnessapplication.ui.shared.Toolbar
 import kotlinx.coroutines.flow.collectLatest
@@ -94,6 +99,8 @@ fun ExerciseDetailScreenLayout(
     exercise: Exercise?,
     onEvent: (ExerciseDetailUiEvent) -> Unit
 ) {
+    var confirmationDialogVisible by remember { mutableStateOf(false) }
+
     Scaffold(
         snackbarHost = snackbarHost,
         topBar = {
@@ -114,8 +121,7 @@ fun ExerciseDetailScreenLayout(
 
                 IconButton(
                     onClick = {
-                        // TODO: Add Dialog to confirm deletion
-                        onEvent(ExerciseDetailUiEvent.Delete)
+                        confirmationDialogVisible = true
                     }
                 ) {
                     Icon(
@@ -126,79 +132,105 @@ fun ExerciseDetailScreenLayout(
             }
         }
     ) {
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize()
         ) {
-            if(exercise?.imageDetail != null || exercise?.image != null) {
-                item {
-                    GlideImage(
-                        model = exercise.imageDetail ?: exercise.image,
-                        contentDescription = exercise.name,
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(16f / 9f)
-                    )
-                }
-            }
-
-            item {
-                LazyRow(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(Dimens.Small)
-                ) {
-                    itemsIndexed(
-                        arrayOf(exercise?.category, exercise?.equipment, exercise?.type).filter { !it.isNullOrBlank() }
-                    ) { index, filter ->
-                        ExerciseFilterChip(
-                            modifier = Modifier.padding(start = if (index == 0) Dimens.Normal else 0.dp),
-                            text = filter ?: "",
-                            selected = true,
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                if (exercise?.imageDetail != null || exercise?.image != null) {
+                    item {
+                        GlideImage(
+                            model = exercise.imageDetail ?: exercise.image,
+                            contentDescription = exercise.name,
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(16f / 9f)
                         )
                     }
                 }
-            }
 
-            if(exercise?.steps?.isNotEmpty() == true) {
                 item {
-                    Text(
-                        text = stringResource(id = R.string.exercise_detail_steps_title),
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            fontWeight = FontWeight.W500
-                        ),
-                        modifier = Modifier.padding(
-                            horizontal = Dimens.Normal,
-                            vertical = Dimens.Tiny
-                        )
-                    )
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(Dimens.Small)
+                    ) {
+                        itemsIndexed(
+                            arrayOf(
+                                exercise?.category,
+                                exercise?.equipment,
+                                exercise?.type
+                            ).filter { !it.isNullOrBlank() }
+                        ) { index, filter ->
+                            ExerciseFilterChip(
+                                modifier = Modifier.padding(start = if (index == 0) Dimens.Normal else 0.dp),
+                                text = filter ?: "",
+                                selected = true,
+                            )
+                        }
+                    }
                 }
 
-                itemsIndexed(exercise.steps ?: emptyList()) { index, step ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = Dimens.Normal)
-                            .padding(top = Dimens.Tiny),
-                        verticalAlignment = Alignment.Top,
-                    ) {
+                if (exercise?.steps?.isNotEmpty() == true) {
+                    item {
                         Text(
-                            text = "${index + 1}.",
-                            style = MaterialTheme.typography.bodySmall.copy(
+                            text = stringResource(id = R.string.exercise_detail_steps_title),
+                            style = MaterialTheme.typography.bodyLarge.copy(
                                 fontWeight = FontWeight.W500
                             ),
-                        )
-
-                        Spacer(modifier = Modifier.width(Dimens.Small))
-
-                        Text(
-                            text = step,
-                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(
+                                horizontal = Dimens.Normal,
+                                vertical = Dimens.Tiny
+                            )
                         )
                     }
+
+                    itemsIndexed(exercise.steps ?: emptyList()) { index, step ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = Dimens.Normal)
+                                .padding(top = Dimens.Tiny),
+                            verticalAlignment = Alignment.Top,
+                        ) {
+                            Text(
+                                text = "${index + 1}.",
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    fontWeight = FontWeight.W500
+                                ),
+                            )
+
+                            Spacer(modifier = Modifier.width(Dimens.Small))
+
+                            Text(
+                                text = step,
+                                style = MaterialTheme.typography.bodySmall,
+                            )
+                        }
+                    }
                 }
+            }
+
+            if(confirmationDialogVisible) {
+                ConfirmationDialog(
+                    title = R.string.title_delete_exercise,
+                    message = R.string.message_delete_exercise,
+                    onConfirm = {
+                        onEvent(ExerciseDetailUiEvent.Delete)
+                        confirmationDialogVisible = false
+                    },
+                    onDismiss = {
+                        confirmationDialogVisible = false
+                    },
+                    confirmText = R.string.delete,
+                    confirmButtonColors = ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error
+                    )
+                )
             }
         }
     }

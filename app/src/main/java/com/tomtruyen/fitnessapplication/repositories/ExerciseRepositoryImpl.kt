@@ -124,6 +124,19 @@ class ExerciseRepositoryImpl(
             }
     }
 
+    override suspend fun deleteUserExercise(
+        userId: String,
+        exerciseId: String,
+        callback: FirebaseCallback<List<Exercise>>
+    ) {
+        val userExercises = exerciseDao.findAllUserExercises().toMutableList().apply {
+            val exercise = find { it.id == exerciseId } ?: return@apply
+            remove(exercise)
+        }
+
+        saveUserExercises(userId, userExercises, callback)
+    }
+
     companion object {
         private const val COLLECTION_NAME = "metadata"
         private const val DOCUMENT_NAME = "exercises"

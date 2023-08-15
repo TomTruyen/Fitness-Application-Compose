@@ -1,18 +1,35 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises.detail
 
 import com.tomtruyen.fitnessapplication.base.BaseViewModel
+import com.tomtruyen.fitnessapplication.base.SnackbarMessage
+import com.tomtruyen.fitnessapplication.data.entities.Exercise
+import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
+import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 
 class ExerciseDetailViewModel(
     private val id: String,
-    exerciseRepository: ExerciseRepository,
+    private val exerciseRepository: ExerciseRepository,
+    private val userRepository: UserRepository
 ): BaseViewModel<ExerciseDetailNavigationType>() {
     val exercise = exerciseRepository.findExerciseById(id)
 
-    private fun delete() {
-        // TODO: Delete Exercise from db
+    private fun delete() = launchIO {
+        val userId = userRepository.getUser()?.uid ?: return@launchIO
 
-        navigate(ExerciseDetailNavigationType.Back)
+        exerciseRepository.deleteUserExercise(
+            userId = userId,
+            exerciseId = id,
+            object: FirebaseCallback<List<Exercise>> {
+                override fun onSuccess(value: List<Exercise>) {
+                    navigate(ExerciseDetailNavigationType.Back)
+                }
+
+                override fun onError(error: String?) {
+                    showSnackbar(SnackbarMessage.Error(error))
+                }
+            }
+        )
     }
 
     fun onEvent(event: ExerciseDetailUiEvent) {

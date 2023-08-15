@@ -23,6 +23,7 @@ private val DarkColorScheme = lightColorScheme(
     onBackground = ChineseWhite,
     surface = ChineseBlack,
     onSurface = ChineseWhite,
+    error = Firebrick
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -36,6 +37,7 @@ private val LightColorScheme = lightColorScheme(
     onBackground = ChineseBlack,
     surface = ChineseWhite,
     onSurface = ChineseBlack,
+    error = Firebrick,
 )
 
 @Composable

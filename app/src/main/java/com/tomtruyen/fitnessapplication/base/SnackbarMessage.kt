@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.base
 
+import android.provider.CalendarContract.Colors
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -10,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.tomtruyen.fitnessapplication.R
+import com.tomtruyen.fitnessapplication.ui.theme.Firebrick
 
 sealed class SnackbarMessage(
     open val message: String? = null,
@@ -26,6 +28,6 @@ sealed class SnackbarMessage(
     class Error(
         override val message: String?,
         override val icon: ImageVector? = Icons.Filled.ErrorOutline,
-        override val backgroundColor: Color? = Color.Red,
+        override val backgroundColor: Color? = Firebrick,
     ) : SnackbarMessage(message, icon, backgroundColor)
 }

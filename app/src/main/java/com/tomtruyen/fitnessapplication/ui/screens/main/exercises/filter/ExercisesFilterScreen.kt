@@ -92,7 +92,7 @@ fun ExercisesFilterScreenLayout(
                 Text(
                     text = stringResource(id = R.string.clear),
                     style = MaterialTheme.typography.bodyMedium.copy(
-                        color = Color.Red
+                        color = MaterialTheme.colorScheme.error
                     ),
                     modifier = Modifier
                         .padding(end = Dimens.Normal)

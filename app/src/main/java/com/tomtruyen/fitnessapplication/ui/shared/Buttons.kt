@@ -57,12 +57,14 @@ object Buttons {
         modifier: Modifier = Modifier,
         enabled: Boolean = true,
         shape: Shape = MaterialTheme.shapes.medium,
+        colors: ButtonColors = ButtonDefaults.textButtonColors(),
         onClick: () -> Unit,
     ) {
         TextButton(
             onClick = onClick,
             enabled = enabled,
             shape = shape,
+            colors = colors,
             modifier = modifier,
         ) {
             Text(
