@@ -18,16 +18,21 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -44,6 +49,7 @@ import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiEvent
 import com.tomtruyen.fitnessapplication.ui.shared.ExerciseFilterChip
 import com.tomtruyen.fitnessapplication.ui.shared.Toolbar
+import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -57,12 +63,24 @@ fun ExerciseDetailScreen(
         parameters = { parametersOf(id) }
     )
 ) {
+    val context = LocalContext.current
+
     val exercise by viewModel.exercise.collectAsStateWithLifecycle(initialValue = null)
+
+    LaunchedEffect(viewModel, context) {
+        viewModel.navigation.collectLatest { navigationType ->
+            when(navigationType) {
+                is ExerciseDetailNavigationType.Back -> navController.popBackStack()
+                is ExerciseDetailNavigationType.Edit -> TODO()
+            }
+        }
+    }
 
     ExerciseDetailScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
-        exercise = exercise
+        exercise = exercise,
+        onEvent = viewModel::onEvent
     )
 }
 
@@ -71,7 +89,8 @@ fun ExerciseDetailScreen(
 fun ExerciseDetailScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
-    exercise: Exercise?
+    exercise: Exercise?,
+    onEvent: (ExerciseDetailUiEvent) -> Unit
 ) {
     Scaffold(
         snackbarHost = snackbarHost,
@@ -79,7 +98,30 @@ fun ExerciseDetailScreenLayout(
             Toolbar(
                 title = exercise?.name ?: "",
                 navController = navController
-            )
+            ) {
+                IconButton(
+                    onClick = {
+                        onEvent(ExerciseDetailUiEvent.Edit)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Edit,
+                        contentDescription = stringResource(id = R.string.content_description_edit)
+                    )
+                }
+
+                IconButton(
+                    onClick = {
+                        // TODO: Add Dialog to confirm deletion
+                        onEvent(ExerciseDetailUiEvent.Delete)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = stringResource(id = R.string.content_description_delete)
+                    )
+                }
+            }
         }
     ) {
         LazyColumn(

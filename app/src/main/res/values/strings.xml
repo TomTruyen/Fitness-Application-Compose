@@ -18,6 +18,8 @@
     <string name="content_description_search">Search</string>
     <string name="content_description_clear">Clear</string>
     <string name="content_description_create_exercise">Create exercise</string>
+    <string name="content_description_edit">Edit</string>
+    <string name="content_description_delete">Delete</string>
 
     <!-- Bottom Navigation -->
     <string name="workouts">Workouts</string>
@@ -25,19 +27,27 @@
     <string name="exercises">Exercises</string>
 
     <!-- App Content -->
+
+    <!-- Login -->
     <string name="title_login">Welcome back!</string>
     <string name="subtitle_login">Sign in to continue on your path</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="login">Sign in</string>
     <string name="button_login_google">Sign in with Google</string>
+
+    <!-- Register -->
     <string name="need_account">Need an account?</string>
     <string name="password_repeat">Repeat password</string>
     <string name="title_register">Let\'s get started!</string>
     <string name="subtitle_register">Create an account to get started</string>
     <string name="register">Sign up</string>
     <string name="have_an_account">Already have an account?</string>
+
+    <!-- Profile -->
     <string name="logout">Logout</string>
+
+    <!-- Exercises -->
     <string name="search">Search</string>
     <string name="filter">Filter</string>
     <string name="clear">Clear</string>
@@ -45,5 +55,6 @@
     <string name="equipment">Equipment</string>
     <string name="exercise_detail_steps_title">How to perform:</string>
 
+    <!-- Workouts -->
 
 </resources>
