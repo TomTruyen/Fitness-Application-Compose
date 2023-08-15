@@ -108,26 +108,28 @@ fun ExerciseDetailScreenLayout(
                 title = exercise?.name ?: "",
                 navController = navController
             ) {
-                IconButton(
-                    onClick = {
-                        onEvent(ExerciseDetailUiEvent.Edit)
+                if(exercise?.isUserCreated == true) {
+                    IconButton(
+                        onClick = {
+                            onEvent(ExerciseDetailUiEvent.Edit)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Edit,
+                            contentDescription = stringResource(id = R.string.content_description_edit)
+                        )
                     }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Edit,
-                        contentDescription = stringResource(id = R.string.content_description_edit)
-                    )
-                }
 
-                IconButton(
-                    onClick = {
-                        confirmationDialogVisible = true
+                    IconButton(
+                        onClick = {
+                            confirmationDialogVisible = true
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = stringResource(id = R.string.content_description_delete)
+                        )
                     }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Delete,
-                        contentDescription = stringResource(id = R.string.content_description_delete)
-                    )
                 }
             }
         }
@@ -163,7 +165,7 @@ fun ExerciseDetailScreenLayout(
                             arrayOf(
                                 exercise?.category,
                                 exercise?.equipment,
-                                exercise?.type
+                                exercise?.type?.replaceFirstChar { it.uppercase() }
                             ).filter { !it.isNullOrBlank() }
                         ) { index, filter ->
                             ExerciseFilterChip(
@@ -189,7 +191,7 @@ fun ExerciseDetailScreenLayout(
                         )
                     }
 
-                    itemsIndexed(exercise.steps ?: emptyList()) { index, step ->
+                    itemsIndexed(exercise.steps) { index, step ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
