@@ -1,6 +1,6 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create
 
-import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,10 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -31,6 +28,7 @@ import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
+import com.tomtruyen.fitnessapplication.ui.shared.ConfirmationDialog
 import com.tomtruyen.fitnessapplication.ui.shared.Dropdown
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 import com.tomtruyen.fitnessapplication.ui.shared.Toolbar
@@ -98,11 +96,21 @@ fun CreateExerciseScreenLayout(
             state.nameValidationResult.isValid() &&
                     state.categoryValidationResult.isValid() &&
                     state.equipmentValidationResult.isValid() &&
-                    state.typeValidationResult.isValid()
+                    state.typeValidationResult.isValid() &&
+                    state.exercise != state.initialExercise
         }
     }
 
     val types = Exercise.ExerciseType.values().map { it.value.replaceFirstChar { it.uppercase() } }
+    var confirmationDialogVisible by remember { mutableStateOf(false) }
+
+    BackHandler(enabled = !confirmationDialogVisible) {
+        if(state.exercise != state.initialExercise) {
+            confirmationDialogVisible = true
+        } else {
+            navController.popBackStack()
+        }
+    }
 
     Scaffold(
         snackbarHost = snackbarHost,
@@ -110,6 +118,13 @@ fun CreateExerciseScreenLayout(
             Toolbar(
                 title = stringResource(id = if(state.isEditing) R.string.edit_exercise else R.string.create_exercise),
                 navController = navController,
+                onNavigateUp = {
+                    if(state.exercise != state.initialExercise) {
+                        confirmationDialogVisible = true
+                    } else {
+                        navController.popBackStack()
+                    }
+                }
             )
         }
     ) {
@@ -185,6 +200,21 @@ fun CreateExerciseScreenLayout(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     onEvent(CreateExerciseUiEvent.OnSaveClicked)
+                }
+
+                if(confirmationDialogVisible) {
+                    ConfirmationDialog(
+                        title = R.string.title_unsaved_changes,
+                        message = R.string.message_unsaved_changes,
+                        onConfirm = {
+                            navController.popBackStack()
+                            confirmationDialogVisible = false
+                        },
+                        onDismiss = {
+                            confirmationDialogVisible = false
+                        },
+                        confirmText = R.string.discard
+                    )
                 }
             }
         }

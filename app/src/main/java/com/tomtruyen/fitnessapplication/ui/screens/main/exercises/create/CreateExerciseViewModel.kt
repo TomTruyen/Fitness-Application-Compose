@@ -38,6 +38,7 @@ class CreateExerciseViewModel(
 
         exerciseRepository.findUserExerciseById(id)?.let {
             state.value = state.value.copy(
+                initialExercise = it,
                 exercise = it
             )
         }

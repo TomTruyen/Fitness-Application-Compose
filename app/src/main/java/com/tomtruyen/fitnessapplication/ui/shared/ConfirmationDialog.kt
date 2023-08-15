@@ -19,9 +19,11 @@ fun ConfirmationDialog(
     onDismiss: () -> Unit,
     @StringRes confirmText: Int,
     @StringRes dismissText: Int = R.string.cancel,
-    confirmButtonColors: ButtonColors = ButtonDefaults.textButtonColors(),
+    confirmButtonColors: ButtonColors = ButtonDefaults.textButtonColors(
+        contentColor = MaterialTheme.colorScheme.error
+    ),
     dismissButtonColors: ButtonColors = ButtonDefaults.textButtonColors(
-        contentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+        contentColor = MaterialTheme.colorScheme.onSurface
     )
 ) {
     AlertDialog(

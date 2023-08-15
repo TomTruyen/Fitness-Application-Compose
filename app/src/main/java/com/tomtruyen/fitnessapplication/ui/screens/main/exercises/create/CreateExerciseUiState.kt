@@ -10,6 +10,7 @@ import com.tomtruyen.fitnessapplication.validation.ValidationResult
 import com.tomtruyen.fitnessapplication.validation.rules.RequiredRule
 
 data class CreateExerciseUiState(
+    val initialExercise: Exercise = Exercise(),
     val exercise: Exercise = Exercise(),
     val isEditing: Boolean = false,
     var lastNameValidationResult: ValidationResult? = null,

@@ -21,6 +21,7 @@ import com.tomtruyen.fitnessapplication.navigation.BottomNavigation
 fun Toolbar(
     title: String,
     navController: NavController,
+    onNavigateUp: () -> Unit = { navController.popBackStack() },
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     TopAppBar(
@@ -31,7 +32,9 @@ fun Toolbar(
             if(navController.previousBackStackEntry != null
                 && navController.currentBackStackEntry?.destination?.route !in BottomNavigation.items.map { it.route }) {
                 IconButton(
-                    onClick = { navController.popBackStack() }
+                    onClick = {
+                        onNavigateUp()
+                    }
                 ) {
                     Icon(
                         imageVector = Icons.Filled.ChevronLeft,

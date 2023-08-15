@@ -227,9 +227,6 @@ fun ExerciseDetailScreenLayout(
                         confirmationDialogVisible = false
                     },
                     confirmText = R.string.delete,
-                    confirmButtonColors = ButtonDefaults.textButtonColors(
-                        contentColor = MaterialTheme.colorScheme.error
-                    )
                 )
             }
         }
