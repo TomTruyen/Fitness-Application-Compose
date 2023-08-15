@@ -115,14 +115,12 @@ fun CreateExerciseScreenLayout(
     ) {
         BoxWithLoader(
             loading = loading,
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize()
-                .padding(Dimens.Normal)
+            modifier = Modifier.padding(it)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(Dimens.Normal)
             ) {
                 Column(
                     modifier = Modifier

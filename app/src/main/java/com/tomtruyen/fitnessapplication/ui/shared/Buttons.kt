@@ -45,6 +45,7 @@ object Buttons {
             )
         ) {
             Text(
+                modifier = Modifier.padding(vertical = Dimens.Tiny),
                 text = text
             )
         }
@@ -65,6 +66,7 @@ object Buttons {
             modifier = modifier,
         ) {
             Text(
+                modifier = Modifier.padding(vertical = Dimens.Tiny),
                 text = text
             )
         }

@@ -95,6 +95,7 @@ object SocialButtons {
             )
             Spacer(modifier = Modifier.width(Dimens.Tiny))
             Text(
+                modifier = Modifier.padding(vertical = Dimens.Tiny),
                 text = text,
                 style = TextStyle(
                     color = MaterialTheme.colorScheme.background

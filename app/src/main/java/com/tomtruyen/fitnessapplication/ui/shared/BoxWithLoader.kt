@@ -1,6 +1,7 @@
 package com.tomtruyen.fitnessapplication.ui.shared
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,13 +14,14 @@ fun BoxWithLoader(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    Box(modifier = modifier) {
-        content()
+    Column(modifier = modifier) {
+        Box(modifier = Modifier.weight(1f)) {
+            content()
+        }
 
         Loader(
             loading = loading,
-            modifier = Modifier.align(Alignment.BottomCenter)
-                .padding(top = Dimens.Tiny)
+            modifier = Modifier.padding(top = Dimens.Tiny)
         )
     }
 }
