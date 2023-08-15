@@ -43,6 +43,7 @@
     <string name="clear">Clear</string>
     <string name="categories">Categories</string>
     <string name="equipment">Equipment</string>
+    <string name="exercise_detail_steps_title">How to perform:</string>
 
 
 </resources>

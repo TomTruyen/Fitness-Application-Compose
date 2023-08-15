@@ -39,11 +39,9 @@ class ExercisesViewModel(
 
     fun onEvent(event: ExercisesUiEvent) {
         when(event) {
-            is ExercisesUiEvent.OnFilterClicked -> navigate(ExercisesNavigationType.Filter)
             is ExercisesUiEvent.OnToggleSearch -> state.value = state.value.copy(
                 searching = !state.value.searching
             )
-            is ExercisesUiEvent.OnAddClicked -> navigate(ExercisesNavigationType.Add)
             is ExercisesUiEvent.OnSearchQueryChanged -> state.value = state.value.copy(
                 search = event.query
             )
@@ -70,6 +68,9 @@ class ExercisesViewModel(
                     }
                 }
             )
+            is ExercisesUiEvent.OnFilterClicked -> navigate(ExercisesNavigationType.Filter)
+            is ExercisesUiEvent.OnAddClicked -> navigate(ExercisesNavigationType.Add)
+            is ExercisesUiEvent.OnExerciseClicked -> navigate(ExercisesNavigationType.Detail(event.exercise.id))
         }
     }
 }

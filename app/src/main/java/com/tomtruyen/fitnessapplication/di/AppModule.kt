@@ -13,6 +13,7 @@ import com.tomtruyen.fitnessapplication.ui.screens.auth.login.LoginViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.auth.register.RegisterViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.profile.ProfileViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesViewModel
+import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.detail.ExerciseDetailViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.singleOf
@@ -46,4 +47,5 @@ val appModule = module {
     viewModelOf(::RegisterViewModel)
     viewModelOf(::ProfileViewModel)
     viewModelOf(::ExercisesViewModel)
+    viewModelOf(::ExerciseDetailViewModel)
 }

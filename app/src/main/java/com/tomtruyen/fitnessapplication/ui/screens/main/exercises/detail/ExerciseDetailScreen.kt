@@ -1,0 +1,159 @@
+package com.tomtruyen.fitnessapplication.ui.screens.main.exercises.detail
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.ramcosta.composedestinations.annotation.Destination
+import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.fitnessapplication.R
+import com.tomtruyen.fitnessapplication.data.entities.Exercise
+import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
+import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiEvent
+import com.tomtruyen.fitnessapplication.ui.shared.ExerciseFilterChip
+import com.tomtruyen.fitnessapplication.ui.shared.Toolbar
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
+
+@ExercisesNavGraph
+@Destination
+@Composable
+fun ExerciseDetailScreen(
+    id: String,
+    navController: NavController,
+    viewModel: ExerciseDetailViewModel = koinViewModel(
+        parameters = { parametersOf(id) }
+    )
+) {
+    val exercise by viewModel.exercise.collectAsStateWithLifecycle(initialValue = null)
+
+    ExerciseDetailScreenLayout(
+        snackbarHost = { viewModel.CreateSnackbarHost() },
+        navController = navController,
+        exercise = exercise
+    )
+}
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun ExerciseDetailScreenLayout(
+    snackbarHost: @Composable () -> Unit,
+    navController: NavController,
+    exercise: Exercise?
+) {
+    Scaffold(
+        snackbarHost = snackbarHost,
+        topBar = {
+            Toolbar(
+                title = exercise?.name ?: "",
+                navController = navController
+            )
+        }
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
+        ) {
+            if(exercise?.imageDetail != null || exercise?.image != null) {
+                item {
+                    GlideImage(
+                        model = exercise.imageDetail ?: exercise.image,
+                        contentDescription = exercise.name,
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(16f / 9f)
+                    )
+                }
+            }
+
+            item {
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(Dimens.Small)
+                ) {
+                    itemsIndexed(
+                        arrayOf(exercise?.category, exercise?.equipment).filter { !it.isNullOrBlank() }
+                    ) { index, filter ->
+                        ExerciseFilterChip(
+                            modifier = Modifier.padding(start = if (index == 0) Dimens.Normal else 0.dp),
+                            text = filter ?: "",
+                            selected = true,
+                        )
+                    }
+                }
+            }
+
+            item {
+                Text(
+                    text = stringResource(id = R.string.exercise_detail_steps_title),
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.W500
+                    ),
+                    modifier = Modifier.padding(
+                        horizontal = Dimens.Normal,
+                        vertical = Dimens.Tiny
+                    )
+                )
+            }
+
+            itemsIndexed(exercise?.steps ?: emptyList()) { index, step ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = Dimens.Normal)
+                        .padding(top = Dimens.Tiny),
+                    verticalAlignment = Alignment.Top,
+                ) {
+                    Text(
+                        text = "${index + 1}.",
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.W500
+                        ),
+                    )
+
+                    Spacer(modifier = Modifier.width(Dimens.Small))
+
+                    Text(
+                        text = step,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
+            }
+        }
+    }
+}

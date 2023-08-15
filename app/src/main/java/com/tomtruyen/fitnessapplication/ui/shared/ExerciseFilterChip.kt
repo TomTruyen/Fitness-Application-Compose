@@ -16,12 +16,12 @@ fun ExerciseFilterChip(
     selected: Boolean,
     modifier: Modifier = Modifier,
     trailingIcon: @Composable (() -> Unit)? = null,
-    onClick: () -> Unit
+    onClick: (() -> Unit)? = null
 ) {
     FilterChip(
         modifier = modifier,
         selected = selected,
-        onClick = onClick,
+        onClick = onClick ?: {},
         trailingIcon = trailingIcon,
         label = {
             Text(text = text)

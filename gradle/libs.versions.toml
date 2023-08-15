@@ -21,6 +21,7 @@ raamcosta-compose-destinations = "1.9.51"
 secrets-gradle = "2.0.1"
 room = "2.5.2"
 gson = "2.10.1"
+glide = "1.0.0-alpha.1"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -53,6 +54,7 @@ raamcosta-compose-destinations-ksp = { group = "io.github.raamcosta.compose-dest
 room = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+glide = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glide" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -27,6 +27,8 @@ class ExerciseRepositoryImpl(
         equipment = filter.equipment
     )
 
+    override fun findExerciseById(id: String) = exerciseDao.findByIdAsync(id)
+
     override fun findCategories() = exerciseDao.findCategories()
 
     override fun findEquipment() = exerciseDao.findEquipment()

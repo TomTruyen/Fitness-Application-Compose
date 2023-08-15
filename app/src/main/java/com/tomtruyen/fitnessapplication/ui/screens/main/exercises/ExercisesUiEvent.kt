@@ -1,5 +1,7 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises
 
+import com.tomtruyen.fitnessapplication.data.entities.Exercise
+
 sealed class ExercisesUiEvent {
     data object OnToggleSearch : ExercisesUiEvent()
     data object OnFilterClicked : ExercisesUiEvent()
@@ -9,4 +11,5 @@ sealed class ExercisesUiEvent {
     data class OnEquipmentFilterChanged(val equipment: String) : ExercisesUiEvent()
     data object OnClearFilterClicked : ExercisesUiEvent()
     data class OnRemoveFilterClicked(val filter: String) : ExercisesUiEvent()
+    data class OnExerciseClicked(val exercise: Exercise) : ExercisesUiEvent()
 }

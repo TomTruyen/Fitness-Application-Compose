@@ -50,6 +50,7 @@ import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
+import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExerciseDetailScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesFilterScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.CollapsingToolbar
@@ -77,6 +78,7 @@ fun ExercisesScreen(
             when(navigationType) {
                 is ExercisesNavigationType.Filter -> navController.navigate(ExercisesFilterScreenDestination)
                 is ExercisesNavigationType.Add -> TODO()
+                is ExercisesNavigationType.Detail -> navController.navigate(ExerciseDetailScreenDestination(navigationType.id))
                 else -> Unit
             }
         }
@@ -221,7 +223,7 @@ fun ExercisesScreenLayout(
                             }
 
                             ExerciseListItem(exercise) {
-
+                                onEvent(ExercisesUiEvent.OnExerciseClicked(exercise))
                             }
 
                             if (index < exercises.lastIndex) {

@@ -21,6 +21,9 @@ abstract class ExerciseDao {
     @Upsert
     abstract fun saveAll(exercises: List<Exercise>): List<Long>
 
+    @Query("SELECT * FROM ${Exercise.TABLE_NAME} WHERE id = :id")
+    abstract fun findByIdAsync(id: String): Flow<Exercise?>
+
     fun findAllAsync(query: String, categories: List<String>, equipment: List<String>): Flow<List<Exercise>> {
         return findAllAsync(findAllQuery(query, categories, equipment))
     }

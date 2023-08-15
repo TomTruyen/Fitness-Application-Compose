@@ -109,6 +109,9 @@ dependencies {
     implementation(libs.raamcosta.compose.destinations)
     ksp(libs.raamcosta.compose.destinations.ksp)
 
+    // Glide
+    implementation(libs.glide)
+
     // Unit Testing
     testImplementation(libs.junit)
     testImplementation(libs.koin.test.junit)
