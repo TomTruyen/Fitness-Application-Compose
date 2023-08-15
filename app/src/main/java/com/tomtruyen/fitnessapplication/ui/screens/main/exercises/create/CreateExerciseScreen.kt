@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +28,7 @@ import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
+import com.tomtruyen.fitnessapplication.ui.shared.Dropdown
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 import com.tomtruyen.fitnessapplication.ui.shared.Toolbar
 import kotlinx.coroutines.flow.collectLatest
@@ -76,11 +78,7 @@ fun CreateExerciseScreenLayout(
     equipment: List<String>,
     onEvent: (CreateExerciseUiEvent) -> Unit,
 ) {
-    val types = Exercise.ExerciseType.values().map { it.name }
-
-    var categoriesExpanded by remember { mutableStateOf(false) }
-    var equipmentExpanded by remember { mutableStateOf(false) }
-    var typeExpanded by remember { mutableStateOf(false) }
+    val types = Exercise.ExerciseType.values().map { it.value.replaceFirstChar { it.uppercase() } }
 
     Scaffold(
         snackbarHost = snackbarHost,
@@ -100,7 +98,8 @@ fun CreateExerciseScreenLayout(
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(Dimens.Small)
             ) {
                 TextFields.Default(
                     value = state.exercise.name,
@@ -110,59 +109,26 @@ fun CreateExerciseScreenLayout(
                     placeholder = stringResource(id = R.string.hint_name),
                 )
 
-                DropdownMenu(
-                    expanded = categoriesExpanded,
-                    onDismissRequest = { categoriesExpanded = false },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    categories.forEach { category ->
-                        DropdownMenuItem(
-                            text = {
-                                Text(text = category)
-                            },
-                            onClick = {
-                                onEvent(CreateExerciseUiEvent.OnCategoryChanged(category))
-                                categoriesExpanded = false
-                            }
-                        )
-                    }
-                }
+                Dropdown(
+                    placeholder = stringResource(id = R.string.hint_category),
+                    options = categories,
+                    selectedOption = state.exercise.category,
+                    onOptionSelected = { category -> onEvent(CreateExerciseUiEvent.OnCategoryChanged(category)) },
+                )
 
-                DropdownMenu(
-                    expanded = equipmentExpanded,
-                    onDismissRequest = { equipmentExpanded = false },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    equipment.forEach { equipment ->
-                        DropdownMenuItem(
-                            text = {
-                                Text(text = equipment)
-                            },
-                            onClick = {
-                                onEvent(CreateExerciseUiEvent.OnEquipmentChanged(equipment))
-                                equipmentExpanded = false
-                            }
-                        )
-                    }
-                }
+                Dropdown(
+                    placeholder = stringResource(id = R.string.hint_equipment),
+                    options = equipment,
+                    selectedOption = state.exercise.equipment,
+                    onOptionSelected = { equipment -> onEvent(CreateExerciseUiEvent.OnEquipmentChanged(equipment)) },
+                )
 
-                DropdownMenu(
-                    expanded = typeExpanded,
-                    onDismissRequest = { typeExpanded = false },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    types.forEach { type ->
-                        DropdownMenuItem(
-                            text = {
-                                Text(text = type)
-                            },
-                            onClick = {
-                                onEvent(CreateExerciseUiEvent.OnTypeChanged(type))
-                                typeExpanded = false
-                            }
-                        )
-                    }
-                }
+                Dropdown(
+                    placeholder = stringResource(id = R.string.hint_type),
+                    options = types,
+                    selectedOption = state.exercise.type,
+                    onOptionSelected = { type -> onEvent(CreateExerciseUiEvent.OnTypeChanged(type)) },
+                )
             }
 
             Buttons.Default(

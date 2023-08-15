@@ -59,6 +59,9 @@
     <string name="hint_name">Name</string>
     <string name="save">Save</string>
     <string name="exercise_saved">Exercise saved</string>
+    <string name="hint_type">Type</string>
+    <string name="hint_equipment">Equipment</string>
+    <string name="hint_category">Category</string>
 
     <!-- Workouts -->
 

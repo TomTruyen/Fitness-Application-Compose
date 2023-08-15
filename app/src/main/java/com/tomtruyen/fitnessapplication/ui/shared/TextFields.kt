@@ -35,17 +35,23 @@ object TextFields {
         error: String? = null,
         obscureText: Boolean = false,
         search: Boolean = false,
+        readOnly: Boolean = false,
+        enabled: Boolean = true,
+        trailingIcon: @Composable (() -> Unit)? = null,
         keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
         colors: TextFieldColors = TextFieldDefaults.colors(
             focusedContainerColor = MaterialTheme.colorScheme.surface,
             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
             errorContainerColor = MaterialTheme.colorScheme.surface,
+            disabledContainerColor = MaterialTheme.colorScheme.surface,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             errorIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent,
             focusedTextColor = MaterialTheme.colorScheme.onSurface,
             unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
             errorTextColor = MaterialTheme.colorScheme.onSurface,
+            disabledTextColor = MaterialTheme.colorScheme.onSurface,
         ),
         shape: Shape = MaterialTheme.shapes.medium,
         modifier: Modifier = Modifier
@@ -58,6 +64,8 @@ object TextFields {
 
         Column(modifier = modifier) {
             TextField(
+                readOnly = readOnly,
+                enabled = enabled,
                 value = value ?: "",
                 onValueChange = onValueChange,
                 visualTransformation = if (!obscureText || obscureTextVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -92,32 +100,36 @@ object TextFields {
                     Modifier.fillMaxWidth()
                 },
                 trailingIcon = {
-                    if (obscureText) {
-                        IconButton(
-                            onClick = { obscureTextVisible = !obscureTextVisible },
-                        ) {
-                            val icon =
-                                if (obscureTextVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                            val contentDescription = if (obscureTextVisible) {
-                                stringResource(id = R.string.content_description_hide_password)
-                            } else {
-                                stringResource(id = R.string.content_description_show_password)
+                    if(trailingIcon != null) {
+                        trailingIcon()
+                    } else {
+                        if (obscureText) {
+                            IconButton(
+                                onClick = { obscureTextVisible = !obscureTextVisible },
+                            ) {
+                                val icon =
+                                    if (obscureTextVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                                val contentDescription = if (obscureTextVisible) {
+                                    stringResource(id = R.string.content_description_hide_password)
+                                } else {
+                                    stringResource(id = R.string.content_description_show_password)
+                                }
+
+                                Icon(
+                                    imageVector = icon,
+                                    contentDescription = contentDescription,
+                                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                )
                             }
-
-                            Icon(
-                                imageVector = icon,
-                                contentDescription = contentDescription,
-                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                            )
                         }
-                    }
 
-                    if (search && !value.isNullOrBlank()) {
-                        IconButton(onClick = { onValueChange("") }) {
-                            Icon(
-                                imageVector = Icons.Filled.Clear,
-                                contentDescription = stringResource(id = R.string.content_description_clear),
-                            )
+                        if (search && !value.isNullOrBlank()) {
+                            IconButton(onClick = { onValueChange("") }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Clear,
+                                    contentDescription = stringResource(id = R.string.content_description_clear),
+                                )
+                            }
                         }
                     }
                 }
