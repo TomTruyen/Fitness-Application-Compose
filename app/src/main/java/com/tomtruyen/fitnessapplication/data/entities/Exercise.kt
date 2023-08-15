@@ -7,10 +7,10 @@ import com.google.firebase.firestore.PropertyName
 @Entity(tableName = Exercise.TABLE_NAME)
 data class Exercise(
     @PrimaryKey var id: String = "",
-    var name: String = "",
-    var category: String = "",
-    var equipment: String = "",
-    var image: String = "",
+    var name: String? = null,
+    var category: String? = null,
+    var equipment: String? = null,
+    var image: String? = null,
     @get:PropertyName("image_detail")
     @set:PropertyName("image_detail")
     var imageDetail: String? = null,

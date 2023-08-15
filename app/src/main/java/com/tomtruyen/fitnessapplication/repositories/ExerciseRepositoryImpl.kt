@@ -29,9 +29,11 @@ class ExerciseRepositoryImpl(
         equipment = filter.equipment
     )
 
-    override fun findUserExercises() = exerciseDao.findAllUserExercises()
+    override suspend fun findUserExercises() = exerciseDao.findAllUserExercises()
 
     override fun findExerciseById(id: String) = exerciseDao.findByIdAsync(id)
+
+    override suspend fun findUserExerciseById(id: String) = exerciseDao.findUserExerciseById(id)
 
     override fun findCategories() = exerciseDao.findCategories()
 
@@ -107,7 +109,7 @@ class ExerciseRepositoryImpl(
             ) {
                 scope.launch {
                     if(userExercises.isNotEmpty()) {
-                        exerciseDao.deleteAllExcept(userExercises.map { it.id })
+                        exerciseDao.deleteAllUserExercisesExcept(userExercises.map { it.id })
                     }
 
                     exerciseDao.saveAll(userExercises)

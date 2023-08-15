@@ -20,6 +20,7 @@ fun Dropdown(
     placeholder: String,
     options: List<String>,
     selectedOption: String,
+    error: String? = null,
     onOptionSelected: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -31,6 +32,7 @@ fun Dropdown(
         },
     ) {
         TextFields.Default(
+            error = error,
             readOnly = true,
             enabled = false,
             placeholder = placeholder,

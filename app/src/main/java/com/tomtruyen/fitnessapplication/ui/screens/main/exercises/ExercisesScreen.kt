@@ -259,7 +259,7 @@ fun ExerciseListItem(exercise: Exercise, onClick: () -> Unit) {
                 style = MaterialTheme.typography.bodyMedium,
             )
             Text(
-                text = exercise.category,
+                text = exercise.category ?: "",
                 style = MaterialTheme.typography.bodySmall.copy(
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                 ),

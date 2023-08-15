@@ -151,7 +151,7 @@ fun ExerciseDetailScreenLayout(
                     horizontalArrangement = Arrangement.spacedBy(Dimens.Small)
                 ) {
                     itemsIndexed(
-                        arrayOf(exercise?.category, exercise?.equipment).filter { !it.isNullOrBlank() }
+                        arrayOf(exercise?.category, exercise?.equipment, exercise?.type).filter { !it.isNullOrBlank() }
                     ) { index, filter ->
                         ExerciseFilterChip(
                             modifier = Modifier.padding(start = if (index == 0) Dimens.Normal else 0.dp),
@@ -162,40 +162,42 @@ fun ExerciseDetailScreenLayout(
                 }
             }
 
-            item {
-                Text(
-                    text = stringResource(id = R.string.exercise_detail_steps_title),
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        fontWeight = FontWeight.W500
-                    ),
-                    modifier = Modifier.padding(
-                        horizontal = Dimens.Normal,
-                        vertical = Dimens.Tiny
-                    )
-                )
-            }
-
-            itemsIndexed(exercise?.steps ?: emptyList()) { index, step ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = Dimens.Normal)
-                        .padding(top = Dimens.Tiny),
-                    verticalAlignment = Alignment.Top,
-                ) {
+            if(exercise?.steps?.isNotEmpty() == true) {
+                item {
                     Text(
-                        text = "${index + 1}.",
-                        style = MaterialTheme.typography.bodySmall.copy(
+                        text = stringResource(id = R.string.exercise_detail_steps_title),
+                        style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.W500
                         ),
+                        modifier = Modifier.padding(
+                            horizontal = Dimens.Normal,
+                            vertical = Dimens.Tiny
+                        )
                     )
+                }
 
-                    Spacer(modifier = Modifier.width(Dimens.Small))
+                itemsIndexed(exercise.steps ?: emptyList()) { index, step ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = Dimens.Normal)
+                            .padding(top = Dimens.Tiny),
+                        verticalAlignment = Alignment.Top,
+                    ) {
+                        Text(
+                            text = "${index + 1}.",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontWeight = FontWeight.W500
+                            ),
+                        )
 
-                    Text(
-                        text = step,
-                        style = MaterialTheme.typography.bodySmall,
-                    )
+                        Spacer(modifier = Modifier.width(Dimens.Small))
+
+                        Text(
+                            text = step,
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
                 }
             }
         }

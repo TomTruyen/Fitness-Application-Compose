@@ -9,8 +9,9 @@ import kotlinx.coroutines.flow.Flow
 
 abstract class ExerciseRepository: BaseRepository() {
     abstract fun findExercises(query: String, filter: ExerciseFilter): Flow<List<Exercise>>
-    abstract fun findUserExercises(): List<Exercise>
+    abstract suspend fun findUserExercises(): List<Exercise>
     abstract fun findExerciseById(id: String): Flow<Exercise?>
+    abstract suspend fun findUserExerciseById(id: String): Exercise?
     abstract fun findEquipment(): Flow<List<String>>
     abstract fun findCategories(): Flow<List<String>>
     abstract fun getExercises(callback: FirebaseCallback<List<Exercise>>)

@@ -28,6 +28,20 @@ class CreateExerciseViewModel(
     val categories = exerciseRepository.findCategories()
     val equipment = exerciseRepository.findEquipment()
 
+    init {
+        findExercise()
+    }
+
+    private fun findExercise() = launchLoading {
+        if(!isEditing || id == null) return@launchLoading
+
+        exerciseRepository.findUserExerciseById(id)?.let {
+            state.value = state.value.copy(
+                exercise = it
+            )
+        }
+    }
+
     private fun save() = launchLoading {
         val userId = userRepository.getUser()?.uid ?: return@launchLoading
         val exercises = exerciseRepository.findUserExercises().toMutableList()
