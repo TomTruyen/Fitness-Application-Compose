@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -21,7 +22,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -36,6 +39,7 @@ import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesNavig
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiEvent
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiState
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesViewModel
+import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.ExerciseFilterChip
 import com.tomtruyen.fitnessapplication.ui.shared.Toolbar
 import kotlinx.coroutines.flow.collectLatest
@@ -89,17 +93,15 @@ fun ExercisesFilterScreenLayout(
                 title = stringResource(id = R.string.filter),
                 navController = navController,
             ) {
-                Text(
+                Buttons.Text(
                     text = stringResource(id = R.string.clear),
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = MaterialTheme.colorScheme.error
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error
                     ),
-                    modifier = Modifier
-                        .padding(end = Dimens.Normal)
-                        .clickable {
-                            onEvent(ExercisesUiEvent.OnClearFilterClicked)
-                        }
-                )
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                ) {
+                    onEvent(ExercisesUiEvent.OnClearFilterClicked)
+                }
             }
         }
     ) {
