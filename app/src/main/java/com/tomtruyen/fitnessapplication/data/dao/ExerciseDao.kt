@@ -7,6 +7,8 @@ import androidx.room.Upsert
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
+import com.tomtruyen.fitnessapplication.extensions.toInt
+import com.tomtruyen.fitnessapplication.model.ExerciseFilter
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -33,14 +35,14 @@ abstract class ExerciseDao {
     @Query("SELECT * FROM ${Exercise.TABLE_NAME} WHERE isUserCreated = 1")
     abstract fun findAllUserExercises(): List<Exercise>
 
-    fun findAllAsync(query: String, categories: List<String>, equipment: List<String>): Flow<List<Exercise>> {
-        return findAllAsync(findAllQuery(query, categories, equipment))
+    fun findAllAsync(query: String, filter: ExerciseFilter): Flow<List<Exercise>> {
+        return findAllAsync(findAllQuery(query, filter))
     }
 
     @RawQuery(observedEntities = [Exercise::class])
     abstract fun findAllAsync(query: SupportSQLiteQuery): Flow<List<Exercise>>
 
-    private fun findAllQuery(query: String, categories: List<String>, equipment: List<String>): SupportSQLiteQuery {
+    private fun findAllQuery(query: String, filter: ExerciseFilter): SupportSQLiteQuery {
         val sql = buildString {
             append("SELECT * FROM ${Exercise.TABLE_NAME}")
 
@@ -50,13 +52,13 @@ abstract class ExerciseDao {
                 filters.add("name LIKE '%$query%'")
             }
 
-            if (categories.isNotEmpty()) {
-                val categoriesString = categories.joinToString(",") { "'$it'" }
+            if (filter.categories.isNotEmpty()) {
+                val categoriesString = filter.categories.joinToString(",") { "'$it'" }
                 filters.add("category IN ($categoriesString)")
             }
 
-            if (equipment.isNotEmpty()) {
-                val equipmentString = equipment.joinToString(",") { "'$it'" }
+            if (filter.equipment.isNotEmpty()) {
+                val equipmentString = filter.equipment.joinToString(",") { "'$it'" }
                 filters.add("equipment IN ($equipmentString)")
             }
 
@@ -65,7 +67,7 @@ abstract class ExerciseDao {
                 append(filters.joinToString(" AND "))
             }
 
-            append(" ORDER BY name ASC")
+            append(" ORDER BY LOWER(name) ASC")
         }
 
         return SimpleSQLiteQuery(sql)

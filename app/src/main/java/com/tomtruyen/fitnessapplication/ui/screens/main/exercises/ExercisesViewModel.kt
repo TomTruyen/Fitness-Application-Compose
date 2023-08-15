@@ -6,13 +6,16 @@ import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.model.ExerciseFilter
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
+import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ExercisesViewModel(
-    private val exerciseRepository: ExerciseRepository
+    private val exerciseRepository: ExerciseRepository,
+    private val userRepository: UserRepository,
 ): BaseViewModel<ExercisesNavigationType>() {
     val state = MutableStateFlow(ExercisesUiState())
 
@@ -23,18 +26,27 @@ class ExercisesViewModel(
     val categories = exerciseRepository.findCategories()
     val equipment = exerciseRepository.findEquipment()
 
-    init {
-        getExercises()
-    }
-
-    private fun getExercises() = launchLoading {
-        exerciseRepository.getExercises(object: FirebaseCallback<List<Exercise>> {
+    private val callback by lazy {
+        object: FirebaseCallback<List<Exercise>> {
             override fun onSuccess(value: List<Exercise>) {}
 
             override fun onError(error: String?) {
                 showSnackbar(SnackbarMessage.Error(error))
             }
-        })
+        }
+    }
+
+    init {
+        getExercises()
+
+    }
+
+    private fun getExercises() = launchLoading {
+        exerciseRepository.getExercises(callback)
+
+        userRepository.getUser()?.let {
+            exerciseRepository.getUserExercises(it.uid, callback)
+        }
     }
 
     fun onEvent(event: ExercisesUiEvent) {

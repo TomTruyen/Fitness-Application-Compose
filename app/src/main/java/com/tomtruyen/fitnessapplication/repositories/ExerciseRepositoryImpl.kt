@@ -25,8 +25,7 @@ class ExerciseRepositoryImpl(
 ): ExerciseRepository() {
     override fun findExercises(query: String, filter: ExerciseFilter) = exerciseDao.findAllAsync(
         query = query,
-        categories = filter.categories,
-        equipment = filter.equipment
+        filter = filter,
     )
 
     override suspend fun findUserExercises() = exerciseDao.findAllUserExercises()
