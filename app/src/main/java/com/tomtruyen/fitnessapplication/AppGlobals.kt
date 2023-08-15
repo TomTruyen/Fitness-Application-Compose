@@ -20,6 +20,7 @@ data class FetchedData(
    }
 
    enum class Type {
-       EXERCISES
+       EXERCISES,
+       USER_EXERCISES
    }
 }

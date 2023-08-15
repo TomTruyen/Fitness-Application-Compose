@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tomtruyen.fitnessapplication.Dimens
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -37,7 +38,7 @@ open class BaseViewModel<TNavigationType>: ViewModel() {
 
     private var snackbarMessage by mutableStateOf<SnackbarMessage>(SnackbarMessage.Empty)
 
-    protected fun launchLoading(block: suspend CoroutineScope.() -> Unit) = vmScope.launch {
+    protected fun launchLoading(block: suspend CoroutineScope.() -> Unit) = vmScope.launch(Dispatchers.IO) {
         loading.tryEmit(true)
         block()
         loading.tryEmit(false)

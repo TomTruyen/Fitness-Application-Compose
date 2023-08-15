@@ -21,8 +21,14 @@ abstract class ExerciseDao {
     @Upsert
     abstract fun saveAll(exercises: List<Exercise>): List<Long>
 
+    @Query("DELETE FROM ${Exercise.TABLE_NAME} WHERE NOT id IN (:ids)")
+    abstract fun deleteAllExcept(ids: List<String>)
+
     @Query("SELECT * FROM ${Exercise.TABLE_NAME} WHERE id = :id")
     abstract fun findByIdAsync(id: String): Flow<Exercise?>
+
+    @Query("SELECT * FROM ${Exercise.TABLE_NAME} WHERE isUserCreated = 1")
+    abstract fun findAllUserExercises(): List<Exercise>
 
     fun findAllAsync(query: String, categories: List<String>, equipment: List<String>): Flow<List<Exercise>> {
         return findAllAsync(findAllQuery(query, categories, equipment))
@@ -55,6 +61,8 @@ abstract class ExerciseDao {
                 append(" WHERE ")
                 append(filters.joinToString(" AND "))
             }
+
+            append(" ORDER BY name ASC")
         }
 
         return SimpleSQLiteQuery(sql)

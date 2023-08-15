@@ -50,6 +50,7 @@ import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
+import com.tomtruyen.fitnessapplication.ui.screens.destinations.CreateExerciseScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExerciseDetailScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesFilterScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
@@ -77,7 +78,7 @@ fun ExercisesScreen(
         viewModel.navigation.collectLatest { navigationType ->
             when(navigationType) {
                 is ExercisesNavigationType.Filter -> navController.navigate(ExercisesFilterScreenDestination)
-                is ExercisesNavigationType.Add -> TODO()
+                is ExercisesNavigationType.Add -> navController.navigate(CreateExerciseScreenDestination(id = null))
                 is ExercisesNavigationType.Detail -> navController.navigate(ExerciseDetailScreenDestination(navigationType.id))
                 else -> Unit
             }

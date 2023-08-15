@@ -42,10 +42,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.navigate
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
+import com.tomtruyen.fitnessapplication.ui.screens.destinations.CreateExerciseScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiEvent
 import com.tomtruyen.fitnessapplication.ui.shared.ExerciseFilterChip
 import com.tomtruyen.fitnessapplication.ui.shared.Toolbar
@@ -71,7 +73,7 @@ fun ExerciseDetailScreen(
         viewModel.navigation.collectLatest { navigationType ->
             when(navigationType) {
                 is ExerciseDetailNavigationType.Back -> navController.popBackStack()
-                is ExerciseDetailNavigationType.Edit -> TODO()
+                is ExerciseDetailNavigationType.Edit -> navController.navigate(CreateExerciseScreenDestination(id = id))
             }
         }
     }

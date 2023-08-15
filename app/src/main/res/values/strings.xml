@@ -54,6 +54,11 @@
     <string name="categories">Categories</string>
     <string name="equipment">Equipment</string>
     <string name="exercise_detail_steps_title">How to perform:</string>
+    <string name="edit_exercise">Edit exercise</string>
+    <string name="create_exercise">Create exercise</string>
+    <string name="hint_name">Name</string>
+    <string name="save">Save</string>
+    <string name="exercise_saved">Exercise saved</string>
 
     <!-- Workouts -->
 
