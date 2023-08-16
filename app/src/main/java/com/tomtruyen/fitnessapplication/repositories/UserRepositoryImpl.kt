@@ -5,15 +5,18 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.tomtruyen.fitnessapplication.data.AppDatabase
+import com.tomtruyen.fitnessapplication.data.entities.Settings
 import com.tomtruyen.fitnessapplication.extensions.handleCompletionResult
 import com.tomtruyen.fitnessapplication.helpers.ContextProvider
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
+import com.tomtruyen.fitnessapplication.repositories.interfaces.SettingsRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import kotlinx.coroutines.launch
 
 class UserRepositoryImpl(
     contextProvider: ContextProvider,
-    private val database: AppDatabase
+    private val database: AppDatabase,
+    private val settingsRepository: SettingsRepository
 ): UserRepository() {
     private val context = contextProvider.context
 
@@ -24,6 +27,7 @@ class UserRepositoryImpl(
                 context = context,
                 callback = callback
             ) { result ->
+                getUserData()
                 callback.onSuccess(result.user)
             }
     }
@@ -34,6 +38,7 @@ class UserRepositoryImpl(
                 context = context,
                 callback = callback
             ) { result ->
+                getUserData()
                 callback.onSuccess(result.user)
             }
     }
@@ -45,6 +50,7 @@ class UserRepositoryImpl(
                 context = context,
                 callback = callback
             ) { result ->
+                getUserData()
                 callback.onSuccess(result.user)
             }
     }
@@ -60,4 +66,16 @@ class UserRepositoryImpl(
     override fun isLoggedIn() = auth.currentUser != null
 
     override fun getUser() = auth.currentUser
+
+    private fun getUserData() = scope.launch {
+        val userId = getUser()?.uid ?: return@launch
+
+        settingsRepository.getSettings(
+            userId = userId,
+            callback = object: FirebaseCallback<Settings> {
+                override fun onSuccess(value: Settings) {}
+                override fun onError(error: String?) {}
+            }
+        )
+    }
 }

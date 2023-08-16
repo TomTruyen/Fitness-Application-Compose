@@ -44,7 +44,7 @@ val appModule = module {
     single { get<AppDatabase>().settingsDao() }
 
     // Repositories
-    single<UserRepository> { UserRepositoryImpl(get(), get()) }
+    single<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
     single<ExerciseRepository> { ExerciseRepositoryImpl(get(), get()) }
     single<SettingsRepository> { SettingsRepositoryImpl(get(), get()) }
 
