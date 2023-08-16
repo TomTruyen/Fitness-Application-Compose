@@ -21,7 +21,7 @@ fun RadioListItem(title: String, selected: Boolean, onCheckedChange: (Boolean) -
             .clickable {
                 onCheckedChange(!selected)
             }
-            .padding(horizontal = Dimens.Normal, vertical = Dimens.Small),
+            .padding(horizontal = Dimens.Tiny, vertical = Dimens.Small),
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(

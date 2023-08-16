@@ -102,7 +102,7 @@ fun <T> NumberPicker(
                     coroutineScope.launch {
                         val endValue = animatedOffset.fling(
                             initialVelocity = velocity,
-                            animationSpec = exponentialDecay(frictionMultiplier = 0.5f),
+                            animationSpec = exponentialDecay(frictionMultiplier = 1f),
                             adjustTarget = { target ->
                                 val coercedTarget = target % halfNumbersColumnHeightPx
                                 val coercedAnchors =
