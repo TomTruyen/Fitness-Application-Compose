@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.kapt)
+    alias(libs.plugins.androidGitVersion)
 }
 
 sonar {
@@ -16,6 +17,11 @@ sonar {
         property("sonar.organization", "tom-truyen")
         property("sonar.host.url", "https://sonarcloud.io")
     }
+}
+
+androidGitVersion {
+    codeFormat = "MNNPPPBBB"
+    format = "%tag%%.count%"
 }
 
 // Signing Configuration for Keystore
@@ -33,8 +39,8 @@ android {
         applicationId = "com.tomtruyen.fitnessapplication"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionName = androidGitVersion.name()
+        versionCode = androidGitVersion.code()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

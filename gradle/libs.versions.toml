@@ -22,6 +22,7 @@ secrets-gradle = "2.0.1"
 room = "2.5.2"
 gson = "2.10.1"
 glide = "1.0.0-alpha.1"
+android-git-version = "0.4.14"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -65,3 +66,4 @@ sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 secretsGradle = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets-gradle" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+androidGitVersion = { id = "com.gladed.androidgitversion", version.ref = "android-git-version" }
