@@ -4,13 +4,16 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.tomtruyen.fitnessapplication.data.AppDatabase
 import com.tomtruyen.fitnessapplication.extensions.handleCompletionResult
 import com.tomtruyen.fitnessapplication.helpers.ContextProvider
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
+import kotlinx.coroutines.launch
 
 class UserRepositoryImpl(
     contextProvider: ContextProvider,
+    private val database: AppDatabase
 ): UserRepository() {
     private val context = contextProvider.context
 
@@ -47,6 +50,10 @@ class UserRepositoryImpl(
     }
 
     override fun logout() {
+        scope.launch {
+            database.clearAllTables()
+        }
+
         auth.signOut()
     }
 
