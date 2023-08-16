@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.ui.shared
+package com.tomtruyen.fitnessapplication.ui.shared.dialogs
 
 import androidx.annotation.StringRes
 import androidx.compose.material3.AlertDialog
@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.tomtruyen.fitnessapplication.R
+import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 
 @Composable
 fun ConfirmationDialog(
@@ -18,7 +19,7 @@ fun ConfirmationDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
     @StringRes confirmText: Int,
-    @StringRes dismissText: Int = R.string.cancel,
+    @StringRes dismissText: Int = android.R.string.cancel,
     confirmButtonColors: ButtonColors = ButtonDefaults.textButtonColors(
         contentColor = MaterialTheme.colorScheme.error
     ),

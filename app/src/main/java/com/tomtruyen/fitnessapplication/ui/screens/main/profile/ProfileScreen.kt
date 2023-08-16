@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -19,6 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -37,9 +39,11 @@ import com.tomtruyen.fitnessapplication.ui.screens.destinations.LoginScreenDesti
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutOverviewScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
-import com.tomtruyen.fitnessapplication.ui.shared.CollapsingToolbar
-import com.tomtruyen.fitnessapplication.ui.shared.ListItem
-import com.tomtruyen.fitnessapplication.ui.shared.SwitchListItem
+import com.tomtruyen.fitnessapplication.ui.shared.dialogs.RestAlertDialog
+import com.tomtruyen.fitnessapplication.ui.shared.dialogs.UnitAlertDialog
+import com.tomtruyen.fitnessapplication.ui.shared.toolbars.CollapsingToolbar
+import com.tomtruyen.fitnessapplication.ui.shared.listitems.ListItem
+import com.tomtruyen.fitnessapplication.ui.shared.listitems.SwitchListItem
 import com.tomtruyen.fitnessapplication.utils.TimeUtils
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -101,6 +105,9 @@ fun ProfileScreenLayout(
     loading: Boolean,
     onEvent: (ProfileUiEvent) -> Unit
 ) {
+    var unitDialogVisible by remember { mutableStateOf(false) }
+    var restDialogVisible by remember { mutableStateOf(false) }
+
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -138,7 +145,7 @@ fun ProfileScreenLayout(
                     title = stringResource(id = R.string.weight_unit),
                     message = state.settings.unit,
                 ) {
-                    // TODO: Setup dialog to display + make message value dynamic
+                    unitDialogVisible = true
                 }
 
                 Divider(
@@ -159,7 +166,7 @@ fun ProfileScreenLayout(
                     title = stringResource(id = R.string.default_rest_timer),
                     message = TimeUtils.formatSeconds(state.settings.rest),
                 ) {
-                    // TODO: Setup dialog to display + make message value dynamic
+                    restDialogVisible = true
                 }
 
                 SwitchListItem(
@@ -228,6 +235,32 @@ fun ProfileScreenLayout(
                         .align(Alignment.CenterHorizontally)
                         .padding(bottom = Dimens.Normal, top = Dimens.Small)
                         .padding(horizontal = Dimens.Normal)
+                )
+            }
+
+            if(unitDialogVisible) {
+                UnitAlertDialog(
+                    onDismiss = {
+                        unitDialogVisible = false
+                    },
+                    onConfirm = { unit ->
+                        onEvent(ProfileUiEvent.UnitChanged(unit))
+                        unitDialogVisible = false
+                    },
+                    unit = state.settings.unit
+                )
+            }
+
+            if(restDialogVisible) {
+                RestAlertDialog(
+                    onDismiss = {
+                        restDialogVisible = false
+                    },
+                    onConfirm = { rest ->
+                        onEvent(ProfileUiEvent.RestChanged(rest))
+                        restDialogVisible = false
+                    },
+                    rest = state.settings.rest
                 )
             }
         }

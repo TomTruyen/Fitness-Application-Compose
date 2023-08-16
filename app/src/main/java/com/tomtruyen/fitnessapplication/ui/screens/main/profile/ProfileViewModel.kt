@@ -86,6 +86,20 @@ class ProfileViewModel(
 
     fun onEvent(event: ProfileUiEvent) {
         when(event) {
+            is ProfileUiEvent.UnitChanged -> {
+                state.value = state.value.copy(
+                    settings = state.value.settings.copy(
+                        unit = event.value
+                    )
+                )
+            }
+            is ProfileUiEvent.RestChanged -> {
+                state.value = state.value.copy(
+                    settings = state.value.settings.copy(
+                        rest = event.value
+                    )
+                )
+            }
             is ProfileUiEvent.RestEnabledChanged -> {
                 state.value = state.value.copy(
                     settings = state.value.settings.copy(

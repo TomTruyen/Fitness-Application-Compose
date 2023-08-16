@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.ui.shared
+package com.tomtruyen.fitnessapplication.ui.shared.toolbars
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons

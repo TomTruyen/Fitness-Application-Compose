@@ -1,10 +1,9 @@
-package com.tomtruyen.fitnessapplication.ui.shared
+package com.tomtruyen.fitnessapplication.ui.shared.toolbars
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -16,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiEvent
+import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

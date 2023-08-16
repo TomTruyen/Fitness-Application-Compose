@@ -28,10 +28,10 @@ import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
-import com.tomtruyen.fitnessapplication.ui.shared.ConfirmationDialog
+import com.tomtruyen.fitnessapplication.ui.shared.dialogs.ConfirmationDialog
 import com.tomtruyen.fitnessapplication.ui.shared.Dropdown
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
-import com.tomtruyen.fitnessapplication.ui.shared.Toolbar
+import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
 import com.tomtruyen.fitnessapplication.validation.errorMessage
 import com.tomtruyen.fitnessapplication.validation.isValid
 import kotlinx.coroutines.flow.collectLatest
@@ -101,7 +101,7 @@ fun CreateExerciseScreenLayout(
         }
     }
 
-    val types = Exercise.ExerciseType.values().map { it.value.replaceFirstChar { it.uppercase() } }
+    val types = Exercise.ExerciseType.values().map { it.value }
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     BackHandler(enabled = !confirmationDialogVisible) {

@@ -8,20 +8,13 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -42,7 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.bumptech.glide.Glide
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.ramcosta.composedestinations.annotation.Destination
@@ -52,10 +44,9 @@ import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.CreateExerciseScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiEvent
-import com.tomtruyen.fitnessapplication.ui.shared.ConfirmationDialog
+import com.tomtruyen.fitnessapplication.ui.shared.dialogs.ConfirmationDialog
 import com.tomtruyen.fitnessapplication.ui.shared.ExerciseFilterChip
-import com.tomtruyen.fitnessapplication.ui.shared.Toolbar
+import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -165,7 +156,7 @@ fun ExerciseDetailScreenLayout(
                             arrayOf(
                                 exercise?.category,
                                 exercise?.equipment,
-                                exercise?.type?.replaceFirstChar { it.uppercase() }
+                                exercise?.type
                             ).filter { !it.isNullOrBlank() }
                         ) { index, filter ->
                             ExerciseFilterChip(

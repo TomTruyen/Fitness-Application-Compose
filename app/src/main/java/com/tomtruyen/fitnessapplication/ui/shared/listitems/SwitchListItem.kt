@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.ui.shared
+package com.tomtruyen.fitnessapplication.ui.shared.listitems
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,34 +17,27 @@ import androidx.compose.ui.Modifier
 import com.tomtruyen.fitnessapplication.Dimens
 
 @Composable
-fun ListItem(title: String, message: String, onClick: () -> Unit) {
+fun SwitchListItem(title: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                onClick()
+                onCheckedChange(!checked)
             }
-            .padding(Dimens.Normal),
+            .padding(horizontal = Dimens.Normal, vertical = Dimens.Small),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            Text(
-                text = message,
-                style = MaterialTheme.typography.bodySmall.copy(
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-                ),
-            )
-        }
+        )
 
-        Icon(
-            imageVector = Icons.Filled.ChevronRight,
-            contentDescription = null
+        Switch(
+            checked = checked,
+            onCheckedChange = {
+                onCheckedChange(it)
+            }
         )
     }
 }

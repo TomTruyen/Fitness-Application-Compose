@@ -27,11 +27,11 @@ data class Exercise(
         }
     }
 
-    val typeEnum get() = ExerciseType.values().firstOrNull { it.value == type } ?: ExerciseType.WEIGHT
+    val typeEnum get() = ExerciseType.values().firstOrNull { it.value.lowercase() == type } ?: ExerciseType.WEIGHT
 
     enum class ExerciseType(val value: String) {
-        WEIGHT("weight"),
-        TIME("time")
+        WEIGHT("Weight"),
+        TIME("Time")
     }
 
     companion object {
