@@ -1,5 +1,7 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.profile
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -44,6 +47,7 @@ import com.tomtruyen.fitnessapplication.ui.shared.dialogs.UnitAlertDialog
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.CollapsingToolbar
 import com.tomtruyen.fitnessapplication.ui.shared.listitems.ListItem
 import com.tomtruyen.fitnessapplication.ui.shared.listitems.SwitchListItem
+import com.tomtruyen.fitnessapplication.utils.EmailUtils
 import com.tomtruyen.fitnessapplication.utils.TimeUtils
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -105,10 +109,14 @@ fun ProfileScreenLayout(
     loading: Boolean,
     onEvent: (ProfileUiEvent) -> Unit
 ) {
+    val context = LocalContext.current
+
     var unitDialogVisible by remember { mutableStateOf(false) }
     var restDialogVisible by remember { mutableStateOf(false) }
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
+    val emailLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
     Scaffold(
         snackbarHost = snackbarHost,
@@ -201,7 +209,9 @@ fun ProfileScreenLayout(
                     title = stringResource(id = R.string.report_an_issue),
                     message = stringResource(id = R.string.message_report_an_issue),
                 ) {
-                    // TODO: Setup Email client with user information prefilled + email subject and recipient
+                    emailLauncher.launch(
+                        EmailUtils.getEmailIntent(context)
+                    )
                 }
 
                 Divider(

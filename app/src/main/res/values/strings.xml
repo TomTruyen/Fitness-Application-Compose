@@ -79,6 +79,7 @@
     <string name="weight_unit">Weight unit</string>
     <string name="units">Units</string>
     <string name="settings_saved">Settings saved</string>
+    <string name="support_email_subject">Support Request (%s)</string>
 
     <!-- Workouts -->
 
