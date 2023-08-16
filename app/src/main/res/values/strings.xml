@@ -46,6 +46,7 @@
 
     <!-- Profile -->
     <string name="logout">Logout</string>
+    <string name="version_and_build">Version: %s - Build: %d</string>
 
     <!-- Exercises -->
     <string name="search">Search</string>
@@ -69,6 +70,15 @@
     <string name="title_unsaved_changes">Unsaved changes</string>
     <string name="message_unsaved_changes">Are you sure you want to leave? All unsaved changes will be lost.</string>
     <string name="discard">Discard</string>
+    <string name="contact_and_support">Contact and support</string>
+    <string name="report_an_issue">Report an issue</string>
+    <string name="message_report_an_issue">Found a problem? Send us the detail</string>
+    <string name="rest_timer">Rest timer</string>
+    <string name="default_rest_timer">Default rest time</string>
+    <string name="rest_timer_enabled">Rest timer enabled</string>
+    <string name="vibrate_upon_finish">Vibrate upon finish</string>
+    <string name="weight_unit">Weight unit</string>
+    <string name="units">Units</string>
 
     <!-- Workouts -->
 

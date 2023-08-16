@@ -56,6 +56,7 @@ import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesFilterS
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.CollapsingToolbar
 import com.tomtruyen.fitnessapplication.ui.shared.ExerciseFilterChip
+import com.tomtruyen.fitnessapplication.ui.shared.ListItem
 import com.tomtruyen.fitnessapplication.ui.shared.SearchToolbar
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 import kotlinx.coroutines.flow.collectLatest
@@ -223,7 +224,7 @@ fun ExercisesScreenLayout(
                                 )
                             }
 
-                            ExerciseListItem(exercise) {
+                            ListItem(exercise.displayName, exercise.category ?: "") {
                                 onEvent(ExercisesUiEvent.OnExerciseClicked(exercise))
                             }
 
@@ -237,38 +238,5 @@ fun ExercisesScreenLayout(
                 }
             }
         }
-    }
-}
-
-@Composable
-fun ExerciseListItem(exercise: Exercise, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onClick()
-            }
-            .padding(Dimens.Normal),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = exercise.displayName,
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            Text(
-                text = exercise.category ?: "",
-                style = MaterialTheme.typography.bodySmall.copy(
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-                ),
-            )
-        }
-
-        Icon(
-            imageVector = Icons.Filled.ChevronRight,
-            contentDescription = null
-        )
     }
 }

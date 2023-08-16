@@ -54,8 +54,6 @@ data class CreateExerciseUiState(
     }
 
     fun validateType(context: Context) {
-        if(exercise.type == null) return // Don't validate if email is null (not entered anything yet)
-
         lastTypeValidationResult = requiredValidator.validate(context, exercise.type)
         typeValidationResult = lastTypeValidationResult
     }
