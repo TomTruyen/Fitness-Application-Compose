@@ -102,7 +102,7 @@ fun <T> NumberPicker(
                     coroutineScope.launch {
                         val endValue = animatedOffset.fling(
                             initialVelocity = velocity,
-                            animationSpec = exponentialDecay(frictionMultiplier = 20f),
+                            animationSpec = exponentialDecay(frictionMultiplier = 0.5f),
                             adjustTarget = { target ->
                                 val coercedTarget = target % halfNumbersColumnHeightPx
                                 val coercedAnchors =
@@ -142,7 +142,7 @@ fun <T> NumberPicker(
                 if (indexOfElement > 0) {
                     val topLabelScale = when {
                         coercedAnimatedOffset > 0 -> minScale + (1 - minScale) * scrollProgress * totalVisibleItems
-                        coercedAnimatedOffset < 0 -> minScale - (minScale - 0.2f) * scrollProgress
+                        coercedAnimatedOffset < 0 -> minScale - (1 + minScale) * scrollProgress
                         else -> 1f
                     }
 
@@ -165,7 +165,7 @@ fun <T> NumberPicker(
                 )
                 if (indexOfElement < list.count() - 1) {
                     val bottomLabelScale = when {
-                        coercedAnimatedOffset > 0 -> minScale - (minScale - 0.2f) * scrollProgress
+                        coercedAnimatedOffset > 0 -> minScale - (1 + minScale) * scrollProgress
                         coercedAnimatedOffset < 0 -> minScale + (1 - minScale) * scrollProgress * totalVisibleItems
                         else -> 1f
                     }
