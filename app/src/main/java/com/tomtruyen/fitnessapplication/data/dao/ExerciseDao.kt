@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class ExerciseDao {
-
     @Query("SELECT DISTINCT category FROM ${Exercise.TABLE_NAME} WHERE category IS NOT NULL AND category != ''")
     abstract fun findCategories(): Flow<List<String>>
 

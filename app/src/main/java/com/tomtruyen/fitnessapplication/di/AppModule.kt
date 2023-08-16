@@ -6,8 +6,10 @@ import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.AppDatabase
 import com.tomtruyen.fitnessapplication.helpers.ContextProvider
 import com.tomtruyen.fitnessapplication.repositories.ExerciseRepositoryImpl
+import com.tomtruyen.fitnessapplication.repositories.SettingsRepositoryImpl
 import com.tomtruyen.fitnessapplication.repositories.UserRepositoryImpl
 import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
+import com.tomtruyen.fitnessapplication.repositories.interfaces.SettingsRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import com.tomtruyen.fitnessapplication.ui.screens.auth.login.LoginViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.auth.register.RegisterViewModel
@@ -39,10 +41,12 @@ val appModule = module {
 
     // Dao
     single { get<AppDatabase>().exerciseDao() }
+    single { get<AppDatabase>().settingsDao() }
 
     // Repositories
     single<UserRepository> { UserRepositoryImpl(get()) }
     single<ExerciseRepository> { ExerciseRepositoryImpl(get(), get()) }
+    single<SettingsRepository> { SettingsRepositoryImpl(get(), get()) }
 
     // ViewModels
     viewModelOf(::LoginViewModel)

@@ -33,6 +33,7 @@ data class Exercise(
         WEIGHT("weight"),
         TIME("time")
     }
+
     companion object {
         const val TABLE_NAME = "exercises"
     }
