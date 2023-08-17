@@ -14,12 +14,12 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -173,7 +174,8 @@ fun ExercisesScreenLayout(
             ) {
                 if(state.filter.categories.isNotEmpty() || state.filter.equipment.isNotEmpty()) {
                     LazyRow(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(bottom = Dimens.Tiny),
                         horizontalArrangement = Arrangement.spacedBy(Dimens.Small)
                     ) {
@@ -200,24 +202,40 @@ fun ExercisesScreenLayout(
                 LazyColumn(
                     modifier = Modifier.weight(1f)
                 ) {
+                    var currentLetter: Char? = null
+
                     itemsIndexed(exercises) { index, exercise ->
                         Column(
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            if (index == 0) {
-                                Divider(
-                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
+                            // Add Text with First Letter of Exercise Name when it changes
+                            val exerciseNameFirstLetter = exercise.displayName.first().uppercaseChar()
+
+                            val isNewLetterSection = if (index > 0) {
+                                val previousExercise = exercises[index - 1]
+                                exerciseNameFirstLetter != previousExercise.displayName.first().uppercaseChar()
+                            } else {
+                                true
+                            }
+
+                            if(isNewLetterSection) {
+                                currentLetter = exerciseNameFirstLetter
+
+                                Text(
+                                    text = currentLetter.toString(),
+                                    style = MaterialTheme.typography.bodySmall.copy(
+                                        fontWeight = FontWeight.Bold
+                                    ),
+                                    modifier = Modifier.padding(
+                                        horizontal = Dimens.Normal,
+                                        vertical = Dimens.Small
+                                    )
                                 )
                             }
+
 
                             ListItem(exercise.displayName, exercise.category ?: "") {
                                 onEvent(ExercisesUiEvent.OnExerciseClicked(exercise))
-                            }
-
-                            if (index < exercises.lastIndex) {
-                                Divider(
-                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
-                                )
                             }
                         }
                     }
