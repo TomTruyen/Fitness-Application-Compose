@@ -82,5 +82,6 @@
     <string name="support_email_subject">Support Request (%s)</string>
 
     <!-- Workouts -->
+    <string name="create_workout">Create workout</string>
 
 </resources>
