@@ -55,8 +55,6 @@ class CreateExerciseViewModel(
 
         if(isEditing) {
             exercises.removeIf { it.id == id }
-        } else {
-            exercise.id = UUID.randomUUID().toString()
         }
 
         exercises.add(exercise)

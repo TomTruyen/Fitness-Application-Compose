@@ -3,10 +3,11 @@ package com.tomtruyen.fitnessapplication.data.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.firebase.firestore.PropertyName
+import java.util.UUID
 
 @Entity(tableName = Exercise.TABLE_NAME)
 data class Exercise(
-    @PrimaryKey var id: String = "",
+    @PrimaryKey var id: String = UUID.randomUUID().toString(),
     var name: String? = null,
     var category: String? = null,
     var equipment: String? = null,
