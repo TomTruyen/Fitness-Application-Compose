@@ -58,8 +58,6 @@ fun ExercisesScreen(
     navController: NavController,
     viewModel: ExercisesViewModel
 ) {
-    Log.d("@@@", "isFromWorkout: $isFromWorkout")
-
     val context = LocalContext.current
 
     val state by viewModel.state.collectAsStateWithLifecycle()

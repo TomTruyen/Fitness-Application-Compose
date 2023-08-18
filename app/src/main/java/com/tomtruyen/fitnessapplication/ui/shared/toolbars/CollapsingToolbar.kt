@@ -14,6 +14,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.extensions.shouldShowNavigationIcon
@@ -30,9 +31,19 @@ fun CollapsingToolbar(
 ) {
     val isBottomBarVisible by getKoin().get<GlobalProvider>().isBottomBarVisible
 
+    // Calculate Size of Title on Expand/Collapse
+    val collapsed = 22
+    val expanded = 28
+    val topAppBarTextSize = (collapsed + (expanded - collapsed) * (1-scrollBehavior.state.collapsedFraction)).sp
+
     LargeTopAppBar(
         title = {
-            Text(text = title)
+            Text(
+                text = title,
+                style = MaterialTheme.typography.headlineMedium.copy(
+                    fontSize = topAppBarTextSize
+                )
+            )
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background,
