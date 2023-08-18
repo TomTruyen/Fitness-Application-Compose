@@ -1,6 +1,5 @@
 package com.tomtruyen.fitnessapplication.repositories.interfaces
 
-import com.tomtruyen.fitnessapplication.FetchedData
 import com.tomtruyen.fitnessapplication.base.BaseRepository
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.model.ExerciseFilter

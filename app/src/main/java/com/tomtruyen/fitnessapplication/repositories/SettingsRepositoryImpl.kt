@@ -1,17 +1,16 @@
 package com.tomtruyen.fitnessapplication.repositories
 
-import com.tomtruyen.fitnessapplication.FetchedData
 import com.tomtruyen.fitnessapplication.data.dao.SettingsDao
 import com.tomtruyen.fitnessapplication.data.entities.Settings
 import com.tomtruyen.fitnessapplication.extensions.handleCompletionResult
-import com.tomtruyen.fitnessapplication.helpers.ContextProvider
+import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
+import com.tomtruyen.fitnessapplication.model.FetchedData
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.SettingsRepository
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class SettingsRepositoryImpl(
-    private val contextProvider: ContextProvider,
+    private val globalProvider: GlobalProvider,
     private val settingsDao: SettingsDao
 ): SettingsRepository() {
     override fun findSettings() = settingsDao.findSettings()
@@ -25,7 +24,7 @@ class SettingsRepositoryImpl(
             .document(userId)
             .set(settings)
             .handleCompletionResult(
-                context = contextProvider.context,
+                context = globalProvider.context,
                 callback = callback
             ) {
                 settings.id = userId
@@ -43,7 +42,7 @@ class SettingsRepositoryImpl(
             .document(userId)
             .get()
             .handleCompletionResult(
-                context = contextProvider.context,
+                context = globalProvider.context,
                 setFetchSuccessful = {
                     setFetchSuccessful(FetchedData.Type.SETTINGS)
                 },

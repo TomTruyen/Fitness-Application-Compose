@@ -2,6 +2,7 @@ package com.tomtruyen.fitnessapplication.extensions
 
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.spec.Direction
+import com.tomtruyen.fitnessapplication.navigation.BottomNavigation
 
 fun NavController.navigateAndClearBackStack(
     destination: Direction,
@@ -12,4 +13,9 @@ fun NavController.navigateAndClearBackStack(
             inclusive = true
         }
     }
+}
+
+fun NavController.shouldShowNavigationIcon(isBottomBarVisible: Boolean): Boolean {
+    return previousBackStackEntry != null
+            && !isBottomBarVisible
 }

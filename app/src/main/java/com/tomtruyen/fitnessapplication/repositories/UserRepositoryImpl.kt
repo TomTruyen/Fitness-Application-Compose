@@ -7,18 +7,18 @@ import com.google.firebase.ktx.Firebase
 import com.tomtruyen.fitnessapplication.data.AppDatabase
 import com.tomtruyen.fitnessapplication.data.entities.Settings
 import com.tomtruyen.fitnessapplication.extensions.handleCompletionResult
-import com.tomtruyen.fitnessapplication.helpers.ContextProvider
+import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.SettingsRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import kotlinx.coroutines.launch
 
 class UserRepositoryImpl(
-    contextProvider: ContextProvider,
+    globalProvider: GlobalProvider,
     private val database: AppDatabase,
     private val settingsRepository: SettingsRepository
 ): UserRepository() {
-    private val context = contextProvider.context
+    private val context = globalProvider.context
 
     private val auth = Firebase.auth
     override fun login(email: String, password: String, callback: FirebaseCallback<FirebaseUser?>) {

@@ -4,17 +4,15 @@ import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.base.BaseViewModel
 import com.tomtruyen.fitnessapplication.base.SnackbarMessage
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
-import com.tomtruyen.fitnessapplication.helpers.ContextProvider
+import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
-import java.util.UUID
 
 class CreateExerciseViewModel(
     private val id: String?,
-    private val contextProvider: ContextProvider,
+    private val globalProvider: GlobalProvider,
     private val exerciseRepository: ExerciseRepository,
     private val userRepository: UserRepository
 ): BaseViewModel<CreateExerciseNavigationType>() {
@@ -66,7 +64,7 @@ class CreateExerciseViewModel(
                 override fun onSuccess(value: List<Exercise>) {
                     showSnackbar(
                         SnackbarMessage.Success(
-                            message = contextProvider.context.getString(R.string.exercise_saved)
+                            message = globalProvider.context.getString(R.string.exercise_saved)
                         )
                     )
 

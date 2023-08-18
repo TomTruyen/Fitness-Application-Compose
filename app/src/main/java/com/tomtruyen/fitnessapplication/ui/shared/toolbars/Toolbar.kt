@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.ui.shared.toolbars
 
+import android.util.Log
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
@@ -11,10 +12,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.navigation.BottomNavigation
+import com.tomtruyen.fitnessapplication.extensions.shouldShowNavigationIcon
+import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
+import org.koin.compose.getKoin
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,13 +28,14 @@ fun Toolbar(
     onNavigateUp: () -> Unit = { navController.popBackStack() },
     actions: @Composable RowScope.() -> Unit = {},
 ) {
+    val isBottomBarVisible by getKoin().get<GlobalProvider>().isBottomBarVisible
+
     TopAppBar(
         title = {
             Text(text = title)
         },
         navigationIcon = {
-            if(navController.previousBackStackEntry != null
-                && navController.currentBackStackEntry?.destination?.route !in BottomNavigation.items.map { it.route }) {
+            if(navController.shouldShowNavigationIcon(isBottomBarVisible)) {
                 IconButton(
                     onClick = {
                         onNavigateUp()

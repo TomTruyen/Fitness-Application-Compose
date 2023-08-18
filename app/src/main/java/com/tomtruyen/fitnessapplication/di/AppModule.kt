@@ -1,10 +1,9 @@
 package com.tomtruyen.fitnessapplication.di
 
 import androidx.room.Room
-import com.tomtruyen.fitnessapplication.AppGlobals
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.AppDatabase
-import com.tomtruyen.fitnessapplication.helpers.ContextProvider
+import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
 import com.tomtruyen.fitnessapplication.repositories.ExerciseRepositoryImpl
 import com.tomtruyen.fitnessapplication.repositories.SettingsRepositoryImpl
 import com.tomtruyen.fitnessapplication.repositories.UserRepositoryImpl
@@ -24,15 +23,13 @@ import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create.CreateE
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
-import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val appModule = module {
-    // ContextProvider - Used to provide context to non-activity classes
-    single { ContextProvider(androidContext()) }
-
-    // Globals
-    single { AppGlobals() }
+    // GlobalProvider - Used to provide context to non-activity classes + global variables
+    single {
+        GlobalProvider(context = androidContext())
+    }
 
     // Database
     single<AppDatabase> {

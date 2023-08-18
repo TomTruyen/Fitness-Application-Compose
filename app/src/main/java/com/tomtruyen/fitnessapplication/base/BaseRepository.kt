@@ -1,17 +1,16 @@
 package com.tomtruyen.fitnessapplication.base
 
-import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.tomtruyen.fitnessapplication.AppGlobals
-import com.tomtruyen.fitnessapplication.FetchedData
+import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
+import com.tomtruyen.fitnessapplication.model.FetchedData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.koin.java.KoinJavaComponent.inject
 
 open class BaseRepository {
-    private val globals: AppGlobals by inject(AppGlobals::class.java)
+    private val globalProvider: GlobalProvider by inject(GlobalProvider::class.java)
 
     protected val db = Firebase.firestore
     protected val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -24,7 +23,7 @@ open class BaseRepository {
             return
         }
 
-        if(!globals.fetchedData.hasFetched(type)) {
+        if(!globalProvider.fetchedData.hasFetched(type)) {
             block()
             return
         }
@@ -35,6 +34,6 @@ open class BaseRepository {
     protected fun setFetchSuccessful(type: FetchedData.Type?) {
         if(type == null) return
 
-        globals.fetchedData.setFetched(type, true)
+        globalProvider.fetchedData.setFetched(type, true)
     }
 }

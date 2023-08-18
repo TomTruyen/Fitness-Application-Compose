@@ -4,14 +4,14 @@ import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.base.BaseViewModel
 import com.tomtruyen.fitnessapplication.base.SnackbarMessage
 import com.tomtruyen.fitnessapplication.data.entities.Settings
-import com.tomtruyen.fitnessapplication.helpers.ContextProvider
+import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.SettingsRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class ProfileViewModel(
-    private val contextProvider: ContextProvider,
+    private val globalProvider: GlobalProvider,
     private val userRepository: UserRepository,
     private val settingsRepository: SettingsRepository
 ): BaseViewModel<ProfileNavigationType>() {
@@ -64,7 +64,7 @@ class ProfileViewModel(
             callback = object: FirebaseCallback<Settings> {
                 override fun onSuccess(value: Settings) {
                     showSnackbar(
-                        SnackbarMessage.Success(contextProvider.context.getString(R.string.settings_saved))
+                        SnackbarMessage.Success(globalProvider.context.getString(R.string.settings_saved))
                     )
                 }
 

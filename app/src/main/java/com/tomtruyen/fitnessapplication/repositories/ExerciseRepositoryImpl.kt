@@ -1,26 +1,19 @@
 package com.tomtruyen.fitnessapplication.repositories
 
-import android.util.Log
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import com.tomtruyen.fitnessapplication.FetchedData
 import com.tomtruyen.fitnessapplication.data.dao.ExerciseDao
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.extensions.handleCompletionResult
-import com.tomtruyen.fitnessapplication.helpers.ContextProvider
+import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
 import com.tomtruyen.fitnessapplication.model.ExerciseFilter
+import com.tomtruyen.fitnessapplication.model.FetchedData
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.networking.ExercisesResponse
 import com.tomtruyen.fitnessapplication.networking.UserExercisesResponse
 import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class ExerciseRepositoryImpl(
-    private val contextProvider: ContextProvider,
+    private val globalProvider: GlobalProvider,
     private val exerciseDao: ExerciseDao
 ): ExerciseRepository() {
     override fun findExercises(query: String, filter: ExerciseFilter) = exerciseDao.findAllAsync(
@@ -48,7 +41,7 @@ class ExerciseRepositoryImpl(
             .document(DOCUMENT_NAME)
             .get()
             .handleCompletionResult(
-                context = contextProvider.context,
+                context = globalProvider.context,
                 setFetchSuccessful = {
                     setFetchSuccessful(FetchedData.Type.EXERCISES)
                 },
@@ -74,7 +67,7 @@ class ExerciseRepositoryImpl(
             .document(userId)
             .get()
             .handleCompletionResult(
-                context = contextProvider.context,
+                context = globalProvider.context,
                 setFetchSuccessful = {
                     setFetchSuccessful(FetchedData.Type.USER_EXERCISES)
                 },
@@ -109,7 +102,7 @@ class ExerciseRepositoryImpl(
                 )
             )
             .handleCompletionResult(
-                context = contextProvider.context,
+                context = globalProvider.context,
                 callback = callback
             ) {
                 scope.launch {
