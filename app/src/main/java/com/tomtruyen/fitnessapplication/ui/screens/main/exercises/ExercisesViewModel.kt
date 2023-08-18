@@ -14,10 +14,13 @@ import kotlinx.coroutines.flow.flatMapLatest
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ExercisesViewModel(
+    isFromWorkout: Boolean,
     private val exerciseRepository: ExerciseRepository,
     private val userRepository: UserRepository,
 ): BaseViewModel<ExercisesNavigationType>() {
-    val state = MutableStateFlow(ExercisesUiState())
+    val state = MutableStateFlow(
+        ExercisesUiState(isFromWorkout = isFromWorkout)
+    )
 
     val exercises = state.flatMapLatest {
         exerciseRepository.findExercises(it.search, it.filter)

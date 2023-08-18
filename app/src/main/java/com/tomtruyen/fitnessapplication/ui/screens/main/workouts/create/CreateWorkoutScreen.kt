@@ -27,11 +27,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.navigate
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.navigation.CreateWorkoutNavGraph
 import com.tomtruyen.fitnessapplication.networking.WorkoutExerciseResponse
+import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
@@ -55,7 +57,7 @@ fun CreateWorkoutScreen(
         viewModel.navigation.collectLatest { navigationType ->
             when(navigationType) {
                 is CreateWorkoutNavigationType.ReorderExercise -> TODO()
-                is CreateWorkoutNavigationType.AddExercise -> TODO()
+                is CreateWorkoutNavigationType.AddExercise -> navController.navigate(ExercisesScreenDestination(isFromWorkout = true))
             }
         }
     }

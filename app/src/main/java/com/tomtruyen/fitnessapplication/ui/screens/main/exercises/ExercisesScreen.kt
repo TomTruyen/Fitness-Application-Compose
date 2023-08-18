@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -53,9 +54,12 @@ import kotlinx.coroutines.flow.collectLatest
 @Destination
 @Composable
 fun ExercisesScreen(
+    isFromWorkout: Boolean = false,
     navController: NavController,
     viewModel: ExercisesViewModel
 ) {
+    Log.d("@@@", "isFromWorkout: $isFromWorkout")
+
     val context = LocalContext.current
 
     val state by viewModel.state.collectAsStateWithLifecycle()

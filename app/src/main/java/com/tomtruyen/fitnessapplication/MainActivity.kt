@@ -16,7 +16,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavType
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
@@ -27,6 +30,7 @@ import com.ramcosta.composedestinations.utils.currentDestinationFlow
 import com.tomtruyen.fitnessapplication.extensions.navigateAndClearBackStack
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import com.tomtruyen.fitnessapplication.navigation.MainBottomNavigation
+import com.tomtruyen.fitnessapplication.navigation.NavArguments
 import com.tomtruyen.fitnessapplication.ui.screens.NavGraphs
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.LoginScreenDestination
@@ -38,6 +42,7 @@ import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWo
 import com.tomtruyen.fitnessapplication.ui.theme.FitnessApplicationTheme
 import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
 class MainActivity : ComponentActivity() {
@@ -71,11 +76,24 @@ class MainActivity : ComponentActivity() {
                 }
 
                 LaunchedEffect(destination) {
-                    showBottomBar = destination in listOf(
+                    val isRootDestinations = destination in listOf(
                         ProfileScreenDestination,
                         WorkoutOverviewScreenDestination,
                         ExercisesScreenDestination
                     )
+
+
+                    val isExercisesFromWorkout = if(destination is ExercisesScreenDestination) {
+                        // Get the isFromWorkout argument from the destination
+                        navController.getBackStackEntry((destination as ExercisesScreenDestination).route)
+                            .let {
+                                it.arguments?.getBoolean(NavArguments.IS_FROM_WORKOUT, false) ?: false
+                            }
+                    } else {
+                        false
+                    }
+
+                    showBottomBar = isRootDestinations && !isExercisesFromWorkout
                 }
 
                 Scaffold(
@@ -100,7 +118,11 @@ class MainActivity : ComponentActivity() {
                                     navController.getBackStackEntry(NavGraphs.exercises.route)
                                 }
 
-                                getViewModel<ExercisesViewModel>(viewModelStoreOwner = parentEntry)
+                                getViewModel<ExercisesViewModel>(viewModelStoreOwner = parentEntry) {
+                                    parametersOf(
+                                        parentEntry.arguments?.getBoolean(NavArguments.IS_FROM_WORKOUT, false) ?: false
+                                    )
+                                }
                             }
 
                             dependency(NavGraphs.createWorkout) {
