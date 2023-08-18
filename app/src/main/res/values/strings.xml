@@ -20,6 +20,7 @@
     <string name="content_description_create_exercise">Create exercise</string>
     <string name="content_description_edit">Edit</string>
     <string name="content_description_delete">Delete</string>
+    <string name="content_description_reorder_exercises">Reorder exercises</string>
 
     <!-- Bottom Navigation -->
     <string name="workouts">Workouts</string>

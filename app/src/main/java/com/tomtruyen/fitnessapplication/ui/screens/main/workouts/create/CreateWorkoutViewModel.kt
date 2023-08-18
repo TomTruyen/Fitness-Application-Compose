@@ -8,7 +8,7 @@ class CreateWorkoutViewModel: BaseViewModel<CreateWorkoutNavigationType>() {
 
     fun onEvent(event: CreateWorkoutUiEvent) {
         when(event) {
-            else -> Unit
+            is CreateWorkoutUiEvent.OnReorderExerciseClicked -> navigate(CreateWorkoutNavigationType.ReorderExercise)
         }
     }
 }

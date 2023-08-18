@@ -8,3 +8,9 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 annotation class ExercisesNavGraph(
     val start: Boolean = false
 )
+
+@RootNavGraph
+@NavGraph
+annotation class CreateWorkoutNavGraph(
+    val start: Boolean = false
+)

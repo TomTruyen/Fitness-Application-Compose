@@ -6,6 +6,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FormatListNumbered
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -19,8 +23,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
+import com.tomtruyen.fitnessapplication.navigation.CreateWorkoutNavGraph
 import com.tomtruyen.fitnessapplication.networking.WorkoutExerciseResponse
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
@@ -28,10 +35,12 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
+@CreateWorkoutNavGraph(start = true)
+@Destination
 @Composable
 fun CreateWorkoutScreen(
     navController: NavController,
-    viewModel: CreateWorkoutViewModel = koinViewModel()
+    viewModel: CreateWorkoutViewModel
 ) {
     val context = LocalContext.current
 
@@ -41,7 +50,7 @@ fun CreateWorkoutScreen(
     LaunchedEffect(viewModel, context) {
         viewModel.navigation.collectLatest { navigationType ->
             when(navigationType) {
-                else -> Unit
+                is CreateWorkoutNavigationType.ReorderExercise -> TODO()
             }
         }
     }
@@ -74,7 +83,14 @@ fun CreateWorkoutScreenLayout(
             Toolbar(
                 title = stringResource(id = R.string.create_workout),
                 navController = navController
-            )
+            ) {
+                IconButton(onClick = { onEvent(CreateWorkoutUiEvent.OnReorderExerciseClicked) }) {
+                    Icon(
+                        imageVector = Icons.Filled.FormatListNumbered,
+                        contentDescription = stringResource(id = R.string.content_description_reorder_exercises),
+                    )
+                }
+            }
         }
     ) {
         BoxWithLoader(
