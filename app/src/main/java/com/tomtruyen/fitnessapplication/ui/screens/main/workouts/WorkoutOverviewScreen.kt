@@ -2,6 +2,7 @@ package com.tomtruyen.fitnessapplication.ui.screens.main.workouts
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +24,7 @@ import androidx.navigation.NavController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.navigate
+import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.CreateWorkoutScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
@@ -85,7 +87,8 @@ fun WorkoutOverviewScreenLayout(
         BoxWithLoader(
             modifier = Modifier
                 .padding(it)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(Dimens.Normal),
             loading = loading,
         ) {
             Column(
@@ -93,6 +96,7 @@ fun WorkoutOverviewScreenLayout(
             ) {
                 Buttons.Default(
                     text = stringResource(id = R.string.create_workout),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     onEvent(WorkoutOverviewUiEvent.OnCreateWorkoutClicked)
                 }
