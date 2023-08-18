@@ -1,7 +1,9 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -25,11 +27,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.navigation.CreateWorkoutNavGraph
 import com.tomtruyen.fitnessapplication.networking.WorkoutExerciseResponse
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
+import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -51,6 +55,7 @@ fun CreateWorkoutScreen(
         viewModel.navigation.collectLatest { navigationType ->
             when(navigationType) {
                 is CreateWorkoutNavigationType.ReorderExercise -> TODO()
+                is CreateWorkoutNavigationType.AddExercise -> TODO()
             }
         }
     }
@@ -99,15 +104,30 @@ fun CreateWorkoutScreenLayout(
                 .fillMaxSize(),
             loading = loading,
         ) {
-            TabLayout(
-                exercises = state.workout.exercises,
-                state = pagerState
-            )
-            TabContentPager(
-                exercises = state.workout.exercises,
-                state = pagerState,
-                onEvent = onEvent
-            )
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                TabLayout(
+                    exercises = state.workout.exercises,
+                    state = pagerState
+                )
+
+                TabContentPager(
+                    modifier = Modifier.weight(1f),
+                    exercises = state.workout.exercises,
+                    state = pagerState,
+                    onEvent = onEvent,
+                )
+
+                Buttons.Default(
+                    text = stringResource(id = R.string.add_exercise),
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(Dimens.Normal)
+                ) {
+                    onEvent(CreateWorkoutUiEvent.OnAddExerciseClicked)
+                }
+            }
+
         }
     }
 }
@@ -140,11 +160,15 @@ fun TabLayout(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TabContentPager(
+    modifier: Modifier = Modifier,
     exercises: List<WorkoutExerciseResponse>,
     state: PagerState,
     onEvent: (CreateWorkoutUiEvent) -> Unit,
 ) {
-    HorizontalPager(state = state) { index ->
+    HorizontalPager(
+        modifier = modifier,
+        state = state
+    ) { index ->
         val exercise = exercises[index]
 
         // TODO: Display WorkoutExerciseScreen here
