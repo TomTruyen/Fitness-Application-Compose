@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +28,9 @@ import com.tomtruyen.fitnessapplication.extensions.navigateAndClearBackStack
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import com.tomtruyen.fitnessapplication.navigation.MainBottomNavigation
 import com.tomtruyen.fitnessapplication.ui.screens.NavGraphs
+import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.LoginScreenDestination
+import com.tomtruyen.fitnessapplication.ui.screens.destinations.ProfileScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.RegisterScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutOverviewScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesViewModel
@@ -54,7 +57,7 @@ class MainActivity : ComponentActivity() {
                     initialValue = navController.currentDestinationAsState()
                 )
 
-                var showBottomBar by remember {
+                var showBottomBar by rememberSaveable {
                     mutableStateOf(false)
                 }
 
@@ -68,9 +71,10 @@ class MainActivity : ComponentActivity() {
                 }
 
                 LaunchedEffect(destination) {
-                    showBottomBar = destination !in listOf(
-                        LoginScreenDestination,
-                        RegisterScreenDestination
+                    showBottomBar = destination in listOf(
+                        ProfileScreenDestination,
+                        WorkoutOverviewScreenDestination,
+                        ExercisesScreenDestination
                     )
                 }
 
