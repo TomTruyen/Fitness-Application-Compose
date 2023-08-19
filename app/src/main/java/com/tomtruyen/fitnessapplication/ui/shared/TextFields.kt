@@ -37,6 +37,7 @@ object TextFields {
         search: Boolean = false,
         readOnly: Boolean = false,
         enabled: Boolean = true,
+        singleLine: Boolean = true,
         trailingIcon: @Composable (() -> Unit)? = null,
         keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
         colors: TextFieldColors = TextFieldDefaults.colors(
@@ -85,7 +86,7 @@ object TextFields {
                         focusManager.clearFocus()
                     }
                 ),
-                singleLine = true,
+                singleLine = singleLine,
                 colors = colors,
                 shape = shape,
                 modifier = if(!error.isNullOrEmpty()) {

@@ -73,4 +73,31 @@ object Buttons {
             )
         }
     }
+
+    @Composable
+    fun Icon(
+        icon: ImageVector,
+        modifier: Modifier = Modifier,
+        enabled: Boolean = true,
+        shape: Shape = MaterialTheme.shapes.medium,
+        colors: ButtonColors = ButtonDefaults.textButtonColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        ),
+        onClick: () -> Unit,
+    ) {
+        TextButton(
+            onClick = onClick,
+            enabled = enabled,
+            shape = shape,
+            colors = colors,
+            modifier = modifier,
+        ) {
+            Icon(
+                modifier = Modifier.padding(vertical = Dimens.Tiny),
+                imageVector = icon,
+                contentDescription = null
+            )
+        }
+    }
 }

@@ -25,6 +25,15 @@ class CreateWorkoutViewModel: BaseViewModel<CreateWorkoutNavigationType>() {
                     )
                 )
             }
+            is CreateWorkoutUiEvent.OnDeleteExerciseClicked -> {
+                state.value = state.value.copy(
+                    workout = state.value.workout.copy(
+                        exercises = state.value.workout.exercises.filterIndexed { index, _ ->
+                            index != event.index
+                        }
+                    )
+                )
+            }
             is CreateWorkoutUiEvent.OnReorderExerciseClicked -> navigate(CreateWorkoutNavigationType.ReorderExercise)
             is CreateWorkoutUiEvent.OnAddExerciseClicked -> navigate(CreateWorkoutNavigationType.AddExercise)
             is CreateWorkoutUiEvent.OnReorderExercises -> {

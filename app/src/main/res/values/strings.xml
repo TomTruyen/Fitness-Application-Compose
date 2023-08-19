@@ -22,6 +22,7 @@
     <string name="content_description_delete">Delete</string>
     <string name="content_description_reorder_exercises">Reorder exercises</string>
     <string name="content_description_add_exercise_to_workout">Add exercise to workout</string>
+    <string name="content_description_delete_exercise">Delete exercise</string>
 
     <!-- Bottom Navigation -->
     <string name="workouts">Workouts</string>
@@ -89,5 +90,7 @@
     <string name="reorder_exercises">Reorder exercises</string>
     <string name="apply">Apply</string>
     <string name="notes">Notes (optional)</string>
+    <string name="message_delete_exercise_from_workout">Are you sure you want to remove this exercise from your workout?</string>
+
 
 </resources>
