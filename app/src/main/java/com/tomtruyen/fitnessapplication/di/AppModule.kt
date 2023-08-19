@@ -17,6 +17,7 @@ import com.tomtruyen.fitnessapplication.ui.screens.auth.register.RegisterViewMod
 import com.tomtruyen.fitnessapplication.ui.screens.main.profile.ProfileViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.WorkoutOverviewViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutViewModel
+import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.reorder.ReorderWorkoutExercisesViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.detail.ExerciseDetailViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create.CreateExerciseViewModel
@@ -59,6 +60,7 @@ val appModule = module {
     viewModelOf(::ProfileViewModel)
     viewModelOf(::WorkoutOverviewViewModel)
     viewModelOf(::CreateWorkoutViewModel)
+    viewModelOf(::ReorderWorkoutExercisesViewModel)
     viewModelOf(::ExercisesViewModel)
     viewModelOf(::ExerciseDetailViewModel)
     viewModel { (id: String?) -> CreateExerciseViewModel(id, get(), get(), get()) }

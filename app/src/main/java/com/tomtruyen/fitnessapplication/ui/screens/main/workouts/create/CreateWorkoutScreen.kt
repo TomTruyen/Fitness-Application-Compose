@@ -46,6 +46,7 @@ import com.tomtruyen.fitnessapplication.navigation.CreateWorkoutNavGraph
 import com.tomtruyen.fitnessapplication.navigation.NavArguments
 import com.tomtruyen.fitnessapplication.networking.WorkoutExerciseResponse
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesScreenDestination
+import com.tomtruyen.fitnessapplication.ui.screens.destinations.ReorderWorkoutExercisesScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
@@ -73,7 +74,9 @@ fun CreateWorkoutScreen(
     LaunchedEffect(viewModel, context) {
         viewModel.navigation.collectLatest { navigationType ->
             when(navigationType) {
-                is CreateWorkoutNavigationType.ReorderExercise -> TODO()
+                is CreateWorkoutNavigationType.ReorderExercise -> navController.navigate(
+                    ReorderWorkoutExercisesScreenDestination
+                )
                 is CreateWorkoutNavigationType.AddExercise -> navController.navigate(ExercisesScreenDestination(isFromWorkout = true))
             }
         }
@@ -126,11 +129,13 @@ fun CreateWorkoutScreenLayout(
                 title = stringResource(id = R.string.create_workout),
                 navController = navController
             ) {
-                IconButton(onClick = { onEvent(CreateWorkoutUiEvent.OnReorderExerciseClicked) }) {
-                    Icon(
-                        imageVector = Icons.Filled.FormatListNumbered,
-                        contentDescription = stringResource(id = R.string.content_description_reorder_exercises),
-                    )
+                AnimatedVisibility(visible = state.workout.exercises.size > 1) {
+                    IconButton(onClick = { onEvent(CreateWorkoutUiEvent.OnReorderExerciseClicked) }) {
+                        Icon(
+                            imageVector = Icons.Filled.FormatListNumbered,
+                            contentDescription = stringResource(id = R.string.content_description_reorder_exercises),
+                        )
+                    }
                 }
             }
         }
@@ -203,7 +208,7 @@ fun TabLayout(
                 },
                 text = {
                     Text(
-                        text = workoutExercise.exercise.name ?: "",
+                        text = workoutExercise.exercise.displayName,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )

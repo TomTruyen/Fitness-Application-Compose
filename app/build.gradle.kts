@@ -119,6 +119,9 @@ dependencies {
     // Glide
     implementation(libs.glide)
 
+    // Reorderable (Drag & Drop) Lazy Column
+    implementation(libs.reorderable)
+
     // Unit Testing
     testImplementation(libs.junit)
     testImplementation(libs.koin.test.junit)

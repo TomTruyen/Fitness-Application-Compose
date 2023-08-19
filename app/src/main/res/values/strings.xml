@@ -86,5 +86,7 @@
     <!-- Workouts -->
     <string name="create_workout">Create workout</string>
     <string name="add_exercise">Add exercise</string>
+    <string name="reorder_exercises">Reorder exercises</string>
+    <string name="apply">Apply</string>
 
 </resources>
