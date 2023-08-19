@@ -2,6 +2,7 @@ package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.reorder
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,6 +41,7 @@ import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
 import kotlinx.coroutines.flow.collectLatest
 import org.burnoutcrew.reorderable.ReorderableItem
+import org.burnoutcrew.reorderable.detectReorder
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
@@ -111,16 +113,16 @@ fun ReorderWorkoutExercisesScreenLayout(
                     .reorderable(reorderState)
                     .detectReorderAfterLongPress(reorderState),
             ) {
-                items(state.exercises, { it.id }) { workoutExercise ->
+                items(state.exercises, { it }) { workoutExercise ->
                     ReorderableItem(
                         state = reorderState,
                         key = workoutExercise
                     ) { isDragging ->
-                        val elevation by animateDpAsState(if (isDragging) 16.dp else 0.dp)
+                        val alpha by animateFloatAsState(if (isDragging) 0.25f else 1f, label = "")
 
                         ReorderListItem(
                             title = workoutExercise.exercise.displayName,
-                            modifier = Modifier.shadow(elevation)
+                            modifier = Modifier.alpha(alpha)
                         )
                     }
                 }
