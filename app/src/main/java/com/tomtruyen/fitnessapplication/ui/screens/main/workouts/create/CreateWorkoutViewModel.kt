@@ -10,6 +10,21 @@ class CreateWorkoutViewModel: BaseViewModel<CreateWorkoutNavigationType>() {
 
     fun onEvent(event: CreateWorkoutUiEvent) {
         when(event) {
+            is CreateWorkoutUiEvent.OnExerciseNotesChanged -> {
+                state.value = state.value.copy(
+                    workout = state.value.workout.copy(
+                        exercises = state.value.workout.exercises.mapIndexed { index, workoutExerciseResponse ->
+                            if(index == event.index) {
+                                workoutExerciseResponse.copy(
+                                    notes = event.notes
+                                )
+                            } else {
+                                workoutExerciseResponse
+                            }
+                        }
+                    )
+                )
+            }
             is CreateWorkoutUiEvent.OnReorderExerciseClicked -> navigate(CreateWorkoutNavigationType.ReorderExercise)
             is CreateWorkoutUiEvent.OnAddExerciseClicked -> navigate(CreateWorkoutNavigationType.AddExercise)
             is CreateWorkoutUiEvent.OnReorderExercises -> {

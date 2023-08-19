@@ -5,17 +5,17 @@ import com.tomtruyen.fitnessapplication.data.entities.WorkoutSet
 import java.util.UUID
 
 data class WorkoutResponse(
-    val id: String = UUID.randomUUID().toString(),
-    val name: String = "",
-    val exercises: List<WorkoutExerciseResponse> = emptyList()
+    var id: String = UUID.randomUUID().toString(),
+    var name: String = "",
+    var exercises: List<WorkoutExerciseResponse> = emptyList()
 )
 
 data class WorkoutExerciseResponse(
-    val id: String = UUID.randomUUID().toString(),
-    val notes: String = "",
-    val rest: Int = 0,
-    val restEnabled: Boolean = false,
-    val order: Int = 0,
-    val exercise: Exercise = Exercise(),
-    val sets: List<WorkoutSet> = emptyList()
+    var id: String = UUID.randomUUID().toString(),
+    var notes: String = "",
+    var rest: Int = 0,
+    var restEnabled: Boolean = false,
+    var order: Int = 0,
+    var exercise: Exercise = Exercise(),
+    var sets: List<WorkoutSet> = emptyList()
 )

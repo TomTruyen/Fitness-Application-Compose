@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -53,6 +54,7 @@ import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesScreenD
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ReorderWorkoutExercisesScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
+import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.ConfirmationDialog
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
 import kotlinx.coroutines.flow.collectLatest
@@ -270,9 +272,20 @@ fun TabContentPager(
         val exercise = exercises.getOrNull(index)
 
         if(exercise != null) {
-
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+                    .padding(Dimens.Normal)
+            ) {
+                item {
+                    TextFields.Default(
+                        placeholder = stringResource(id = R.string.notes),
+                        value = exercise.notes,
+                        onValueChange = { notes ->
+                            onEvent(CreateWorkoutUiEvent.OnExerciseNotesChanged(index, notes))
+                        }
+                    )
+                }
+            }
         }
-
-        // TODO: Display WorkoutExerciseScreen here
     }
 }

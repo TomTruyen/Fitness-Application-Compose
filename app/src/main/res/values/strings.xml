@@ -88,5 +88,6 @@
     <string name="add_exercise">Add exercise</string>
     <string name="reorder_exercises">Reorder exercises</string>
     <string name="apply">Apply</string>
+    <string name="notes">Notes (optional)</string>
 
 </resources>
