@@ -1,10 +1,13 @@
 package com.tomtruyen.fitnessapplication.data.entities
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.firebase.firestore.PropertyName
+import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
+@Parcelize
 @Entity(tableName = Exercise.TABLE_NAME)
 data class Exercise(
     @PrimaryKey var id: String = UUID.randomUUID().toString(),
@@ -20,7 +23,7 @@ data class Exercise(
     @set:PropertyName("description")
     var steps: List<String> = emptyList(),
     var isUserCreated: Boolean = false
-) {
+): Parcelable {
     val displayName get() = buildString {
         append(name)
         if(!equipment.isNullOrBlank()) {

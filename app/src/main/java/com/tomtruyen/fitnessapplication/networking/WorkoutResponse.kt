@@ -11,11 +11,11 @@ data class WorkoutResponse(
 )
 
 data class WorkoutExerciseResponse(
-    val id: String,
-    val notes: String,
-    val rest: Int,
-    val restEnabled: Boolean,
-    val order: Int,
-    val exercise: Exercise,
-    val sets: List<WorkoutSet>
+    val id: String = UUID.randomUUID().toString(),
+    val notes: String = "",
+    val rest: Int = 0,
+    val restEnabled: Boolean = false,
+    val order: Int = 0,
+    val exercise: Exercise = Exercise(),
+    val sets: List<WorkoutSet> = emptyList()
 )

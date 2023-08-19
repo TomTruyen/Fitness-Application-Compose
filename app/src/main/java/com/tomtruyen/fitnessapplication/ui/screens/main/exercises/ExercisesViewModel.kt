@@ -1,10 +1,12 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises
 
+import androidx.lifecycle.SavedStateHandle
 import com.tomtruyen.fitnessapplication.base.BaseViewModel
 import com.tomtruyen.fitnessapplication.base.SnackbarMessage
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.model.ExerciseFilter
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
+import com.tomtruyen.fitnessapplication.navigation.NavArguments
 import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -14,9 +16,10 @@ import kotlinx.coroutines.flow.flatMapLatest
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ExercisesViewModel(
-    isFromWorkout: Boolean,
+    private val isFromWorkout: Boolean,
     private val exerciseRepository: ExerciseRepository,
     private val userRepository: UserRepository,
+    private val savedStateHandle: SavedStateHandle
 ): BaseViewModel<ExercisesNavigationType>() {
     val state = MutableStateFlow(
         ExercisesUiState(isFromWorkout = isFromWorkout)
@@ -90,7 +93,20 @@ class ExercisesViewModel(
             )
             is ExercisesUiEvent.OnFilterClicked -> navigate(ExercisesNavigationType.Filter)
             is ExercisesUiEvent.OnAddClicked -> navigate(ExercisesNavigationType.Add)
-            is ExercisesUiEvent.OnExerciseClicked -> navigate(ExercisesNavigationType.Detail(event.exercise.id))
+            is ExercisesUiEvent.OnExerciseClicked -> if(isFromWorkout) {
+                state.value = state.value.copy(
+                    selectedExercise = if(state.value.selectedExercise == event.exercise) {
+                        null
+                    } else {
+                        event.exercise
+                    }
+                )
+            } else {
+                navigate(ExercisesNavigationType.Detail(event.exercise.id))
+            }
+            is ExercisesUiEvent.OnAddExerciseToWorkoutClicked -> {
+                navigate(ExercisesNavigationType.BackToWorkout(event.exercise))
+            }
         }
     }
 }

@@ -12,4 +12,5 @@ sealed class ExercisesUiEvent {
     data object OnClearFilterClicked : ExercisesUiEvent()
     data class OnRemoveFilterClicked(val filter: String) : ExercisesUiEvent()
     data class OnExerciseClicked(val exercise: Exercise) : ExercisesUiEvent()
+    data class OnAddExerciseToWorkoutClicked(val exercise: Exercise) : ExercisesUiEvent()
 }

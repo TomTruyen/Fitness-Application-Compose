@@ -1,5 +1,7 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create
 
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,19 +12,28 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FormatListNumbered
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.annotation.Destination
@@ -32,6 +43,7 @@ import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.navigation.CreateWorkoutNavGraph
+import com.tomtruyen.fitnessapplication.navigation.NavArguments
 import com.tomtruyen.fitnessapplication.networking.WorkoutExerciseResponse
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
@@ -41,6 +53,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalFoundationApi::class)
 @CreateWorkoutNavGraph(start = true)
 @Destination
 @Composable
@@ -53,6 +66,10 @@ fun CreateWorkoutScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val loading by viewModel.loading.collectAsStateWithLifecycle()
 
+    val pagerState = rememberPagerState(
+        pageCount = { state.workout.exercises.size }
+    )
+
     LaunchedEffect(viewModel, context) {
         viewModel.navigation.collectLatest { navigationType ->
             when(navigationType) {
@@ -62,11 +79,32 @@ fun CreateWorkoutScreen(
         }
     }
 
+    LaunchedEffect(Unit, navController) {
+        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Exercise?>(NavArguments.EXERCISE, null)
+            ?.collectLatest {
+                it?.let { exercise ->
+                    viewModel.state.value = state.copy(
+                        workout = state.workout.copy(
+                            exercises = state.workout.exercises + WorkoutExerciseResponse(exercise = exercise)
+                        )
+                    )
+
+                    navController.currentBackStackEntry?.savedStateHandle?.remove<Exercise>(NavArguments.EXERCISE)
+                }
+            }
+    }
+
+    LaunchedEffect(state.workout.exercises) {
+        if(state.workout.exercises.isEmpty()) return@LaunchedEffect
+        pagerState.animateScrollToPage(state.workout.exercises.size - 1)
+    }
+
     CreateWorkoutScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
         loading = loading,
+        pagerState = pagerState,
         onEvent = viewModel::onEvent
     )
 }
@@ -78,12 +116,9 @@ fun CreateWorkoutScreenLayout(
     navController: NavController,
     state: CreateWorkoutUiState,
     loading: Boolean,
+    pagerState: PagerState,
     onEvent: (CreateWorkoutUiEvent) -> Unit,
 ) {
-    val pagerState = rememberPagerState(
-        pageCount = { state.workout.exercises.size }
-    )
-
     Scaffold(
         snackbarHost = snackbarHost,
         topBar = {
@@ -109,10 +144,12 @@ fun CreateWorkoutScreenLayout(
             Column(
                 modifier = Modifier.fillMaxSize()
             ) {
-                TabLayout(
-                    exercises = state.workout.exercises,
-                    state = pagerState
-                )
+                if (state.workout.exercises.isNotEmpty()) {
+                    TabLayout(
+                        exercises = state.workout.exercises,
+                        state = pagerState
+                    )
+                }
 
                 TabContentPager(
                     modifier = Modifier.weight(1f),
@@ -123,7 +160,8 @@ fun CreateWorkoutScreenLayout(
 
                 Buttons.Default(
                     text = stringResource(id = R.string.add_exercise),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(Dimens.Normal)
                 ) {
                     onEvent(CreateWorkoutUiEvent.OnAddExerciseClicked)
@@ -142,7 +180,19 @@ fun TabLayout(
 )  {
     val scope = rememberCoroutineScope()
 
-    TabRow(selectedTabIndex = state.currentPage) {
+    ScrollableTabRow(
+        selectedTabIndex = state.currentPage,
+        containerColor = MaterialTheme.colorScheme.background,
+        edgePadding = 0.dp,
+        divider = {
+            Divider(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
+                thickness = 1.dp
+            )
+        }
+    ) {
         exercises.forEachIndexed { index, workoutExercise ->
             Tab(
                 selected = state.currentPage == index,
@@ -152,8 +202,12 @@ fun TabLayout(
                     }
                 },
                 text = {
-                    Text(text = workoutExercise.exercise.name ?: "")
-                }
+                    Text(
+                        text = workoutExercise.exercise.name ?: "",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
             )
         }
     }
@@ -171,7 +225,11 @@ fun TabContentPager(
         modifier = modifier,
         state = state
     ) { index ->
-        val exercise = exercises[index]
+        val exercise = exercises.getOrNull(index)
+
+        if(exercise != null) {
+
+        }
 
         // TODO: Display WorkoutExerciseScreen here
     }

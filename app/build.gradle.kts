@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.kapt)
     alias(libs.plugins.androidGitVersion)
+    id("kotlin-parcelize")
 }
 
 sonar {

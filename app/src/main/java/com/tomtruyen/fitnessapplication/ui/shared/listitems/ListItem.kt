@@ -16,7 +16,13 @@ import androidx.compose.ui.Modifier
 import com.tomtruyen.fitnessapplication.Dimens
 
 @Composable
-fun ListItem(title: String, message: String, onClick: () -> Unit) {
+fun ListItem(
+    title: String,
+    message: String,
+    selected: Boolean = false,
+    showChevron: Boolean = true,
+    onClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -31,19 +37,31 @@ fun ListItem(title: String, message: String, onClick: () -> Unit) {
         ) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    color = if(selected) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.onBackground
+                    }
+                ),
             )
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodySmall.copy(
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                    color = if(selected) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                    }
                 ),
             )
         }
 
-        Icon(
-            imageVector = Icons.Filled.ChevronRight,
-            contentDescription = null
-        )
+        if(showChevron) {
+            Icon(
+                imageVector = Icons.Filled.ChevronRight,
+                contentDescription = null
+            )
+        }
     }
 }

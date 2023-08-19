@@ -1,6 +1,9 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,10 +15,12 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -40,6 +45,7 @@ import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
+import com.tomtruyen.fitnessapplication.navigation.NavArguments
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.CreateExerciseScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExerciseDetailScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesFilterScreenDestination
@@ -70,6 +76,13 @@ fun ExercisesScreen(
                 is ExercisesNavigationType.Filter -> navController.navigate(ExercisesFilterScreenDestination)
                 is ExercisesNavigationType.Add -> navController.navigate(CreateExerciseScreenDestination(id = null))
                 is ExercisesNavigationType.Detail -> navController.navigate(ExerciseDetailScreenDestination(navigationType.id))
+                is ExercisesNavigationType.BackToWorkout -> {
+                    navController.previousBackStackEntry?.savedStateHandle?.set(
+                        NavArguments.EXERCISE,
+                        navigationType.exercise
+                    )
+                    navController.popBackStack()
+                }
                 else -> Unit
             }
         }
@@ -164,6 +177,24 @@ fun ExercisesScreenLayout(
                 )
             }
         },
+        floatingActionButton = {
+          AnimatedVisibility(
+              visible = state.selectedExercise != null,
+              enter = scaleIn(),
+              exit = scaleOut()
+          ) {
+              FloatingActionButton(
+                  onClick = {
+                      onEvent(ExercisesUiEvent.OnAddExerciseToWorkoutClicked(state.selectedExercise!!))
+                  }
+              ) {
+                Icon(
+                    imageVector = Icons.Filled.Check,
+                    contentDescription = stringResource(id = R.string.content_description_add_exercise_to_workout)
+                )
+              }
+          }
+        },
         // nestedScroll modifier is required for the scroll behavior to work
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
@@ -236,7 +267,12 @@ fun ExercisesScreenLayout(
                             }
 
 
-                            ListItem(exercise.displayName, exercise.category ?: "") {
+                            ListItem(
+                                title = exercise.displayName,
+                                message = exercise.category ?: "",
+                                selected = state.selectedExercise?.id == exercise.id,
+                                showChevron = !state.isFromWorkout,
+                            ) {
                                 onEvent(ExercisesUiEvent.OnExerciseClicked(exercise))
                             }
                         }
