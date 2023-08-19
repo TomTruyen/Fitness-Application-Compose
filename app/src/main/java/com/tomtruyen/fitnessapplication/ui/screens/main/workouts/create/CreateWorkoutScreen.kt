@@ -336,7 +336,7 @@ fun TabContentPager(
                     deleteConfirmationDialogVisible = true
                 }
 
-                Spacer(modifier = Modifier.width(Dimens.Normal))
+                Spacer(modifier = Modifier.width(Dimens.Small))
             }
 
             Buttons.Default(

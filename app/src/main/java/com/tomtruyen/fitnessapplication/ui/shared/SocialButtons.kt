@@ -6,6 +6,7 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -81,6 +82,9 @@ object SocialButtons {
             },
             shape = shape,
             modifier = modifier
+                .defaultMinSize(
+                    minHeight = Dimens.MinButtonHeight,
+                )
                 .fillMaxWidth()
                 .padding(top = Dimens.Tiny)
                 .clip(MaterialTheme.shapes.medium),
@@ -95,7 +99,7 @@ object SocialButtons {
             )
             Spacer(modifier = Modifier.width(Dimens.Tiny))
             Text(
-                modifier = Modifier.padding(vertical = Dimens.Tiny),
+                modifier = Modifier.padding(vertical = Dimens.Small),
                 text = text,
                 style = TextStyle(
                     color = MaterialTheme.colorScheme.background

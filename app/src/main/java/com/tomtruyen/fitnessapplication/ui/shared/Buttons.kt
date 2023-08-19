@@ -1,27 +1,13 @@
 package com.tomtruyen.fitnessapplication.ui.shared
 
-import android.app.Activity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.SoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.fitnessapplication.Dimens
-import com.tomtruyen.fitnessapplication.R
 
 object Buttons {
     @Composable
@@ -36,7 +22,9 @@ object Buttons {
             onClick = onClick,
             enabled = enabled,
             shape = shape,
-            modifier = modifier,
+            modifier = modifier.defaultMinSize(
+                minHeight = Dimens.MinButtonHeight,
+            ),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -45,7 +33,6 @@ object Buttons {
             )
         ) {
             Text(
-                modifier = Modifier.padding(vertical = Dimens.Tiny),
                 text = text
             )
         }
@@ -65,7 +52,9 @@ object Buttons {
             enabled = enabled,
             shape = shape,
             colors = colors,
-            modifier = modifier,
+            modifier = modifier.defaultMinSize(
+                minHeight = Dimens.MinButtonHeight,
+            ),
         ) {
             Text(
                 modifier = Modifier.padding(vertical = Dimens.Tiny),
@@ -91,10 +80,14 @@ object Buttons {
             enabled = enabled,
             shape = shape,
             colors = colors,
-            modifier = modifier,
+            modifier = modifier.defaultMinSize(
+                minWidth = Dimens.MinButtonHeight,
+                minHeight = Dimens.MinButtonHeight,
+            ),
         ) {
             Icon(
-                modifier = Modifier.padding(vertical = Dimens.Tiny),
+                modifier = Modifier
+                    .padding(vertical = Dimens.Tiny),
                 imageVector = icon,
                 contentDescription = null
             )
