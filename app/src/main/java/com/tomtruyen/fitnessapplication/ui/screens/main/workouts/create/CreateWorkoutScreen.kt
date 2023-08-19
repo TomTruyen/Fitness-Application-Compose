@@ -1,6 +1,7 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
@@ -27,7 +28,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -49,6 +53,7 @@ import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesScreenD
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ReorderWorkoutExercisesScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
+import com.tomtruyen.fitnessapplication.ui.shared.dialogs.ConfirmationDialog
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -122,12 +127,29 @@ fun CreateWorkoutScreenLayout(
     pagerState: PagerState,
     onEvent: (CreateWorkoutUiEvent) -> Unit,
 ) {
+    var confirmationDialogVisible by remember { mutableStateOf(false) }
+
+    BackHandler(enabled = !confirmationDialogVisible) {
+        if(state.workout.exercises != state.initialWorkout.exercises) {
+            confirmationDialogVisible = true
+        } else {
+            navController.popBackStack()
+        }
+    }
+
     Scaffold(
         snackbarHost = snackbarHost,
         topBar = {
             Toolbar(
                 title = stringResource(id = R.string.create_workout),
-                navController = navController
+                navController = navController,
+                onNavigateUp = {
+                    if(state.workout.exercises != state.initialWorkout.exercises) {
+                        confirmationDialogVisible = true
+                    } else {
+                        navController.popBackStack()
+                    }
+                }
             ) {
                 AnimatedVisibility(visible = state.workout.exercises.size > 1) {
                     IconButton(onClick = { onEvent(CreateWorkoutUiEvent.OnReorderExerciseClicked) }) {
@@ -170,6 +192,21 @@ fun CreateWorkoutScreenLayout(
                         .padding(Dimens.Normal)
                 ) {
                     onEvent(CreateWorkoutUiEvent.OnAddExerciseClicked)
+                }
+
+                if(confirmationDialogVisible) {
+                    ConfirmationDialog(
+                        title = R.string.title_unsaved_changes,
+                        message = R.string.message_unsaved_changes,
+                        onConfirm = {
+                            navController.popBackStack()
+                            confirmationDialogVisible = false
+                        },
+                        onDismiss = {
+                            confirmationDialogVisible = false
+                        },
+                        confirmText = R.string.discard
+                    )
                 }
             }
 
