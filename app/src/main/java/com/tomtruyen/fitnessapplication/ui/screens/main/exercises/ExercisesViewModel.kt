@@ -57,52 +57,43 @@ class ExercisesViewModel(
     }
 
     fun onEvent(event: ExercisesUiEvent) {
-        when(event) {
-            is ExercisesUiEvent.OnToggleSearch -> state.value = state.value.copy(
-                searching = !state.value.searching
-            )
-            is ExercisesUiEvent.OnSearchQueryChanged -> state.value = state.value.copy(
-                search = event.query
-            )
-            is ExercisesUiEvent.OnCategoryFilterChanged -> state.value = state.value.copy(
-                filter = state.value.filter.copy().apply {
+        val currentState = state.value
+
+        when (event) {
+            is ExercisesUiEvent.OnToggleSearch -> state.value = currentState.copy(searching = !currentState.searching)
+            is ExercisesUiEvent.OnSearchQueryChanged -> state.value = currentState.copy(search = event.query)
+            is ExercisesUiEvent.OnCategoryFilterChanged -> state.value = currentState.copy(
+                filter = currentState.filter.copy().apply {
                     tryAddCategory(event.category)
                 }
             )
-            is ExercisesUiEvent.OnEquipmentFilterChanged -> state.value = state.value.copy(
-                filter = state.value.filter.copy().apply {
+            is ExercisesUiEvent.OnEquipmentFilterChanged -> state.value = currentState.copy(
+                filter = currentState.filter.copy().apply {
                     tryAddEquipment(event.equipment)
                 }
             )
-            is ExercisesUiEvent.OnClearFilterClicked -> state.value = state.value.copy(
-                filter = ExerciseFilter()
-            )
-            is ExercisesUiEvent.OnRemoveFilterClicked -> state.value = state.value.copy(
-                filter = state.value.filter.copy().apply {
-                    categories = categories.toMutableList().apply {
-                        remove(event.filter)
-                    }
-                    equipment = equipment.toMutableList().apply {
-                        remove(event.filter)
-                    }
-                }
+            is ExercisesUiEvent.OnClearFilterClicked -> state.value = currentState.copy(filter = ExerciseFilter())
+            is ExercisesUiEvent.OnRemoveFilterClicked -> state.value = currentState.copy(
+                filter = currentState.filter.copy(
+                    categories = currentState.filter.categories.toMutableList().apply { remove(event.filter) },
+                    equipment = currentState.filter.equipment.toMutableList().apply { remove(event.filter) }
+                )
             )
             is ExercisesUiEvent.OnFilterClicked -> navigate(ExercisesNavigationType.Filter)
             is ExercisesUiEvent.OnAddClicked -> navigate(ExercisesNavigationType.Add)
-            is ExercisesUiEvent.OnExerciseClicked -> if(isFromWorkout) {
-                state.value = state.value.copy(
-                    selectedExercise = if(state.value.selectedExercise == event.exercise) {
-                        null
-                    } else {
-                        event.exercise
-                    }
-                )
-            } else {
-                navigate(ExercisesNavigationType.Detail(event.exercise.id))
+            is ExercisesUiEvent.OnExerciseClicked -> {
+                if (isFromWorkout) {
+                    state.value = currentState.copy(
+                        selectedExercise = if (currentState.selectedExercise == event.exercise) null else event.exercise
+                    )
+                } else {
+                    navigate(ExercisesNavigationType.Detail(event.exercise.id))
+                }
             }
             is ExercisesUiEvent.OnAddExerciseToWorkoutClicked -> {
                 navigate(ExercisesNavigationType.BackToWorkout(event.exercise))
             }
         }
     }
+
 }

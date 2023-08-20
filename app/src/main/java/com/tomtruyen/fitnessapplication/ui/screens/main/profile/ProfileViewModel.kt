@@ -85,36 +85,18 @@ class ProfileViewModel(
     }
 
     fun onEvent(event: ProfileUiEvent) {
-        when(event) {
-            is ProfileUiEvent.UnitChanged -> {
-                state.value = state.value.copy(
-                    settings = state.value.settings.copy(
-                        unit = event.value
-                    )
-                )
-            }
-            is ProfileUiEvent.RestChanged -> {
-                state.value = state.value.copy(
-                    settings = state.value.settings.copy(
-                        rest = event.value
-                    )
-                )
-            }
-            is ProfileUiEvent.RestEnabledChanged -> {
-                state.value = state.value.copy(
-                    settings = state.value.settings.copy(
-                        restEnabled = event.value
-                    )
-                )
-            }
-            is ProfileUiEvent.RestVibrationEnabledChanged -> {
-                state.value = state.value.copy(
-                    settings = state.value.settings.copy(
-                        restVibrationEnabled = event.value
-                    )
-                )
-            }
+        val currentState = state.value
+        val newSettings = currentState.settings.copy()
+
+        when (event) {
+            is ProfileUiEvent.UnitChanged -> newSettings.unit = event.value
+            is ProfileUiEvent.RestChanged -> newSettings.rest = event.value
+            is ProfileUiEvent.RestEnabledChanged -> newSettings.restEnabled = event.value
+            is ProfileUiEvent.RestVibrationEnabledChanged -> newSettings.restVibrationEnabled = event.value
             is ProfileUiEvent.Logout -> logout()
         }
+
+        state.value = currentState.copy(settings = newSettings)
     }
+
 }

@@ -89,183 +89,141 @@ class CreateWorkoutViewModel(
     }
 
     fun onEvent(event: CreateWorkoutUiEvent) {
-        when(event) {
+        val currentState = state.value
+
+        when (event) {
             is CreateWorkoutUiEvent.Save -> save(event.workoutName)
             is CreateWorkoutUiEvent.OnSettingsChanged -> {
-                if(event.settings == null) return
-                state.value = state.value.copy(
-                    settings = event.settings,
-                )
+                event.settings?.let {
+                    state.value = currentState.copy(settings = it)
+                }
             }
             is CreateWorkoutUiEvent.OnExerciseNotesChanged -> {
-                state.value = state.value.copy(
-                    workout = state.value.workout.copy(
-                        exercises = state.value.workout.exercises.mapIndexed { index, workoutExerciseResponse ->
-                            if(index == event.index) {
-                                workoutExerciseResponse.copy(
-                                    notes = event.notes
-                                )
-                            } else {
-                                workoutExerciseResponse
-                            }
+                state.value = currentState.copy(
+                    workout = currentState.workout.copy(
+                        exercises = currentState.workout.exercises.mapIndexed { index, exercise ->
+                            if (index == event.index) exercise.copy(notes = event.notes) else exercise
                         }
                     )
                 )
             }
             is CreateWorkoutUiEvent.OnDeleteExerciseClicked -> {
-                state.value = state.value.copy(
-                    workout = state.value.workout.copy(
-                        exercises = state.value.workout.exercises.filterIndexed { index, _ ->
-                            index != event.index
-                        }
+                state.value = currentState.copy(
+                    workout = currentState.workout.copy(
+                        exercises = currentState.workout.exercises.filterIndexed { index, _ -> index != event.index }
                     ),
-                    selectedExerciseId = if(event.index > 0) {
-                        state.value.workout.exercises.getOrNull(event.index - 1)?.id
-                    } else if(state.value.workout.exercises.size > 1) {
-                        state.value.workout.exercises.getOrNull(event.index + 1)?.id
-                    } else {
-                        null
-                    }
+                    selectedExerciseId = currentState.workout.exercises.getOrNull(
+                        if (event.index > 0) event.index - 1 else if (currentState.workout.exercises.size > 1) event.index + 1 else -1
+                    )?.id
                 )
             }
             is CreateWorkoutUiEvent.OnReorderExerciseClicked -> navigate(CreateWorkoutNavigationType.ReorderExercise)
             is CreateWorkoutUiEvent.OnAddExerciseClicked -> navigate(CreateWorkoutNavigationType.AddExercise)
             is CreateWorkoutUiEvent.OnAddExercise -> {
-                state.value = state.value.copy(
-                    workout = state.value.workout.copy(
-                        exercises = state.value.workout.exercises + WorkoutExerciseResponse(
-                            exercise = event.exercise,
-                            rest = state.value.settings.rest,
-                            restEnabled = state.value.settings.restEnabled,
-                        ).apply {
-                            sets = listOf(WorkoutSet(workoutExerciseId = this@apply.id))
-                        }
-                    ),
+                val newExercise = WorkoutExerciseResponse(
+                    exercise = event.exercise,
+                    rest = currentState.settings.rest,
+                    restEnabled = currentState.settings.restEnabled,
+                ).apply { sets = listOf(WorkoutSet(workoutExerciseId = this@apply.id)) }
+
+                state.value = currentState.copy(
+                    workout = currentState.workout.copy(exercises = currentState.workout.exercises + newExercise),
                     selectedExerciseId = event.exercise.id
                 )
             }
             is CreateWorkoutUiEvent.OnReorderExercises -> {
-                state.value = state.value.copy(
-                    workout = state.value.workout.copy(
-                        exercises = event.exercises
-                    )
-                )
+                state.value = currentState.copy(workout = currentState.workout.copy(exercises = event.exercises))
             }
             is CreateWorkoutUiEvent.OnRepsChanged -> {
-                state.value = state.value.copy(
-                    workout = state.value.workout.copy(
-                        exercises = state.value.workout.exercises.mapIndexed { index, workoutExerciseResponse ->
-                            if(index == event.exerciseIndex) {
-                                workoutExerciseResponse.copy(
-                                    sets = workoutExerciseResponse.sets.mapIndexed { setIndex, workoutSetResponse ->
-                                        if(setIndex == event.setIndex) {
-                                            workoutSetResponse.copy(
-                                                reps = event.reps?.toIntOrNull(),
-                                                repsString = event.reps
-                                            )
-                                        } else {
-                                            workoutSetResponse
-                                        }
+                state.value = currentState.copy(
+                    workout = currentState.workout.copy(
+                        exercises = currentState.workout.exercises.mapIndexed { index, exercise ->
+                            if (index == event.exerciseIndex) {
+                                exercise.copy(
+                                    sets = exercise.sets.mapIndexed { setIndex, set ->
+                                        if (setIndex == event.setIndex) set.copy(
+                                            reps = event.reps?.toIntOrNull(),
+                                            repsString = event.reps
+                                        ) else set
                                     }
                                 )
                             } else {
-                                workoutExerciseResponse
+                                exercise
                             }
                         }
                     )
                 )
             }
             is CreateWorkoutUiEvent.OnWeightChanged -> {
-                state.value = state.value.copy(
-                    workout = state.value.workout.copy(
-                        exercises = state.value.workout.exercises.mapIndexed { index, workoutExerciseResponse ->
-                            if(index == event.exerciseIndex) {
-                                workoutExerciseResponse.copy(
-                                    sets = workoutExerciseResponse.sets.mapIndexed { setIndex, workoutSetResponse ->
-                                        if(setIndex == event.setIndex) {
-                                            workoutSetResponse.copy(
-                                                weight = event.weight?.toDoubleOrNull(),
-                                                weightString = event.weight
-                                            )
-                                        } else {
-                                            workoutSetResponse
-                                        }
+                state.value = currentState.copy(
+                    workout = currentState.workout.copy(
+                        exercises = currentState.workout.exercises.mapIndexed { index, exercise ->
+                            if (index == event.exerciseIndex) {
+                                exercise.copy(
+                                    sets = exercise.sets.mapIndexed { setIndex, set ->
+                                        if (setIndex == event.setIndex) set.copy(
+                                            weight = event.weight?.toDoubleOrNull(),
+                                            weightString = event.weight
+                                        ) else set
                                     }
                                 )
                             } else {
-                                workoutExerciseResponse
+                                exercise
                             }
                         }
                     )
                 )
             }
             is CreateWorkoutUiEvent.OnDeleteSetClicked -> {
-                state.value = state.value.copy(
-                    workout = state.value.workout.copy(
-                        exercises = state.value.workout.exercises.mapIndexed { index, workoutExerciseResponse ->
-                            if(index == event.exerciseIndex) {
-                                workoutExerciseResponse.copy(
-                                    sets = workoutExerciseResponse.sets.filterIndexed { setIndex, _ ->
-                                        setIndex != event.setIndex
-                                    }
-                                )
+                state.value = currentState.copy(
+                    workout = currentState.workout.copy(
+                        exercises = currentState.workout.exercises.mapIndexed { index, exercise ->
+                            if (index == event.exerciseIndex) {
+                                exercise.copy(sets = exercise.sets.filterIndexed { setIndex, _ -> setIndex != event.setIndex })
                             } else {
-                                workoutExerciseResponse
+                                exercise
                             }
                         }
                     )
                 )
             }
             is CreateWorkoutUiEvent.OnAddSetClicked -> {
-                state.value = state.value.copy(
-                    workout = state.value.workout.copy(
-                        exercises = state.value.workout.exercises.mapIndexed { index, workoutExerciseResponse ->
-                            if(index == event.exerciseIndex) {
-                                workoutExerciseResponse.copy(
-                                    sets = workoutExerciseResponse.sets + listOf(
-                                        WorkoutSet(
-                                            workoutExerciseId = workoutExerciseResponse.id,
-                                            order = workoutExerciseResponse.sets.last().order + 1
-                                        )
+                state.value = currentState.copy(
+                    workout = currentState.workout.copy(
+                        exercises = currentState.workout.exercises.mapIndexed { index, exercise ->
+                            if (index == event.exerciseIndex) {
+                                exercise.copy(
+                                    sets = exercise.sets + WorkoutSet(
+                                        workoutExerciseId = exercise.id,
+                                        order = exercise.sets.lastOrNull()?.order?.plus(1) ?: 0
                                     )
                                 )
                             } else {
-                                workoutExerciseResponse
+                                exercise
                             }
                         }
                     )
                 )
             }
             is CreateWorkoutUiEvent.OnRestEnabledChanged -> {
-                state.value = state.value.copy(
-                    workout = state.value.workout.copy(
-                        exercises = state.value.workout.exercises.mapIndexed { index, workoutExerciseResponse ->
-                            if(index == event.exerciseIndex) {
-                                workoutExerciseResponse.copy(
-                                    restEnabled = event.enabled
-                                )
-                            } else {
-                                workoutExerciseResponse
-                            }
+                state.value = currentState.copy(
+                    workout = currentState.workout.copy(
+                        exercises = currentState.workout.exercises.mapIndexed { index, exercise ->
+                            if (index == event.exerciseIndex) exercise.copy(restEnabled = event.enabled) else exercise
                         }
                     )
                 )
             }
             is CreateWorkoutUiEvent.OnRestChanged -> {
-                state.value = state.value.copy(
-                    workout = state.value.workout.copy(
-                        exercises = state.value.workout.exercises.mapIndexed { index, workoutExerciseResponse ->
-                            if(index == event.exerciseIndex) {
-                                workoutExerciseResponse.copy(
-                                    rest = event.rest
-                                )
-                            } else {
-                                workoutExerciseResponse
-                            }
+                state.value = currentState.copy(
+                    workout = currentState.workout.copy(
+                        exercises = currentState.workout.exercises.mapIndexed { index, exercise ->
+                            if (index == event.exerciseIndex) exercise.copy(rest = event.rest) else exercise
                         }
                     )
                 )
             }
         }
     }
+
 }
