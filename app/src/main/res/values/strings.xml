@@ -23,6 +23,7 @@
     <string name="content_description_reorder_exercises">Reorder exercises</string>
     <string name="content_description_add_exercise_to_workout">Add exercise to workout</string>
     <string name="content_description_delete_exercise">Delete exercise</string>
+    <string name="content_description_save_workout">Save workout</string>
 
     <!-- Bottom Navigation -->
     <string name="workouts">Workouts</string>
@@ -62,7 +63,6 @@
     <string name="create_exercise">Create exercise</string>
     <string name="hint_name">Name</string>
     <string name="save">Save</string>
-    <string name="exercise_saved">Exercise saved</string>
     <string name="hint_type">Type</string>
     <string name="hint_equipment">Equipment</string>
     <string name="hint_category">Category</string>

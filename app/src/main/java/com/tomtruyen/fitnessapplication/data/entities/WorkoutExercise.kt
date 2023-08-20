@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.Relation
+import com.tomtruyen.fitnessapplication.networking.WorkoutExerciseResponse
 import java.util.UUID
 
 @Entity(
@@ -53,4 +54,14 @@ data class WorkoutExerciseWithExercisesAndSets(
         entity = WorkoutSet::class
     )
     val sets: List<WorkoutSet> = emptyList()
-)
+) {
+    fun toWorkoutExerciseResponse() = WorkoutExerciseResponse(
+        id = workoutExercise.id,
+        notes = workoutExercise.notes ?: "",
+        rest = workoutExercise.rest,
+        restEnabled = workoutExercise.restEnabled,
+        order = workoutExercise.order,
+        exercise = exercise,
+        sets = sets
+    )
+}

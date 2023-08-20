@@ -63,5 +63,5 @@ val appModule = module {
     viewModelOf(::ReorderWorkoutExercisesViewModel)
     viewModelOf(::ExercisesViewModel)
     viewModelOf(::ExerciseDetailViewModel)
-    viewModel { (id: String?) -> CreateExerciseViewModel(id, get(), get(), get()) }
+    viewModel { (id: String?) -> CreateExerciseViewModel(id, get(), get()) }
 }

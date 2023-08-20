@@ -26,6 +26,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.FormatListNumbered
 import androidx.compose.material3.ButtonDefaults
@@ -107,6 +108,7 @@ fun CreateWorkoutScreen(
     LaunchedEffect(viewModel, context) {
         viewModel.navigation.collectLatest { navigationType ->
             when(navigationType) {
+                is CreateWorkoutNavigationType.Back -> navController.popBackStack()
                 is CreateWorkoutNavigationType.ReorderExercise -> navController.navigate(
                     ReorderWorkoutExercisesScreenDestination
                 )
@@ -187,11 +189,20 @@ fun CreateWorkoutScreenLayout(
                     }
                 }
             ) {
-                AnimatedVisibility(visible = state.workout.exercises.size > 1) {
+                if(state.workout.exercises.size > 1) {
                     IconButton(onClick = { onEvent(CreateWorkoutUiEvent.OnReorderExerciseClicked) }) {
                         Icon(
                             imageVector = Icons.Filled.FormatListNumbered,
                             contentDescription = stringResource(id = R.string.content_description_reorder_exercises),
+                        )
+                    }
+                }
+
+                if(state.workout.exercises.isNotEmpty()) {
+                    IconButton(onClick = { onEvent(CreateWorkoutUiEvent.Save) }) {
+                        Icon(
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = stringResource(id = R.string.content_description_save_workout),
                         )
                     }
                 }

@@ -14,4 +14,5 @@ sealed class CreateWorkoutUiEvent {
     data class OnWeightChanged(val exerciseIndex: Int, val setIndex: Int, val weight: String?) : CreateWorkoutUiEvent()
     data class OnDeleteSetClicked(val exerciseIndex: Int, val setIndex: Int) : CreateWorkoutUiEvent()
     data class OnAddSetClicked(val exerciseIndex: Int) : CreateWorkoutUiEvent()
+    data object Save: CreateWorkoutUiEvent()
 }

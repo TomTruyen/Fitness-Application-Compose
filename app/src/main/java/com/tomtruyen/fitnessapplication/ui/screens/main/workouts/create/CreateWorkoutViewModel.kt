@@ -1,23 +1,95 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create
 
 import android.util.Log
+import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.base.BaseViewModel
+import com.tomtruyen.fitnessapplication.base.SnackbarMessage
+import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.data.entities.Settings
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutSet
+import com.tomtruyen.fitnessapplication.data.entities.WorkoutWithExercises
+import com.tomtruyen.fitnessapplication.model.FirebaseCallback
+import com.tomtruyen.fitnessapplication.networking.WorkoutResponse
 import com.tomtruyen.fitnessapplication.repositories.interfaces.SettingsRepository
+import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
+import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepository
+import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create.CreateExerciseNavigationType
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class CreateWorkoutViewModel(
+    private val id: String?,
+    private val userRepository: UserRepository,
+    private val workoutRepository: WorkoutRepository,
     settingsRepository: SettingsRepository
 ): BaseViewModel<CreateWorkoutNavigationType>() {
-    val state = MutableStateFlow(CreateWorkoutUiState())
+    private val isEditing = id != null
+
+    val state = MutableStateFlow(
+        CreateWorkoutUiState(isEditing = isEditing)
+    )
 
     val settings = settingsRepository.findSettings()
 
-    // TODO: OnSave to Firebase --> Set the "order" value for each exercise (index in the list)
+    init {
+        findWorkout()
+    }
+
+    private fun findWorkout() = launchLoading {
+        if(!isEditing || id == null) return@launchLoading
+
+        workoutRepository.findWorkoutById(id)?.let {
+            state.value = state.value.copy(
+                initialWorkout = it.toWorkoutResponse(),
+                workout = it.toWorkoutResponse()
+            )
+        }
+    }
+
+    private fun save() = launchIO {
+        val userId = userRepository.getUser()?.uid ?: return@launchIO
+
+        isLoading(true)
+
+        val workouts = workoutRepository.findWorkouts().map {
+            it.toWorkoutResponse()
+        }.toMutableList()
+
+        val workout = state.value.workout.apply {
+            exercises.forEachIndexed { index, workoutExerciseResponse ->
+                workoutExerciseResponse.order = index
+            }
+
+            unit = state.value.settings.unit
+        }
+
+        if(isEditing) {
+            workouts.removeIf { it.id == id }
+        }
+
+        workouts.add(workout)
+
+        workoutRepository.saveWorkout(
+            userId = userId,
+            workouts = workouts,
+            callback = object: FirebaseCallback<List<WorkoutResponse>> {
+                override fun onSuccess(value: List<WorkoutResponse>) {
+                    navigate(CreateWorkoutNavigationType.Back)
+                }
+
+                override fun onError(error: String?) {
+                    showSnackbar(SnackbarMessage.Error(error))
+                }
+
+                override fun onStopLoading() {
+                    isLoading(false)
+                }
+            }
+        )
+    }
 
     fun onEvent(event: CreateWorkoutUiEvent) {
         when(event) {
+            is CreateWorkoutUiEvent.Save -> save()
             is CreateWorkoutUiEvent.OnSettingsChanged -> {
                 if(event.settings == null) return
                 state.value = state.value.copy(
