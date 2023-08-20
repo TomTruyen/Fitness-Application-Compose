@@ -324,7 +324,7 @@ fun TabContentPager(
                     LazyColumn(
                         modifier = Modifier
                             .weight(1f)
-                            .padding(vertical = Dimens.Normal)
+                            .padding(top = Dimens.Normal)
                     ) {
                         // Header Row
                         item {
@@ -373,7 +373,7 @@ fun TabContentPager(
                         }
 
                         // Sets
-                        itemsIndexed(workoutExercise.sets, key = { _, set -> set }) { setIndex, set ->
+                        itemsIndexed(workoutExercise.sets, key = { _, set -> set.id }) { setIndex, set ->
                             Row(
                                 modifier = Modifier.fillMaxWidth()
                                     .animateItemPlacement(),

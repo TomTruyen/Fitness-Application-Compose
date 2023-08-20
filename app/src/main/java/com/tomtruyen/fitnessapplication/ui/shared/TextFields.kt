@@ -23,6 +23,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
@@ -107,14 +108,22 @@ object TextFields {
             ) { innerTextField ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .background(
                             color = containerColor,
                             shape = shape
                         )
                         .padding(padding)
                 ) {
-                    Box(modifier = Modifier.weight(1f)) {
+                    BoxWithConstraints(
+                        modifier = Modifier.weight(1f),
+                        contentAlignment = if(textStyle.textAlign == TextAlign.Center) {
+                            Alignment.Center
+                        } else {
+                            Alignment.CenterStart
+                        }
+                    ) {
                         if(value.isNullOrBlank()) {
                             Text(
                                 text = placeholder,
@@ -126,7 +135,7 @@ object TextFields {
                             )
                         }
 
-                        innerTextField()
+                        innerTextField.invoke()
                     }
 
                     if(trailing != null) {
