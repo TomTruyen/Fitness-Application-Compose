@@ -6,12 +6,15 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.tomtruyen.fitnessapplication.data.AppDatabase
 import com.tomtruyen.fitnessapplication.data.entities.Settings
+import com.tomtruyen.fitnessapplication.di.appModule
 import com.tomtruyen.fitnessapplication.extensions.handleCompletionResult
 import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.SettingsRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import kotlinx.coroutines.launch
+import org.koin.core.context.loadKoinModules
+import org.koin.core.context.unloadKoinModules
 
 class UserRepositoryImpl(
     globalProvider: GlobalProvider,
@@ -61,6 +64,10 @@ class UserRepositoryImpl(
         }
 
         auth.signOut()
+
+        // Reset Koin
+        unloadKoinModules(appModule)
+        loadKoinModules(appModule)
     }
 
     override fun isLoggedIn() = auth.currentUser != null
