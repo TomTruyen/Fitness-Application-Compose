@@ -1,7 +1,10 @@
 package com.tomtruyen.fitnessapplication.ui.shared
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -28,6 +31,7 @@ import java.time.format.TextStyle
 
 
 object TextFields {
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Default(
         value: String?,
@@ -38,23 +42,11 @@ object TextFields {
         readOnly: Boolean = false,
         enabled: Boolean = true,
         singleLine: Boolean = true,
+        padding: PaddingValues = PaddingValues(Dimens.Normal),
         textStyle: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.bodyMedium,
         trailingIcon: @Composable (() -> Unit)? = null,
         keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-        colors: TextFieldColors = TextFieldDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.surface,
-            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-            errorContainerColor = MaterialTheme.colorScheme.surface,
-            disabledContainerColor = MaterialTheme.colorScheme.surface,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            errorIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent,
-            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-            errorTextColor = MaterialTheme.colorScheme.onSurface,
-            disabledTextColor = MaterialTheme.colorScheme.onSurface,
-        ),
+        containerColor: Color = MaterialTheme.colorScheme.surface,
         shape: Shape = MaterialTheme.shapes.medium,
         modifier: Modifier = Modifier
     ) {
@@ -62,34 +54,45 @@ object TextFields {
 
         var obscureTextVisible by rememberSaveable { mutableStateOf(false) }
 
+        val trailing = if(obscureText) {
+            {
+                IconButton(
+                    onClick = { obscureTextVisible = !obscureTextVisible },
+                ) {
+                    val icon =
+                        if (obscureTextVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                    val contentDescription = if (obscureTextVisible) {
+                        stringResource(id = R.string.content_description_hide_password)
+                    } else {
+                        stringResource(id = R.string.content_description_show_password)
+                    }
+
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = contentDescription,
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
+                }
+            }
+        } else {
+            trailingIcon
+        }
+
         Column(modifier = modifier) {
-            TextField(
-                readOnly = readOnly,
-                enabled = enabled,
+            BasicTextField(
                 value = value ?: "",
                 onValueChange = onValueChange,
+                readOnly = readOnly,
+                enabled = enabled,
+                singleLine = singleLine,
                 visualTransformation = if (!obscureText || obscureTextVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 textStyle = textStyle,
-                placeholder = {
-                    Text(
-                        text = placeholder,
-                        style = textStyle.copy(
-                            color = textStyle.color.copy(alpha = 0.6f)
-                        ),
-                        textAlign = textStyle.textAlign,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                },
-                isError = !error.isNullOrEmpty(),
                 keyboardOptions = keyboardOptions,
                 keyboardActions = KeyboardActions(
                     onDone = {
                         focusManager.clearFocus()
                     }
                 ),
-                singleLine = singleLine,
-                colors = colors,
-                shape = shape,
                 modifier = if(!error.isNullOrEmpty()) {
                     Modifier
                         .fillMaxWidth()
@@ -100,31 +103,42 @@ object TextFields {
                         )
                 } else {
                     Modifier.fillMaxWidth()
-                },
-                trailingIcon = if(obscureText) {
-                    {
-                        IconButton(
-                            onClick = { obscureTextVisible = !obscureTextVisible },
-                        ) {
-                            val icon =
-                                if (obscureTextVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                            val contentDescription = if (obscureTextVisible) {
-                                stringResource(id = R.string.content_description_hide_password)
-                            } else {
-                                stringResource(id = R.string.content_description_show_password)
-                            }
-
-                            Icon(
-                                imageVector = icon,
-                                contentDescription = contentDescription,
-                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                }.animateContentSize(),
+            ) { innerTextField ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                        .background(
+                            color = containerColor,
+                            shape = shape
+                        )
+                        .padding(padding)
+                ) {
+                    Box(modifier = Modifier.weight(1f)) {
+                        if(value.isNullOrBlank()) {
+                            Text(
+                                text = placeholder,
+                                style = textStyle.copy(
+                                    color = textStyle.color.copy(alpha = 0.6f)
+                                ),
+                                textAlign = textStyle.textAlign,
+                                modifier = Modifier.fillMaxWidth()
                             )
                         }
+
+                        innerTextField()
                     }
-                } else {
-                    trailingIcon
-                },
-            )
+
+                    if(trailing != null) {
+                        Box(
+                            modifier = Modifier.size(28.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            trailing.invoke()
+                        }
+                    }
+                }
+            }
 
             if(!error.isNullOrEmpty()) {
                 Row(

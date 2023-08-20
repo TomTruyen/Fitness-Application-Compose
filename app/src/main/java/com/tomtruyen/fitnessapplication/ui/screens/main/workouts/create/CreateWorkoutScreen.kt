@@ -7,6 +7,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -380,6 +381,7 @@ fun TabContentPager(
                                         textStyle = MaterialTheme.typography.bodyMedium.copy(
                                             textAlign = TextAlign.Center
                                         ),
+                                        padding = PaddingValues(Dimens.Small),
                                         modifier = Modifier.weight(1f)
                                     )
 
@@ -397,6 +399,7 @@ fun TabContentPager(
                                         textStyle = MaterialTheme.typography.bodyMedium.copy(
                                             textAlign = TextAlign.Center
                                         ),
+                                        padding = PaddingValues(Dimens.Small),
                                         modifier = Modifier.weight(1f)
                                     )
 

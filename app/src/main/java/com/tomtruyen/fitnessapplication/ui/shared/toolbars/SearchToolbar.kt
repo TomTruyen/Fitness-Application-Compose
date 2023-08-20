@@ -3,7 +3,11 @@ package com.tomtruyen.fitnessapplication.ui.shared.toolbars
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
@@ -16,11 +20,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 
@@ -38,18 +44,27 @@ fun SearchToolbar(
                 value = value,
                 onValueChange = onValueChange,
                 placeholder = stringResource(id = R.string.search),
+                padding = PaddingValues(
+                    start = Dimens.Normal,
+                    end = Dimens.Small,
+                    top = Dimens.Small,
+                    bottom = Dimens.Small
+                ),
                 trailingIcon = {
                     AnimatedVisibility(
                         visible = value.isNotEmpty(),
                         enter = scaleIn(),
                         exit = scaleOut()
                     ) {
-                        IconButton(onClick = { onValueChange("") }) {
-                            Icon(
-                                imageVector = Icons.Filled.Clear,
-                                contentDescription = stringResource(id = R.string.content_description_clear),
-                            )
-                        }
+                        Icon(
+                            imageVector = Icons.Filled.Clear,
+                            contentDescription = stringResource(id = R.string.content_description_clear),
+                            modifier = Modifier.size(20.dp)
+                                .clip(CircleShape)
+                                .clickable {
+                                    onValueChange("")
+                                }
+                        )
                     }
                 },
                 keyboardOptions = KeyboardOptions(
