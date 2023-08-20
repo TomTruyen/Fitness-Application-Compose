@@ -7,6 +7,7 @@ data class CreateWorkoutUiState(
     val isEditing: Boolean = false,
     val initialWorkout: WorkoutResponse = WorkoutResponse(),
     val workout: WorkoutResponse = WorkoutResponse(),
-    val settings: Settings = Settings()
+    val settings: Settings = Settings(),
+    val selectedExerciseId: String? = null,
 )
 

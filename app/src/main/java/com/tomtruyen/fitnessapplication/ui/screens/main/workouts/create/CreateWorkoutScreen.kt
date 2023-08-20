@@ -132,7 +132,8 @@ fun CreateWorkoutScreen(
                             ).apply {
                                 sets = listOf(WorkoutSet(workoutExerciseId = this@apply.id))
                             }
-                        )
+                        ),
+                        selectedExerciseId = exercise.id
                     )
 
                     navController.currentBackStackEntry?.savedStateHandle?.remove<Exercise>(NavArguments.EXERCISE)
@@ -140,9 +141,14 @@ fun CreateWorkoutScreen(
             }
     }
 
-    LaunchedEffect(state.workout.exercises.size) {
+    LaunchedEffect(state.selectedExerciseId) {
         if(state.workout.exercises.isEmpty()) return@LaunchedEffect
-        pagerState.animateScrollToPage(state.workout.exercises.size - 1)
+
+        val index = state.workout.exercises.indexOfFirst { it.exercise.id == state.selectedExerciseId }
+
+        if(index != -1) {
+            pagerState.animateScrollToPage(index)
+        }
     }
 
     LaunchedEffect(settings) {

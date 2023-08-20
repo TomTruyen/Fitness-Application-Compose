@@ -117,7 +117,14 @@ class CreateWorkoutViewModel(
                         exercises = state.value.workout.exercises.filterIndexed { index, _ ->
                             index != event.index
                         }
-                    )
+                    ),
+                    selectedExerciseId = if(event.index > 0) {
+                        state.value.workout.exercises.getOrNull(event.index - 1)?.id
+                    } else if(state.value.workout.exercises.size > 1) {
+                        state.value.workout.exercises.getOrNull(event.index + 1)?.id
+                    } else {
+                        null
+                    }
                 )
             }
             is CreateWorkoutUiEvent.OnReorderExerciseClicked -> navigate(CreateWorkoutNavigationType.ReorderExercise)
