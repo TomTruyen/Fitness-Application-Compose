@@ -326,7 +326,8 @@ fun TabContentPager(
                         // Header Row
                         item {
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth()
+                                    .padding(bottom = Dimens.Tiny),
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Text(
@@ -362,7 +363,9 @@ fun TabContentPager(
                                     )
                                 )
 
-                                Spacer(modifier = Modifier.width(Dimens.MinButtonHeight))
+                                AnimatedVisibility(visible = workoutExercise.sets.size > 1) {
+                                    Spacer(modifier = Modifier.width(Dimens.MinButtonHeight))
+                                }
                             }
                         }
 
@@ -440,18 +443,30 @@ fun TabContentPager(
                                         modifier = Modifier.weight(1f)
                                     )
 
-                                    IconButton(
-                                        modifier = Modifier.width(Dimens.MinButtonHeight),
-                                        onClick = {
-                                            onEvent(CreateWorkoutUiEvent.OnDeleteSetClicked(index, setIndex))
+                                    AnimatedVisibility(visible = workoutExercise.sets.size > 1) {
+                                        IconButton(
+                                            modifier = Modifier.width(Dimens.MinButtonHeight),
+                                            onClick = {
+                                                onEvent(CreateWorkoutUiEvent.OnDeleteSetClicked(index, setIndex))
+                                            }
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Filled.Delete,
+                                                contentDescription = null
+                                            )
                                         }
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Filled.Delete,
-                                            contentDescription = null
-                                        )
                                     }
                                 }
+                            }
+                        }
+
+                        item {
+                            Buttons.Text(
+                                text = stringResource(id = R.string.add_set).uppercase(),
+                                modifier = Modifier.fillMaxWidth()
+                                    .padding(vertical = Dimens.Small)
+                            ) {
+                                onEvent(CreateWorkoutUiEvent.OnAddSetClicked(index))
                             }
                         }
                     }

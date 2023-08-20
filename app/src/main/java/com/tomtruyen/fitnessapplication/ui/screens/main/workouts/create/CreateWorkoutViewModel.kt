@@ -3,6 +3,7 @@ package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create
 import android.util.Log
 import com.tomtruyen.fitnessapplication.base.BaseViewModel
 import com.tomtruyen.fitnessapplication.data.entities.Settings
+import com.tomtruyen.fitnessapplication.data.entities.WorkoutSet
 import com.tomtruyen.fitnessapplication.repositories.interfaces.SettingsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -113,6 +114,26 @@ class CreateWorkoutViewModel(
                                     sets = workoutExerciseResponse.sets.filterIndexed { setIndex, _ ->
                                         setIndex != event.setIndex
                                     }
+                                )
+                            } else {
+                                workoutExerciseResponse
+                            }
+                        }
+                    )
+                )
+            }
+            is CreateWorkoutUiEvent.OnAddSetClicked -> {
+                state.value = state.value.copy(
+                    workout = state.value.workout.copy(
+                        exercises = state.value.workout.exercises.mapIndexed { index, workoutExerciseResponse ->
+                            if(index == event.exerciseIndex) {
+                                workoutExerciseResponse.copy(
+                                    sets = workoutExerciseResponse.sets + listOf(
+                                        WorkoutSet(
+                                            workoutExerciseId = workoutExerciseResponse.id,
+                                            order = workoutExerciseResponse.sets.last().order + 1
+                                        )
+                                    )
                                 )
                             } else {
                                 workoutExerciseResponse
