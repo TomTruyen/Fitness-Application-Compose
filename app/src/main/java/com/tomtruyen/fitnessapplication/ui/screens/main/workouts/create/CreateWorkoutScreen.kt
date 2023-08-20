@@ -76,19 +76,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.navigate
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
-import com.tomtruyen.fitnessapplication.data.entities.WorkoutSet
 import com.tomtruyen.fitnessapplication.navigation.CreateWorkoutNavGraph
 import com.tomtruyen.fitnessapplication.navigation.NavArguments
 import com.tomtruyen.fitnessapplication.networking.WorkoutExerciseResponse
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ReorderWorkoutExercisesScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create.CreateExerciseViewModel
-import com.tomtruyen.fitnessapplication.ui.screens.main.profile.ProfileUiEvent
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
@@ -99,15 +95,14 @@ import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
 import com.tomtruyen.fitnessapplication.utils.TimeUtils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalFoundationApi::class)
 @CreateWorkoutNavGraph(start = true)
-@Destination
+@Destination(
+    navArgsDelegate = CreateWorkoutNavArgsDelegate::class,
+)
 @Composable
 fun CreateWorkoutScreen(
-    id: String? = null,
     navController: NavController,
     viewModel: CreateWorkoutViewModel
 ) {

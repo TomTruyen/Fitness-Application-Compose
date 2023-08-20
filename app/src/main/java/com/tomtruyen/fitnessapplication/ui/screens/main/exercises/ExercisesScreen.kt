@@ -57,10 +57,11 @@ import com.tomtruyen.fitnessapplication.ui.shared.toolbars.SearchToolbar
 import kotlinx.coroutines.flow.collectLatest
 
 @ExercisesNavGraph(start = true)
-@Destination
+@Destination(
+    navArgsDelegate = ExercisesNavArgsDelegate::class
+)
 @Composable
 fun ExercisesScreen(
-    isFromWorkout: Boolean = false,
     navController: NavController,
     viewModel: ExercisesViewModel
 ) {
