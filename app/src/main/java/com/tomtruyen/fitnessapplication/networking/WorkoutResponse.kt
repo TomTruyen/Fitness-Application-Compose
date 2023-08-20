@@ -22,5 +22,5 @@ data class WorkoutExerciseResponse(
     var restEnabled: Boolean = false,
     var order: Int = 0,
     var exercise: Exercise = Exercise(),
-    var sets: List<WorkoutSet> = emptyList()
+    var sets: List<WorkoutSet> = listOf()
 ): Parcelable

@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.ui.theme.ChineseWhite
+import java.time.format.TextStyle
 
 
 object TextFields {
@@ -34,10 +35,10 @@ object TextFields {
         placeholder: String = "",
         error: String? = null,
         obscureText: Boolean = false,
-        search: Boolean = false,
         readOnly: Boolean = false,
         enabled: Boolean = true,
         singleLine: Boolean = true,
+        textStyle: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.bodyMedium,
         trailingIcon: @Composable (() -> Unit)? = null,
         keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
         colors: TextFieldColors = TextFieldDefaults.colors(
@@ -59,8 +60,6 @@ object TextFields {
     ) {
         val focusManager = LocalFocusManager.current
 
-        val textStyle = MaterialTheme.typography.bodyMedium
-
         var obscureTextVisible by rememberSaveable { mutableStateOf(false) }
 
         Column(modifier = modifier) {
@@ -75,8 +74,10 @@ object TextFields {
                     Text(
                         text = placeholder,
                         style = textStyle.copy(
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                        )
+                            color = textStyle.color.copy(alpha = 0.6f)
+                        ),
+                        textAlign = textStyle.textAlign,
+                        modifier = Modifier.fillMaxWidth()
                     )
                 },
                 isError = !error.isNullOrEmpty(),
@@ -100,40 +101,29 @@ object TextFields {
                 } else {
                     Modifier.fillMaxWidth()
                 },
-                trailingIcon = {
-                    if(trailingIcon != null) {
-                        trailingIcon()
-                    } else {
-                        if (obscureText) {
-                            IconButton(
-                                onClick = { obscureTextVisible = !obscureTextVisible },
-                            ) {
-                                val icon =
-                                    if (obscureTextVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                                val contentDescription = if (obscureTextVisible) {
-                                    stringResource(id = R.string.content_description_hide_password)
-                                } else {
-                                    stringResource(id = R.string.content_description_show_password)
-                                }
-
-                                Icon(
-                                    imageVector = icon,
-                                    contentDescription = contentDescription,
-                                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                                )
+                trailingIcon = if(obscureText) {
+                    {
+                        IconButton(
+                            onClick = { obscureTextVisible = !obscureTextVisible },
+                        ) {
+                            val icon =
+                                if (obscureTextVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                            val contentDescription = if (obscureTextVisible) {
+                                stringResource(id = R.string.content_description_hide_password)
+                            } else {
+                                stringResource(id = R.string.content_description_show_password)
                             }
-                        }
 
-                        if (search && !value.isNullOrBlank()) {
-                            IconButton(onClick = { onValueChange("") }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Clear,
-                                    contentDescription = stringResource(id = R.string.content_description_clear),
-                                )
-                            }
+                            Icon(
+                                imageVector = icon,
+                                contentDescription = contentDescription,
+                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                            )
                         }
                     }
-                }
+                } else {
+                    trailingIcon
+                },
             )
 
             if(!error.isNullOrEmpty()) {

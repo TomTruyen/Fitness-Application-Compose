@@ -91,6 +91,9 @@
     <string name="apply">Apply</string>
     <string name="notes">Notes (optional)</string>
     <string name="message_delete_exercise_from_workout">Are you sure you want to remove this exercise from your workout?</string>
+    <string name="set">Set</string>
+    <string name="reps">Reps</string>
+    <string name="time">Time</string>
 
 
 </resources>

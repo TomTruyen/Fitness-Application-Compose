@@ -16,9 +16,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.FormatListNumbered
@@ -51,6 +54,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -61,6 +66,7 @@ import com.ramcosta.composedestinations.navigation.navigate
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
+import com.tomtruyen.fitnessapplication.data.entities.WorkoutSet
 import com.tomtruyen.fitnessapplication.navigation.CreateWorkoutNavGraph
 import com.tomtruyen.fitnessapplication.navigation.NavArguments
 import com.tomtruyen.fitnessapplication.networking.WorkoutExerciseResponse
@@ -86,6 +92,7 @@ fun CreateWorkoutScreen(
     val context = LocalContext.current
 
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val settings by viewModel.settings.collectAsStateWithLifecycle(initialValue = null)
     val loading by viewModel.loading.collectAsStateWithLifecycle()
 
     val pagerState = rememberPagerState(
@@ -109,7 +116,9 @@ fun CreateWorkoutScreen(
                 it?.let { exercise ->
                     viewModel.state.value = state.copy(
                         workout = state.workout.copy(
-                            exercises = state.workout.exercises + WorkoutExerciseResponse(exercise = exercise)
+                            exercises = state.workout.exercises + WorkoutExerciseResponse(
+                                exercise = exercise,
+                            ).apply { sets = listOf(WorkoutSet(workoutExerciseId = id)) }
                         )
                     )
 
@@ -121,6 +130,12 @@ fun CreateWorkoutScreen(
     LaunchedEffect(state.workout.exercises) {
         if(state.workout.exercises.isEmpty()) return@LaunchedEffect
         pagerState.animateScrollToPage(state.workout.exercises.size - 1)
+    }
+
+    LaunchedEffect(settings) {
+        if(settings != null) {
+            viewModel.onEvent(CreateWorkoutUiEvent.OnSettingsChanged(settings))
+        }
     }
 
     CreateWorkoutScreenLayout(
@@ -196,8 +211,8 @@ fun CreateWorkoutScreenLayout(
 
                 TabContentPager(
                     modifier = Modifier.weight(1f),
-                    exercises = state.workout.exercises,
-                    state = pagerState,
+                    state = state,
+                    pagerState = pagerState,
                     onEvent = onEvent,
                 )
 
@@ -266,8 +281,8 @@ fun TabLayout(
 @Composable
 fun TabContentPager(
     modifier: Modifier = Modifier,
-    exercises: List<WorkoutExerciseResponse>,
-    state: PagerState,
+    state: CreateWorkoutUiState,
+    pagerState: PagerState,
     onEvent: (CreateWorkoutUiEvent) -> Unit,
 ) {
     var deleteConfirmationDialogVisible by remember { mutableStateOf(false) }
@@ -278,29 +293,129 @@ fun TabContentPager(
     ) {
         HorizontalPager(
             modifier = modifier,
-            state = state
+            state = pagerState
         ) { index ->
-            val workoutExercise = exercises.getOrNull(index)
+            val workoutExercise = state.workout.exercises.getOrNull(index)
 
 
             if (workoutExercise != null) {
-                LazyColumn(
+                Column(
                     modifier = Modifier
                         .weight(1f)
                         .padding(Dimens.Normal),
                     verticalArrangement = Arrangement.Top
                 ) {
-                    item {
-                        TextFields.Default(
-                            singleLine = false,
-                            placeholder = stringResource(id = R.string.notes),
-                            value = workoutExercise.notes,
-                            onValueChange = { notes ->
-                                onEvent(CreateWorkoutUiEvent.OnExerciseNotesChanged(index, notes))
-                            },
-                        )
+                    TextFields.Default(
+                        singleLine = false,
+                        placeholder = stringResource(id = R.string.notes),
+                        value = workoutExercise.notes,
+                        onValueChange = { notes ->
+                            onEvent(CreateWorkoutUiEvent.OnExerciseNotesChanged(index, notes))
+                        },
+                    )
+
+                    LazyColumn(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(vertical = Dimens.Normal)
+                    ) {
+                        // Header Row
+                        item {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.set).uppercase(),
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.width(Dimens.MinButtonHeight)
+                                )
+
+                                Text(
+                                    text = stringResource(id = R.string.reps).uppercase(),
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.weight(1f)
+                                )
+
+                                Spacer(modifier = Modifier.width(Dimens.Small))
+
+                                Text(
+                                    text = if(workoutExercise.exercise.typeEnum == Exercise.ExerciseType.WEIGHT) {
+                                        state.settings.unit
+                                    } else {
+                                        stringResource(id = R.string.time)
+                                    }.uppercase(),
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.weight(1f)
+                                )
+
+                                Spacer(modifier = Modifier.width(Dimens.MinButtonHeight))
+                            }
+                        }
+
+                        // Sets
+                        items(workoutExercise.sets.size) { index ->
+                            val set = workoutExercise.sets.getOrNull(index)
+
+                            if(set != null) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Text(
+                                        text = "${index + 1}",
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.width(Dimens.MinButtonHeight)
+                                    )
+
+                                    TextFields.Default(
+                                        value = set.reps?.toString() ?: "",
+                                        onValueChange = { reps ->
+
+                                        },
+                                        placeholder = "0",
+                                        keyboardOptions = KeyboardOptions.Default.copy(
+                                            keyboardType = KeyboardType.Number
+                                        ),
+                                        textStyle = MaterialTheme.typography.bodyMedium.copy(
+                                            textAlign = TextAlign.Center
+                                        ),
+                                        modifier = Modifier.weight(1f)
+                                    )
+
+                                    Spacer(modifier = Modifier.width(Dimens.Small))
+
+                                    TextFields.Default(
+                                        value = set.weight?.toString() ?: "",
+                                        onValueChange = { weight ->
+
+                                        },
+                                        placeholder = "0",
+                                        keyboardOptions = KeyboardOptions.Default.copy(
+                                            keyboardType = KeyboardType.Number
+                                        ),
+                                        textStyle = MaterialTheme.typography.bodyMedium.copy(
+                                            textAlign = TextAlign.Center
+                                        ),
+                                        modifier = Modifier.weight(1f)
+                                    )
+
+                                    IconButton(
+                                        modifier = Modifier.width(Dimens.MinButtonHeight),
+                                        onClick = {
+
+                                        }
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.Delete,
+                                            contentDescription = null
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
-                }
+               }
             }
 
             if (deleteConfirmationDialogVisible) {
@@ -325,7 +440,7 @@ fun TabContentPager(
                 .padding(Dimens.Normal),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (exercises.isNotEmpty()) {
+            if (state.workout.exercises.isNotEmpty()) {
                 Buttons.Icon(
                     icon = Icons.Filled.Delete,
                     colors = ButtonDefaults.textButtonColors(

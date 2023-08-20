@@ -1,9 +1,13 @@
 package com.tomtruyen.fitnessapplication.ui.shared.toolbars
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,7 +38,20 @@ fun SearchToolbar(
                 value = value,
                 onValueChange = onValueChange,
                 placeholder = stringResource(id = R.string.search),
-                search = true,
+                trailingIcon = {
+                    AnimatedVisibility(
+                        visible = value.isNotEmpty(),
+                        enter = scaleIn(),
+                        exit = scaleOut()
+                    ) {
+                        IconButton(onClick = { onValueChange("") }) {
+                            Icon(
+                                imageVector = Icons.Filled.Clear,
+                                contentDescription = stringResource(id = R.string.content_description_clear),
+                            )
+                        }
+                    }
+                },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Search

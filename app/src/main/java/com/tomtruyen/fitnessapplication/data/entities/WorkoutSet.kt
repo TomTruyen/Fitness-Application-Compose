@@ -24,7 +24,8 @@ data class WorkoutSet(
     var workoutExerciseId: String,
     var reps: Int? = null, // For Weight Type exercises
     var weight: Double? = null, // For Weight Type exercises
-    var time: Int? = null, // For Time Type exercises
+    var time: Int? = null, // For Time Type exercises,
+    var order: Int = 1
 ): Parcelable {
     companion object {
         const val TABLE_NAME = "workout_sets"
