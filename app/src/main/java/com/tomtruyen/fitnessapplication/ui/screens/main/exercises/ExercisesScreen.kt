@@ -235,7 +235,7 @@ fun ExercisesScreenLayout(
                 LazyColumn(
                     modifier = Modifier.weight(1f)
                 ) {
-                    var currentLetter: Char? = null
+                    var currentLetter: Char?
 
                     itemsIndexed(exercises) { index, exercise ->
                         Column(

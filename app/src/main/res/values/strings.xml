@@ -95,6 +95,8 @@
     <string name="reps">Reps</string>
     <string name="time">Time</string>
     <string name="add_set">Add set</string>
+    <string name="title_workout_name">Workout name</string>
+    <string name="message_workout_name">Please enter a name for your workout</string>
 
 
 </resources>

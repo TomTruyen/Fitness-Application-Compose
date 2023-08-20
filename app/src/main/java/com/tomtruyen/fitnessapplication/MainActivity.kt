@@ -126,7 +126,11 @@ class MainActivity : ComponentActivity() {
                                     navController.getBackStackEntry(NavGraphs.createWorkout.route)
                                 }
 
-                                getViewModel<CreateWorkoutViewModel>(viewModelStoreOwner = parentEntry)
+                                getViewModel<CreateWorkoutViewModel>(viewModelStoreOwner = parentEntry) {
+                                    parametersOf(
+                                        parentEntry.arguments?.getString(NavArguments.ID, null)
+                                    )
+                                }
                             }
                         },
                         modifier = Modifier.padding(it)

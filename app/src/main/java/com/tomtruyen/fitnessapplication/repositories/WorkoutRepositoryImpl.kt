@@ -10,6 +10,7 @@ import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.networking.UserExercisesResponse
 import com.tomtruyen.fitnessapplication.networking.WorkoutResponse
+import com.tomtruyen.fitnessapplication.networking.WorkoutsResponse
 import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -38,7 +39,7 @@ class WorkoutRepositoryImpl(
     ) {
         db.collection(USER_WORKOUT_COLLECTION_NAME)
             .document(userId)
-            .set(workouts)
+            .set(WorkoutsResponse(workouts))
             .handleCompletionResult(
                 context = globalProvider.context,
                 callback = callback

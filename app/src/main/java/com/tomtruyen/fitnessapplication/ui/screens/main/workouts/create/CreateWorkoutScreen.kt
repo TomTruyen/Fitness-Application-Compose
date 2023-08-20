@@ -78,20 +78,24 @@ import com.tomtruyen.fitnessapplication.navigation.NavArguments
 import com.tomtruyen.fitnessapplication.networking.WorkoutExerciseResponse
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ReorderWorkoutExercisesScreenDestination
+import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create.CreateExerciseViewModel
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.ConfirmationDialog
+import com.tomtruyen.fitnessapplication.ui.shared.dialogs.TextFieldDialog
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalFoundationApi::class)
 @CreateWorkoutNavGraph(start = true)
 @Destination
 @Composable
 fun CreateWorkoutScreen(
+    id: String? = null,
     navController: NavController,
     viewModel: CreateWorkoutViewModel
 ) {
@@ -125,7 +129,9 @@ fun CreateWorkoutScreen(
                         workout = state.workout.copy(
                             exercises = state.workout.exercises + WorkoutExerciseResponse(
                                 exercise = exercise,
-                            ).apply { sets = listOf(WorkoutSet(workoutExerciseId = id)) }
+                            ).apply {
+                                sets = listOf(WorkoutSet(workoutExerciseId = this@apply.id))
+                            }
                         )
                     )
 
@@ -134,7 +140,7 @@ fun CreateWorkoutScreen(
             }
     }
 
-    LaunchedEffect(state.workout.exercises) {
+    LaunchedEffect(state.workout.exercises.size) {
         if(state.workout.exercises.isEmpty()) return@LaunchedEffect
         pagerState.animateScrollToPage(state.workout.exercises.size - 1)
     }
@@ -165,6 +171,7 @@ fun CreateWorkoutScreenLayout(
     pagerState: PagerState,
     onEvent: (CreateWorkoutUiEvent) -> Unit,
 ) {
+    var workoutNameDialogVisible by remember { mutableStateOf(false) }
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     BackHandler(enabled = !confirmationDialogVisible) {
@@ -199,7 +206,7 @@ fun CreateWorkoutScreenLayout(
                 }
 
                 if(state.workout.exercises.isNotEmpty()) {
-                    IconButton(onClick = { onEvent(CreateWorkoutUiEvent.Save) }) {
+                    IconButton(onClick = { workoutNameDialogVisible = true }) {
                         Icon(
                             imageVector = Icons.Filled.Check,
                             contentDescription = stringResource(id = R.string.content_description_save_workout),
@@ -244,6 +251,21 @@ fun CreateWorkoutScreenLayout(
                             confirmationDialogVisible = false
                         },
                         confirmText = R.string.discard
+                    )
+                }
+
+                if(workoutNameDialogVisible) {
+                    TextFieldDialog(
+                        title = R.string.title_workout_name,
+                        message = R.string.message_workout_name,
+                        onConfirm = {
+                            onEvent(CreateWorkoutUiEvent.Save(it))
+                            workoutNameDialogVisible = false
+                        },
+                        onDismiss = {
+                            workoutNameDialogVisible = false
+                        },
+                        confirmText = R.string.save,
                     )
                 }
             }

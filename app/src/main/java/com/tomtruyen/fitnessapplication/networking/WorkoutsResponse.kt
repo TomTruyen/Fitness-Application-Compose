@@ -8,6 +8,10 @@ import com.tomtruyen.fitnessapplication.data.entities.WorkoutSet
 import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
+data class WorkoutsResponse(
+    val data: List<WorkoutResponse> = emptyList()
+)
+
 @Parcelize
 data class WorkoutResponse(
     var id: String = UUID.randomUUID().toString(),

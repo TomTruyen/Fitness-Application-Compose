@@ -1,25 +1,21 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises
 
-import androidx.lifecycle.SavedStateHandle
 import com.tomtruyen.fitnessapplication.base.BaseViewModel
 import com.tomtruyen.fitnessapplication.base.SnackbarMessage
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.model.ExerciseFilter
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
-import com.tomtruyen.fitnessapplication.navigation.NavArguments
 import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ExercisesViewModel(
     private val isFromWorkout: Boolean,
     private val exerciseRepository: ExerciseRepository,
-    private val userRepository: UserRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val userRepository: UserRepository
 ): BaseViewModel<ExercisesNavigationType>() {
     val state = MutableStateFlow(
         ExercisesUiState(isFromWorkout = isFromWorkout)

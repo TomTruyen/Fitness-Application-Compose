@@ -48,7 +48,7 @@ fun WorkoutOverviewScreen(
         viewModel.navigation.collectLatest { navigationType ->
             when(navigationType) {
                 is WorkoutOverviewNavigationType.CreateWorkout -> navController.navigate(
-                    CreateWorkoutScreenDestination
+                    CreateWorkoutScreenDestination(id = null)
                 )
             }
         }

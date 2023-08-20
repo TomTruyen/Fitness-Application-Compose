@@ -17,7 +17,7 @@ import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create.CreateE
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class CreateWorkoutViewModel(
-    private val id: String?,
+    val id: String?,
     private val userRepository: UserRepository,
     private val workoutRepository: WorkoutRepository,
     settingsRepository: SettingsRepository
@@ -45,7 +45,7 @@ class CreateWorkoutViewModel(
         }
     }
 
-    private fun save() = launchIO {
+    private fun save(workoutName: String) = launchIO {
         val userId = userRepository.getUser()?.uid ?: return@launchIO
 
         isLoading(true)
@@ -58,7 +58,7 @@ class CreateWorkoutViewModel(
             exercises.forEachIndexed { index, workoutExerciseResponse ->
                 workoutExerciseResponse.order = index
             }
-
+            name = workoutName
             unit = state.value.settings.unit
         }
 
@@ -89,7 +89,7 @@ class CreateWorkoutViewModel(
 
     fun onEvent(event: CreateWorkoutUiEvent) {
         when(event) {
-            is CreateWorkoutUiEvent.Save -> save()
+            is CreateWorkoutUiEvent.Save -> save(event.workoutName)
             is CreateWorkoutUiEvent.OnSettingsChanged -> {
                 if(event.settings == null) return
                 state.value = state.value.copy(
