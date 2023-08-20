@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create
 
+import android.util.Log
 import com.tomtruyen.fitnessapplication.base.BaseViewModel
 import com.tomtruyen.fitnessapplication.data.entities.Settings
 import com.tomtruyen.fitnessapplication.repositories.interfaces.SettingsRepository
@@ -52,6 +53,71 @@ class CreateWorkoutViewModel(
                 state.value = state.value.copy(
                     workout = state.value.workout.copy(
                         exercises = event.exercises
+                    )
+                )
+            }
+            is CreateWorkoutUiEvent.OnRepsChanged -> {
+                state.value = state.value.copy(
+                    workout = state.value.workout.copy(
+                        exercises = state.value.workout.exercises.mapIndexed { index, workoutExerciseResponse ->
+                            if(index == event.exerciseIndex) {
+                                workoutExerciseResponse.copy(
+                                    sets = workoutExerciseResponse.sets.mapIndexed { setIndex, workoutSetResponse ->
+                                        if(setIndex == event.setIndex) {
+                                            workoutSetResponse.copy(
+                                                reps = event.reps?.toIntOrNull(),
+                                                repsString = event.reps
+                                            )
+                                        } else {
+                                            workoutSetResponse
+                                        }
+                                    }
+                                )
+                            } else {
+                                workoutExerciseResponse
+                            }
+                        }
+                    )
+                )
+            }
+            is CreateWorkoutUiEvent.OnWeightChanged -> {
+                state.value = state.value.copy(
+                    workout = state.value.workout.copy(
+                        exercises = state.value.workout.exercises.mapIndexed { index, workoutExerciseResponse ->
+                            if(index == event.exerciseIndex) {
+                                workoutExerciseResponse.copy(
+                                    sets = workoutExerciseResponse.sets.mapIndexed { setIndex, workoutSetResponse ->
+                                        if(setIndex == event.setIndex) {
+                                            workoutSetResponse.copy(
+                                                weight = event.weight?.toDoubleOrNull(),
+                                                weightString = event.weight
+                                            )
+                                        } else {
+                                            workoutSetResponse
+                                        }
+                                    }
+                                )
+                            } else {
+                                workoutExerciseResponse
+                            }
+                        }
+                    )
+                )
+            }
+            is CreateWorkoutUiEvent.OnDeleteSetClicked -> {
+                state.value = state.value.copy(
+                    workout = state.value.workout.copy(
+                        exercises = state.value.workout.exercises.mapIndexed { index, workoutExerciseResponse ->
+                            if(index == event.exerciseIndex) {
+                                workoutExerciseResponse.copy(
+                                    sets = workoutExerciseResponse.sets.filterIndexed { setIndex, _ ->
+                                        setIndex != event.setIndex
+                                    }
+                                )
+                            } else {
+                                workoutExerciseResponse
+                            }
+                        }
                     )
                 )
             }

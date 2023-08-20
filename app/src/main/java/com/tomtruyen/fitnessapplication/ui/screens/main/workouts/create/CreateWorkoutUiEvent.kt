@@ -10,4 +10,7 @@ sealed class CreateWorkoutUiEvent {
     data class OnReorderExercises(val exercises: List<WorkoutExerciseResponse>) : CreateWorkoutUiEvent()
     data object OnReorderExerciseClicked : CreateWorkoutUiEvent()
     data object OnAddExerciseClicked : CreateWorkoutUiEvent()
+    data class OnRepsChanged(val exerciseIndex: Int, val setIndex: Int, val reps: String?) : CreateWorkoutUiEvent()
+    data class OnWeightChanged(val exerciseIndex: Int, val setIndex: Int, val weight: String?) : CreateWorkoutUiEvent()
+    data class OnDeleteSetClicked(val exerciseIndex: Int, val setIndex: Int) : CreateWorkoutUiEvent()
 }

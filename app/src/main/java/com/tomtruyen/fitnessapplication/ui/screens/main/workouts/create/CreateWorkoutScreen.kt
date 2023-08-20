@@ -367,8 +367,8 @@ fun TabContentPager(
                         }
 
                         // Sets
-                        items(workoutExercise.sets.size) { index ->
-                            val set = workoutExercise.sets.getOrNull(index)
+                        items(workoutExercise.sets.size) { setIndex ->
+                            val set = workoutExercise.sets.getOrNull(setIndex)
 
                             if(set != null) {
                                 Row(
@@ -376,7 +376,7 @@ fun TabContentPager(
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
                                     Text(
-                                        text = "${index + 1}",
+                                        text = "${setIndex + 1}",
                                         style = MaterialTheme.typography.bodyMedium.copy(
                                             fontWeight = FontWeight.W500,
                                             color = MaterialTheme.colorScheme.primary
@@ -386,13 +386,22 @@ fun TabContentPager(
                                     )
 
                                     TextFields.Default(
-                                        value = set.reps?.toString() ?: "",
+                                        value = set.repsString ?: "",
                                         onValueChange = { reps ->
+                                            // Check if value can be cast to int, if not don't update the value
+                                            if(reps.isNotEmpty() && reps.toIntOrNull() == null) return@Default
 
+                                            onEvent(
+                                                CreateWorkoutUiEvent.OnRepsChanged(
+                                                    exerciseIndex = index,
+                                                    setIndex = setIndex,
+                                                    reps = reps
+                                                )
+                                            )
                                         },
                                         placeholder = "0",
                                         keyboardOptions = KeyboardOptions.Default.copy(
-                                            keyboardType = KeyboardType.Number
+                                            keyboardType = KeyboardType.NumberPassword
                                         ),
                                         textStyle = MaterialTheme.typography.bodyMedium.copy(
                                             textAlign = TextAlign.Center
@@ -403,10 +412,22 @@ fun TabContentPager(
 
                                     Spacer(modifier = Modifier.width(Dimens.Small))
 
+                                    // TODO: ADD TIME INPUT
                                     TextFields.Default(
-                                        value = set.weight?.toString() ?: "",
+                                        value = set.weightString ?: "",
                                         onValueChange = { weight ->
+                                            val filteredWeight = weight.replace(",", ".")
 
+                                            // Check if the number can be cast to double, if not don't update the value
+                                            if(filteredWeight.isNotEmpty() && filteredWeight.toDoubleOrNull() == null) return@Default
+
+                                            onEvent(
+                                                CreateWorkoutUiEvent.OnWeightChanged(
+                                                    exerciseIndex = index,
+                                                    setIndex = setIndex,
+                                                    weight = filteredWeight
+                                                )
+                                            )
                                         },
                                         placeholder = "0",
                                         keyboardOptions = KeyboardOptions.Default.copy(
@@ -422,7 +443,7 @@ fun TabContentPager(
                                     IconButton(
                                         modifier = Modifier.width(Dimens.MinButtonHeight),
                                         onClick = {
-
+                                            onEvent(CreateWorkoutUiEvent.OnDeleteSetClicked(index, setIndex))
                                         }
                                     ) {
                                         Icon(
