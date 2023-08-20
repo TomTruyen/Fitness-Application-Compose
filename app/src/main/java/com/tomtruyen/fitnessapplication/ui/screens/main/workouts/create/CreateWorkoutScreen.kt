@@ -55,6 +55,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -315,6 +316,8 @@ fun TabContentPager(
                         },
                     )
 
+                    Spacer(modifier = Modifier.height(Dimens.Normal))
+
                     LazyColumn(
                         modifier = Modifier
                             .weight(1f)
@@ -329,13 +332,19 @@ fun TabContentPager(
                                 Text(
                                     text = stringResource(id = R.string.set).uppercase(),
                                     textAlign = TextAlign.Center,
-                                    modifier = Modifier.width(Dimens.MinButtonHeight)
+                                    modifier = Modifier.width(Dimens.MinButtonHeight),
+                                    style = MaterialTheme.typography.bodySmall.copy(
+                                        fontWeight = FontWeight.W500,
+                                    )
                                 )
 
                                 Text(
                                     text = stringResource(id = R.string.reps).uppercase(),
                                     textAlign = TextAlign.Center,
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier.weight(1f),
+                                    style = MaterialTheme.typography.bodySmall.copy(
+                                        fontWeight = FontWeight.W500,
+                                    )
                                 )
 
                                 Spacer(modifier = Modifier.width(Dimens.Small))
@@ -347,7 +356,10 @@ fun TabContentPager(
                                         stringResource(id = R.string.time)
                                     }.uppercase(),
                                     textAlign = TextAlign.Center,
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier.weight(1f),
+                                    style = MaterialTheme.typography.bodySmall.copy(
+                                        fontWeight = FontWeight.W500,
+                                    )
                                 )
 
                                 Spacer(modifier = Modifier.width(Dimens.MinButtonHeight))
@@ -365,6 +377,10 @@ fun TabContentPager(
                                 ) {
                                     Text(
                                         text = "${index + 1}",
+                                        style = MaterialTheme.typography.bodyMedium.copy(
+                                            fontWeight = FontWeight.W500,
+                                            color = MaterialTheme.colorScheme.primary
+                                        ),
                                         textAlign = TextAlign.Center,
                                         modifier = Modifier.width(Dimens.MinButtonHeight)
                                     )
