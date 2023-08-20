@@ -9,6 +9,7 @@ import com.tomtruyen.fitnessapplication.data.entities.Settings
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutSet
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutWithExercises
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
+import com.tomtruyen.fitnessapplication.networking.WorkoutExerciseResponse
 import com.tomtruyen.fitnessapplication.networking.WorkoutResponse
 import com.tomtruyen.fitnessapplication.repositories.interfaces.SettingsRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
@@ -129,6 +130,20 @@ class CreateWorkoutViewModel(
             }
             is CreateWorkoutUiEvent.OnReorderExerciseClicked -> navigate(CreateWorkoutNavigationType.ReorderExercise)
             is CreateWorkoutUiEvent.OnAddExerciseClicked -> navigate(CreateWorkoutNavigationType.AddExercise)
+            is CreateWorkoutUiEvent.OnAddExercise -> {
+                state.value = state.value.copy(
+                    workout = state.value.workout.copy(
+                        exercises = state.value.workout.exercises + WorkoutExerciseResponse(
+                            exercise = event.exercise,
+                            rest = state.value.settings.rest,
+                            restEnabled = state.value.settings.restEnabled,
+                        ).apply {
+                            sets = listOf(WorkoutSet(workoutExerciseId = this@apply.id))
+                        }
+                    ),
+                    selectedExerciseId = event.exercise.id
+                )
+            }
             is CreateWorkoutUiEvent.OnReorderExercises -> {
                 state.value = state.value.copy(
                     workout = state.value.workout.copy(
@@ -213,6 +228,36 @@ class CreateWorkoutViewModel(
                                             order = workoutExerciseResponse.sets.last().order + 1
                                         )
                                     )
+                                )
+                            } else {
+                                workoutExerciseResponse
+                            }
+                        }
+                    )
+                )
+            }
+            is CreateWorkoutUiEvent.OnRestEnabledChanged -> {
+                state.value = state.value.copy(
+                    workout = state.value.workout.copy(
+                        exercises = state.value.workout.exercises.mapIndexed { index, workoutExerciseResponse ->
+                            if(index == event.exerciseIndex) {
+                                workoutExerciseResponse.copy(
+                                    restEnabled = event.enabled
+                                )
+                            } else {
+                                workoutExerciseResponse
+                            }
+                        }
+                    )
+                )
+            }
+            is CreateWorkoutUiEvent.OnRestChanged -> {
+                state.value = state.value.copy(
+                    workout = state.value.workout.copy(
+                        exercises = state.value.workout.exercises.mapIndexed { index, workoutExerciseResponse ->
+                            if(index == event.exerciseIndex) {
+                                workoutExerciseResponse.copy(
+                                    rest = event.rest
                                 )
                             } else {
                                 workoutExerciseResponse

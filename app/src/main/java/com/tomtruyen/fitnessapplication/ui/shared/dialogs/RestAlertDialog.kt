@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.ui.shared.dialogs
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.AlertDialog
@@ -9,23 +10,33 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
+import com.tomtruyen.fitnessapplication.ui.screens.main.profile.ProfileUiEvent
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.NumberPicker
+import com.tomtruyen.fitnessapplication.ui.shared.listitems.SwitchListItem
 import java.util.concurrent.TimeUnit
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun RestAlertDialog(
-    onConfirm: (Int) -> Unit,
+    onConfirm: (Int, Boolean?) -> Unit,
     onDismiss: () -> Unit,
     rest: Int,
+    restEnabled: Boolean? = null,
 ) {
     var selectedRestValue by remember { mutableIntStateOf(rest) }
+    var selectedRestEnabled by remember { mutableStateOf(restEnabled) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -38,29 +49,45 @@ fun RestAlertDialog(
             )
         },
         text = {
-            NumberPicker(
-                modifier = Modifier.fillMaxWidth(),
-                value = selectedRestValue,
-                onValueChange = {
-                    selectedRestValue = it
-                },
-                dividersColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
-                textStyle = MaterialTheme.typography.bodyLarge,
-                label = {
-                    // Format the number to be displayed
-                    val minutes = TimeUnit.SECONDS.toMinutes(it.toLong())
-                    val seconds = it - TimeUnit.MINUTES.toSeconds(minutes)
+            Column(
+                verticalArrangement = Arrangement.spacedBy(Dimens.Normal)
+            ) {
+                if(restEnabled != null) {
+                    SwitchListItem(
+                        title = stringResource(id = R.string.rest_timer_enabled),
+                        checked = selectedRestEnabled ?: false,
+                    ) {
+                        selectedRestEnabled = it
+                    }
+                }
 
-                    String.format("%d:%02d", minutes, seconds)
-                },
-                list = (0..300 step 5).toList() // 0 to 300 seconds, step of 5 per
-            )
+
+                NumberPicker(
+                    enabled = selectedRestEnabled ?: true,
+                    modifier = Modifier.fillMaxWidth(),
+                    value = selectedRestValue,
+                    onValueChange = {
+                        if(selectedRestEnabled == false) return@NumberPicker
+                        selectedRestValue = it
+                    },
+                    dividersColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
+                    textStyle = MaterialTheme.typography.bodyLarge,
+                    label = {
+                        // Format the number to be displayed
+                        val minutes = TimeUnit.SECONDS.toMinutes(it.toLong())
+                        val seconds = it - TimeUnit.MINUTES.toSeconds(minutes)
+
+                        String.format("%d:%02d", minutes, seconds)
+                    },
+                    list = (0..300 step 5).toList() // 0 to 300 seconds, step of 5 per
+                )
+            }
         },
         confirmButton = {
             Buttons.Text(
                 text = stringResource(id = android.R.string.ok),
                 onClick = {
-                    onConfirm(selectedRestValue)
+                    onConfirm(selectedRestValue, selectedRestEnabled)
                 },
             )
         },

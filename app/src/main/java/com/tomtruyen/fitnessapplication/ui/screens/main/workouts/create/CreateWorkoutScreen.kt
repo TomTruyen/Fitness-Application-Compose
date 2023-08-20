@@ -3,19 +3,24 @@ package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -29,6 +34,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.FormatListNumbered
+import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DividerDefaults
@@ -41,6 +48,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
@@ -55,6 +63,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -79,12 +88,15 @@ import com.tomtruyen.fitnessapplication.networking.WorkoutExerciseResponse
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ReorderWorkoutExercisesScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create.CreateExerciseViewModel
+import com.tomtruyen.fitnessapplication.ui.screens.main.profile.ProfileUiEvent
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.ConfirmationDialog
+import com.tomtruyen.fitnessapplication.ui.shared.dialogs.RestAlertDialog
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.TextFieldDialog
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
+import com.tomtruyen.fitnessapplication.utils.TimeUtils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -125,16 +137,7 @@ fun CreateWorkoutScreen(
         navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Exercise?>(NavArguments.EXERCISE, null)
             ?.collectLatest {
                 it?.let { exercise ->
-                    viewModel.state.value = state.copy(
-                        workout = state.workout.copy(
-                            exercises = state.workout.exercises + WorkoutExerciseResponse(
-                                exercise = exercise,
-                            ).apply {
-                                sets = listOf(WorkoutSet(workoutExerciseId = this@apply.id))
-                            }
-                        ),
-                        selectedExerciseId = exercise.id
-                    )
+                    viewModel.onEvent(CreateWorkoutUiEvent.OnAddExercise(exercise))
 
                     navController.currentBackStackEntry?.savedStateHandle?.remove<Exercise>(NavArguments.EXERCISE)
                 }
@@ -329,6 +332,7 @@ fun TabContentPager(
     pagerState: PagerState,
     onEvent: (CreateWorkoutUiEvent) -> Unit,
 ) {
+    var restDialogVisible by remember { mutableStateOf(false) }
     var deleteConfirmationDialogVisible by remember { mutableStateOf(false) }
 
     Column(
@@ -358,7 +362,36 @@ fun TabContentPager(
                         },
                     )
 
-                    Spacer(modifier = Modifier.height(Dimens.Normal))
+                    Row(
+                        modifier = Modifier
+                            .wrapContentWidth()
+                            .padding(vertical = Dimens.Normal)
+                            .defaultMinSize(
+                                minWidth = 100.dp
+                            )
+                            .animateContentSize()
+                            .background(
+                                color = MaterialTheme.colorScheme.surface,
+                                shape = MaterialTheme.shapes.medium
+                            )
+                            .clip(MaterialTheme.shapes.medium)
+                            .clickable { restDialogVisible = true }
+                            .padding(Dimens.Normal)
+                            .alpha(if(workoutExercise.restEnabled) 1f else 0.5f)
+                            .align(Alignment.End),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Timer,
+                            contentDescription = null,
+                        )
+
+                        Text(
+                            text = TimeUtils.formatSeconds(workoutExercise.rest),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(start = Dimens.Small)
+                        )
+                    }
 
                     LazyColumn(
                         modifier = Modifier
@@ -368,7 +401,8 @@ fun TabContentPager(
                         // Header Row
                         item {
                             Row(
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier
+                                    .fillMaxWidth()
                                     .padding(bottom = Dimens.Tiny),
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
@@ -414,7 +448,8 @@ fun TabContentPager(
                         // Sets
                         itemsIndexed(workoutExercise.sets, key = { _, set -> set.id }) { setIndex, set ->
                             Row(
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier
+                                    .fillMaxWidth()
                                     .animateItemPlacement(),
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
@@ -456,7 +491,6 @@ fun TabContentPager(
 
                                 Spacer(modifier = Modifier.width(Dimens.Small))
 
-                                // TODO: ADD TIME INPUT
                                 TextFields.Default(
                                     value = set.weightString ?: "",
                                     onValueChange = { weight ->
@@ -503,7 +537,8 @@ fun TabContentPager(
                         item {
                             Buttons.Text(
                                 text = stringResource(id = R.string.add_set).uppercase(),
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier
+                                    .fillMaxWidth()
                                     .padding(vertical = Dimens.Small)
                             ) {
                                 onEvent(CreateWorkoutUiEvent.OnAddSetClicked(index))
@@ -525,6 +560,24 @@ fun TabContentPager(
                         deleteConfirmationDialogVisible = false
                     },
                     confirmText = R.string.delete
+                )
+            }
+
+            if(restDialogVisible) {
+                RestAlertDialog(
+                    onDismiss = {
+                        restDialogVisible = false
+                    },
+                    onConfirm = { rest, restEnabled ->
+                        onEvent(CreateWorkoutUiEvent.OnRestChanged(index, rest))
+
+                        restEnabled?.let {
+                            onEvent(CreateWorkoutUiEvent.OnRestEnabledChanged(index, it))
+                        }
+                        restDialogVisible = false
+                    },
+                    rest = workoutExercise?.rest ?: state.settings.rest,
+                    restEnabled = workoutExercise?.restEnabled ?: state.settings.restEnabled
                 )
             }
         }

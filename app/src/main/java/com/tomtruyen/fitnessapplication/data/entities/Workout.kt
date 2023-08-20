@@ -12,6 +12,7 @@ data class Workout(
     @PrimaryKey var id: String = UUID.randomUUID().toString(),
     var name: String = "",
     var unit: String = Settings.UnitType.KG.value, // KG or LBS
+    var createdAt: Long = System.currentTimeMillis()
 ) {
     companion object {
         const val TABLE_NAME = "workouts"
@@ -32,6 +33,7 @@ data class WorkoutWithExercises(
         id = workout.id,
         name = workout.name,
         unit = workout.unit,
-        exercises = exercises.map { it.toWorkoutExerciseResponse() }
+        exercises = exercises.map { it.toWorkoutExerciseResponse() },
+        createdAt = workout.createdAt
     )
 }

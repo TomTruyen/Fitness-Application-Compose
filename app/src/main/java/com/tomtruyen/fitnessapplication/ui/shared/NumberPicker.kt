@@ -57,6 +57,7 @@ fun <T> NumberPicker(
     modifier: Modifier = Modifier,
     label: (T) -> String = { it.toString() },
     value: T,
+    enabled: Boolean = true,
     onValueChange: (T) -> Unit,
     dividersColor: Color = MaterialTheme.colorScheme.primary,
     list: List<T>,
@@ -91,36 +92,43 @@ fun <T> NumberPicker(
 
     Layout(
         modifier = modifier
-            .draggable(
-                orientation = Orientation.Vertical,
-                state = rememberDraggableState { deltaY ->
-                    coroutineScope.launch {
-                        animatedOffset.snapTo(animatedOffset.value + deltaY)
-                    }
-                },
-                onDragStopped = { velocity ->
-                    coroutineScope.launch {
-                        val endValue = animatedOffset.fling(
-                            initialVelocity = velocity,
-                            animationSpec = exponentialDecay(frictionMultiplier = 1f),
-                            adjustTarget = { target ->
-                                val coercedTarget = target % halfNumbersColumnHeightPx
-                                val coercedAnchors =
-                                    listOf(-halfNumbersColumnHeightPx, 0f, halfNumbersColumnHeightPx)
-                                val coercedPoint = coercedAnchors.minByOrNull { abs(it - coercedTarget) }!!
-                                val base = halfNumbersColumnHeightPx * (target / halfNumbersColumnHeightPx).toInt()
-                                coercedPoint + base
+            .then(
+                if(enabled) {
+                    Modifier.draggable(
+                        orientation = Orientation.Vertical,
+                        state = rememberDraggableState { deltaY ->
+                            coroutineScope.launch {
+                                animatedOffset.snapTo(animatedOffset.value + deltaY)
                             }
-                        ).endState.value
+                        },
+                        onDragStopped = { velocity ->
+                            coroutineScope.launch {
+                                val endValue = animatedOffset.fling(
+                                    initialVelocity = velocity,
+                                    animationSpec = exponentialDecay(frictionMultiplier = 1f),
+                                    adjustTarget = { target ->
+                                        val coercedTarget = target % halfNumbersColumnHeightPx
+                                        val coercedAnchors =
+                                            listOf(-halfNumbersColumnHeightPx, 0f, halfNumbersColumnHeightPx)
+                                        val coercedPoint = coercedAnchors.minByOrNull { abs(it - coercedTarget) }!!
+                                        val base = halfNumbersColumnHeightPx * (target / halfNumbersColumnHeightPx).toInt()
+                                        coercedPoint + base
+                                    }
+                                ).endState.value
 
-                        val result = list.elementAt(
-                            getItemIndexForOffset(list, value, endValue, halfNumbersColumnHeightPx)
-                        )
-                        onValueChange(result)
-                        animatedOffset.snapTo(0f)
-                    }
+                                val result = list.elementAt(
+                                    getItemIndexForOffset(list, value, endValue, halfNumbersColumnHeightPx)
+                                )
+                                onValueChange(result)
+                                animatedOffset.snapTo(0f)
+                            }
+                        }
+                    ).alpha(1f)
+                } else {
+                    Modifier.alpha(0.5f)
                 }
             )
+
             .padding(vertical = numbersColumnHeight / totalVisibleItems + verticalMargin * 2),
         content = {
             Box(

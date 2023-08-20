@@ -266,7 +266,7 @@ fun ProfileScreenLayout(
                     onDismiss = {
                         restDialogVisible = false
                     },
-                    onConfirm = { rest ->
+                    onConfirm = { rest, _ ->
                         onEvent(ProfileUiEvent.RestChanged(rest))
                         restDialogVisible = false
                     },

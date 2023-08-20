@@ -17,12 +17,14 @@ data class WorkoutResponse(
     var id: String = UUID.randomUUID().toString(),
     var name: String = "",
     var unit: String = "",
-    var exercises: List<WorkoutExerciseResponse> = emptyList()
+    var exercises: List<WorkoutExerciseResponse> = emptyList(),
+    var createdAt: Long = System.currentTimeMillis()
 ): Parcelable {
     fun toWorkout(): Workout = Workout(
         id = id,
         name = name,
-        unit = unit
+        unit = unit,
+        createdAt = createdAt
     )
 }
 
