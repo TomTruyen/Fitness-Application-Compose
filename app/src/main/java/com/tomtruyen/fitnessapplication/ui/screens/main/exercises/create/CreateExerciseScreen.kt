@@ -150,6 +150,10 @@ fun CreateExerciseScreenLayout(
                             onEvent(CreateExerciseUiEvent.OnExerciseNameChanged(name))
                         },
                         placeholder = stringResource(id = R.string.hint_name),
+                        padding = PaddingValues(
+                            horizontal = Dimens.Normal,
+                            vertical = Dimens.Tiny + Dimens.Normal
+                        )
                     )
 
                     Dropdown(
