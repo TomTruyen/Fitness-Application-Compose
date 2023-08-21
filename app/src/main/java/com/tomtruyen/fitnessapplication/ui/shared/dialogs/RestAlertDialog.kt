@@ -13,27 +13,25 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.ui.screens.main.profile.ProfileUiEvent
+import com.tomtruyen.fitnessapplication.model.RestAlertType
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
-import com.tomtruyen.fitnessapplication.ui.shared.NumberPicker
+import com.tomtruyen.fitnessapplication.ui.shared.numberpickers.NumberPicker
 import com.tomtruyen.fitnessapplication.ui.shared.listitems.SwitchListItem
+import com.tomtruyen.fitnessapplication.ui.shared.numberpickers.MinutesAndSecondsPicker
 import java.util.concurrent.TimeUnit
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun RestAlertDialog(
     onConfirm: (Int, Boolean?) -> Unit,
     onDismiss: () -> Unit,
     rest: Int,
     restEnabled: Boolean? = null,
+    type: RestAlertType = RestAlertType.REST_TIME
 ) {
     var selectedRestValue by remember { mutableIntStateOf(rest) }
     var selectedRestEnabled by remember { mutableStateOf(restEnabled) }
@@ -61,26 +59,24 @@ fun RestAlertDialog(
                     }
                 }
 
+                when(type) {
+                    RestAlertType.REST_TIME -> RestTimeLayout(
+                        value = selectedRestValue,
+                        onValueChange = { rest ->
+                            if(selectedRestEnabled == false) return@RestTimeLayout
+                            selectedRestValue = rest
+                        },
+                        enabled = selectedRestEnabled ?: true
+                    )
 
-                NumberPicker(
-                    enabled = selectedRestEnabled ?: true,
-                    modifier = Modifier.fillMaxWidth(),
-                    value = selectedRestValue,
-                    onValueChange = {
-                        if(selectedRestEnabled == false) return@NumberPicker
-                        selectedRestValue = it
-                    },
-                    dividersColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
-                    textStyle = MaterialTheme.typography.bodyLarge,
-                    label = {
-                        // Format the number to be displayed
-                        val minutes = TimeUnit.SECONDS.toMinutes(it.toLong())
-                        val seconds = it - TimeUnit.MINUTES.toSeconds(minutes)
-
-                        String.format("%d:%02d", minutes, seconds)
-                    },
-                    list = (0..300 step 5).toList() // 0 to 300 seconds, step of 5 per
-                )
+                    RestAlertType.SET_TIME -> SetTimeLayout(
+                        value = selectedRestValue,
+                        onValueChange = { rest ->
+                            if(selectedRestEnabled == false) return@SetTimeLayout
+                            selectedRestValue = rest
+                        },
+                    )
+                }
             }
         },
         confirmButton = {
@@ -100,5 +96,43 @@ fun RestAlertDialog(
                 )
             )
         }
+    )
+}
+
+@Composable
+fun RestTimeLayout(
+    value: Int,
+    onValueChange: (Int) -> Unit,
+    enabled: Boolean,
+) {
+    NumberPicker(
+        enabled = enabled,
+        modifier = Modifier.fillMaxWidth(),
+        value = value,
+        onValueChange = onValueChange,
+        dividersColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
+        textStyle = MaterialTheme.typography.bodyLarge,
+        label = {
+            // Format the number to be displayed
+            val minutes = TimeUnit.SECONDS.toMinutes(it.toLong())
+            val seconds = it - TimeUnit.MINUTES.toSeconds(minutes)
+
+            String.format("%d:%02d", minutes, seconds)
+        },
+        list = (0..300 step 5).toList() // 0 to 300 seconds, step of 5 per
+    )
+}
+
+@Composable
+fun SetTimeLayout(
+    value: Int,
+    onValueChange: (Int) -> Unit,
+) {
+    MinutesAndSecondsPicker(
+        modifier = Modifier.fillMaxWidth(),
+        value = value,
+        onValueChange = onValueChange,
+        dividersColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
+        textStyle = MaterialTheme.typography.bodyLarge,
     )
 }

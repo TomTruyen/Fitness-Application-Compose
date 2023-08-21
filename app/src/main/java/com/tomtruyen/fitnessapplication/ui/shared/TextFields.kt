@@ -117,7 +117,8 @@ object TextFields {
                         .padding(padding)
                 ) {
                     BoxWithConstraints(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.weight(1f)
+                            .animateContentSize(),
                         contentAlignment = if(textStyle.textAlign == TextAlign.Center) {
                             Alignment.Center
                         } else {

@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.ui.shared
+package com.tomtruyen.fitnessapplication.ui.shared.numberpickers
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationResult

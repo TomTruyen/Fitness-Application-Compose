@@ -2,6 +2,7 @@ package com.tomtruyen.fitnessapplication.ui.screens.main.exercises
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
@@ -235,6 +236,7 @@ fun ExercisesScreenLayout(
 
                 LazyColumn(
                     modifier = Modifier.weight(1f)
+                        .animateContentSize()
                 ) {
                     var currentLetter: Char?
 

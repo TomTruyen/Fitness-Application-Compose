@@ -1,6 +1,7 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -140,6 +141,7 @@ fun CreateExerciseScreenLayout(
                 Column(
                     modifier = Modifier
                         .weight(1f)
+                        .animateContentSize()
                         .verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(Dimens.Small)
                 ) {

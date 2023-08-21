@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -103,6 +104,7 @@ fun WorkoutOverviewScreenLayout(
 
                 LazyColumn(
                     modifier = Modifier.weight(1f)
+                        .animateContentSize()
                 ) {
                     // TODO: Workouts and remove Text composable
                     item {

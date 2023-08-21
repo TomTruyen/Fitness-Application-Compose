@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.ui.shared.listitems
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,6 +35,7 @@ fun ListItem(
     ) {
         Column(
             modifier = Modifier.weight(1f)
+                .animateContentSize()
         ) {
             Text(
                 text = title,

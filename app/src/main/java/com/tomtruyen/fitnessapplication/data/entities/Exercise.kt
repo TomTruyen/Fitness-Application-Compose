@@ -3,6 +3,7 @@ package com.tomtruyen.fitnessapplication.data.entities
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.firebase.encoders.annotations.Encodable.Ignore
 import com.google.firebase.firestore.PropertyName
 import kotlinx.parcelize.Parcelize
 import java.util.UUID
@@ -24,6 +25,7 @@ data class Exercise(
     var steps: List<String> = emptyList(),
     var isUserCreated: Boolean = false
 ): Parcelable {
+    @get:Ignore
     val displayName get() = buildString {
         append(name)
         if(!equipment.isNullOrBlank()) {
@@ -31,6 +33,7 @@ data class Exercise(
         }
     }
 
+    @get:Ignore
     val typeEnum get() = ExerciseType.values().firstOrNull { it.value.lowercase() == type } ?: ExerciseType.WEIGHT
 
     enum class ExerciseType(val value: String) {

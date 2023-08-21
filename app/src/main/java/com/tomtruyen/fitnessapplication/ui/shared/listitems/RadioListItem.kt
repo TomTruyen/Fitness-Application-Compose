@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.ui.shared.listitems
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,6 +34,7 @@ fun RadioListItem(title: String, selected: Boolean, onCheckedChange: (Boolean) -
             text = title,
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.weight(1f)
+                .animateContentSize()
         )
     }
 }

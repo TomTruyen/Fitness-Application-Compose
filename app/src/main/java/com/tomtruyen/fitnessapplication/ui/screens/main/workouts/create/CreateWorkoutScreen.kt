@@ -8,6 +8,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
@@ -81,6 +82,7 @@ import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutSet
+import com.tomtruyen.fitnessapplication.model.RestAlertType
 import com.tomtruyen.fitnessapplication.navigation.CreateWorkoutNavGraph
 import com.tomtruyen.fitnessapplication.navigation.NavArguments
 import com.tomtruyen.fitnessapplication.networking.WorkoutExerciseResponse
@@ -238,7 +240,8 @@ fun CreateWorkoutScreenLayout(
                 }
 
                 TabContentPager(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f)
+                        .animateContentSize(),
                     state = state,
                     pagerState = pagerState,
                     onEvent = onEvent,
@@ -346,6 +349,7 @@ fun TabContentPager(
                 Column(
                     modifier = Modifier
                         .weight(1f)
+                        .animateContentSize()
                         .padding(Dimens.Normal),
                     verticalArrangement = Arrangement.Top
                 ) {
@@ -370,6 +374,7 @@ fun TabContentPager(
                     LazyColumn(
                         modifier = Modifier
                             .weight(1f)
+                            .animateContentSize()
                             .padding(top = Dimens.Normal)
                     ) {
                         // Header Row
@@ -388,6 +393,7 @@ fun TabContentPager(
                                 exerciseIndex = index,
                                 setIndex = setIndex,
                                 set = set,
+                                type = workoutExercise.exercise.typeEnum,
                                 isOnlySet = workoutExercise.sets.size == 1,
                                 onEvent = onEvent
                             )
@@ -468,6 +474,7 @@ fun TabContentPager(
                 modifier = Modifier
                     .weight(1f)
                     .height(IntrinsicSize.Max)
+                    .animateContentSize()
             ) {
                 onEvent(CreateWorkoutUiEvent.OnAddExerciseClicked)
             }
@@ -534,29 +541,44 @@ fun WorkoutExerciseSetHeader(
             )
         )
 
-        Text(
-            text = stringResource(id = R.string.reps).uppercase(),
-            textAlign = TextAlign.Center,
-            modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.bodySmall.copy(
-                fontWeight = FontWeight.W500,
-            )
-        )
+        when(workoutExercise.exercise.typeEnum) {
+            Exercise.ExerciseType.WEIGHT -> {
+                Text(
+                    text = stringResource(id = R.string.reps).uppercase(),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.weight(1f)
+                        .animateContentSize(),
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        fontWeight = FontWeight.W500,
+                    )
+                )
 
-        Spacer(modifier = Modifier.width(Dimens.Small))
+                Spacer(modifier = Modifier.width(Dimens.Small))
 
-        Text(
-            text = if(workoutExercise.exercise.typeEnum == Exercise.ExerciseType.WEIGHT) {
-                unit
-            } else {
-                stringResource(id = R.string.time)
-            }.uppercase(),
-            textAlign = TextAlign.Center,
-            modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.bodySmall.copy(
-                fontWeight = FontWeight.W500,
-            )
-        )
+                Text(
+                    text = unit.uppercase(),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.weight(1f)
+                        .animateContentSize(),
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        fontWeight = FontWeight.W500,
+                    )
+                )
+            }
+
+            Exercise.ExerciseType.TIME -> {
+                Text(
+                    text = stringResource(id = R.string.time).uppercase(),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.weight(1f)
+                        .animateContentSize(),
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        fontWeight = FontWeight.W500,
+                    )
+                )
+            }
+        }
+
 
         AnimatedVisibility(visible = workoutExercise.sets.size > 1) {
             Spacer(modifier = Modifier.width(Dimens.MinButtonHeight))
@@ -570,9 +592,12 @@ fun WorkoutExerciseSet(
     exerciseIndex: Int,
     setIndex: Int,
     set: WorkoutSet,
+    type: Exercise.ExerciseType,
     isOnlySet: Boolean = false,
     onEvent: (CreateWorkoutUiEvent) -> Unit,
 ) {
+    var timeDialogVisible by remember { mutableStateOf(false) }
+
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
@@ -587,64 +612,91 @@ fun WorkoutExerciseSet(
             modifier = Modifier.width(Dimens.MinButtonHeight)
         )
 
-        TextFields.Default(
-            value = set.repsString ?: "",
-            onValueChange = { reps ->
-                // Check if value can be cast to int, if not don't update the value
-                if(reps.isNotEmpty() && reps.toIntOrNull() == null) return@Default
+        when(type) {
+            // Weight
+            Exercise.ExerciseType.WEIGHT -> {
+                TextFields.Default(
+                    value = set.repsString ?: "",
+                    onValueChange = { reps ->
+                        // Check if value can be cast to int, if not don't update the value
+                        if(reps.isNotEmpty() && reps.toIntOrNull() == null) return@Default
 
-                onEvent(
-                    CreateWorkoutUiEvent.OnRepsChanged(
-                        exerciseIndex = exerciseIndex,
-                        setIndex = setIndex,
-                        reps = reps
-                    )
+                        onEvent(
+                            CreateWorkoutUiEvent.OnRepsChanged(
+                                exerciseIndex = exerciseIndex,
+                                setIndex = setIndex,
+                                reps = reps
+                            )
+                        )
+                    },
+                    placeholder = "0",
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.NumberPassword,
+                        imeAction = ImeAction.Next
+                    ),
+                    textStyle = MaterialTheme.typography.bodyMedium.copy(
+                        textAlign = TextAlign.Center
+                    ),
+                    padding = PaddingValues(Dimens.Small),
+                    modifier = Modifier.weight(1f)
+                        .animateContentSize()
                 )
-            },
-            placeholder = "0",
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.NumberPassword,
-                imeAction = ImeAction.Next
-            ),
-            textStyle = MaterialTheme.typography.bodyMedium.copy(
-                textAlign = TextAlign.Center
-            ),
-            padding = PaddingValues(Dimens.Small),
-            modifier = Modifier.weight(1f)
-        )
 
-        Spacer(modifier = Modifier.width(Dimens.Small))
+                Spacer(modifier = Modifier.width(Dimens.Small))
 
-        TextFields.Default(
-            value = set.weightString ?: "",
-            onValueChange = { weight ->
-                val filteredWeight = weight.replace(",", ".")
+                TextFields.Default(
+                    value = set.weightString ?: "",
+                    onValueChange = { weight ->
+                        val filteredWeight = weight.replace(",", ".")
 
-                // Check if the number can be cast to double, if not don't update the value
-                if(filteredWeight.isNotEmpty() && filteredWeight.toDoubleOrNull() == null) return@Default
+                        // Check if the number can be cast to double, if not don't update the value
+                        if (filteredWeight.isNotEmpty() && filteredWeight.toDoubleOrNull() == null) return@Default
 
-                onEvent(
-                    CreateWorkoutUiEvent.OnWeightChanged(
-                        exerciseIndex = exerciseIndex,
-                        setIndex = setIndex,
-                        weight = filteredWeight
-                    )
+                        onEvent(
+                            CreateWorkoutUiEvent.OnWeightChanged(
+                                exerciseIndex = exerciseIndex,
+                                setIndex = setIndex,
+                                weight = filteredWeight
+                            )
+                        )
+                    },
+                    placeholder = "0",
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Number
+                    ),
+                    textStyle = MaterialTheme.typography.bodyMedium.copy(
+                        textAlign = TextAlign.Center
+                    ),
+                    padding = PaddingValues(Dimens.Small),
+                    modifier = Modifier.weight(1f)
+                        .animateContentSize()
                 )
-            },
-            placeholder = "0",
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number
-            ),
-            textStyle = MaterialTheme.typography.bodyMedium.copy(
-                textAlign = TextAlign.Center
-            ),
-            padding = PaddingValues(Dimens.Small),
-            modifier = Modifier.weight(1f)
-        )
+            }
 
-        AnimatedVisibility(visible = !isOnlySet) {
+            // Time
+            Exercise.ExerciseType.TIME -> Text(
+                text = TimeUtils.formatSeconds(set.time ?: 0),
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .weight(1f)
+                    .animateContentSize()
+                    .background(
+                        color = MaterialTheme.colorScheme.surface,
+                        shape = MaterialTheme.shapes.medium
+                    )
+                    .clip(MaterialTheme.shapes.medium)
+                    .clickable {
+                        timeDialogVisible = true
+                    }
+                    .padding(Dimens.Small)
+            )
+        }
+
+        AnimatedVisibility(
+            modifier = Modifier.width(Dimens.MinButtonHeight),
+            visible = !isOnlySet
+        ) {
             IconButton(
-                modifier = Modifier.width(Dimens.MinButtonHeight),
                 onClick = {
                     onEvent(CreateWorkoutUiEvent.OnDeleteSetClicked(exerciseIndex, setIndex))
                 }
@@ -654,6 +706,20 @@ fun WorkoutExerciseSet(
                     contentDescription = null
                 )
             }
+        }
+
+        if(timeDialogVisible) {
+            RestAlertDialog(
+                onDismiss = {
+                    timeDialogVisible = false
+                },
+                onConfirm = { time, _ ->
+                    onEvent(CreateWorkoutUiEvent.OnTimeChanged(exerciseIndex, setIndex, time))
+                    timeDialogVisible = false
+                },
+                rest = set.time ?: 0,
+                type = RestAlertType.SET_TIME
+            )
         }
     }
 }

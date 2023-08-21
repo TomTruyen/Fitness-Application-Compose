@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.ui.shared.listitems
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,6 +32,7 @@ fun SwitchListItem(title: String, checked: Boolean, onCheckedChange: (Boolean) -
             text = title,
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.weight(1f)
+                .animateContentSize()
         )
 
         Switch(

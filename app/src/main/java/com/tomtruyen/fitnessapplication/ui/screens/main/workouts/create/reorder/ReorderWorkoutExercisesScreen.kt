@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.reorder
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -110,6 +111,7 @@ fun ReorderWorkoutExercisesScreenLayout(
                 state = reorderState.listState,
                 modifier = Modifier
                     .weight(1f)
+                    .animateContentSize()
                     .reorderable(reorderState)
                     .detectReorderAfterLongPress(reorderState),
             ) {
@@ -163,6 +165,7 @@ fun ReorderListItem(
                 text = title,
                 modifier = Modifier
                     .weight(1f)
+                    .animateContentSize()
                     .padding(start = Dimens.Small)
             )
         }

@@ -16,6 +16,7 @@ sealed class CreateWorkoutUiEvent {
     data class OnRestChanged(val exerciseIndex: Int, val rest: Int) : CreateWorkoutUiEvent()
     data class OnRepsChanged(val exerciseIndex: Int, val setIndex: Int, val reps: String?) : CreateWorkoutUiEvent()
     data class OnWeightChanged(val exerciseIndex: Int, val setIndex: Int, val weight: String?) : CreateWorkoutUiEvent()
+    data class OnTimeChanged(val exerciseIndex: Int, val setIndex: Int, val time: Int?) : CreateWorkoutUiEvent()
     data class OnDeleteSetClicked(val exerciseIndex: Int, val setIndex: Int) : CreateWorkoutUiEvent()
     data class OnAddSetClicked(val exerciseIndex: Int) : CreateWorkoutUiEvent()
     data class Save(val workoutName: String): CreateWorkoutUiEvent()

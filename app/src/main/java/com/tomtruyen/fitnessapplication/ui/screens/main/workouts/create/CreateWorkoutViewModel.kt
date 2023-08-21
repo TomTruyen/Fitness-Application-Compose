@@ -174,6 +174,25 @@ class CreateWorkoutViewModel(
                     )
                 )
             }
+            is CreateWorkoutUiEvent.OnTimeChanged -> {
+                state.value = currentState.copy(
+                    workout = currentState.workout.copy(
+                        exercises = currentState.workout.exercises.mapIndexed { index, exercise ->
+                            if (index == event.exerciseIndex) {
+                                exercise.copy(
+                                    sets = exercise.sets.mapIndexed { setIndex, set ->
+                                        if (setIndex == event.setIndex) set.copy(
+                                            time = event.time,
+                                        ) else set
+                                    }
+                                )
+                            } else {
+                                exercise
+                            }
+                        }
+                    )
+                )
+            }
             is CreateWorkoutUiEvent.OnDeleteSetClicked -> {
                 state.value = currentState.copy(
                     workout = currentState.workout.copy(
