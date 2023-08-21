@@ -7,6 +7,7 @@ import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 
 class CreateExerciseViewModel(
     private val id: String?,
@@ -22,7 +23,9 @@ class CreateExerciseViewModel(
     )
 
     val categories = exerciseRepository.findCategories()
-    val equipment = exerciseRepository.findEquipment()
+    val equipment = exerciseRepository.findEquipment().map {
+        listOf(Exercise.DEFAULT_DROPDOWN_VALUE) + it
+    }
 
     init {
         findExercise()
@@ -46,7 +49,9 @@ class CreateExerciseViewModel(
 
         val exercises = exerciseRepository.findUserExercises().toMutableList()
 
-        val exercise = state.value.exercise
+        val exercise = state.value.exercise.apply {
+            if(equipment == Exercise.DEFAULT_DROPDOWN_VALUE) equipment = null
+        }
 
         if(isEditing) {
             exercises.removeIf { it.id == id }

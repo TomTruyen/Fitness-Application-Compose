@@ -15,7 +15,6 @@ data class CreateExerciseUiState(
     val isEditing: Boolean = false,
     var lastNameValidationResult: ValidationResult? = null,
     var lastCategoryValidationResult: ValidationResult? = null,
-    var lastEquipmentValidationResult: ValidationResult? = null,
     var lastTypeValidationResult: ValidationResult? = null,
 ) {
     private val requiredValidator = TextValidator.withRules(RequiredRule())
@@ -24,9 +23,6 @@ data class CreateExerciseUiState(
         private set
 
     var categoryValidationResult by mutableStateOf(lastCategoryValidationResult)
-        private set
-
-    var equipmentValidationResult by mutableStateOf(lastEquipmentValidationResult)
         private set
 
     var typeValidationResult by mutableStateOf(lastTypeValidationResult)
@@ -44,13 +40,6 @@ data class CreateExerciseUiState(
 
         lastCategoryValidationResult = requiredValidator.validate(context, exercise.category)
         categoryValidationResult = lastCategoryValidationResult
-    }
-
-    fun validateEquipment(context: Context) {
-        if(exercise.equipment == null) return // Don't validate if email is null (not entered anything yet)
-
-        lastEquipmentValidationResult = requiredValidator.validate(context, exercise.equipment)
-        equipmentValidationResult = lastEquipmentValidationResult
     }
 
     fun validateType(context: Context) {

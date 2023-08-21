@@ -43,5 +43,6 @@ data class Exercise(
 
     companion object {
         const val TABLE_NAME = "exercises"
+        const val DEFAULT_DROPDOWN_VALUE = "None"
     }
 }

@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -59,7 +60,6 @@ fun CreateExerciseScreen(
     LaunchedEffect(state.exercise) {
         state.validateName(context)
         state.validateCategory(context)
-        state.validateEquipment(context)
         state.validateType(context)
     }
 
@@ -96,7 +96,6 @@ fun CreateExerciseScreenLayout(
         derivedStateOf {
             state.nameValidationResult.isValid() &&
                     state.categoryValidationResult.isValid() &&
-                    state.equipmentValidationResult.isValid() &&
                     state.typeValidationResult.isValid() &&
                     state.exercise != state.initialExercise
         }
@@ -170,8 +169,7 @@ fun CreateExerciseScreenLayout(
                     Dropdown(
                         placeholder = stringResource(id = R.string.hint_equipment),
                         options = equipment,
-                        selectedOption = state.exercise.equipment ?: "",
-                        error = state.equipmentValidationResult.errorMessage(),
+                        selectedOption = state.exercise.equipment ?: equipment.firstOrNull() ?: "",
                         onOptionSelected = { equipment ->
                             onEvent(
                                 CreateExerciseUiEvent.OnEquipmentChanged(
