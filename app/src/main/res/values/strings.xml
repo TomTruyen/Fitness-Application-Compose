@@ -98,6 +98,10 @@
     <string name="title_workout_name">Workout name</string>
     <string name="message_workout_name">Please enter a name for your workout</string>
     <string name="rest">Rest</string>
+    <string name="start">Start</string>
+    <string name="workout_empty_title">No exercises added</string>
+    <string name="workout_empty_subtitle">Click on \'Add Exercise\' to add your first exercise</string>
+
 
 
 </resources>

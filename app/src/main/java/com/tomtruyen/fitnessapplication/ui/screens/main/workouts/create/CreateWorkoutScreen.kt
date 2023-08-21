@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,10 +31,12 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.FormatListNumbered
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.outlined.Timer
@@ -66,6 +69,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -90,6 +94,7 @@ import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesScreenD
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ReorderWorkoutExercisesScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
+import com.tomtruyen.fitnessapplication.ui.shared.EmptyState
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.ConfirmationDialog
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.RestAlertDialog
@@ -240,7 +245,8 @@ fun CreateWorkoutScreenLayout(
                 }
 
                 TabContentPager(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .animateContentSize(),
                     state = state,
                     pagerState = pagerState,
@@ -338,113 +344,145 @@ fun TabContentPager(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        HorizontalPager(
-            modifier = modifier,
-            state = pagerState
-        ) { index ->
-            val workoutExercise = state.workout.exercises.getOrNull(index)
-
-
-            if (workoutExercise != null) {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .animateContentSize()
-                        .padding(Dimens.Normal),
-                    verticalArrangement = Arrangement.Top
-                ) {
-                    // Notes
-                    TextFields.Default(
-                        singleLine = false,
-                        placeholder = stringResource(id = R.string.notes),
-                        value = workoutExercise.notes,
-                        onValueChange = { notes ->
-                            onEvent(CreateWorkoutUiEvent.OnExerciseNotesChanged(index, notes))
-                        },
-                    )
-
-                    // Rest time
-                    RestTimeSelector(
-                        modifier = Modifier.align(Alignment.End),
-                        workoutExercise = workoutExercise,
+        if(state.workout.exercises.isEmpty()) {
+            EmptyState(
+                modifier = modifier
+                    .fillMaxWidth(),
+                icon = {
+                    Box(
+                        modifier = Modifier
+                            .size(150.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.primaryContainer,
+                                shape = CircleShape
+                            )
+                            .padding(Dimens.Normal)
                     ) {
-                        restDialogVisible = true
+                        Icon(
+                            modifier = Modifier
+                                .rotate(-45f)
+                                .fillMaxSize(),
+                            imageVector = Icons.Filled.FitnessCenter,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
                     }
+                },
+                title = stringResource(id = R.string.workout_empty_title),
+                subtitle = stringResource(id = R.string.workout_empty_subtitle),
+            )
+        } else {
+            HorizontalPager(
+                modifier = modifier,
+                state = pagerState
+            ) { index ->
+                val workoutExercise = state.workout.exercises.getOrNull(index)
 
-                    LazyColumn(
+
+                if (workoutExercise != null) {
+                    Column(
                         modifier = Modifier
                             .weight(1f)
                             .animateContentSize()
-                            .padding(top = Dimens.Normal)
+                            .padding(Dimens.Normal),
+                        verticalArrangement = Arrangement.Top
                     ) {
-                        // Header Row
-                        item {
-                            WorkoutExerciseSetHeader(
-                                workoutExercise = workoutExercise,
-                                unit = state.settings.unit
-                            )
+                        // Notes
+                        TextFields.Default(
+                            singleLine = false,
+                            placeholder = stringResource(id = R.string.notes),
+                            value = workoutExercise.notes,
+                            onValueChange = { notes ->
+                                onEvent(CreateWorkoutUiEvent.OnExerciseNotesChanged(index, notes))
+                            },
+                        )
+
+                        // Rest time
+                        RestTimeSelector(
+                            modifier = Modifier.align(Alignment.End),
+                            workoutExercise = workoutExercise,
+                        ) {
+                            restDialogVisible = true
                         }
 
-                        // Sets
-                        itemsIndexed(workoutExercise.sets, key = { _, set -> set.id }) { setIndex, set ->
-                            WorkoutExerciseSet(
-                                modifier = Modifier.fillMaxWidth()
-                                    .animateItemPlacement(),
-                                exerciseIndex = index,
-                                setIndex = setIndex,
-                                set = set,
-                                type = workoutExercise.exercise.typeEnum,
-                                isOnlySet = workoutExercise.sets.size == 1,
-                                onEvent = onEvent
-                            )
-                        }
+                        LazyColumn(
+                            modifier = Modifier
+                                .weight(1f)
+                                .animateContentSize()
+                                .padding(top = Dimens.Normal)
+                        ) {
+                            // Header Row
+                            item {
+                                WorkoutExerciseSetHeader(
+                                    workoutExercise = workoutExercise,
+                                    unit = state.settings.unit
+                                )
+                            }
 
-                        // Add Set
-                        item {
-                            Buttons.Text(
-                                text = stringResource(id = R.string.add_set).uppercase(),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = Dimens.Small)
-                            ) {
-                                onEvent(CreateWorkoutUiEvent.OnAddSetClicked(index))
+                            // Sets
+                            itemsIndexed(
+                                workoutExercise.sets,
+                                key = { _, set -> set.id }) { setIndex, set ->
+                                WorkoutExerciseSet(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .animateItemPlacement(),
+                                    exerciseIndex = index,
+                                    setIndex = setIndex,
+                                    set = set,
+                                    type = workoutExercise.exercise.typeEnum,
+                                    isOnlySet = workoutExercise.sets.size == 1,
+                                    onEvent = onEvent
+                                )
+                            }
+
+                            // Add Set
+                            item {
+                                Buttons.Text(
+                                    text = stringResource(id = R.string.add_set).uppercase(),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = Dimens.Small)
+                                ) {
+                                    onEvent(CreateWorkoutUiEvent.OnAddSetClicked(index))
+                                }
                             }
                         }
                     }
-               }
-            }
+                }
 
-            if (deleteConfirmationDialogVisible) {
-                ConfirmationDialog(
-                    title = R.string.title_delete_exercise,
-                    message = R.string.message_delete_exercise_from_workout,
-                    onConfirm = {
-                        onEvent(CreateWorkoutUiEvent.OnDeleteExerciseClicked(index))
-                        deleteConfirmationDialogVisible = false
-                    },
-                    onDismiss = {
-                        deleteConfirmationDialogVisible = false
-                    },
-                    confirmText = R.string.delete
-                )
-            }
+                if (deleteConfirmationDialogVisible) {
+                    ConfirmationDialog(
+                        title = R.string.title_delete_exercise,
+                        message = R.string.message_delete_exercise_from_workout,
+                        onConfirm = {
+                            onEvent(CreateWorkoutUiEvent.OnDeleteExerciseClicked(index))
+                            deleteConfirmationDialogVisible = false
+                        },
+                        onDismiss = {
+                            deleteConfirmationDialogVisible = false
+                        },
+                        confirmText = R.string.delete
+                    )
+                }
 
-            if(restDialogVisible) {
-                RestAlertDialog(
-                    onDismiss = {
-                        restDialogVisible = false
-                    },
-                    onConfirm = { rest, restEnabled ->
-                        onEvent(CreateWorkoutUiEvent.OnRestChanged(index, rest))
+                if (restDialogVisible) {
+                    RestAlertDialog(
+                        onDismiss = {
+                            restDialogVisible = false
+                        },
+                        onConfirm = { rest, restEnabled ->
+                            onEvent(CreateWorkoutUiEvent.OnRestChanged(index, rest))
 
-                        restEnabled?.let {
-                            onEvent(CreateWorkoutUiEvent.OnRestEnabledChanged(index, it))
-                        }
-                        restDialogVisible = false
-                    },
-                    rest = workoutExercise?.rest ?: state.settings.rest,
-                    restEnabled = workoutExercise?.restEnabled ?: state.settings.restEnabled
-                )
+                            restEnabled?.let {
+                                onEvent(CreateWorkoutUiEvent.OnRestEnabledChanged(index, it))
+                            }
+                            restDialogVisible = false
+                        },
+                        rest = workoutExercise?.rest ?: state.settings.rest,
+                        restEnabled = workoutExercise?.restEnabled ?: state.settings.restEnabled
+                    )
+                }
             }
         }
 
@@ -505,7 +543,7 @@ fun RestTimeSelector(
                 onClick()
             }
             .padding(Dimens.Normal)
-            .alpha(if(workoutExercise.restEnabled) 1f else 0.5f),
+            .alpha(if (workoutExercise.restEnabled) 1f else 0.5f),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
@@ -546,7 +584,8 @@ fun WorkoutExerciseSetHeader(
                 Text(
                     text = stringResource(id = R.string.reps).uppercase(),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .animateContentSize(),
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.W500,
@@ -558,7 +597,8 @@ fun WorkoutExerciseSetHeader(
                 Text(
                     text = unit.uppercase(),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .animateContentSize(),
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.W500,
@@ -570,7 +610,8 @@ fun WorkoutExerciseSetHeader(
                 Text(
                     text = stringResource(id = R.string.time).uppercase(),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .animateContentSize(),
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.W500,
@@ -638,7 +679,8 @@ fun WorkoutExerciseSet(
                         textAlign = TextAlign.Center
                     ),
                     padding = PaddingValues(Dimens.Small),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .animateContentSize()
                 )
 
@@ -668,7 +710,8 @@ fun WorkoutExerciseSet(
                         textAlign = TextAlign.Center
                     ),
                     padding = PaddingValues(Dimens.Small),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .animateContentSize()
                 )
             }
