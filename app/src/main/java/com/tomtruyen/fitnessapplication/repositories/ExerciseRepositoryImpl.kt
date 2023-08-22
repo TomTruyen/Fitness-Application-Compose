@@ -76,6 +76,7 @@ class ExerciseRepositoryImpl(
                 val exercises = it.toObject(UserExercisesResponse::class.java)?.exercises ?: emptyList()
 
                 scope.launch {
+                    exerciseDao.deleteAllUserExercises()
                     exerciseDao.saveAll(exercises)
                 }
 

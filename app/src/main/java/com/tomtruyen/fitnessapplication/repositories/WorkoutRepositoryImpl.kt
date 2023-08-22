@@ -7,6 +7,7 @@ import com.tomtruyen.fitnessapplication.data.dao.WorkoutSetDao
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutWithExercises
 import com.tomtruyen.fitnessapplication.extensions.handleCompletionResult
 import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
+import com.tomtruyen.fitnessapplication.model.FetchedData
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.networking.UserExercisesResponse
 import com.tomtruyen.fitnessapplication.networking.WorkoutResponse
@@ -28,8 +29,28 @@ class WorkoutRepositoryImpl(
 
     override fun findWorkoutById(id: String) = workoutDao.findById(id)
 
-    override fun getWorkouts(callback: FirebaseCallback<List<WorkoutResponse>>) {
-        TODO("Not yet implemented")
+    override fun getWorkouts(userId: String, callback: FirebaseCallback<List<WorkoutResponse>>) = tryRequestWhenNotFetched(
+        type = FetchedData.Type.WORKOUTS,
+        onStopLoading = {
+            callback.onStopLoading()
+        }
+    ) {
+        db.collection(USER_WORKOUT_COLLECTION_NAME)
+            .document(userId)
+            .get()
+            .handleCompletionResult(
+                context = globalProvider.context,
+                callback = callback
+            ) {
+                val workouts = it.toObject(WorkoutsResponse::class.java)?.data ?: emptyList()
+
+                scope.launch {
+                    workoutDao.deleteAll()
+                    saveWorkoutResponses(workouts)
+                }
+
+                callback.onSuccess(workouts)
+            }
     }
 
     override fun saveWorkout(

@@ -9,9 +9,11 @@ import kotlinx.coroutines.flow.Flow
 abstract class WorkoutRepository: BaseRepository() {
     abstract fun findWorkoutsAsync(): Flow<List<WorkoutWithExercises>>
     abstract suspend fun findWorkouts(): List<WorkoutWithExercises>
-
     abstract fun findWorkoutById(id: String): WorkoutWithExercises?
-    abstract fun getWorkouts(callback: FirebaseCallback<List<WorkoutResponse>>)
+    abstract fun getWorkouts(
+        userId: String,
+        callback: FirebaseCallback<List<WorkoutResponse>>
+    )
     abstract fun saveWorkout(
         userId: String,
         workouts: List<WorkoutResponse>,

@@ -18,6 +18,9 @@ abstract class WorkoutDao {
     @Query("SELECT * FROM ${Workout.TABLE_NAME} WHERE id = :id")
     abstract fun findById(id: String): WorkoutWithExercises?
 
+    @Query("DELETE FROM ${Workout.TABLE_NAME}")
+    abstract fun deleteAll(): Int
+
     @Query("DELETE FROM ${Workout.TABLE_NAME} WHERE id NOT IN (:ids)")
     abstract fun deleteAllWorkoutsExcept(ids: List<String>): Int
 

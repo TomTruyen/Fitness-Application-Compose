@@ -21,6 +21,9 @@ abstract class ExerciseDao {
     @Upsert
     abstract fun saveAll(exercises: List<Exercise>): List<Long>
 
+    @Query("DELETE FROM ${Exercise.TABLE_NAME} WHERE isUserCreated = 1")
+    abstract fun deleteAllUserExercises(): Int
+
     @Query("DELETE FROM ${Exercise.TABLE_NAME} WHERE NOT id IN (:ids) AND isUserCreated = 1")
     abstract fun deleteAllUserExercisesExcept(ids: List<String>): Int
 
