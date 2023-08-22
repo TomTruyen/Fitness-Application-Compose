@@ -30,7 +30,7 @@ class UserRepositoryImpl(
                 context = context,
                 callback = callback
             ) { result ->
-                getUserData()
+                getUserData(callback)
                 callback.onSuccess(result.user)
             }
     }
@@ -41,7 +41,7 @@ class UserRepositoryImpl(
                 context = context,
                 callback = callback
             ) { result ->
-                getUserData()
+                getUserData(callback)
                 callback.onSuccess(result.user)
             }
     }
@@ -53,7 +53,7 @@ class UserRepositoryImpl(
                 context = context,
                 callback = callback
             ) { result ->
-                getUserData()
+                getUserData(callback)
                 callback.onSuccess(result.user)
             }
     }
@@ -74,14 +74,15 @@ class UserRepositoryImpl(
 
     override fun getUser() = auth.currentUser
 
-    private fun getUserData() = scope.launch {
+    private fun getUserData(callback: FirebaseCallback<FirebaseUser?>) = scope.launch {
         val userId = getUser()?.uid ?: return@launch
 
         settingsRepository.getSettings(
             userId = userId,
             callback = object: FirebaseCallback<Settings> {
-                override fun onSuccess(value: Settings) {}
-                override fun onError(error: String?) {}
+                override fun onError(error: String?) {
+                    callback.onError(error)
+                }
             }
         )
     }

@@ -37,8 +37,6 @@ class ProfileViewModel(
         settingsRepository.getSettings(
             userId = userId,
             callback = object: FirebaseCallback<Settings> {
-                override fun onSuccess(value: Settings) {}
-
                 override fun onError(error: String?) {
                     showSnackbar(SnackbarMessage.Error(error))
                 }

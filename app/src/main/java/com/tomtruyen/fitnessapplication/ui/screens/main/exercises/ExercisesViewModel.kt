@@ -30,8 +30,6 @@ class ExercisesViewModel(
 
     private val callback by lazy {
         object: FirebaseCallback<List<Exercise>> {
-            override fun onSuccess(value: List<Exercise>) {}
-
             override fun onError(error: String?) {
                 showSnackbar(SnackbarMessage.Error(error))
             }
@@ -44,7 +42,6 @@ class ExercisesViewModel(
 
     init {
         getExercises()
-
     }
 
     private fun getExercises() {
