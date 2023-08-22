@@ -22,7 +22,7 @@ import java.util.UUID
 @Parcelize
 data class WorkoutSet(
     @PrimaryKey var id: String = UUID.randomUUID().toString(),
-    var workoutExerciseId: String,
+    var workoutExerciseId: String? = null,
     var reps: Int? = null, // For Weight Type exercises
     var weight: Double? = null, // For Weight Type exercises
     var time: Int? = null, // For Time Type exercises,

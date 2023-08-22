@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,6 +28,7 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.navigate
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
+import com.tomtruyen.fitnessapplication.data.entities.WorkoutWithExercises
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.CreateWorkoutScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
@@ -43,6 +45,7 @@ fun WorkoutOverviewScreen(
 ) {
     val context = LocalContext.current
 
+    val workouts by viewModel.workouts.collectAsStateWithLifecycle(initialValue = emptyList())
     val loading by viewModel.loading.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewModel, context) {
@@ -58,6 +61,7 @@ fun WorkoutOverviewScreen(
     WorkoutOverviewScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
+        workouts = workouts,
         loading = loading,
         onEvent = viewModel::onEvent
     )
@@ -68,6 +72,7 @@ fun WorkoutOverviewScreen(
 fun WorkoutOverviewScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
+    workouts: List<WorkoutWithExercises>,
     loading: Boolean,
     onEvent: (WorkoutOverviewUiEvent) -> Unit
 ) {
@@ -103,14 +108,14 @@ fun WorkoutOverviewScreenLayout(
                 }
 
                 LazyColumn(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .animateContentSize()
                 ) {
-                    // TODO: Workouts and remove Text composable
-                    item {
-                        Text(
-                            text = "Workouts"
-                        )
+
+                    // TODO: Design workout item
+                    items(workouts) { workout ->
+                        Text(text = workout.workout.name)
                     }
                 }
             }
