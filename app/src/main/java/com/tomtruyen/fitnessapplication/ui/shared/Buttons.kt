@@ -6,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.fitnessapplication.Dimens
 
@@ -16,6 +17,14 @@ object Buttons {
         modifier: Modifier = Modifier,
         enabled: Boolean = true,
         shape: Shape = MaterialTheme.shapes.medium,
+        minButtonSize: Dp = Dimens.MinButtonHeight,
+        colors: ButtonColors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
+            disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+            disabledContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f)
+        ),
+        contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
         onClick: () -> Unit,
     ) {
         Button(
@@ -23,14 +32,10 @@ object Buttons {
             enabled = enabled,
             shape = shape,
             modifier = modifier.defaultMinSize(
-                minHeight = Dimens.MinButtonHeight,
+                minHeight = minButtonSize,
             ),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                disabledContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f)
-            )
+            contentPadding = contentPadding,
+            colors = colors,
         ) {
             Text(
                 text = text

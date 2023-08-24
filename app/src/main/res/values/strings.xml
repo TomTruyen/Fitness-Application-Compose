@@ -101,7 +101,7 @@
     <string name="start">Start</string>
     <string name="workout_empty_title">No exercises added</string>
     <string name="workout_empty_subtitle">Click on \'Add Exercise\' to add your first exercise</string>
-
+    <string name="start_workout">Start workout</string>
 
 
 </resources>

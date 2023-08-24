@@ -1,15 +1,28 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -17,10 +30,18 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.annotation.Destination
@@ -85,7 +106,18 @@ fun WorkoutOverviewScreenLayout(
                 title = stringResource(id = R.string.workouts),
                 navController = navController,
                 scrollBehavior = scrollBehavior
-            )
+            ) {
+                IconButton(
+                    onClick = {
+                        onEvent(WorkoutOverviewUiEvent.OnCreateWorkoutClicked)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = stringResource(id = R.string.create_workout)
+                    )
+                }
+            }
         },
         // nestedScroll modifier is required for the scroll behavior to work
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -93,29 +125,108 @@ fun WorkoutOverviewScreenLayout(
         BoxWithLoader(
             modifier = Modifier
                 .padding(it)
-                .fillMaxSize()
-                .padding(Dimens.Normal),
+                .fillMaxSize(),
             loading = loading,
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize()
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .animateContentSize(),
+                verticalArrangement = Arrangement.spacedBy(Dimens.Normal),
+                contentPadding = PaddingValues(Dimens.Normal)
             ) {
-                Buttons.Default(
-                    text = stringResource(id = R.string.create_workout),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    onEvent(WorkoutOverviewUiEvent.OnCreateWorkoutClicked)
+                items(workouts) { workout ->
+                    WorkoutListItem(
+                        workoutWithExercises = workout,
+                        onEvent = onEvent,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
+            }
+        }
+    }
+}
 
-                LazyColumn(
-                    modifier = Modifier
-                        .weight(1f)
-                        .animateContentSize()
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun WorkoutListItem(
+    workoutWithExercises: WorkoutWithExercises,
+    onEvent: (WorkoutOverviewUiEvent) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.background
+        ),
+        elevation = CardDefaults.cardElevation(4.dp),
+        onClick = {
+
+        }
+    ) {
+        Column(
+            modifier = modifier
+        ) {
+            // Name + Expand Icon
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = Dimens.Normal),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = workoutWithExercises.workout.name,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.primary
+                    ),
+                    modifier = Modifier.weight(1f)
+                )
+
+                IconButton(
+                    onClick = {
+                        expanded = !expanded
+                    }
                 ) {
+                    Icon(
+                        imageVector = Icons.Filled.KeyboardArrowDown,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.rotate(
+                            if(expanded) 180f else 0f
+                        )
+                    )
+                }
+            }
 
-                    // TODO: Design workout item
-                    items(workouts) { workout ->
-                        Text(text = workout.workout.name)
+            // Exercises
+            AnimatedVisibility(visible = expanded) {
+                Column(
+                    modifier = Modifier.padding(
+                        start = Dimens.Normal,
+                        end = Dimens.Normal,
+                        bottom = Dimens.Normal,
+                        top = Dimens.Small,
+                    )
+                ) {
+                    workoutWithExercises.exercises.forEach { exerciseWithSets ->
+                        Text(
+                            text = "${exerciseWithSets.sets.size} x ${exerciseWithSets.exercise.displayName}",
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    }
+
+                    Buttons.Default(
+                        text = stringResource(id = R.string.start_workout),
+                        minButtonSize = 0.dp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = Dimens.Normal)
+                    ) {
+                        // TODO: Navigate to the Start Workout Screen with overview of exercises
                     }
                 }
             }
