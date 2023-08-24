@@ -17,6 +17,8 @@ class ExerciseDetailViewModel(
     private fun delete() = launchIO {
         val userId = userRepository.getUser()?.uid ?: return@launchIO
 
+        isLoading(true)
+
         exerciseRepository.deleteUserExercise(
             userId = userId,
             exerciseId = id,
@@ -27,6 +29,10 @@ class ExerciseDetailViewModel(
 
                 override fun onError(error: String?) {
                     showSnackbar(SnackbarMessage.Error(error))
+                }
+
+                override fun onStopLoading() {
+                    isLoading(false)
                 }
             }
         )

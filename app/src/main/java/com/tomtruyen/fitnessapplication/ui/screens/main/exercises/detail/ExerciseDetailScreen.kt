@@ -44,6 +44,7 @@ import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.CreateExerciseScreenDestination
+import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.ConfirmationDialog
 import com.tomtruyen.fitnessapplication.ui.shared.ExerciseFilterChip
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
@@ -64,6 +65,7 @@ fun ExerciseDetailScreen(
     val context = LocalContext.current
 
     val exercise by viewModel.exercise.collectAsStateWithLifecycle(initialValue = null)
+    val loading by viewModel.loading.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewModel, context) {
         viewModel.navigation.collectLatest { navigationType ->
@@ -78,6 +80,7 @@ fun ExerciseDetailScreen(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         exercise = exercise,
+        loading = loading,
         onEvent = viewModel::onEvent
     )
 }
@@ -88,6 +91,7 @@ fun ExerciseDetailScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
     exercise: Exercise?,
+    loading: Boolean,
     onEvent: (ExerciseDetailUiEvent) -> Unit
 ) {
     var confirmationDialogVisible by remember { mutableStateOf(false) }
@@ -125,10 +129,11 @@ fun ExerciseDetailScreenLayout(
             }
         }
     ) {
-        Column(
+        BoxWithLoader(
             modifier = Modifier
                 .padding(it)
-                .fillMaxSize()
+                .fillMaxSize(),
+            loading = loading,
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize()

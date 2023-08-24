@@ -65,7 +65,9 @@ class WorkoutRepositoryImpl(
                 callback = callback
             ) {
                 scope.launch {
-                    if(workouts.isNotEmpty()) {
+                    if(workouts.isEmpty()) {
+                        workoutDao.deleteAll()
+                    } else {
                         workoutDao.deleteAllWorkoutsExcept(workouts.map { it.id })
                     }
 

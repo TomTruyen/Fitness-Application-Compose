@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.repositories
 
+import android.util.Log
 import com.tomtruyen.fitnessapplication.data.dao.ExerciseDao
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.extensions.handleCompletionResult
@@ -107,7 +108,9 @@ class ExerciseRepositoryImpl(
                 callback = callback
             ) {
                 scope.launch {
-                    if(userExercises.isNotEmpty()) {
+                    if(userExercises.isEmpty()) {
+                        exerciseDao.deleteAllUserExercises()
+                    } else {
                         exerciseDao.deleteAllUserExercisesExcept(userExercises.map { it.id })
                     }
 
@@ -126,7 +129,12 @@ class ExerciseRepositoryImpl(
         val userExercises = exerciseDao.findAllUserExercises().toMutableList().apply {
             val exercise = find { it.id == exerciseId } ?: return@apply
             remove(exercise)
+            Log.d("@@@", "Removed exercise: $exercise with id: $exerciseId")
         }
+
+        Log.d("@@@", "User exercises: $userExercises")
+
+
 
         saveUserExercises(userId, userExercises, callback)
     }
