@@ -1,20 +1,14 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create
 
-import android.util.Log
-import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.base.BaseViewModel
 import com.tomtruyen.fitnessapplication.base.SnackbarMessage
-import com.tomtruyen.fitnessapplication.data.entities.Exercise
-import com.tomtruyen.fitnessapplication.data.entities.Settings
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutSet
-import com.tomtruyen.fitnessapplication.data.entities.WorkoutWithExercises
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.networking.WorkoutExerciseResponse
 import com.tomtruyen.fitnessapplication.networking.WorkoutResponse
 import com.tomtruyen.fitnessapplication.repositories.interfaces.SettingsRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepository
-import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create.CreateExerciseNavigationType
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class CreateWorkoutViewModel(
@@ -69,7 +63,7 @@ class CreateWorkoutViewModel(
 
         workouts.add(workout)
 
-        workoutRepository.saveWorkout(
+        workoutRepository.saveWorkouts(
             userId = userId,
             workouts = workouts,
             callback = object: FirebaseCallback<List<WorkoutResponse>> {

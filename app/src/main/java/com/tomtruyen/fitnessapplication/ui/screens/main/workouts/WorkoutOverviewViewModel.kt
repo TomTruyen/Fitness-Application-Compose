@@ -38,6 +38,7 @@ class WorkoutOverviewViewModel(
     fun onEvent(event: WorkoutOverviewUiEvent) {
         when(event) {
             is WorkoutOverviewUiEvent.OnCreateWorkoutClicked -> navigate(WorkoutOverviewNavigationType.CreateWorkout)
+            is WorkoutOverviewUiEvent.OnDetailClicked -> navigate(WorkoutOverviewNavigationType.Detail(event.id))
         }
     }
 }

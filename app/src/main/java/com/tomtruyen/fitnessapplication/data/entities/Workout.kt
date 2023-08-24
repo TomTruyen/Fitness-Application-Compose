@@ -33,7 +33,7 @@ data class WorkoutWithExercises(
         id = workout.id,
         name = workout.name,
         unit = workout.unit,
-        exercises = exercises.map { it.toWorkoutExerciseResponse() },
+        exercises = exercises.map { it.toWorkoutExerciseResponse() }.sortedBy { it.order },
         createdAt = workout.createdAt
     )
 }

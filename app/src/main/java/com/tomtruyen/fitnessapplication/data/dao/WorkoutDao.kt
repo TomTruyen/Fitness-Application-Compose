@@ -9,11 +9,14 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class WorkoutDao {
-    @Query("SELECT * FROM ${Workout.TABLE_NAME}")
+    @Query("SELECT * FROM ${Workout.TABLE_NAME} ORDER BY createdAt DESC")
     abstract fun findWorkoutsAsync(): Flow<List<WorkoutWithExercises>>
 
-    @Query("SELECT * FROM ${Workout.TABLE_NAME}")
+    @Query("SELECT * FROM ${Workout.TABLE_NAME} ORDER BY createdAt DESC")
     abstract fun findWorkouts(): List<WorkoutWithExercises>
+
+    @Query("SELECT * FROM ${Workout.TABLE_NAME} WHERE id = :id")
+    abstract fun findByIdAsync(id: String): Flow<WorkoutWithExercises?>
 
     @Query("SELECT * FROM ${Workout.TABLE_NAME} WHERE id = :id")
     abstract fun findById(id: String): WorkoutWithExercises?

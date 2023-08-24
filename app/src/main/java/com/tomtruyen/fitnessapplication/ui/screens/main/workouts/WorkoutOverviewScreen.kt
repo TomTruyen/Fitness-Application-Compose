@@ -51,6 +51,7 @@ import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutWithExercises
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.CreateWorkoutScreenDestination
+import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutDetailScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.CollapsingToolbar
@@ -74,6 +75,9 @@ fun WorkoutOverviewScreen(
             when(navigationType) {
                 is WorkoutOverviewNavigationType.CreateWorkout -> navController.navigate(
                     CreateWorkoutScreenDestination(id = null)
+                )
+                is WorkoutOverviewNavigationType.Detail -> navController.navigate(
+                    WorkoutDetailScreenDestination(navigationType.id)
                 )
             }
         }
@@ -165,7 +169,7 @@ fun WorkoutListItem(
         ),
         elevation = CardDefaults.cardElevation(4.dp),
         onClick = {
-
+            onEvent(WorkoutOverviewUiEvent.OnDetailClicked(workoutWithExercises.workout.id))
         }
     ) {
         Column(
@@ -212,7 +216,9 @@ fun WorkoutListItem(
                         top = Dimens.Small,
                     )
                 ) {
-                    workoutWithExercises.exercises.forEach { exerciseWithSets ->
+                    workoutWithExercises.exercises
+                        .sortedBy { it.workoutExercise.order }
+                        .forEach { exerciseWithSets ->
                         Text(
                             text = "${exerciseWithSets.sets.size} x ${exerciseWithSets.exercise.displayName}",
                             style = MaterialTheme.typography.bodyMedium,
@@ -226,7 +232,7 @@ fun WorkoutListItem(
                             .fillMaxWidth()
                             .padding(top = Dimens.Normal)
                     ) {
-                        // TODO: Navigate to the Start Workout Screen with overview of exercises
+                        onEvent(WorkoutOverviewUiEvent.OnDetailClicked(workoutWithExercises.workout.id))
                     }
                 }
             }

@@ -218,7 +218,15 @@ fun CreateWorkoutScreenLayout(
                 }
 
                 if(state.workout.exercises.isNotEmpty()) {
-                    IconButton(onClick = { workoutNameDialogVisible = true }) {
+                    IconButton(
+                        onClick = {
+                            if(state.workout.name.isNotEmpty()) {
+                                onEvent(CreateWorkoutUiEvent.Save(state.workout.name))
+                            } else {
+                                workoutNameDialogVisible = true
+                            }
+                        }
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.Check,
                             contentDescription = stringResource(id = R.string.content_description_save_workout),

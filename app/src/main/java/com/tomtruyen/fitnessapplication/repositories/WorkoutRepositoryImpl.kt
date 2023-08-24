@@ -4,16 +4,13 @@ import com.tomtruyen.fitnessapplication.data.dao.ExerciseDao
 import com.tomtruyen.fitnessapplication.data.dao.WorkoutDao
 import com.tomtruyen.fitnessapplication.data.dao.WorkoutExerciseDao
 import com.tomtruyen.fitnessapplication.data.dao.WorkoutSetDao
-import com.tomtruyen.fitnessapplication.data.entities.WorkoutWithExercises
 import com.tomtruyen.fitnessapplication.extensions.handleCompletionResult
 import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
 import com.tomtruyen.fitnessapplication.model.FetchedData
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
-import com.tomtruyen.fitnessapplication.networking.UserExercisesResponse
 import com.tomtruyen.fitnessapplication.networking.WorkoutResponse
 import com.tomtruyen.fitnessapplication.networking.WorkoutsResponse
 import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepository
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class WorkoutRepositoryImpl(
@@ -26,6 +23,8 @@ class WorkoutRepositoryImpl(
     override fun findWorkoutsAsync() = workoutDao.findWorkoutsAsync()
 
     override suspend fun findWorkouts() = workoutDao.findWorkouts()
+
+    override fun findWorkoutByIdAsync(id: String) = workoutDao.findByIdAsync(id)
 
     override fun findWorkoutById(id: String) = workoutDao.findById(id)
 
@@ -53,7 +52,7 @@ class WorkoutRepositoryImpl(
             }
     }
 
-    override fun saveWorkout(
+    override fun saveWorkouts(
         userId: String,
         workouts: List<WorkoutResponse>,
         callback: FirebaseCallback<List<WorkoutResponse>>
@@ -75,6 +74,19 @@ class WorkoutRepositoryImpl(
 
                 callback.onSuccess(workouts)
             }
+    }
+
+    override suspend fun deleteWorkout(
+        userId: String,
+        workoutId: String,
+        callback: FirebaseCallback<List<WorkoutResponse>>
+    ) {
+        val workouts = workoutDao.findWorkouts().toMutableList().apply {
+            val workout = find { it.workout.id == workoutId } ?: return@apply
+            remove(workout)
+        }.map { it.toWorkoutResponse() }
+
+        saveWorkouts(userId, workouts, callback)
     }
 
     private fun saveWorkoutResponses(responses: List<WorkoutResponse>) = scope.launch {
