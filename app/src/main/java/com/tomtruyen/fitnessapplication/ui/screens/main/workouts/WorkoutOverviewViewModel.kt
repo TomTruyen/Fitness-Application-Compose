@@ -39,6 +39,7 @@ class WorkoutOverviewViewModel(
         when(event) {
             is WorkoutOverviewUiEvent.OnCreateWorkoutClicked -> navigate(WorkoutOverviewNavigationType.CreateWorkout)
             is WorkoutOverviewUiEvent.OnDetailClicked -> navigate(WorkoutOverviewNavigationType.Detail(event.id))
+            is WorkoutOverviewUiEvent.OnStartWorkoutClicked -> navigate(WorkoutOverviewNavigationType.StartWorkout(event.id))
         }
     }
 }

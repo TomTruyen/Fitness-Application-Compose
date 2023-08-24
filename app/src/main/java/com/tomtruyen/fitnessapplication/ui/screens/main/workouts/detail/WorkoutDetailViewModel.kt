@@ -47,6 +47,7 @@ class WorkoutDetailViewModel(
                 navigate(WorkoutDetailNavigationType.Edit(id))
             }
             is WorkoutDetailUiEvent.Delete -> delete()
+            is WorkoutDetailUiEvent.StartWorkout -> navigate(WorkoutDetailNavigationType.StartWorkout(id))
         }
     }
 }

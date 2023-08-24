@@ -51,6 +51,7 @@ import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutWithExercises
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.CreateWorkoutScreenDestination
+import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExecuteWorkoutScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutDetailScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
@@ -78,6 +79,9 @@ fun WorkoutOverviewScreen(
                 )
                 is WorkoutOverviewNavigationType.Detail -> navController.navigate(
                     WorkoutDetailScreenDestination(navigationType.id)
+                )
+                is WorkoutOverviewNavigationType.StartWorkout -> navController.navigate(
+                    ExecuteWorkoutScreenDestination(navigationType.id)
                 )
             }
         }
@@ -232,7 +236,7 @@ fun WorkoutListItem(
                             .fillMaxWidth()
                             .padding(top = Dimens.Normal)
                     ) {
-                        onEvent(WorkoutOverviewUiEvent.OnDetailClicked(workoutWithExercises.workout.id))
+                        onEvent(WorkoutOverviewUiEvent.OnStartWorkoutClicked(workoutWithExercises.workout.id))
                     }
                 }
             }

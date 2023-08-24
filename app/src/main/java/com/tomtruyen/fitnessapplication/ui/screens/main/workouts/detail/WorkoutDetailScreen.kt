@@ -2,6 +2,7 @@ package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.detail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -24,10 +25,13 @@ import androidx.navigation.NavController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.navigate
+import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutWithExercises
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.CreateWorkoutScreenDestination
+import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExecuteWorkoutScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
+import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.ConfirmationDialog
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
 import kotlinx.coroutines.flow.collectLatest
@@ -57,6 +61,9 @@ fun WorkoutDetailScreen(
                     navController.navigate(CreateWorkoutScreenDestination(navigationType.id))
                 }
                 is WorkoutDetailNavigationType.Back -> navController.popBackStack()
+                is WorkoutDetailNavigationType.StartWorkout -> {
+                    navController.navigate(ExecuteWorkoutScreenDestination(navigationType.id))
+                }
             }
         }
     }
@@ -121,8 +128,20 @@ fun WorkoutDetailScreenLayout(
         ) {
             Column(
                 modifier = Modifier.fillMaxSize()
+                    .padding(Dimens.Normal)
             ) {
-                Text(text = "Detail Page - Editing the Name of the workout should be done on this page, not on the edit page")
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = "Detail Page - Editing the Name of the workout should be done on this page, not on the edit page")
+                }
+
+                Buttons.Default(
+                    text = stringResource(id = R.string.start_workout),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    onEvent(WorkoutDetailUiEvent.StartWorkout)
+                }
 
                 if (confirmationDialogVisible) {
                     ConfirmationDialog(

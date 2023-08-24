@@ -131,11 +131,13 @@ fun ProfileScreenLayout(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
         BoxWithLoader(
-            loading = loading
+            loading = loading,
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
         ) {
             Column(
                 modifier = Modifier
-                    .padding(it)
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
