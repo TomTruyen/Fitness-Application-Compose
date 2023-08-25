@@ -2,6 +2,13 @@ package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.execute
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -177,7 +184,7 @@ fun WorkoutExerciseTabContent(
     onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
     ) {
         HorizontalPager(
@@ -233,6 +240,7 @@ fun WorkoutExerciseTabContent(
                             type = workoutExercise.exercise.typeEnum,
                             hasMultipleSets = workoutExercise.sets.size > 1,
                             isExecute = true,
+                            lastPerformedSet = null, // TODO: Replace with SETs from last time this workout was executed
                             onEvent = onWorkoutEvent
                         )
                     }
@@ -240,12 +248,17 @@ fun WorkoutExerciseTabContent(
             }
         }
 
-        AnimatedVisibility(visible = pagerState.currentPage < pagerState.pageCount - 1) {
+        AnimatedVisibility(
+            visible = pagerState.currentPage < pagerState.pageCount - 1,
+            enter = fadeIn() + slideInHorizontally(),
+            exit = slideOutHorizontally() + fadeOut()
+        ) {
             Buttons.Default(
                 text = stringResource(id = R.string.next_exercise),
                 modifier = Modifier
                     .fillMaxWidth()
                     .animateContentSize()
+                    .padding(Dimens.Normal),
             ) {
                 onEvent(ExecuteWorkoutUiEvent.NextExercise)
             }

@@ -41,6 +41,21 @@ fun WorkoutExerciseSetHeader(
             )
         )
 
+        if(isExecute) {
+            Text(
+                text = stringResource(id = R.string.last).uppercase(),
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .weight(1f)
+                    .animateContentSize(),
+                style = MaterialTheme.typography.bodySmall.copy(
+                    fontWeight = FontWeight.W500,
+                )
+            )
+
+            Spacer(modifier = Modifier.width(Dimens.Small))
+        }
+
         when(exercise.typeEnum) {
             Exercise.ExerciseType.WEIGHT -> {
                 Text(

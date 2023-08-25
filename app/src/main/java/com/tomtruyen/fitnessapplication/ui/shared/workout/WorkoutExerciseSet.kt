@@ -44,6 +44,7 @@ fun WorkoutExerciseSet(
     exerciseIndex: Int,
     setIndex: Int,
     set: WorkoutSet,
+    lastPerformedSet: WorkoutSet? = null,
     type: Exercise.ExerciseType,
     hasMultipleSets: Boolean = false,
     isExecute: Boolean = false,
@@ -65,8 +66,31 @@ fun WorkoutExerciseSet(
                 color = MaterialTheme.colorScheme.primary
             ),
             textAlign = TextAlign.Center,
-            modifier = Modifier.width(Dimens.MinButtonHeight)
+            modifier = Modifier.width(MinButtonHeight)
         )
+
+        if(isExecute) {
+            /**
+             * Type Weight: Display reps and weight e.g.: 4x10
+             * Type Time: Display time e.g.: 1m 30s
+             * If there is no known last performed set: Display "-"
+             */
+            Text(
+                text = if(lastPerformedSet == null) {
+                    "-"
+                } else {
+                    when (type) {
+                        Exercise.ExerciseType.WEIGHT -> "${lastPerformedSet.reps}x${lastPerformedSet.weight}kg"
+                        Exercise.ExerciseType.TIME -> TimeUtils.formatSeconds(lastPerformedSet.time ?: 0)
+                    }
+                },
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .weight(1f)
+                    .animateContentSize()
+            )
+        }
 
         when(type) {
             // Weight
@@ -151,7 +175,7 @@ fun WorkoutExerciseSet(
         }
 
         AnimatedVisibility(
-            modifier = Modifier.width(Dimens.MinButtonHeight),
+            modifier = Modifier.width(MinButtonHeight),
             visible = hasMultipleSets && !isExecute
         ) {
             IconButton(
