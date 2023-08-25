@@ -26,6 +26,95 @@ data class WorkoutResponse(
         unit = unit,
         createdAt = createdAt
     )
+
+    fun copyWithRepsChanged(
+        exerciseIndex: Int,
+        setIndex: Int,
+        reps: String?
+    ) = copy(exercises = exercises.mapIndexed { eIndex, exercise ->
+            if (eIndex == exerciseIndex) {
+                exercise.copy(
+                    sets = exercise.sets.mapIndexed { sIndex, set ->
+                        if (sIndex == setIndex) set.copy(
+                            reps = reps?.toIntOrNull(),
+                            repsText = reps
+                        ) else set
+                    }
+                )
+            } else {
+                exercise
+            }
+        }
+    )
+
+    fun copyWithWeightChanged(
+        exerciseIndex: Int,
+        setIndex: Int,
+        weight: String?
+    ) = copy(exercises = exercises.mapIndexed { eIndex, exercise ->
+            if (eIndex == exerciseIndex) {
+                exercise.copy(
+                    sets = exercise.sets.mapIndexed { sIndex, set ->
+                        if (sIndex == setIndex) set.copy(
+                            weight = weight?.toDoubleOrNull(),
+                            weightText = weight
+                        ) else set
+                    }
+                )
+            } else {
+                exercise
+            }
+        }
+    )
+
+    fun copyWithTimeChanged(
+        exerciseIndex: Int,
+        setIndex: Int,
+        time: Int?
+    ) = copy(exercises = exercises.mapIndexed { eIndex, exercise ->
+            if (eIndex == exerciseIndex) {
+                exercise.copy(
+                    sets = exercise.sets.mapIndexed { sIndex, set ->
+                        if (sIndex == setIndex) set.copy(
+                            time = time,
+                        ) else set
+                    }
+                )
+            } else {
+                exercise
+            }
+        }
+    )
+
+    fun copyWithDeleteSet(
+        exerciseIndex: Int,
+        setIndex: Int
+    ) = copy(exercises = exercises.mapIndexed { eIndex, exercise ->
+            if (eIndex == exerciseIndex) {
+                exercise.copy(
+                    sets = exercise.sets.filterIndexed { sIndex, _ -> sIndex != setIndex }
+                )
+            } else {
+                exercise
+            }
+        }
+    )
+
+    fun copyWithAddSet(
+        exerciseIndex: Int
+    ) = copy(exercises = exercises.mapIndexed { eIndex, exercise ->
+            if (eIndex == exerciseIndex) {
+                exercise.copy(
+                    sets = exercise.sets + WorkoutSet(
+                        workoutExerciseId = exercise.id,
+                        order = exercise.sets.lastOrNull()?.order?.plus(1) ?: 0
+                    )
+                )
+            } else {
+                exercise
+            }
+        }
+    )
 }
 
 @Parcelize

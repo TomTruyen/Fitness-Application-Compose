@@ -1,4 +1,7 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.execute
 
-// TODO --> Convert to data class
-class ExecuteWorkoutUiState
+import com.tomtruyen.fitnessapplication.networking.WorkoutResponse
+
+data class ExecuteWorkoutUiState(
+    val workout: WorkoutResponse = WorkoutResponse(),
+)

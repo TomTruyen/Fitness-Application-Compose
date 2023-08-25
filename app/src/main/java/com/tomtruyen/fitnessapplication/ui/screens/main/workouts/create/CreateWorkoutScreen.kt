@@ -1,6 +1,5 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -11,11 +10,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,59 +21,38 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.FormatListNumbered
-import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.DividerDefaults
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.FloatingActionButtonElevation
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScrollableTabRow
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -85,13 +61,12 @@ import com.ramcosta.composedestinations.navigation.navigate
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
-import com.tomtruyen.fitnessapplication.data.entities.WorkoutSet
-import com.tomtruyen.fitnessapplication.model.RestAlertType
 import com.tomtruyen.fitnessapplication.navigation.CreateWorkoutNavGraph
 import com.tomtruyen.fitnessapplication.navigation.NavArguments
 import com.tomtruyen.fitnessapplication.networking.WorkoutExerciseResponse
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ReorderWorkoutExercisesScreenDestination
+import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseEvent
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.EmptyState
@@ -100,9 +75,11 @@ import com.tomtruyen.fitnessapplication.ui.shared.dialogs.ConfirmationDialog
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.RestAlertDialog
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.TextFieldDialog
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
+import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseSet
+import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseSetHeader
+import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseTabLayout
 import com.tomtruyen.fitnessapplication.utils.TimeUtils
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @CreateWorkoutNavGraph(start = true)
@@ -169,7 +146,8 @@ fun CreateWorkoutScreen(
         state = state,
         loading = loading,
         pagerState = pagerState,
-        onEvent = viewModel::onEvent
+        onEvent = viewModel::onEvent,
+        onWorkoutEvent = viewModel::onWorkoutEvent
     )
 }
 
@@ -182,6 +160,7 @@ fun CreateWorkoutScreenLayout(
     loading: Boolean,
     pagerState: PagerState,
     onEvent: (CreateWorkoutUiEvent) -> Unit,
+    onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
 ) {
     var workoutNameDialogVisible by remember { mutableStateOf(false) }
     var confirmationDialogVisible by remember { mutableStateOf(false) }
@@ -245,20 +224,21 @@ fun CreateWorkoutScreenLayout(
             Column(
                 modifier = Modifier.fillMaxSize()
             ) {
-                if (state.workout.exercises.isNotEmpty()) {
-                    TabLayout(
+                AnimatedVisibility(visible = state.workout.exercises.isNotEmpty()) {
+                    WorkoutExerciseTabLayout(
                         exercises = state.workout.exercises,
                         state = pagerState
                     )
                 }
 
-                TabContentPager(
+                WorkoutExerciseTabContent(
                     modifier = Modifier
                         .weight(1f)
                         .animateContentSize(),
                     state = state,
                     pagerState = pagerState,
                     onEvent = onEvent,
+                    onWorkoutEvent = onWorkoutEvent
                 )
 
                 if(confirmationDialogVisible) {
@@ -298,52 +278,12 @@ fun CreateWorkoutScreenLayout(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TabLayout(
-    exercises: List<WorkoutExerciseResponse>,
-    state: PagerState
-)  {
-    val scope = rememberCoroutineScope()
-
-    ScrollableTabRow(
-        selectedTabIndex = state.currentPage,
-        containerColor = MaterialTheme.colorScheme.background,
-        edgePadding = 0.dp,
-        divider = {
-            Divider(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
-                thickness = 1.dp
-            )
-        }
-    ) {
-        exercises.forEachIndexed { index, workoutExercise ->
-            Tab(
-                selected = state.currentPage == index,
-                onClick = {
-                    scope.launch {
-                        state.animateScrollToPage(index)
-                    }
-                },
-                text = {
-                    Text(
-                        text = workoutExercise.exercise.displayName,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun TabContentPager(
+fun WorkoutExerciseTabContent(
     modifier: Modifier = Modifier,
     state: CreateWorkoutUiState,
     pagerState: PagerState,
     onEvent: (CreateWorkoutUiEvent) -> Unit,
+    onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
 ) {
     var restDialogVisible by remember { mutableStateOf(false) }
     var deleteConfirmationDialogVisible by remember { mutableStateOf(false) }
@@ -388,72 +328,76 @@ fun TabContentPager(
 
 
                 if (workoutExercise != null) {
-                    Column(
+                    LazyColumn(
                         modifier = Modifier
-                            .weight(1f)
+                            .fillMaxSize()
                             .animateContentSize()
                             .padding(Dimens.Normal),
                         verticalArrangement = Arrangement.Top
                     ) {
-                        // Notes
-                        TextFields.Default(
-                            singleLine = false,
-                            placeholder = stringResource(id = R.string.notes),
-                            value = workoutExercise.notes,
-                            onValueChange = { notes ->
-                                onEvent(CreateWorkoutUiEvent.OnExerciseNotesChanged(index, notes))
-                            },
-                        )
-
-                        // Rest time
-                        RestTimeSelector(
-                            modifier = Modifier.align(Alignment.End),
-                            workoutExercise = workoutExercise,
-                        ) {
-                            restDialogVisible = true
+                        item {
+                            // Notes
+                            TextFields.Default(
+                                singleLine = false,
+                                placeholder = stringResource(id = R.string.notes),
+                                value = workoutExercise.notes,
+                                onValueChange = { notes ->
+                                    onEvent(
+                                        CreateWorkoutUiEvent.OnExerciseNotesChanged(
+                                            index,
+                                            notes
+                                        )
+                                    )
+                                },
+                            )
                         }
 
-                        LazyColumn(
-                            modifier = Modifier
-                                .weight(1f)
-                                .animateContentSize()
-                                .padding(top = Dimens.Normal)
-                        ) {
-                            // Header Row
-                            item {
-                                WorkoutExerciseSetHeader(
+                        item {
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.CenterEnd
+                            ) {                            // Rest time
+                                RestTimeSelector(
                                     workoutExercise = workoutExercise,
-                                    unit = state.settings.unit
-                                )
-                            }
-
-                            // Sets
-                            itemsIndexed(
-                                workoutExercise.sets,
-                                key = { _, set -> set.id }) { setIndex, set ->
-                                WorkoutExerciseSet(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .animateItemPlacement(),
-                                    exerciseIndex = index,
-                                    setIndex = setIndex,
-                                    set = set,
-                                    type = workoutExercise.exercise.typeEnum,
-                                    isOnlySet = workoutExercise.sets.size == 1,
-                                    onEvent = onEvent
-                                )
-                            }
-
-                            // Add Set
-                            item {
-                                Buttons.Text(
-                                    text = stringResource(id = R.string.add_set).uppercase(),
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(vertical = Dimens.Small)
                                 ) {
-                                    onEvent(CreateWorkoutUiEvent.OnAddSetClicked(index))
+                                    restDialogVisible = true
                                 }
+                            }
+                        }
+
+                        item {
+                        // Header Row
+                            WorkoutExerciseSetHeader(
+                                exercise = workoutExercise.exercise,
+                                hasMultipleSets = workoutExercise.sets.size > 1,
+                                unit = state.settings.unit
+                            )
+                        }
+
+                        // Sets
+                        itemsIndexed(workoutExercise.sets) { setIndex, set ->
+                            WorkoutExerciseSet(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .animateItemPlacement(),
+                                exerciseIndex = index,
+                                setIndex = setIndex,
+                                set = set,
+                                type = workoutExercise.exercise.typeEnum,
+                                hasMultipleSets = workoutExercise.sets.size > 1,
+                                onEvent = onWorkoutEvent
+                            )
+                        }
+
+                        item {
+                            // Add Set
+                            Buttons.Text(
+                                text = stringResource(id = R.string.add_set).uppercase(),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = Dimens.Small)
+                            ) {
+                                onWorkoutEvent(WorkoutExerciseEvent.OnAddSetClicked(index))
                             }
                         }
                     }
@@ -567,210 +511,3 @@ fun RestTimeSelector(
     }
 }
 
-@Composable
-fun WorkoutExerciseSetHeader(
-    workoutExercise: WorkoutExerciseResponse,
-    unit: String
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = Dimens.Tiny),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = stringResource(id = R.string.set).uppercase(),
-            textAlign = TextAlign.Center,
-            modifier = Modifier.width(Dimens.MinButtonHeight),
-            style = MaterialTheme.typography.bodySmall.copy(
-                fontWeight = FontWeight.W500,
-            )
-        )
-
-        when(workoutExercise.exercise.typeEnum) {
-            Exercise.ExerciseType.WEIGHT -> {
-                Text(
-                    text = stringResource(id = R.string.reps).uppercase(),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .weight(1f)
-                        .animateContentSize(),
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.W500,
-                    )
-                )
-
-                Spacer(modifier = Modifier.width(Dimens.Small))
-
-                Text(
-                    text = unit.uppercase(),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .weight(1f)
-                        .animateContentSize(),
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.W500,
-                    )
-                )
-            }
-
-            Exercise.ExerciseType.TIME -> {
-                Text(
-                    text = stringResource(id = R.string.time).uppercase(),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .weight(1f)
-                        .animateContentSize(),
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.W500,
-                    )
-                )
-            }
-        }
-
-
-        AnimatedVisibility(visible = workoutExercise.sets.size > 1) {
-            Spacer(modifier = Modifier.width(Dimens.MinButtonHeight))
-        }
-    }
-}
-
-@Composable
-fun WorkoutExerciseSet(
-    modifier: Modifier = Modifier,
-    exerciseIndex: Int,
-    setIndex: Int,
-    set: WorkoutSet,
-    type: Exercise.ExerciseType,
-    isOnlySet: Boolean = false,
-    onEvent: (CreateWorkoutUiEvent) -> Unit,
-) {
-    var timeDialogVisible by remember { mutableStateOf(false) }
-
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = "${setIndex + 1}",
-            style = MaterialTheme.typography.bodyMedium.copy(
-                fontWeight = FontWeight.W500,
-                color = MaterialTheme.colorScheme.primary
-            ),
-            textAlign = TextAlign.Center,
-            modifier = Modifier.width(Dimens.MinButtonHeight)
-        )
-
-        when(type) {
-            // Weight
-            Exercise.ExerciseType.WEIGHT -> {
-                TextFields.Default(
-                    value = set.repsString ?: "",
-                    onValueChange = { reps ->
-                        // Check if value can be cast to int, if not don't update the value
-                        if(reps.isNotEmpty() && reps.toIntOrNull() == null) return@Default
-
-                        onEvent(
-                            CreateWorkoutUiEvent.OnRepsChanged(
-                                exerciseIndex = exerciseIndex,
-                                setIndex = setIndex,
-                                reps = reps
-                            )
-                        )
-                    },
-                    placeholder = "0",
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.NumberPassword,
-                        imeAction = ImeAction.Next
-                    ),
-                    textStyle = MaterialTheme.typography.bodyMedium.copy(
-                        textAlign = TextAlign.Center
-                    ),
-                    padding = PaddingValues(Dimens.Small),
-                    modifier = Modifier
-                        .weight(1f)
-                        .animateContentSize()
-                )
-
-                Spacer(modifier = Modifier.width(Dimens.Small))
-
-                TextFields.Default(
-                    value = set.weightString ?: "",
-                    onValueChange = { weight ->
-                        val filteredWeight = weight.replace(",", ".")
-
-                        // Check if the number can be cast to double, if not don't update the value
-                        if (filteredWeight.isNotEmpty() && filteredWeight.toDoubleOrNull() == null) return@Default
-
-                        onEvent(
-                            CreateWorkoutUiEvent.OnWeightChanged(
-                                exerciseIndex = exerciseIndex,
-                                setIndex = setIndex,
-                                weight = filteredWeight
-                            )
-                        )
-                    },
-                    placeholder = "0",
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Number
-                    ),
-                    textStyle = MaterialTheme.typography.bodyMedium.copy(
-                        textAlign = TextAlign.Center
-                    ),
-                    padding = PaddingValues(Dimens.Small),
-                    modifier = Modifier
-                        .weight(1f)
-                        .animateContentSize()
-                )
-            }
-
-            // Time
-            Exercise.ExerciseType.TIME -> Text(
-                text = TimeUtils.formatSeconds(set.time ?: 0),
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .weight(1f)
-                    .animateContentSize()
-                    .background(
-                        color = MaterialTheme.colorScheme.surface,
-                        shape = MaterialTheme.shapes.medium
-                    )
-                    .clip(MaterialTheme.shapes.medium)
-                    .clickable {
-                        timeDialogVisible = true
-                    }
-                    .padding(Dimens.Small)
-            )
-        }
-
-        AnimatedVisibility(
-            modifier = Modifier.width(Dimens.MinButtonHeight),
-            visible = !isOnlySet
-        ) {
-            IconButton(
-                onClick = {
-                    onEvent(CreateWorkoutUiEvent.OnDeleteSetClicked(exerciseIndex, setIndex))
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Delete,
-                    contentDescription = null
-                )
-            }
-        }
-
-        if(timeDialogVisible) {
-            RestAlertDialog(
-                onDismiss = {
-                    timeDialogVisible = false
-                },
-                onConfirm = { time, _ ->
-                    onEvent(CreateWorkoutUiEvent.OnTimeChanged(exerciseIndex, setIndex, time))
-                    timeDialogVisible = false
-                },
-                rest = set.time ?: 0,
-                type = RestAlertType.SET_TIME
-            )
-        }
-    }
-}
