@@ -81,7 +81,7 @@ fun WorkoutExerciseSet(
                 } else {
                     when (type) {
                         Exercise.ExerciseType.WEIGHT -> "${lastPerformedSet.reps}x${lastPerformedSet.weight}kg"
-                        Exercise.ExerciseType.TIME -> TimeUtils.formatSeconds(lastPerformedSet.time ?: 0)
+                        Exercise.ExerciseType.TIME -> TimeUtils.formatSeconds(lastPerformedSet.time?.toLong() ?: 0L)
                     }
                 },
                 style = MaterialTheme.typography.bodyMedium,
@@ -157,7 +157,7 @@ fun WorkoutExerciseSet(
 
             // Time
             Exercise.ExerciseType.TIME -> Text(
-                text = TimeUtils.formatSeconds(set.time ?: 0),
+                text = TimeUtils.formatSeconds(set.time?.toLong() ?: 0L),
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .weight(1f)

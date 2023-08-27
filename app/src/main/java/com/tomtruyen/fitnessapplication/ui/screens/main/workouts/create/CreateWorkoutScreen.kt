@@ -504,7 +504,7 @@ fun RestTimeSelector(
         )
 
         Text(
-            text = TimeUtils.formatSeconds(workoutExercise.rest),
+            text = TimeUtils.formatSeconds(workoutExercise.rest.toLong()),
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(start = Dimens.Small)
         )

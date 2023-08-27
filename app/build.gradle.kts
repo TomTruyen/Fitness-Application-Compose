@@ -38,7 +38,7 @@ android {
 
     defaultConfig {
         applicationId = "com.tomtruyen.fitnessapplication"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionName = androidGitVersion.name()
         versionCode = androidGitVersion.code()

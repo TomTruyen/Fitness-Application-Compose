@@ -174,7 +174,7 @@ fun ProfileScreenLayout(
 
                 ListItem(
                     title = stringResource(id = R.string.default_rest_timer),
-                    message = TimeUtils.formatSeconds(state.settings.rest),
+                    message = TimeUtils.formatSeconds(state.settings.rest.toLong()),
                 ) {
                     restDialogVisible = true
                 }

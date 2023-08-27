@@ -24,7 +24,7 @@ class ExecuteWorkoutViewModel(
         }
     }
 
-    private fun finishWorkout() {
+    private fun finishWorkout(duration: Long) = launchIO {
         // TODO: Logic to save workout to database
         // TODO: Should save to collection <userId>_<month>_<year>_history
         // TODO: It should also save the "workout" object in the history object --> In case workout gets deleted + to be able to use the ID of the workout to check for previous values
@@ -33,7 +33,7 @@ class ExecuteWorkoutViewModel(
     fun onEvent(event: ExecuteWorkoutUiEvent) {
         when(event) {
             is ExecuteWorkoutUiEvent.NextExercise -> navigate(ExecuteWorkoutNavigationType.NextExercise)
-            is ExecuteWorkoutUiEvent.FinishWorkout -> finishWorkout()
+            is ExecuteWorkoutUiEvent.FinishWorkout -> finishWorkout(event.duration)
         }
     }
 
