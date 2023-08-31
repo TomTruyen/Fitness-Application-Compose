@@ -8,8 +8,8 @@ import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
 import com.tomtruyen.fitnessapplication.model.ExerciseFilter
 import com.tomtruyen.fitnessapplication.model.FetchedData
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
-import com.tomtruyen.fitnessapplication.networking.ExercisesResponse
-import com.tomtruyen.fitnessapplication.networking.UserExercisesResponse
+import com.tomtruyen.fitnessapplication.networking.models.ExercisesResponse
+import com.tomtruyen.fitnessapplication.networking.models.UserExercisesResponse
 import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
 import kotlinx.coroutines.launch
 

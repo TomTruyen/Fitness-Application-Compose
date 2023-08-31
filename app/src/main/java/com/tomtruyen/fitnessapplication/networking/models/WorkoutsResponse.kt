@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.networking
+package com.tomtruyen.fitnessapplication.networking.models
 
 import android.os.Parcelable
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
@@ -118,7 +118,6 @@ data class WorkoutResponse(
 }
 
 @Parcelize
-
 data class WorkoutExerciseResponse(
     var id: String = UUID.randomUUID().toString(),
     var notes: String = "",

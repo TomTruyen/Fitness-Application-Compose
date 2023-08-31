@@ -3,7 +3,7 @@ package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.detail
 import com.tomtruyen.fitnessapplication.base.BaseViewModel
 import com.tomtruyen.fitnessapplication.base.SnackbarMessage
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
-import com.tomtruyen.fitnessapplication.networking.WorkoutResponse
+import com.tomtruyen.fitnessapplication.networking.models.WorkoutResponse
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepository
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -2,7 +2,7 @@ package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create
 
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.data.entities.Settings
-import com.tomtruyen.fitnessapplication.networking.WorkoutExerciseResponse
+import com.tomtruyen.fitnessapplication.networking.models.WorkoutExerciseResponse
 
 sealed class CreateWorkoutUiEvent {
     data class OnSettingsChanged(val settings: Settings?) : CreateWorkoutUiEvent()

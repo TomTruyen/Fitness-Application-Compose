@@ -8,8 +8,8 @@ import com.tomtruyen.fitnessapplication.extensions.handleCompletionResult
 import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
 import com.tomtruyen.fitnessapplication.model.FetchedData
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
-import com.tomtruyen.fitnessapplication.networking.WorkoutResponse
-import com.tomtruyen.fitnessapplication.networking.WorkoutsResponse
+import com.tomtruyen.fitnessapplication.networking.models.WorkoutResponse
+import com.tomtruyen.fitnessapplication.networking.models.WorkoutsResponse
 import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepository
 import kotlinx.coroutines.launch
 
@@ -91,7 +91,7 @@ class WorkoutRepositoryImpl(
         saveWorkouts(userId, workouts, callback)
     }
 
-    private fun saveWorkoutResponses(responses: List<WorkoutResponse>) = scope.launch {
+    override suspend fun saveWorkoutResponses(responses: List<WorkoutResponse>) {
         val workouts = responses.map { it.toWorkout() }
         val workoutExercises = responses.flatMap { it.exercises.map { exercise -> exercise.toWorkoutExercise(it.id) } }
         val exercises = responses.flatMap { it.exercises.map { exercise -> exercise.exercise } }

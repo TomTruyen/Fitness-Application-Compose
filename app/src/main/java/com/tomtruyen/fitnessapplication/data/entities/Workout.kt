@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
-import com.tomtruyen.fitnessapplication.networking.WorkoutResponse
+import com.tomtruyen.fitnessapplication.networking.models.WorkoutResponse
 import java.util.UUID
 
 @Entity(tableName = Workout.TABLE_NAME)

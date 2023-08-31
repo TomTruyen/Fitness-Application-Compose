@@ -1,14 +1,25 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.execute
 
 import com.tomtruyen.fitnessapplication.base.BaseViewModel
+import com.tomtruyen.fitnessapplication.base.SnackbarMessage
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutSet
+import com.tomtruyen.fitnessapplication.model.FirebaseCallback
+import com.tomtruyen.fitnessapplication.networking.models.WorkoutHistoryResponse
+import com.tomtruyen.fitnessapplication.networking.models.WorkoutResponse
+import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
+import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutHistoryRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepository
+import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutNavigationType
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseEvent
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.time.LocalDate
+import java.time.YearMonth
 
 class ExecuteWorkoutViewModel(
     private val id: String,
-    private val workoutRepository: WorkoutRepository
+    private val workoutRepository: WorkoutRepository,
+    private val historyRepository: WorkoutHistoryRepository,
+    private val userRepository: UserRepository
 ): BaseViewModel<ExecuteWorkoutNavigationType>() {
     val state = MutableStateFlow(ExecuteWorkoutUiState())
 
@@ -25,9 +36,35 @@ class ExecuteWorkoutViewModel(
     }
 
     private fun finishWorkout(duration: Long) = launchIO {
-        // TODO: Logic to save workout to database
-        // TODO: Should save to collection <userId>_<month>_<year>_history
-        // TODO: It should also save the "workout" object in the history object --> In case workout gets deleted + to be able to use the ID of the workout to check for previous values
+        val userId = userRepository.getUser()?.uid ?: return@launchIO
+
+        isLoading(true)
+
+        val histories = historyRepository.findWorkoutHistoriesByRange(
+            start = YearMonth.now().atDay(1).toEpochDay(),
+            end = YearMonth.now().atEndOfMonth().toEpochDay(),
+        ).map { it.toWorkoutHistoryResponse() } + WorkoutHistoryResponse(
+            duration = duration,
+            workout = state.value.workout
+        )
+
+        historyRepository.finishWorkout(
+            userId = userId,
+            histories = histories,
+            callback = object: FirebaseCallback<List<WorkoutHistoryResponse>> {
+                override fun onSuccess(value: List<WorkoutHistoryResponse>) {
+                    navigate(ExecuteWorkoutNavigationType.Finish)
+                }
+
+                override fun onError(error: String?) {
+                    showSnackbar(SnackbarMessage.Error(error))
+                }
+
+                override fun onStopLoading() {
+                    isLoading(false)
+                }
+            }
+        )
     }
 
     fun onEvent(event: ExecuteWorkoutUiEvent) {

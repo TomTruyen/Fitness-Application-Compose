@@ -1,7 +1,7 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.reorder
 
 import com.tomtruyen.fitnessapplication.base.BaseViewModel
-import com.tomtruyen.fitnessapplication.networking.WorkoutExerciseResponse
+import com.tomtruyen.fitnessapplication.networking.models.WorkoutExerciseResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class ReorderWorkoutExercisesViewModel(

@@ -117,6 +117,9 @@ fun ExecuteWorkoutScreen(
                 is ExecuteWorkoutNavigationType.NextExercise -> {
                     pagerState.animateScrollToPage(pagerState.currentPage + 1)
                 }
+                is ExecuteWorkoutNavigationType.Finish -> {
+                    navController.popBackStack()
+                }
             }
         }
     }

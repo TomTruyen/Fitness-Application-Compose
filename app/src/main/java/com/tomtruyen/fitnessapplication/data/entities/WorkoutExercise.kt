@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.Relation
-import com.tomtruyen.fitnessapplication.networking.WorkoutExerciseResponse
+import com.tomtruyen.fitnessapplication.networking.models.WorkoutExerciseResponse
 import java.util.UUID
 
 @Entity(
