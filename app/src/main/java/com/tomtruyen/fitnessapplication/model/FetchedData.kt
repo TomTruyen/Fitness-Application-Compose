@@ -1,20 +1,20 @@
 package com.tomtruyen.fitnessapplication.model
 
 data class FetchedData(
-    val data: MutableMap<Type, Boolean> = mutableMapOf()
+    val data: MutableMap<String, Boolean> = mutableMapOf()
 ) {
-    fun hasFetched(type: Type): Boolean {
-        return data[type] ?: false
+    fun hasFetched(identifier: String): Boolean {
+        return data[identifier] ?: false
     }
 
-    fun setFetched(type: Type, fetched: Boolean) {
-        data[type] = fetched
+    fun setFetched(identifier: String, fetched: Boolean) {
+        data[identifier] = fetched
     }
 
-    enum class Type {
-        EXERCISES,
-        USER_EXERCISES,
-        SETTINGS,
-        WORKOUTS
+    enum class Type(val identifier: String) {
+        EXERCISES("exercises"),
+        USER_EXERCISES("user_exercises"),
+        SETTINGS("settings"),
+        WORKOUTS("workouts");
     }
 }

@@ -29,7 +29,7 @@ class WorkoutRepositoryImpl(
     override fun findWorkoutById(id: String) = workoutDao.findById(id)
 
     override fun getWorkouts(userId: String, callback: FirebaseCallback<List<WorkoutResponse>>) = tryRequestWhenNotFetched(
-        type = FetchedData.Type.WORKOUTS,
+        identifier = FetchedData.Type.WORKOUTS.identifier,
         onStopLoading = {
             callback.onStopLoading()
         }
@@ -39,7 +39,10 @@ class WorkoutRepositoryImpl(
             .get()
             .handleCompletionResult(
                 context = globalProvider.context,
-                callback = callback
+                callback = callback,
+                setFetchSuccessful = {
+                    setFetchSuccessful(FetchedData.Type.WORKOUTS.identifier)
+                }
             ) {
                 val workouts = it.toObject(WorkoutsResponse::class.java)?.data ?: emptyList()
 

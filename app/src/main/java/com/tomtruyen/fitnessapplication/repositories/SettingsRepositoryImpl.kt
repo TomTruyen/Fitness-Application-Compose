@@ -37,14 +37,19 @@ class SettingsRepositoryImpl(
             }
     }
 
-    override fun getSettings(userId: String, callback: FirebaseCallback<Settings>) {
+    override fun getSettings(userId: String, callback: FirebaseCallback<Settings>) = tryRequestWhenNotFetched(
+        identifier = FetchedData.Type.SETTINGS.identifier,
+        onStopLoading = {
+            callback.onStopLoading()
+        }
+    ) {
         db.collection(COLLECTION_NAME)
             .document(userId)
             .get()
             .handleCompletionResult(
                 context = globalProvider.context,
                 setFetchSuccessful = {
-                    setFetchSuccessful(FetchedData.Type.SETTINGS)
+                    setFetchSuccessful(FetchedData.Type.SETTINGS.identifier)
                 },
                 callback = callback
             ) {

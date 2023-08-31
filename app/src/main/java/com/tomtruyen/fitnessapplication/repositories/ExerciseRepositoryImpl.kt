@@ -33,7 +33,7 @@ class ExerciseRepositoryImpl(
     override fun findEquipment() = exerciseDao.findEquipment()
 
     override fun getExercises(callback: FirebaseCallback<List<Exercise>>) = tryRequestWhenNotFetched(
-        type = FetchedData.Type.EXERCISES,
+        identifier = FetchedData.Type.EXERCISES.identifier,
         onStopLoading = {
             callback.onStopLoading()
         }
@@ -44,7 +44,7 @@ class ExerciseRepositoryImpl(
             .handleCompletionResult(
                 context = globalProvider.context,
                 setFetchSuccessful = {
-                    setFetchSuccessful(FetchedData.Type.EXERCISES)
+                    setFetchSuccessful(FetchedData.Type.EXERCISES.identifier)
                 },
                 callback = callback
             ) {
@@ -59,7 +59,7 @@ class ExerciseRepositoryImpl(
     }
 
     override fun getUserExercises(userId: String, callback: FirebaseCallback<List<Exercise>>) = tryRequestWhenNotFetched(
-        type = FetchedData.Type.USER_EXERCISES,
+        identifier = FetchedData.Type.USER_EXERCISES.identifier,
         onStopLoading = {
             callback.onStopLoading()
         }
@@ -70,7 +70,7 @@ class ExerciseRepositoryImpl(
             .handleCompletionResult(
                 context = globalProvider.context,
                 setFetchSuccessful = {
-                    setFetchSuccessful(FetchedData.Type.USER_EXERCISES)
+                    setFetchSuccessful(FetchedData.Type.USER_EXERCISES.identifier)
                 },
                 callback = callback
             ) {
@@ -129,12 +129,7 @@ class ExerciseRepositoryImpl(
         val userExercises = exerciseDao.findAllUserExercises().toMutableList().apply {
             val exercise = find { it.id == exerciseId } ?: return@apply
             remove(exercise)
-            Log.d("@@@", "Removed exercise: $exercise with id: $exerciseId")
         }
-
-        Log.d("@@@", "User exercises: $userExercises")
-
-
 
         saveUserExercises(userId, userExercises, callback)
     }
