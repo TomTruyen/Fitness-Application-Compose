@@ -16,6 +16,9 @@ import java.util.UUID
             childColumns = ["workoutExerciseId"],
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        androidx.room.Index(value = ["workoutExerciseId"])
     ]
 )
 @Parcelize

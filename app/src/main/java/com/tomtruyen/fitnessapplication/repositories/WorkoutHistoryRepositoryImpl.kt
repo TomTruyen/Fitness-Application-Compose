@@ -11,6 +11,7 @@ import com.tomtruyen.fitnessapplication.networking.models.WorkoutHistoryResponse
 import com.tomtruyen.fitnessapplication.networking.models.WorkoutResponse
 import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutHistoryRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.inject
 import java.time.LocalDate
@@ -22,10 +23,36 @@ class WorkoutHistoryRepositoryImpl(
 ): WorkoutHistoryRepository() {
     private val workoutRepository by inject<WorkoutRepository>(WorkoutRepository::class.java)
 
+    override fun findWorkoutHistoriesAsync() = workoutHistoryDao.findWorkoutHistoriesAsync()
+
     override fun findWorkoutHistoriesByRange(
         start: Long,
         end: Long
     ) = workoutHistoryDao.findWorkoutHistoriesByRange(start, end)
+
+    override fun getWorkoutHistoryDocuments(userId: String, callback: FirebaseCallback<Unit>) {
+        // Get all documents names so we can fetch them later
+        // These must be saved in the Database somewhere
+        // WorkoutHistoryRemoteDocumentDao.kt ?
+
+        // Must be done on  start of the app
+        // This Dao must also be updated when we finish a workout
+        // That is in a monthyear that is not in these WorkoutHistoryRemoteDocuments
+    }
+
+    override fun getWorkoutHistoriesPerMonth(
+        userId: String,
+        callback: FirebaseCallback<WorkoutHistoriesResponse>
+    ) {
+        // Us ethe documents that were fetched by the getWorkoutHistoryDocuments function
+        // To fetch the actual data
+
+        // On startup: always fetch the latest known document
+        // On the History page actually fetch the other documents paginated
+        // When on end of list, fetch the next document
+        // Do use the tryRequestWhenNotFetched function
+        // The identifier is the monthyear
+    }
 
     override fun finishWorkout(
         userId: String,

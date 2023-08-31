@@ -2,6 +2,7 @@ package com.tomtruyen.fitnessapplication.data.dao
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Upsert
 import com.tomtruyen.fitnessapplication.data.entities.Workout
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutWithExercises
@@ -9,15 +10,19 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class WorkoutDao {
+    @Transaction
     @Query("SELECT * FROM ${Workout.TABLE_NAME} ORDER BY createdAt DESC")
     abstract fun findWorkoutsAsync(): Flow<List<WorkoutWithExercises>>
 
+    @Transaction
     @Query("SELECT * FROM ${Workout.TABLE_NAME} ORDER BY createdAt DESC")
     abstract fun findWorkouts(): List<WorkoutWithExercises>
 
+    @Transaction
     @Query("SELECT * FROM ${Workout.TABLE_NAME} WHERE id = :id")
     abstract fun findByIdAsync(id: String): Flow<WorkoutWithExercises?>
 
+    @Transaction
     @Query("SELECT * FROM ${Workout.TABLE_NAME} WHERE id = :id")
     abstract fun findById(id: String): WorkoutWithExercises?
 

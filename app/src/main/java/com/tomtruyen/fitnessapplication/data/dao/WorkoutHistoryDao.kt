@@ -6,11 +6,16 @@ import androidx.room.Transaction
 import androidx.room.Upsert
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutHistory
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutHistoryWithWorkout
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class WorkoutHistoryDao {
     @Transaction
-    @Query("SELECT * FROM workout_history WHERE createdAt BETWEEN :start AND :end")
+    @Query("SELECT * FROM ${WorkoutHistory.TABLE_NAME}")
+    abstract fun findWorkoutHistoriesAsync(): Flow<List<WorkoutHistoryWithWorkout>>
+
+    @Transaction
+    @Query("SELECT * FROM ${WorkoutHistory.TABLE_NAME} WHERE createdAt BETWEEN :start AND :end")
     abstract fun findWorkoutHistoriesByRange(
         start: Long,
         end: Long

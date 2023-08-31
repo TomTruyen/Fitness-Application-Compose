@@ -17,6 +17,9 @@ import java.util.UUID
             childColumns = ["workoutId"],
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        androidx.room.Index(value = ["workoutId"])
     ]
 )
 data class WorkoutHistory(
