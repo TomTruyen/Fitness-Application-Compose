@@ -39,9 +39,7 @@ class SettingsRepositoryImpl(
 
     override fun getSettings(userId: String, callback: FirebaseCallback<Settings>) = tryRequestWhenNotFetched(
         identifier = FetchedData.Type.SETTINGS.identifier,
-        onStopLoading = {
-            callback.onStopLoading()
-        }
+        onStopLoading = callback::onStopLoading
     ) {
         db.collection(COLLECTION_NAME)
             .document(userId)

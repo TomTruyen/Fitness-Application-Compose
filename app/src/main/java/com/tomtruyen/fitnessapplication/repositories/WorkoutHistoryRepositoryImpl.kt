@@ -5,6 +5,7 @@ import com.tomtruyen.fitnessapplication.data.dao.WorkoutHistoryDao
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutHistoryWithWorkout
 import com.tomtruyen.fitnessapplication.extensions.handleCompletionResult
 import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
+import com.tomtruyen.fitnessapplication.model.FetchedData
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.networking.models.WorkoutHistoriesResponse
 import com.tomtruyen.fitnessapplication.networking.models.WorkoutHistoryResponse
@@ -21,6 +22,8 @@ class WorkoutHistoryRepositoryImpl(
     private val globalProvider: GlobalProvider,
     private val workoutHistoryDao: WorkoutHistoryDao
 ): WorkoutHistoryRepository() {
+    private var historyDocuments: List<String>? = null
+
     private val workoutRepository by inject<WorkoutRepository>(WorkoutRepository::class.java)
 
     override fun findWorkoutHistoriesAsync() = workoutHistoryDao.findWorkoutHistoriesAsync()
@@ -30,14 +33,25 @@ class WorkoutHistoryRepositoryImpl(
         end: Long
     ) = workoutHistoryDao.findWorkoutHistoriesByRange(start, end)
 
-    override fun getWorkoutHistoryDocuments(userId: String, callback: FirebaseCallback<Unit>) {
-        // Get all documents names so we can fetch them later
-        // These must be saved in the Database somewhere
-        // WorkoutHistoryRemoteDocumentDao.kt ?
+    override fun getWorkoutHistoryDocuments(userId: String, callback: FirebaseCallback<Unit>) = tryRequestWhenNotFetched(
+        identifier = FetchedData.Type.WORKOUT_HISTORY_DOCUMENTS.identifier,
+        onStopLoading = callback::onStopLoading
+    ) {
+        db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
+            .document(userId)
+            .collection(USER_WORKOUT_HISTORY_FIELD_NAME)
+            .get()
+            .handleCompletionResult(
+                context = globalProvider.context,
+                callback = callback,
+                setFetchSuccessful = {
+                    setFetchSuccessful(FetchedData.Type.WORKOUT_HISTORY_DOCUMENTS.identifier)
+                }
+            ) {
+                historyDocuments = it.documents.map { doc -> doc.id }
 
-        // Must be done on  start of the app
-        // This Dao must also be updated when we finish a workout
-        // That is in a monthyear that is not in these WorkoutHistoryRemoteDocuments
+                callback.onSuccess(Unit)
+            }
     }
 
     override fun getWorkoutHistoriesPerMonth(
@@ -63,8 +77,8 @@ class WorkoutHistoryRepositoryImpl(
 
         db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
             .document(userId)
-            .collection(monthYear)
-            .document(USER_WORKOUT_HISTORY_FIELD_NAME)
+            .collection(USER_WORKOUT_HISTORY_FIELD_NAME)
+            .document(monthYear)
             .set(WorkoutHistoriesResponse(histories))
             .handleCompletionResult(
                 context = globalProvider.context,

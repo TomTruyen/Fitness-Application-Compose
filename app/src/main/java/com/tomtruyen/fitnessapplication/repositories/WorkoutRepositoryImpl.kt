@@ -30,9 +30,7 @@ class WorkoutRepositoryImpl(
 
     override fun getWorkouts(userId: String, callback: FirebaseCallback<List<WorkoutResponse>>) = tryRequestWhenNotFetched(
         identifier = FetchedData.Type.WORKOUTS.identifier,
-        onStopLoading = {
-            callback.onStopLoading()
-        }
+        onStopLoading = callback::onStopLoading
     ) {
         db.collection(USER_WORKOUT_COLLECTION_NAME)
             .document(userId)
