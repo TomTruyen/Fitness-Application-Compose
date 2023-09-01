@@ -18,8 +18,8 @@ abstract class WorkoutHistoryRepository: BaseRepository() {
     ): List<WorkoutHistoryWithWorkout>
 
     abstract fun getWorkoutHistoriesPaginated(
-        userId: String,
-    ): Flow<PagingData<WorkoutHistoriesResponse>>
+        userId: String
+    ): Flow<PagingData<WorkoutHistoryWithWorkout>>
 
     abstract fun finishWorkout(
         userId: String,

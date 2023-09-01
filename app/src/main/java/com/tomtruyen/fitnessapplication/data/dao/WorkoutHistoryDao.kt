@@ -23,4 +23,7 @@ abstract class WorkoutHistoryDao {
 
     @Upsert
     abstract fun saveAll(histories: List<WorkoutHistory>): List<Long>
+
+    @Query("SELECT * FROM ${WorkoutHistory.TABLE_NAME} WHERE id IN (:ids)")
+    abstract fun findWorkoutHistoriesByIds(ids: List<String>): List<WorkoutHistoryWithWorkout>
 }

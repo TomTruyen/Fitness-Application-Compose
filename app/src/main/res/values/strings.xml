@@ -107,6 +107,5 @@
     <string name="message_delete_workout">Are you sure you want to delete this workout? This action can\'t be undone.</string>
     <string name="next_exercise">Next exercise</string>
     <string name="last">Last</string>
-
-
+    <string name="history">History</string>
 </resources>

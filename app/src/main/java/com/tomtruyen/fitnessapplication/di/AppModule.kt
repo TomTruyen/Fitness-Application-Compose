@@ -25,6 +25,7 @@ import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.detail.Exercis
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create.CreateExerciseViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.detail.WorkoutDetailViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.execute.ExecuteWorkoutViewModel
+import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.history.WorkoutHistoryViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
@@ -72,4 +73,5 @@ val appModule = module {
     viewModelOf(::ExercisesViewModel)
     viewModelOf(::ExerciseDetailViewModel)
     viewModel { (id: String?) -> CreateExerciseViewModel(id, get(), get()) }
+    viewModelOf(::WorkoutHistoryViewModel)
 }

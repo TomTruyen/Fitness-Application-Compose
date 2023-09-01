@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -53,6 +54,7 @@ import com.tomtruyen.fitnessapplication.data.entities.WorkoutWithExercises
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.CreateWorkoutScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExecuteWorkoutScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutDetailScreenDestination
+import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutHistoryScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.CollapsingToolbar
@@ -74,6 +76,7 @@ fun WorkoutOverviewScreen(
     LaunchedEffect(viewModel, context) {
         viewModel.navigation.collectLatest { navigationType ->
             when(navigationType) {
+                is WorkoutOverviewNavigationType.History -> navController.navigate(WorkoutHistoryScreenDestination)
                 is WorkoutOverviewNavigationType.CreateWorkout -> navController.navigate(
                     CreateWorkoutScreenDestination(id = null)
                 )
@@ -115,6 +118,17 @@ fun WorkoutOverviewScreenLayout(
                 navController = navController,
                 scrollBehavior = scrollBehavior
             ) {
+                IconButton(
+                    onClick = {
+                        onEvent(WorkoutOverviewUiEvent.OnHistoryClicked)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.History,
+                        contentDescription = stringResource(id = R.string.history)
+                    )
+                }
+
                 IconButton(
                     onClick = {
                         onEvent(WorkoutOverviewUiEvent.OnCreateWorkoutClicked)
