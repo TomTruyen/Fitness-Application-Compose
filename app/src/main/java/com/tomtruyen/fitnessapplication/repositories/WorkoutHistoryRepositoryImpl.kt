@@ -1,15 +1,15 @@
 package com.tomtruyen.fitnessapplication.repositories
 
-import com.google.firebase.firestore.SetOptions
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.tomtruyen.fitnessapplication.data.dao.WorkoutHistoryDao
-import com.tomtruyen.fitnessapplication.data.entities.WorkoutHistoryWithWorkout
 import com.tomtruyen.fitnessapplication.extensions.handleCompletionResult
 import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
-import com.tomtruyen.fitnessapplication.model.FetchedData
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
+import com.tomtruyen.fitnessapplication.networking.paging.WorkoutHistoryPagingSource
 import com.tomtruyen.fitnessapplication.networking.models.WorkoutHistoriesResponse
 import com.tomtruyen.fitnessapplication.networking.models.WorkoutHistoryResponse
-import com.tomtruyen.fitnessapplication.networking.models.WorkoutResponse
 import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutHistoryRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepository
 import kotlinx.coroutines.flow.Flow
@@ -22,8 +22,6 @@ class WorkoutHistoryRepositoryImpl(
     private val globalProvider: GlobalProvider,
     private val workoutHistoryDao: WorkoutHistoryDao
 ): WorkoutHistoryRepository() {
-    private var historyDocuments: List<String>? = null
-
     private val workoutRepository by inject<WorkoutRepository>(WorkoutRepository::class.java)
 
     override fun findWorkoutHistoriesAsync() = workoutHistoryDao.findWorkoutHistoriesAsync()
@@ -33,39 +31,20 @@ class WorkoutHistoryRepositoryImpl(
         end: Long
     ) = workoutHistoryDao.findWorkoutHistoriesByRange(start, end)
 
-    override fun getWorkoutHistoryDocuments(userId: String, callback: FirebaseCallback<Unit>) = tryRequestWhenNotFetched(
-        identifier = FetchedData.Type.WORKOUT_HISTORY_DOCUMENTS.identifier,
-        onStopLoading = callback::onStopLoading
-    ) {
-        db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
-            .document(userId)
-            .collection(USER_WORKOUT_HISTORY_FIELD_NAME)
-            .get()
-            .handleCompletionResult(
-                context = globalProvider.context,
-                callback = callback,
-                setFetchSuccessful = {
-                    setFetchSuccessful(FetchedData.Type.WORKOUT_HISTORY_DOCUMENTS.identifier)
-                }
-            ) {
-                historyDocuments = it.documents.map { doc -> doc.id }
-
-                callback.onSuccess(Unit)
-            }
-    }
-
-    override fun getWorkoutHistoriesPerMonth(
+    override fun getWorkoutHistoriesPaginated(
         userId: String,
-        callback: FirebaseCallback<WorkoutHistoriesResponse>
-    ) {
-        // Us ethe documents that were fetched by the getWorkoutHistoryDocuments function
-        // To fetch the actual data
+    ): Flow<PagingData<WorkoutHistoriesResponse>> {
+        val source = WorkoutHistoryPagingSource(
+            query = db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
+                .document(userId)
+                .collection(USER_WORKOUT_HISTORY_FIELD_NAME),
+        )
 
-        // On startup: always fetch the latest known document
-        // On the History page actually fetch the other documents paginated
-        // When on end of list, fetch the next document
-        // Do use the tryRequestWhenNotFetched function
-        // The identifier is the monthyear
+        return Pager(config = PagingConfig(pageSize = 1)) {
+            source
+        }.flow
+
+
     }
 
     override fun finishWorkout(

@@ -122,6 +122,10 @@ dependencies {
     // Reorderable (Drag & Drop) Lazy Column
     implementation(libs.reorderable)
 
+    // Paging 3
+    implementation(libs.paging.runtime)
+    implementation(libs.paging.compose)
+
     // Unit Testing
     testImplementation(libs.junit)
     testImplementation(libs.koin.test.junit)

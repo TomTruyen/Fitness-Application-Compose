@@ -7,14 +7,14 @@ androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 lifecycle-runtime-ktx = "2.6.1"
 activity-compose = "1.7.2"
-compose-bom = "2023.06.01"
+compose-bom = "2023.08.00"
 leakcanary = "2.12"
 sonarqube = "4.2.1.3168"
 koin-android-compose = "3.4.6"
 koin-test-junit = "3.4.3"
 google-services = "4.3.15"
-firebase-bom = "32.2.2"
-crashlytics-plugin = "2.9.8"
+firebase-bom = "32.2.3"
+crashlytics-plugin = "2.9.9"
 play-services-auth = "20.6.0"
 ksp = "1.9.0-1.0.13"
 raamcosta-compose-destinations = "1.9.51"
@@ -24,6 +24,7 @@ gson = "2.10.1"
 glide = "1.0.0-alpha.1"
 android-git-version = "0.4.14"
 reorderable = "0.9.6"
+paging = "3.2.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -58,6 +59,8 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 glide = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glide" }
 reorderable = { group = "org.burnoutcrew.composereorderable", name = "reorderable", version.ref = "reorderable" }
+paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
+paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

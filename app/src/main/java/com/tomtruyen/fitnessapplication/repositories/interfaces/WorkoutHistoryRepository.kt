@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.repositories.interfaces
 
+import androidx.paging.PagingData
 import com.tomtruyen.fitnessapplication.base.BaseRepository
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutHistoryWithWorkout
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
@@ -16,15 +17,9 @@ abstract class WorkoutHistoryRepository: BaseRepository() {
         end: Long,
     ): List<WorkoutHistoryWithWorkout>
 
-    abstract fun getWorkoutHistoryDocuments(
+    abstract fun getWorkoutHistoriesPaginated(
         userId: String,
-        callback: FirebaseCallback<Unit>
-    )
-
-    abstract fun getWorkoutHistoriesPerMonth(
-        userId: String,
-        callback: FirebaseCallback<WorkoutHistoriesResponse>
-    )
+    ): Flow<PagingData<WorkoutHistoriesResponse>>
 
     abstract fun finishWorkout(
         userId: String,
