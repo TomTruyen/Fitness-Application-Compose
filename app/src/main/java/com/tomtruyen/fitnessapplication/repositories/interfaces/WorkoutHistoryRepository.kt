@@ -3,6 +3,7 @@ package com.tomtruyen.fitnessapplication.repositories.interfaces
 import androidx.paging.PagingData
 import com.tomtruyen.fitnessapplication.base.BaseRepository
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutHistoryWithWorkout
+import com.tomtruyen.fitnessapplication.data.entities.WorkoutWithExercises
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.networking.models.WorkoutHistoriesResponse
 import com.tomtruyen.fitnessapplication.networking.models.WorkoutHistoryResponse

@@ -48,7 +48,7 @@ class WorkoutHistoryRepositoryImpl(
             },
         )
 
-        return Pager(config = PagingConfig(pageSize = 1)) {
+        return Pager(config = PagingConfig(pageSize = 20)) {
             source
         }.flow
     }
@@ -60,21 +60,34 @@ class WorkoutHistoryRepositoryImpl(
     ) {
         val monthYear = LocalDate.now().format(DateTimeFormatter.ofPattern("MMMM-yyyy"))
 
-        db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
-            .document(userId)
-            .collection(USER_WORKOUT_HISTORY_FIELD_NAME)
-            .document(monthYear)
-            .set(WorkoutHistoriesResponse(histories))
-            .handleCompletionResult(
-                context = globalProvider.context,
-                callback = callback
-            ) {
-                scope.launch {
-                    saveWorkoutHistoryResponses(histories)
-                }
+        db.runBatch { batch ->
+            batch.set(
+                db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
+                    .document(userId)
+                    .collection(USER_WORKOUT_HISTORY_FIELD_NAME)
+                    .document(monthYear),
+                WorkoutHistoriesResponse(histories)
+            )
 
-                callback.onSuccess(histories)
+            histories.lastOrNull()?.workout?.let { finishedWorkout ->
+                batch.set(
+                    db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
+                        .document(userId)
+                        .collection(USER_WORKOUT_HISTORY_WORKOUTS_COLLECTION_NAME)
+                        .document(finishedWorkout.id),
+                    finishedWorkout
+                )
             }
+        }.handleCompletionResult(
+            context = globalProvider.context,
+            callback = callback
+        ) {
+            scope.launch {
+                saveWorkoutHistoryResponses(histories)
+            }
+
+            callback.onSuccess(histories)
+        }
     }
 
     private suspend fun saveWorkoutHistoryResponses(responses: List<WorkoutHistoryResponse>) {
@@ -87,6 +100,7 @@ class WorkoutHistoryRepositoryImpl(
 
     companion object {
         private const val USER_WORKOUT_HISTORY_COLLECTION_NAME = "workout_history"
+        private const val USER_WORKOUT_HISTORY_WORKOUTS_COLLECTION_NAME = "workouts"
         private const val USER_WORKOUT_HISTORY_FIELD_NAME = "history"
     }
 }
