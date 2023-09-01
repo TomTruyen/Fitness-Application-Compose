@@ -33,16 +33,6 @@ class WorkoutHistoryPagingSource(
 
             val data = currentDocument.toObjects(WorkoutHistoriesResponse::class.java).flatMap { it.data }
 
-            // Is the documents id/name e.g.: "February-2023"
-            val documentId = lastVisibleDocument?.reference?.id
-
-            // TODO: Add Caching
-            // All documents should only be fetched once. After that we should just return them from the database
-            // The best way is to probably have another table "WorkoutHistoryRemoteKeys"
-            // That database should have all ids of the histories
-            // It should also have as key the name of the document
-            // It should also state whether there is a next document or not
-
             val savedHistories = withContext(Dispatchers.IO) {
                 onSaveResponse(data)
                 workoutHistoryDao.findWorkoutHistoriesByIds(data.map { it.id })
@@ -54,7 +44,6 @@ class WorkoutHistoryPagingSource(
                 nextKey = nextDocument
             )
         } catch (e: Exception) {
-            Log.d("@@@", "Error: $e")
             LoadResult.Error(e)
         }
     }
