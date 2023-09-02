@@ -41,7 +41,7 @@ open class BaseViewModel<TNavigationType>: ViewModel() {
 
     protected fun isLoading(loading: Boolean) = this.loading.tryEmit(loading)
 
-    protected fun launchLoading(block: suspend CoroutineScope.() -> Unit) = vmScope.launch(Dispatchers.IO) {
+    protected fun launchLoading(block: suspend CoroutineScope.() -> Unit) = launchIO {
         isLoading(true)
         block()
         isLoading(false)
