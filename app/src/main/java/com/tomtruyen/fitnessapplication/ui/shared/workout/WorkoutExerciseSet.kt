@@ -80,8 +80,26 @@ fun WorkoutExerciseSet(
                     "-"
                 } else {
                     when (type) {
-                        Exercise.ExerciseType.WEIGHT -> "${lastPerformedSet.reps}x${lastPerformedSet.weight}kg"
-                        Exercise.ExerciseType.TIME -> TimeUtils.formatSeconds(lastPerformedSet.time?.toLong() ?: 0L)
+                        Exercise.ExerciseType.WEIGHT -> {
+                            val weight = try {
+                                lastPerformedSet.weight?.toInt()
+                            } catch(e: Exception) {
+                                lastPerformedSet.weight
+                            }
+
+                            if(lastPerformedSet.reps == null || weight == null) {
+                                "-"
+                            } else {
+                                "${lastPerformedSet.reps}x${weight}"
+                            }
+                        }
+                        Exercise.ExerciseType.TIME -> {
+                            if(lastPerformedSet.time == null) {
+                                "-"
+                            } else {
+                                TimeUtils.formatSeconds(lastPerformedSet.time?.toLong() ?: 0L)
+                            }
+                        }
                     }
                 },
                 style = MaterialTheme.typography.bodyMedium,

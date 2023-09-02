@@ -18,13 +18,15 @@ data class WorkoutResponse(
     var name: String = "",
     var unit: String = "",
     var exercises: List<WorkoutExerciseResponse> = emptyList(),
-    var createdAt: Long = System.currentTimeMillis()
+    var createdAt: Long = System.currentTimeMillis(),
+    var isPerformed: Boolean = false,
 ): Parcelable {
     fun toWorkout(): Workout = Workout(
         id = id,
         name = name,
         unit = unit,
-        createdAt = createdAt
+        createdAt = createdAt,
+        isPerformed = isPerformed
     )
 
     fun copyWithRepsChanged(

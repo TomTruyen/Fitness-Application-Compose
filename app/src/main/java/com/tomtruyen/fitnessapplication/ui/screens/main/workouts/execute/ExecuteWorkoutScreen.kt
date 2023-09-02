@@ -97,6 +97,7 @@ fun ExecuteWorkoutScreen(
     val context = LocalContext.current
 
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val lastEntryForWorkout by viewModel.lastEntryForWorkout.collectAsStateWithLifecycle(initialValue = null)
     val loading by viewModel.loading.collectAsStateWithLifecycle()
 
     val stopwatchTimer = remember {
@@ -128,6 +129,7 @@ fun ExecuteWorkoutScreen(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
+        lastEntryForWorkout = lastEntryForWorkout,
         loading = loading,
         pagerState = pagerState,
         stopwatchTimer = stopwatchTimer,
@@ -142,6 +144,7 @@ fun ExecuteWorkoutScreenLayout(
     snackbarHost : @Composable () -> Unit,
     navController: NavController,
     state: ExecuteWorkoutUiState,
+    lastEntryForWorkout: WorkoutWithExercises?,
     loading: Boolean,
     pagerState: PagerState,
     stopwatchTimer: StopwatchTimer,
@@ -213,6 +216,7 @@ fun ExecuteWorkoutScreenLayout(
                         .weight(1f)
                         .animateContentSize(),
                     state = state,
+                    lastEntryForWorkout = lastEntryForWorkout,
                     pagerState = pagerState,
                     onEvent = onEvent,
                     onWorkoutEvent = onWorkoutEvent
@@ -227,6 +231,7 @@ fun ExecuteWorkoutScreenLayout(
 fun WorkoutExerciseTabContent(
     modifier: Modifier = Modifier,
     state: ExecuteWorkoutUiState,
+    lastEntryForWorkout: WorkoutWithExercises?,
     pagerState: PagerState,
     onEvent: (ExecuteWorkoutUiEvent) -> Unit,
     onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
@@ -240,6 +245,7 @@ fun WorkoutExerciseTabContent(
             state = pagerState
         ) { index ->
             val workoutExercise = state.workout.exercises.getOrNull(index)
+            val lastWorkoutExercise = lastEntryForWorkout?.exercises?.getOrNull(index)
 
             if (workoutExercise != null) {
                 LazyColumn(
@@ -278,6 +284,8 @@ fun WorkoutExerciseTabContent(
 
                     // Sets
                     itemsIndexed(workoutExercise.sets) { setIndex, set ->
+                        val lastPerformedSet = lastWorkoutExercise?.sets?.getOrNull(setIndex)
+
                         WorkoutExerciseSet(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -288,7 +296,7 @@ fun WorkoutExerciseTabContent(
                             type = workoutExercise.exercise.typeEnum,
                             hasMultipleSets = workoutExercise.sets.size > 1,
                             isExecute = true,
-                            lastPerformedSet = null, // TODO: Replace with SETs from last time this workout was executed
+                            lastPerformedSet = lastPerformedSet,
                             onEvent = onWorkoutEvent
                         )
                     }

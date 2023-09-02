@@ -23,16 +23,35 @@ class ExecuteWorkoutViewModel(
 ): BaseViewModel<ExecuteWorkoutNavigationType>() {
     val state = MutableStateFlow(ExecuteWorkoutUiState())
 
+    val lastEntryForWorkout = historyRepository.findLastEntryForWorkout(id)
+
     init {
         findWorkout()
+        getLastEntryForWorkout()
     }
 
-    private fun findWorkout() = launchLoading {
+    private fun findWorkout() = launchIO {
         workoutRepository.findWorkoutById(id)?.let {
             state.value = state.value.copy(
                 workout = it.toWorkoutResponse()
             )
         }
+    }
+
+    private fun getLastEntryForWorkout() = launchIO {
+        val userId = userRepository.getUser()?.uid ?: return@launchIO
+
+        isLoading(true)
+
+        historyRepository.getLastEntryForWorkout(
+            userId = userId,
+            workoutId = id,
+            callback = object: FirebaseCallback<Unit> {
+                override fun onStopLoading() {
+                    isLoading(false)
+                }
+            }
+        )
     }
 
     private fun finishWorkout(duration: Long) = launchIO {

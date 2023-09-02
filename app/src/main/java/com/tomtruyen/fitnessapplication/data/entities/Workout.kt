@@ -12,7 +12,8 @@ data class Workout(
     @PrimaryKey var id: String = UUID.randomUUID().toString(),
     var name: String = "",
     var unit: String = Settings.UnitType.KG.value, // KG or LBS
-    var createdAt: Long = System.currentTimeMillis()
+    var createdAt: Long = System.currentTimeMillis(),
+    var isPerformed: Boolean = false,
 ) {
     companion object {
         const val TABLE_NAME = "workouts"

@@ -16,6 +16,7 @@ data class FetchedData(
         USER_EXERCISES("user_exercises"),
         SETTINGS("settings"),
         WORKOUTS("workouts"),
-        WORKOUT_HISTORY_DOCUMENTS("workout_history_documents");
+        LAST_WORKOUT("last_workout"),
+        WORKOUT_HISTORY("workout_history"),
     }
 }
