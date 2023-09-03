@@ -1,7 +1,9 @@
 package com.tomtruyen.fitnessapplication.base
 
+import androidx.room.withTransaction
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.tomtruyen.fitnessapplication.data.AppDatabase
 import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
 import com.tomtruyen.fitnessapplication.model.FetchedData
 import kotlinx.coroutines.CoroutineScope
@@ -12,8 +14,12 @@ import org.koin.java.KoinJavaComponent.inject
 open class BaseRepository {
     private val globalProvider: GlobalProvider by inject(GlobalProvider::class.java)
 
+    private val database: AppDatabase by inject(AppDatabase::class.java)
+
     protected val db = Firebase.firestore
     protected val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+
+    protected suspend fun <T> transaction(block: suspend () -> T) = database.withTransaction(block)
 
     // This function is used to check if we have already made a request to Firebase.
     // If we have, we don't need to make another request --> Reduces the amount of Reads on Firebase
