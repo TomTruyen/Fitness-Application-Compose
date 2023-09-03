@@ -7,7 +7,7 @@ on:
       - master
 
 jobs:
-  setup:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -18,13 +18,18 @@ jobs:
       - name: Decode Keystore
         env:
           ENCODED_STRING: ${{ secrets.KEY_JKS }}
-        run: echo $ENCODED_STRING | base64 -di > key.jks
+        run: |
+          echo $ENCODED_STRING | base64 -di > key.jks
+          chmod 644 key.jks
+          chown $USER key.jks
 
       - name: Signing.gradle
         env:
           ENCODED_SIGNING_GRADLE: ${{ secrets.SIGNING_GRADLE }}
         run: |
           echo $ENCODED_SIGNING_GRADLE | base64 -di > signing.gradle
+          chmod 644 signing.gradle
+          chown $USER signing.gradle
 
       - name: Set up JDK 17
         uses: actions/setup-java@v2
@@ -35,34 +40,26 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Setup gradle cache
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
+      - name: Clear Gradle Cache
+        run: ./gradlew clean --refresh-dependencies
 
-  build:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
+#      - name: Setup gradle cache
+#        uses: gradle/gradle-build-action@v2
+#        with:
+#          gradle-home-cache-cleanup: true
+
       - name: Build prodRelease
         run: ./gradlew app:bundleProdRelease
 
-  artifact:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
       - name: Upload app bundle as artifact
         uses: actions/upload-artifact@v2
         with:
           name: app-bundle
           path: app/build/outputs/bundle/prodRelease/app-prod-release.aab
 
-  tests:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
       - name: Build and run tests
         run: ./gradlew test
+
 
 
 
