@@ -41,6 +41,9 @@ jobs:
         with:
           gradle-home-cache-cleanup: true
 
+      - name: Debug signingConfig properties
+        run: ./gradlew properties
+
       - name: Build prodRelease
         run: ./gradlew app:bundleProdRelease
 
