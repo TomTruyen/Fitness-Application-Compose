@@ -14,12 +14,12 @@ jobs:
       - name: Signing.gradle
         env:
           ENCODED_SIGNING_GRADLE: ${{ secrets.SIGNING_GRADLE }}
-        run: echo $ENCODED_SIGNING_GRADLE | base64 -di > "${RUNNER_TEMP}"/signing.gradle
+        run: echo $ENCODED_SIGNING_GRADLE | base64 -di > signing.gradle
 
       - name: Decode Keystore
         env:
-          ENCODED_STRING: ${{ secrets.SIGNING_KEY_STORE_BASE64 }}
-        run: echo $ENCODED_STRING | base64 -di > "${RUNNER_TEMP}"/key.jks
+          ENCODED_STRING: ${{ secrets.KEY_JKS }}
+        run: echo $ENCODED_STRING | base64 -di > key.jks
 
       - name: Checkout repository
         uses: actions/checkout@v3
