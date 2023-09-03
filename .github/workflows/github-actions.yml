@@ -20,7 +20,7 @@ jobs:
         env:
           ENCODED_STRING: ${{ secrets.SIGNING_KEY_STORE_BASE64 }}
         run: echo $ENCODED_STRING | base64 --decode > key.jks
-        
+
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
@@ -33,7 +33,7 @@ jobs:
           java-version: '17'
 
       - name: Make gradlew executable
-        run: chmod +x gradlew
+        run: chmod +x ./gradlew
 
       - name: Setup gradle cache
         uses: gradle/gradle-build-action@v2
@@ -41,7 +41,7 @@ jobs:
           gradle-home-cache-cleanup: true
 
       - name: Build prodRelease
-        run: /gradlew app:bundleProdRelease
+        run: ./gradlew app:bundleProdRelease
 
       - name: Upload app bundle as artifact
         uses: actions/upload-artifact@v2
