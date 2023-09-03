@@ -7,10 +7,14 @@ on:
       - master
 
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
-
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
       - name: Decode Keystore
         env:
           ENCODED_STRING: ${{ secrets.KEY_JKS }}
@@ -21,11 +25,6 @@ jobs:
           ENCODED_SIGNING_GRADLE: ${{ secrets.SIGNING_GRADLE }}
         run: |
           echo $ENCODED_SIGNING_GRADLE | base64 -di > signing.gradle
-
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v2
@@ -41,16 +40,36 @@ jobs:
         with:
           gradle-home-cache-cleanup: true
 
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
       - name: Build prodRelease
         run: ./gradlew app:bundleProdRelease
 
+  artifact:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Upload app bundle as artifact
         uses: actions/upload-artifact@v2
         with:
           name: app-bundle
           path: app/build/outputs/bundle/prodRelease/app-prod-release.aab
 
+  tests:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
       - name: Build and run tests
         run: ./gradlew test
+
+
+
+
+
+
+
+
     
 
