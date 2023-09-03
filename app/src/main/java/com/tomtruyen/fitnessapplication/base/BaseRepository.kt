@@ -9,6 +9,7 @@ import com.tomtruyen.fitnessapplication.model.FetchedData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.inject
 
 open class BaseRepository {
@@ -20,6 +21,10 @@ open class BaseRepository {
     protected val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     protected suspend fun <T> transaction(block: suspend () -> T) = database.withTransaction(block)
+
+    fun launchWithTransaction(block: suspend () -> Unit)  = scope.launch {
+        transaction(block)
+    }
 
     // This function is used to check if we have already made a request to Firebase.
     // If we have, we don't need to make another request --> Reduces the amount of Reads on Firebase

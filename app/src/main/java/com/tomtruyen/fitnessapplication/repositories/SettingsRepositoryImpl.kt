@@ -29,7 +29,7 @@ class SettingsRepositoryImpl(
             ) {
                 settings.id = userId
 
-                scope.launch {
+                launchWithTransaction {
                     settingsDao.save(settings)
                 }
 
@@ -51,11 +51,11 @@ class SettingsRepositoryImpl(
                 },
                 callback = callback
             ) {
-                val settings = it.toObject(Settings::class.java) ?: Settings()
+                val settings = (it.toObject(Settings::class.java) ?: Settings()).apply {
+                    id = it.id
+                }
 
-                settings.id = it.id
-
-                scope.launch {
+                launchWithTransaction {
                     settingsDao.save(settings)
                 }
 

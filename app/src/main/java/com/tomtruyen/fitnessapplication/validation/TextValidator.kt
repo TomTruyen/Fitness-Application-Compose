@@ -2,6 +2,7 @@ package com.tomtruyen.fitnessapplication.validation
 
 import android.content.Context
 
+@Suppress("UNUSED_EXPRESSION")
 open class TextValidator private constructor(
     private var text: String? = null,
     rulesBuilder: TextValidator.() -> Unit

@@ -44,7 +44,7 @@ class WorkoutRepositoryImpl(
             ) {
                 val workouts = it.toObject(WorkoutsResponse::class.java)?.data ?: emptyList()
 
-                scope.launch {
+                launchWithTransaction {
                     workoutDao.deleteAll()
                     saveWorkoutResponses(workouts)
                 }
@@ -65,7 +65,7 @@ class WorkoutRepositoryImpl(
                 context = globalProvider.context,
                 callback = callback
             ) {
-                scope.launch {
+                launchWithTransaction {
                     if(workouts.isEmpty()) {
                         workoutDao.deleteAll()
                     } else {
@@ -93,15 +93,17 @@ class WorkoutRepositoryImpl(
     }
 
     override suspend fun saveWorkoutResponses(responses: List<WorkoutResponse>) {
-        val workouts = responses.map { it.toWorkout() }
-        val workoutExercises = responses.flatMap { it.exercises.map { exercise -> exercise.toWorkoutExercise(it.id) } }
-        val exercises = responses.flatMap { it.exercises.map { exercise -> exercise.exercise } }
-        val sets = responses.flatMap { it.exercises.flatMap { exercise -> exercise.sets } }
+        transaction {
+            val workouts = responses.map { it.toWorkout() }
+            val workoutExercises = responses.flatMap { it.exercises.map { exercise -> exercise.toWorkoutExercise(it.id) } }
+            val exercises = responses.flatMap { it.exercises.map { exercise -> exercise.exercise } }
+            val sets = responses.flatMap { it.exercises.flatMap { exercise -> exercise.sets } }
 
-        exerciseDao.saveAll(exercises)
-        workoutDao.saveAll(workouts)
-        workoutExerciseDao.saveAll(workoutExercises)
-        workoutSetDao.saveAll(sets)
+            exerciseDao.saveAll(exercises)
+            workoutDao.saveAll(workouts)
+            workoutExerciseDao.saveAll(workoutExercises)
+            workoutSetDao.saveAll(sets)
+        }
     }
 
     companion object {

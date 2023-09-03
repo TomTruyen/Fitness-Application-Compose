@@ -65,7 +65,7 @@ class WorkoutHistoryRepositoryImpl(
                 val response = document.toObject(WorkoutResponse::class.java) ?: return@handleCompletionResult
 
                 val lastWorkout = addPrefixToIds(response, FetchedData.Type.LAST_WORKOUT.identifier)
-                scope.launch {
+                launchWithTransaction {
                     workoutRepository.saveWorkoutResponses(listOf(lastWorkout))
                 }
 
@@ -80,7 +80,7 @@ class WorkoutHistoryRepositoryImpl(
                 .collection(USER_WORKOUT_HISTORY_FIELD_NAME)
                 .orderBy(UPDATED_AT_ORDER_FIELD, Query.Direction.DESCENDING),
             onSaveResponse = { histories ->
-                scope.launch {
+                launchWithTransaction {
                     saveWorkoutHistoryResponses(histories)
                 }
             },
@@ -120,7 +120,7 @@ class WorkoutHistoryRepositoryImpl(
             context = globalProvider.context,
             callback = callback
         ) {
-            scope.launch {
+            launchWithTransaction {
                 saveWorkoutHistoryResponses(histories)
             }
 
@@ -128,7 +128,7 @@ class WorkoutHistoryRepositoryImpl(
         }
     }
 
-    private suspend fun saveWorkoutHistoryResponses(responses: List<WorkoutHistoryResponse>) {
+    private suspend fun saveWorkoutHistoryResponses(responses: List<WorkoutHistoryResponse>) = transaction {
         val histories = responses.map {
             it.toWorkoutHistory().apply {
                 workoutId = getIdWithPrefix(workoutId, FetchedData.Type.WORKOUT_HISTORY.identifier)

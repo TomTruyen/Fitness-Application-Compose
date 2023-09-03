@@ -48,7 +48,7 @@ class ExerciseRepositoryImpl(
             ) {
                 val exercises = it.toObject(ExercisesResponse::class.java)?.data ?: emptyList()
 
-                scope.launch {
+                launchWithTransaction {
                     exerciseDao.saveAll(exercises)
                 }
 
@@ -72,7 +72,7 @@ class ExerciseRepositoryImpl(
             ) {
                 val exercises = it.toObject(UserExercisesResponse::class.java)?.exercises ?: emptyList()
 
-                scope.launch {
+                launchWithTransaction {
                     exerciseDao.deleteAllUserExercises()
                     exerciseDao.saveAll(exercises)
                 }
@@ -103,7 +103,7 @@ class ExerciseRepositoryImpl(
                 context = globalProvider.context,
                 callback = callback
             ) {
-                scope.launch {
+                launchWithTransaction {
                     if(userExercises.isEmpty()) {
                         exerciseDao.deleteAllUserExercises()
                     } else {
