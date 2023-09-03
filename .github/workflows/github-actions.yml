@@ -36,13 +36,13 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Setup gradle cache
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
+#      - name: Setup gradle cache
+#        uses: gradle/gradle-build-action@v2
+#        with:
+#          gradle-home-cache-cleanup: true
 
-      - name: Gradle Sync
-        run: ./gradlew --recompile-scripts
+      - name: Debug Gradle Signing Config
+        run: ./gradlew signingReport
 
       - name: Build prodRelease
         run: ./gradlew app:bundleProdRelease
