@@ -40,13 +40,10 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Clear Gradle Cache
-        run: ./gradlew clean --refresh-dependencies
-
-#      - name: Setup gradle cache
-#        uses: gradle/gradle-build-action@v2
-#        with:
-#          gradle-home-cache-cleanup: true
+      - name: Setup gradle cache
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-home-cache-cleanup: true
 
       - name: Build prodRelease
         run: ./gradlew app:bundleProdRelease
