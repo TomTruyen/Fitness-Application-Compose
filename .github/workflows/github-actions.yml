@@ -11,10 +11,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Signing.gradle
+        env:
+          ENCODED_SIGNING_GRADLE: ${{ secrets.SIGNING_GRADLE }}
+        run: echo $ENCODED_SIGNING_GRADLE | base64 --decode > signing.gradle
+
       - name: Decode Keystore
         env:
           ENCODED_STRING: ${{ secrets.SIGNING_KEY_STORE_BASE64 }}
         run: echo $ENCODED_STRING | base64 --decode > key.jks
+        
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
@@ -26,11 +32,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: SonarCloud Scan
-        run: ./gradlew sonar --info
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
       - name: Make gradlew executable
         run: chmod +x gradlew
 
@@ -41,10 +42,6 @@ jobs:
 
       - name: Build prodRelease
         run: /gradlew app:bundleProdRelease
-        env:
-          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
-          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
-          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
 
       - name: Upload app bundle as artifact
         uses: actions/upload-artifact@v2

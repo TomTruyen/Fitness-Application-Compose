@@ -2,7 +2,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.sonarqube)
     alias(libs.plugins.googleServices)
     alias(libs.plugins.secretsGradle)
     alias(libs.plugins.ksp)
@@ -10,14 +9,6 @@ plugins {
     alias(libs.plugins.kapt)
     alias(libs.plugins.androidGitVersion)
     id("kotlin-parcelize")
-}
-
-sonar {
-    properties {
-        property("sonar.projectKey", "tom-truyen_fitness-application")
-        property("sonar.organization", "tom-truyen")
-        property("sonar.host.url", "https://sonarcloud.io")
-    }
 }
 
 androidGitVersion {
