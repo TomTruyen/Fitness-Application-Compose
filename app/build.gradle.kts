@@ -17,11 +17,11 @@ androidGitVersion {
 }
 
 // Signing Configuration for Keystore
-if(file(rootProject.projectDir.absolutePath + "/signing.gradle").exists()) {
+//if(file(rootProject.projectDir.absolutePath + "/signing.gradle").exists()) {
     apply(
         from = rootProject.projectDir.absolutePath + "/signing.gradle"
     )
-}
+//}
 
 android {
     namespace = "com.tomtruyen.fitnessapplication"
