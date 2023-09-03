@@ -22,9 +22,6 @@ jobs:
         run: |
           echo $ENCODED_SIGNING_GRADLE | base64 -di > signing.gradle
 
-      - name: Print signing.gradle location
-        run: echo "Signing.gradle is located at $(pwd)/signing.gradle"
-
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
@@ -43,6 +40,9 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           gradle-home-cache-cleanup: true
+
+      - name: Gradle Sync
+        run: ./gradlew --recompile-scripts
 
       - name: Build prodRelease
         run: ./gradlew app:bundleProdRelease
