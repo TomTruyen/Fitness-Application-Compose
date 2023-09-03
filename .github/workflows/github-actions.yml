@@ -22,21 +22,20 @@ jobs:
           distribution: 'adopt'
           server-id: 'github'
 
+      - name: Google Services JSON
+        env:
+          ENCODED_STRING: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo $ENCODED_STRING | base64 -di > app/google-services.json
+
       - name: Decode Keystore
         env:
           ENCODED_STRING: ${{ secrets.KEY_JKS }}
-        run: |
-          echo $ENCODED_STRING | base64 -di > key.jks
-          chmod 644 key.jks
-          chown $USER key.jks
+        run: echo $ENCODED_STRING | base64 -di > key.jks
 
       - name: Signing.gradle
         env:
           ENCODED_SIGNING_GRADLE: ${{ secrets.SIGNING_GRADLE }}
-        run: |
-          echo $ENCODED_SIGNING_GRADLE | base64 -di > signing.gradle
-          chmod 644 signing.gradle
-          chown $USER signing.gradle
+        run: echo $ENCODED_SIGNING_GRADLE | base64 -di > signing.gradle
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
