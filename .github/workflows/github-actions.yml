@@ -6,6 +6,12 @@ on:
       - main
       - master
 
+# TODO:
+# FIX:
+#  * What went wrong:
+#  A problem occurred configuring project ':app'.
+#   > Failed to notify project evaluation listener.
+#   > The file '/home/runner/work/Fitness-Application-Compose/Fitness-Application-Compose/local.properties' could not be found
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -36,6 +42,15 @@ jobs:
         env:
           ENCODED_SIGNING_GRADLE: ${{ secrets.SIGNING_GRADLE }}
         run: echo $ENCODED_SIGNING_GRADLE | base64 -di > signing.gradle
+
+      - name: Decode Google Server Client ID and add to local.properties
+        env:
+          ENCODED_STRING: ${{ secrets.GOOGLE_SERVER_CLIENT_ID }}
+        run: |
+          if [ ! -f local.properties ]; then
+            touch local.properties
+          fi
+          echo $ENCODED_STRING | base64 -di >> local.properties
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew

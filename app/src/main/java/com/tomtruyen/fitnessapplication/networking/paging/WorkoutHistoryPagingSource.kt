@@ -24,10 +24,12 @@ class WorkoutHistoryPagingSource(
 
     override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, WorkoutHistoryWithWorkout> {
         return try {
-            val currentDocument = params.key ?: query.get().await()
-            val lastVisibleDocument = currentDocument.documents.lastOrNull()
+            val currentDocument = params.key ?: query.get().await() // get().await() is only executed on the first page
 
-            val nextDocument = lastVisibleDocument?.let {
+            // Get the first document -> Most recent Month Year
+            val firstVisibleDocument = currentDocument.documents.firstOrNull()
+
+            val nextDocument = firstVisibleDocument?.let {
                 query.startAfter(it).get().await()
             }
 
