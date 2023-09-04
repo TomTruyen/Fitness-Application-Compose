@@ -5,13 +5,7 @@ on:
     branches:
       - main
       - master
-
-# TODO:
-# FIX:
-#  * What went wrong:
-#  A problem occurred configuring project ':app'.
-#   > Failed to notify project evaluation listener.
-#   > The file '/home/runner/work/Fitness-Application-Compose/Fitness-Application-Compose/local.properties' could not be found
+      
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
