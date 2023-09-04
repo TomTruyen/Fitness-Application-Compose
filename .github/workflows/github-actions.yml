@@ -60,6 +60,9 @@ jobs:
         with:
           gradle-home-cache-cleanup: true
 
+      - name: Run tests
+        run: ./gradlew test
+
       - name: Build Release Bundle
         run: ./gradlew app:bundleRelease
 
@@ -67,10 +70,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: app-bundle
-          path: app/build/outputs/bundle/prodRelease/app-prod-release.aab
-
-      - name: Build and run tests
-        run: ./gradlew test
+          path: app/build/outputs/bundle/release/app-release.aab
 
 
 
