@@ -33,8 +33,6 @@ class WorkoutHistoryRepositoryImpl(
 ): WorkoutHistoryRepository() {
     private val workoutRepository by inject<WorkoutRepository>(WorkoutRepository::class.java)
 
-    override fun findWorkoutHistoriesAsync() = workoutHistoryDao.findWorkoutHistoriesAsync()
-
     override fun findWorkoutHistoriesByRange(
         start: Long,
         end: Long
@@ -87,7 +85,9 @@ class WorkoutHistoryRepositoryImpl(
             },
         )
 
-        return Pager(config = PagingConfig(pageSize = 20)) {
+        // PageSize is set to 1 because we only want to load the most recent MonthYear, in a lot of cases most users won't scroll to other months
+        // Especially not to months that are years ago
+        return Pager(config = PagingConfig(pageSize = 1)) {
             source
         }.flow
     }
