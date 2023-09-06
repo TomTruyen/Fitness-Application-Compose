@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.history
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -72,7 +73,7 @@ fun WorkoutHistoryItem(
     entry: WorkoutHistoryWithWorkout
 ) {
     Text(
-        text = entry.history.id,
+        text = entry.toString(),
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 32.dp)
     )
 }

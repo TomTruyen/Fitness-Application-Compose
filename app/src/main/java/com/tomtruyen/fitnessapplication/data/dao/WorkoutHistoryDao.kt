@@ -11,10 +11,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 abstract class WorkoutHistoryDao {
     @Transaction
-    @Query("SELECT * FROM ${WorkoutHistory.TABLE_NAME}")
-    abstract fun findWorkoutHistoriesAsync(): Flow<List<WorkoutHistoryWithWorkout>>
-
-    @Transaction
     @Query("SELECT * FROM ${WorkoutHistory.TABLE_NAME} WHERE createdAt BETWEEN :start AND :end")
     abstract fun findWorkoutHistoriesByRange(
         start: Long,

@@ -35,6 +35,7 @@ class StopwatchTimer(
         }
     }
 
+    @Synchronized
     fun stop() {
         isActive = false
     }

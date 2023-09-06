@@ -5,18 +5,20 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.ktx.toObject
 import com.tomtruyen.fitnessapplication.data.dao.WorkoutHistoryDao
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutHistoryWithWorkout
 import com.tomtruyen.fitnessapplication.networking.models.WorkoutHistoriesResponse
 import com.tomtruyen.fitnessapplication.networking.models.WorkoutHistoryResponse
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import org.koin.java.KoinJavaComponent.inject
 
 class WorkoutHistoryPagingSource(
     private val query: Query,
-    private val onSaveResponse: (List<WorkoutHistoryResponse>) -> Unit
+    private val onSaveResponse: (List<WorkoutHistoryResponse>) -> Job
 ): PagingSource<QuerySnapshot, WorkoutHistoryWithWorkout>() {
     private val workoutHistoryDao by inject<WorkoutHistoryDao>(WorkoutHistoryDao::class.java)
 
@@ -33,12 +35,13 @@ class WorkoutHistoryPagingSource(
                 query.startAfter(it).get().await()
             }
 
-            val data = currentDocument.toObjects(WorkoutHistoriesResponse::class.java).flatMap { it.data }
+            val data = firstVisibleDocument?.toObject(WorkoutHistoriesResponse::class.java)?.data ?: emptyList()
 
             val savedHistories = withContext(Dispatchers.IO) {
-                onSaveResponse(data)
+                onSaveResponse(data).join()
                 workoutHistoryDao.findWorkoutHistoriesByIds(data.map { it.id })
             }
+
 
             LoadResult.Page(
                 data = savedHistories,

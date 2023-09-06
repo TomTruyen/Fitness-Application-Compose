@@ -9,8 +9,6 @@ import com.tomtruyen.fitnessapplication.networking.models.WorkoutHistoryResponse
 import kotlinx.coroutines.flow.Flow
 
 abstract class WorkoutHistoryRepository: BaseRepository() {
-    abstract fun findWorkoutHistoriesAsync(): Flow<List<WorkoutHistoryWithWorkout>>
-
     abstract fun findWorkoutHistoriesByRange(
         start: Long,
         end: Long,
