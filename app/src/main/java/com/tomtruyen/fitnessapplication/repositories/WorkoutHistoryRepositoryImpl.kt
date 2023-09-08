@@ -99,8 +99,7 @@ class WorkoutHistoryRepositoryImpl(
         history: WorkoutHistoryResponse,
         callback: FirebaseCallback<Unit>
     ) {
-//        val monthYear = LocalDate.now().format(DateTimeFormatter.ofPattern("MMMM-yyyy"))
-        val monthYear = "test"
+        val monthYear = LocalDate.now().format(DateTimeFormatter.ofPattern("MMMM-yyyy"))
 
         val historyDocumentRef = db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
             .document(userId)
