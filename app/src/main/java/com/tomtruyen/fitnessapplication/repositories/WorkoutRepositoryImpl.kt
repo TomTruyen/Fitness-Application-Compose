@@ -89,7 +89,7 @@ class WorkoutRepositoryImpl(
         workoutId: String,
         callback: FirebaseCallback<Unit>
     ) {
-        val workout = workoutDao.findById(workoutId)?.toWorkoutResponse() ?: return
+        val workout = workoutDao.findById(workoutId)?.toWorkoutResponse() ?: return callback.onStopLoading()
 
         db.collection(USER_WORKOUT_COLLECTION_NAME)
             .document(userId)

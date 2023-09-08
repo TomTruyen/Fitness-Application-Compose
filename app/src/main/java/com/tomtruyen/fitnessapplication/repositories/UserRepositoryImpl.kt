@@ -75,7 +75,7 @@ class UserRepositoryImpl(
     override fun getUser() = auth.currentUser
 
     private fun getUserData(callback: FirebaseCallback<FirebaseUser?>) = scope.launch {
-        val userId = getUser()?.uid ?: return@launch
+        val userId = getUser()?.uid ?: return@launch callback.onStopLoading()
 
         settingsRepository.getSettings(
             userId = userId,

@@ -118,7 +118,7 @@ class ExerciseRepositoryImpl(
         exerciseId: String,
         callback: FirebaseCallback<Unit>
     ) {
-        val exercise = exerciseDao.findUserExerciseById(exerciseId) ?: return
+        val exercise = exerciseDao.findUserExerciseById(exerciseId) ?: return callback.onStopLoading()
 
         // No need to check if document exists, because if it doesn't then this exercise shouldn't exist either
         db.collection(USER_EXERCISE_COLLECTION_NAME)
