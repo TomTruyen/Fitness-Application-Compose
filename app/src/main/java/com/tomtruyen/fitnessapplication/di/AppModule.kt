@@ -56,10 +56,10 @@ val appModule = module {
 
     // Repositories
     single<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
-    single<ExerciseRepository> { ExerciseRepositoryImpl(get(), get()) }
-    single<SettingsRepository> { SettingsRepositoryImpl(get(), get()) }
-    single<WorkoutRepository> { WorkoutRepositoryImpl(get(), get(), get(), get(), get()) }
-    single<WorkoutHistoryRepository> { WorkoutHistoryRepositoryImpl(get(), get(), get()) }
+    single<ExerciseRepository> { ExerciseRepositoryImpl(get()) }
+    single<SettingsRepository> { SettingsRepositoryImpl(get()) }
+    single<WorkoutRepository> { WorkoutRepositoryImpl(get(), get(), get(), get()) }
+    single<WorkoutHistoryRepository> { WorkoutHistoryRepositoryImpl(get(), get()) }
 
     // ViewModels
     viewModelOf(::LoginViewModel)

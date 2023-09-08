@@ -14,7 +14,6 @@ import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseReposito
 import kotlinx.coroutines.launch
 
 class ExerciseRepositoryImpl(
-    private val globalProvider: GlobalProvider,
     private val exerciseDao: ExerciseDao
 ): ExerciseRepository() {
     override fun findExercises(query: String, filter: ExerciseFilter) = exerciseDao.findAllAsync(

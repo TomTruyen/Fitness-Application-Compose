@@ -31,6 +31,6 @@ abstract class WorkoutHistoryRepository: BaseRepository() {
     abstract suspend fun finishWorkout(
         userId: String,
         history: WorkoutHistoryResponse,
-        callback: FirebaseCallback<List<WorkoutHistoryResponse>>
+        callback: FirebaseCallback<Unit>
     )
 }

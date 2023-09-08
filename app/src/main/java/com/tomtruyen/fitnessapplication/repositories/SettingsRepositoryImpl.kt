@@ -10,7 +10,6 @@ import com.tomtruyen.fitnessapplication.repositories.interfaces.SettingsReposito
 import kotlinx.coroutines.launch
 
 class SettingsRepositoryImpl(
-    private val globalProvider: GlobalProvider,
     private val settingsDao: SettingsDao
 ): SettingsRepository() {
     override fun findSettings() = settingsDao.findSettings()

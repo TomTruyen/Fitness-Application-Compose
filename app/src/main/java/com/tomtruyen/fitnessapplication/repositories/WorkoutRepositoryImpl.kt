@@ -14,7 +14,6 @@ import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepositor
 import kotlinx.coroutines.launch
 
 class WorkoutRepositoryImpl(
-    private val globalProvider: GlobalProvider,
     private val workoutDao: WorkoutDao,
     private val workoutExerciseDao: WorkoutExerciseDao,
     private val workoutSetDao: WorkoutSetDao,

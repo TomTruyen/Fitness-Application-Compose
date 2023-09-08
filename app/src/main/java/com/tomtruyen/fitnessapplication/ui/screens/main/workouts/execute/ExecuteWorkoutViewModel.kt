@@ -65,8 +65,8 @@ class ExecuteWorkoutViewModel(
                 duration = duration,
                 workout = state.value.workout
             ),
-            callback = object: FirebaseCallback<List<WorkoutHistoryResponse>> {
-                override fun onSuccess(value: List<WorkoutHistoryResponse>) {
+            callback = object: FirebaseCallback<Unit> {
+                override fun onSuccess(value: Unit) {
                     navigate(ExecuteWorkoutNavigationType.Finish)
                 }
 

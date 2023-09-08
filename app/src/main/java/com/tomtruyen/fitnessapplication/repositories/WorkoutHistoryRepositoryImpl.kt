@@ -3,7 +3,9 @@ package com.tomtruyen.fitnessapplication.repositories
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.SetOptions
 import com.tomtruyen.fitnessapplication.data.dao.WorkoutDao
 import com.tomtruyen.fitnessapplication.data.dao.WorkoutHistoryDao
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutHistoryWithWorkout
@@ -28,7 +30,6 @@ import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 class WorkoutHistoryRepositoryImpl(
-    private val globalProvider: GlobalProvider,
     private val workoutHistoryDao: WorkoutHistoryDao,
     private val workoutDao: WorkoutDao
 ): WorkoutHistoryRepository() {
@@ -96,51 +97,35 @@ class WorkoutHistoryRepositoryImpl(
     override suspend fun finishWorkout(
         userId: String,
         history: WorkoutHistoryResponse,
-        callback: FirebaseCallback<List<WorkoutHistoryResponse>>
+        callback: FirebaseCallback<Unit>
     ) {
-        val monthYear = LocalDate.now().format(DateTimeFormatter.ofPattern("MMMM-yyyy"))
+//        val monthYear = LocalDate.now().format(DateTimeFormatter.ofPattern("MMMM-yyyy"))
+        val monthYear = "test"
 
         val historyDocumentRef = db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
             .document(userId)
             .collection(USER_WORKOUT_HISTORY_FIELD_NAME)
             .document(monthYear)
 
-        // Get Histories for Current Month Year
-        val historiesForMonthYear = try {
-            historyDocumentRef
-                .get()
-                .await()
-                .toObject(WorkoutHistoriesResponse::class.java)?.data ?: emptyList()
-        } catch (e: Exception) {
-            emptyList()
-        }
-
-        // Create new history list with the new history
-        val histories = historiesForMonthYear + history
-
-        // Actually save the history
-        db.runBatch { batch ->
-            batch.set(
-                historyDocumentRef,
-                WorkoutHistoriesResponse(histories)
-            )
-
-            batch.set(
-                db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
-                    .document(userId)
-                    .collection(USER_WORKOUT_HISTORY_WORKOUTS_COLLECTION_NAME)
-                    .document(history.id),
-                history
-            )
-        }.handleCompletionResult(
-            context = globalProvider.context,
+        updateOrSet(
+            ref = historyDocumentRef,
+            setData = WorkoutHistoriesResponse(listOf(history)),
+            updateData = FieldValue.arrayUnion(history),
             callback = callback
         ) {
             launchWithTransaction {
-                saveWorkoutHistoryResponses(histories)
+                saveWorkoutHistoryResponses(listOf(history))
             }
 
-            callback.onSuccess(histories)
+            // Store the workout separately to be able to know what the "last workout" was for when performing next
+            // We don't check this for failure because it isn't breaking the flow of the app if it fails
+            db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
+                .document(userId)
+                .collection(USER_WORKOUT_HISTORY_WORKOUTS_COLLECTION_NAME)
+                .document(history.id)
+                .set(history)
+
+            callback.onSuccess(Unit)
         }
     }
 
