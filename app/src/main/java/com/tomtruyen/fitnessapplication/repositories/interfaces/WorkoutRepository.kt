@@ -15,13 +15,18 @@ abstract class WorkoutRepository: BaseRepository() {
         userId: String,
         callback: FirebaseCallback<List<WorkoutResponse>>
     )
-    abstract fun saveWorkouts(
+    abstract suspend fun saveWorkout(
         userId: String,
-        workouts: List<WorkoutResponse>,
-        callback: FirebaseCallback<List<WorkoutResponse>>
+        workout: WorkoutResponse,
+        isUpdate: Boolean,
+        callback: FirebaseCallback<Unit>
     )
 
-    abstract suspend fun deleteWorkout(userId: String, workoutId: String, callback: FirebaseCallback<List<WorkoutResponse>>)
+    abstract suspend fun deleteWorkout(
+        userId: String,
+        workoutId: String,
+        callback: FirebaseCallback<Unit>
+    )
 
     abstract suspend fun saveWorkoutResponses(responses: List<WorkoutResponse>)
 }

@@ -46,10 +46,6 @@ class CreateWorkoutViewModel(
 
         isLoading(true)
 
-        val workouts = workoutRepository.findWorkouts().map {
-            it.toWorkoutResponse()
-        }.toMutableList()
-
         val workout = state.value.workout.apply {
             exercises.forEachIndexed { index, workoutExerciseResponse ->
                 workoutExerciseResponse.order = index
@@ -58,17 +54,12 @@ class CreateWorkoutViewModel(
             unit = state.value.settings.unit
         }
 
-        if(isEditing) {
-            workouts.removeIf { it.id == id }
-        }
-
-        workouts.add(workout)
-
-        workoutRepository.saveWorkouts(
+        workoutRepository.saveWorkout(
             userId = userId,
-            workouts = workouts,
-            callback = object: FirebaseCallback<List<WorkoutResponse>> {
-                override fun onSuccess(value: List<WorkoutResponse>) {
+            workout = workout,
+            isUpdate = isEditing,
+            callback = object: FirebaseCallback<Unit> {
+                override fun onSuccess(value: Unit) {
                     navigate(CreateWorkoutNavigationType.Back)
                 }
 

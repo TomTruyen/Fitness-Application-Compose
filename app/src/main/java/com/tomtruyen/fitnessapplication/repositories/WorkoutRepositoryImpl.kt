@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.repositories
 
+import com.google.firebase.firestore.FieldValue
 import com.tomtruyen.fitnessapplication.data.dao.ExerciseDao
 import com.tomtruyen.fitnessapplication.data.dao.WorkoutDao
 import com.tomtruyen.fitnessapplication.data.dao.WorkoutExerciseDao
@@ -52,11 +53,22 @@ class WorkoutRepositoryImpl(
             }
     }
 
-    override fun saveWorkouts(
+    override suspend fun saveWorkout(
         userId: String,
-        workouts: List<WorkoutResponse>,
-        callback: FirebaseCallback<List<WorkoutResponse>>
+        workout: WorkoutResponse,
+        isUpdate: Boolean,
+        callback: FirebaseCallback<Unit>
     ) {
+        val workouts = workoutDao.findWorkouts().map {
+            it.toWorkoutResponse()
+        }.toMutableList().apply {
+            if(isUpdate) {
+                removeIf { it.id == workout.id }
+            }
+
+            add(workout)
+        }
+
         db.collection(USER_WORKOUT_COLLECTION_NAME)
             .document(userId)
             .set(WorkoutsResponse(workouts))
@@ -65,30 +77,33 @@ class WorkoutRepositoryImpl(
                 callback = callback
             ) {
                 launchWithTransaction {
-                    if(workouts.isEmpty()) {
-                        workoutDao.deleteAll()
-                    } else {
-                        workoutDao.deleteAllWorkoutsExcept(workouts.map { it.id })
-                    }
-
                     saveWorkoutResponses(workouts)
                 }
 
-                callback.onSuccess(workouts)
+                callback.onSuccess(Unit)
             }
     }
 
     override suspend fun deleteWorkout(
         userId: String,
         workoutId: String,
-        callback: FirebaseCallback<List<WorkoutResponse>>
+        callback: FirebaseCallback<Unit>
     ) {
-        val workouts = workoutDao.findWorkouts().toMutableList().apply {
-            val workout = find { it.workout.id == workoutId } ?: return@apply
-            remove(workout)
-        }.map { it.toWorkoutResponse() }
+        val workout = workoutDao.findById(workoutId)?.toWorkoutResponse() ?: return
 
-        saveWorkouts(userId, workouts, callback)
+        db.collection(USER_WORKOUT_COLLECTION_NAME)
+            .document(userId)
+            .update("data", FieldValue.arrayRemove(workout))
+            .handleCompletionResult(
+                context = globalProvider.context,
+                callback = callback
+            ) {
+                launchWithTransaction {
+                    workoutDao.deleteById(workoutId)
+                }
+
+                callback.onSuccess(Unit)
+            }
     }
 
     override suspend fun saveWorkoutResponses(responses: List<WorkoutResponse>) {

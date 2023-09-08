@@ -34,4 +34,7 @@ abstract class WorkoutDao {
 
     @Upsert
     abstract fun saveAll(workouts: List<Workout>): List<Long>
+
+    @Query("DELETE FROM ${Workout.TABLE_NAME} WHERE id = :workoutId")
+    abstract fun deleteById(workoutId: String): Int
 }
