@@ -28,9 +28,9 @@ abstract class WorkoutHistoryRepository: BaseRepository() {
         userId: String
     ): Flow<PagingData<WorkoutHistoryWithWorkout>>
 
-    abstract fun finishWorkout(
+    abstract suspend fun finishWorkout(
         userId: String,
-        histories: List<WorkoutHistoryResponse>,
+        history: WorkoutHistoryResponse,
         callback: FirebaseCallback<List<WorkoutHistoryResponse>>
     )
 }

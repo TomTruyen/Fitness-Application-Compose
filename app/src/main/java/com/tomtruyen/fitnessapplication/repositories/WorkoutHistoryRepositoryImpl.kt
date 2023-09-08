@@ -21,6 +21,7 @@ import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutHistoryRe
 import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import org.koin.java.KoinJavaComponent.inject
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -92,31 +93,45 @@ class WorkoutHistoryRepositoryImpl(
         }.flow
     }
 
-    override fun finishWorkout(
+    override suspend fun finishWorkout(
         userId: String,
-        histories: List<WorkoutHistoryResponse>,
+        history: WorkoutHistoryResponse,
         callback: FirebaseCallback<List<WorkoutHistoryResponse>>
     ) {
         val monthYear = LocalDate.now().format(DateTimeFormatter.ofPattern("MMMM-yyyy"))
 
+        val historyDocumentRef = db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
+            .document(userId)
+            .collection(USER_WORKOUT_HISTORY_FIELD_NAME)
+            .document(monthYear)
+
+        // Get Histories for Current Month Year
+        val historiesForMonthYear = try {
+            historyDocumentRef
+                .get()
+                .await()
+                .toObject(WorkoutHistoriesResponse::class.java)?.data ?: emptyList()
+        } catch (e: Exception) {
+            emptyList()
+        }
+
+        // Create new history list with the new history
+        val histories = historiesForMonthYear + history
+
+        // Actually save the history
         db.runBatch { batch ->
             batch.set(
-                db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
-                    .document(userId)
-                    .collection(USER_WORKOUT_HISTORY_FIELD_NAME)
-                    .document(monthYear),
+                historyDocumentRef,
                 WorkoutHistoriesResponse(histories)
             )
 
-            histories.lastOrNull()?.workout?.let { finishedWorkout ->
-                batch.set(
-                    db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
-                        .document(userId)
-                        .collection(USER_WORKOUT_HISTORY_WORKOUTS_COLLECTION_NAME)
-                        .document(finishedWorkout.id),
-                    finishedWorkout
-                )
-            }
+            batch.set(
+                db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
+                    .document(userId)
+                    .collection(USER_WORKOUT_HISTORY_WORKOUTS_COLLECTION_NAME)
+                    .document(history.id),
+                history
+            )
         }.handleCompletionResult(
             context = globalProvider.context,
             callback = callback

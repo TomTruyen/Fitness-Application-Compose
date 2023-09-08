@@ -59,17 +59,12 @@ class ExecuteWorkoutViewModel(
 
         isLoading(true)
 
-        val histories = historyRepository.findWorkoutHistoriesByRange(
-            start = YearMonth.now().atDay(1).toEpochDay(),
-            end = YearMonth.now().atEndOfMonth().toEpochDay(),
-        ).map { it.toWorkoutHistoryResponse() } + WorkoutHistoryResponse(
-            duration = duration,
-            workout = state.value.workout
-        )
-
         historyRepository.finishWorkout(
             userId = userId,
-            histories = histories,
+            history = WorkoutHistoryResponse(
+                duration = duration,
+                workout = state.value.workout
+            ),
             callback = object: FirebaseCallback<List<WorkoutHistoryResponse>> {
                 override fun onSuccess(value: List<WorkoutHistoryResponse>) {
                     navigate(ExecuteWorkoutNavigationType.Finish)
