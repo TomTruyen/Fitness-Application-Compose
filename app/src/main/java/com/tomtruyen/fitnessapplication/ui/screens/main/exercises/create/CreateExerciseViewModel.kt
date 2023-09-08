@@ -47,23 +47,16 @@ class CreateExerciseViewModel(
 
         isLoading(true)
 
-        val exercises = exerciseRepository.findUserExercises().toMutableList()
-
         val exercise = state.value.exercise.apply {
             if(equipment == Exercise.DEFAULT_DROPDOWN_VALUE) equipment = null
         }
 
-        if(isEditing) {
-            exercises.removeIf { it.id == id }
-        }
-
-        exercises.add(exercise)
-
-        exerciseRepository.saveUserExercises(
+        exerciseRepository.saveUserExercise(
             userId = userId,
-            exercises = exercises,
-            object: FirebaseCallback<List<Exercise>> {
-                override fun onSuccess(value: List<Exercise>) {
+            exercise = exercise,
+            isUpdate = isEditing,
+            object: FirebaseCallback<Unit> {
+                override fun onSuccess(value: Unit) {
                     navigate(CreateExerciseNavigationType.Back)
                 }
 

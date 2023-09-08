@@ -1,6 +1,7 @@
 package com.tomtruyen.fitnessapplication.repositories
 
 import android.util.Log
+import com.google.firebase.firestore.FieldValue
 import com.tomtruyen.fitnessapplication.data.dao.ExerciseDao
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.extensions.handleCompletionResult
@@ -48,6 +49,7 @@ class ExerciseRepositoryImpl(
                 val exercises = it.toObject(ExercisesResponse::class.java)?.data ?: emptyList()
 
                 launchWithTransaction {
+                    exerciseDao.deleteAllNonUserExercises()
                     exerciseDao.saveAll(exercises)
                 }
 
@@ -80,53 +82,58 @@ class ExerciseRepositoryImpl(
             }
     }
 
-    override fun saveUserExercises(
+    override suspend fun saveUserExercise(
         userId: String,
-        exercises: List<Exercise>,
-        callback: FirebaseCallback<List<Exercise>>
+        exercise: Exercise,
+        isUpdate: Boolean,
+        callback: FirebaseCallback<Unit>
     ) {
-        val userExercises = exercises.map {
-            it.apply {
-                isUserCreated = true
+        exercise.isUserCreated = true
+
+        val exercises = exerciseDao.findAllUserExercises().toMutableList().apply {
+            if(isUpdate) {
+                removeIf { it.id == exercise.id }
             }
+
+            add(exercise)
         }
 
         db.collection(USER_EXERCISE_COLLECTION_NAME)
             .document(userId)
-            .set(
-                UserExercisesResponse(
-                    exercises = userExercises
-                )
-            )
+            .set(UserExercisesResponse(exercises))
             .handleCompletionResult(
                 context = globalProvider.context,
                 callback = callback
             ) {
                 launchWithTransaction {
-                    if(userExercises.isEmpty()) {
-                        exerciseDao.deleteAllUserExercises()
-                    } else {
-                        exerciseDao.deleteAllUserExercisesExcept(userExercises.map { it.id })
-                    }
-
-                    exerciseDao.saveAll(userExercises)
+                    exerciseDao.save(exercise)
                 }
 
-                callback.onSuccess(userExercises)
+                callback.onSuccess(Unit)
             }
     }
 
     override suspend fun deleteUserExercise(
         userId: String,
         exerciseId: String,
-        callback: FirebaseCallback<List<Exercise>>
+        callback: FirebaseCallback<Unit>
     ) {
-        val userExercises = exerciseDao.findAllUserExercises().toMutableList().apply {
-            val exercise = find { it.id == exerciseId } ?: return@apply
-            remove(exercise)
-        }
+        val exercise = exerciseDao.findUserExerciseById(exerciseId) ?: return
 
-        saveUserExercises(userId, userExercises, callback)
+        // No need to check if document exists, because if it doesn't then this exercise shouldn't exist either
+        db.collection(USER_EXERCISE_COLLECTION_NAME)
+            .document(userId)
+            .update("exercises", FieldValue.arrayRemove(exercise))
+            .handleCompletionResult(
+                context = globalProvider.context,
+                callback = callback
+            ) {
+                launchWithTransaction {
+                    exerciseDao.deleteUserExerciseById(exerciseId)
+                }
+
+                callback.onSuccess(Unit)
+            }
     }
 
     companion object {

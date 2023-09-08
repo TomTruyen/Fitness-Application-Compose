@@ -22,8 +22,8 @@ class ExerciseDetailViewModel(
         exerciseRepository.deleteUserExercise(
             userId = userId,
             exerciseId = id,
-            object: FirebaseCallback<List<Exercise>> {
-                override fun onSuccess(value: List<Exercise>) {
+            object: FirebaseCallback<Unit> {
+                override fun onSuccess(value: Unit) {
                     navigate(ExerciseDetailNavigationType.Back)
                 }
 

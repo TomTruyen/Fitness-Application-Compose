@@ -19,7 +19,13 @@ abstract class ExerciseDao {
     abstract fun findEquipment(): Flow<List<String>>
 
     @Upsert
+    abstract fun save(exercise: Exercise): Long
+
+    @Upsert
     abstract fun saveAll(exercises: List<Exercise>): List<Long>
+
+    @Query("DELETE FROM ${Exercise.TABLE_NAME} WHERE isUserCreated = 0")
+    abstract fun deleteAllNonUserExercises(): Int
 
     @Query("DELETE FROM ${Exercise.TABLE_NAME} WHERE isUserCreated = 1")
     abstract fun deleteAllUserExercises(): Int
@@ -32,6 +38,9 @@ abstract class ExerciseDao {
 
     @Query("SELECT * FROM ${Exercise.TABLE_NAME} WHERE id = :id AND isUserCreated = 1")
     abstract fun findUserExerciseById(id: String): Exercise?
+
+    @Query("DELETE FROM ${Exercise.TABLE_NAME} WHERE id = :id AND isUserCreated = 1")
+    abstract fun deleteUserExerciseById(id: String): Int
 
     @Query("SELECT * FROM ${Exercise.TABLE_NAME} WHERE isUserCreated = 1")
     abstract fun findAllUserExercises(): List<Exercise>
