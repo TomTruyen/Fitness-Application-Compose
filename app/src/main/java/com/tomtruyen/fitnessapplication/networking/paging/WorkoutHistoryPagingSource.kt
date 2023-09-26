@@ -42,7 +42,6 @@ class WorkoutHistoryPagingSource(
                 workoutHistoryDao.findWorkoutHistoriesByIds(data.map { it.id })
             }
 
-
             LoadResult.Page(
                 data = savedHistories,
                 prevKey = null,

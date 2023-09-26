@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 abstract class WorkoutHistoryDao {
     @Transaction
-    @Query("SELECT * FROM ${WorkoutHistory.TABLE_NAME} WHERE createdAt BETWEEN :start AND :end")
+    @Query("SELECT * FROM ${WorkoutHistory.TABLE_NAME} WHERE createdAt BETWEEN :start AND :end ORDER BY createdAt DESC")
     abstract fun findWorkoutHistoriesByRange(
         start: Long,
         end: Long
@@ -20,6 +20,6 @@ abstract class WorkoutHistoryDao {
     @Upsert
     abstract fun saveAll(histories: List<WorkoutHistory>): List<Long>
 
-    @Query("SELECT * FROM ${WorkoutHistory.TABLE_NAME} WHERE id IN (:ids)")
+    @Query("SELECT * FROM ${WorkoutHistory.TABLE_NAME} WHERE id IN (:ids) ORDER BY createdAt DESC")
     abstract fun findWorkoutHistoriesByIds(ids: List<String>): List<WorkoutHistoryWithWorkout>
 }

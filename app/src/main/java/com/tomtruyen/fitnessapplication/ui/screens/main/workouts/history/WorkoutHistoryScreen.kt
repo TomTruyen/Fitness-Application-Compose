@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -42,6 +43,7 @@ import com.tomtruyen.fitnessapplication.data.entities.WorkoutHistoryWithWorkout
 import com.tomtruyen.fitnessapplication.ui.shared.modifiers.drawColoredShadow
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
 import com.tomtruyen.fitnessapplication.utils.TimeUtils
+import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
 @RootNavGraph
@@ -51,7 +53,19 @@ fun WorkoutHistoryScreen(
     navController: NavController,
     viewModel: WorkoutHistoryViewModel = koinViewModel()
 ) {
+    val context = LocalContext.current
+
     val history = viewModel.history.collectAsLazyPagingItems()
+
+    LaunchedEffect(context, viewModel) {
+        viewModel.navigation.collectLatest { navigationType ->
+            when(navigationType) {
+                is WorkoutHistoryNavigationType.Detail -> {
+                    // TODO: Implement -- This is for a future update
+                }
+            }
+        }
+    }
 
     WorkoutHistoryScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
