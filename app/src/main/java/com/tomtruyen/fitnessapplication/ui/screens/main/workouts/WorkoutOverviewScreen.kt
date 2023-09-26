@@ -191,7 +191,7 @@ fun WorkoutListItem(
         }
     ) {
         Column(
-            modifier = modifier
+            modifier = Modifier.fillMaxWidth()
         ) {
             // Name + Expand Icon
             Row(

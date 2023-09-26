@@ -1,5 +1,7 @@
 package com.tomtruyen.fitnessapplication.utils
 
+import java.text.SimpleDateFormat
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 object TimeUtils {
@@ -40,4 +42,9 @@ object TimeUtils {
 
         return "0".repeat(LEADING_ZERO_WIDTH - str.length) + str
     }
+
+    fun formatDate(dateMillis: Long): String = SimpleDateFormat(
+        "dd MMM yyyy HH:mm",
+        Locale.getDefault()
+    ).format(dateMillis)
 }

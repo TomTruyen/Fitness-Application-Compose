@@ -12,4 +12,12 @@ class WorkoutHistoryViewModel(
     val history = workoutHistoryRepository.getWorkoutHistoriesPaginated(
         userRepository.getUser()?.uid!!
     ).cachedIn(vmScope)
+
+    fun onEvent(event: WorkoutHistoryUiEvent) {
+        when(event) {
+            is WorkoutHistoryUiEvent.OnDetailClicked -> {
+                navigate(WorkoutHistoryNavigationType.Detail(event.id))
+            }
+        }
+    }
 }
