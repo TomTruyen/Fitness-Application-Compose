@@ -57,6 +57,7 @@ import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutDetailScr
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutHistoryScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
+import com.tomtruyen.fitnessapplication.ui.shared.modifiers.drawColoredShadow
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.CollapsingToolbar
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -154,8 +155,6 @@ fun WorkoutOverviewScreenLayout(
                 modifier = Modifier
                     .fillMaxSize()
                     .animateContentSize(),
-                verticalArrangement = Arrangement.spacedBy(Dimens.Normal),
-                contentPadding = PaddingValues(Dimens.Normal)
             ) {
                 items(workouts) { workout ->
                     WorkoutListItem(
@@ -181,11 +180,20 @@ fun WorkoutListItem(
     }
 
     Card(
-        modifier = modifier,
+        modifier = modifier
+            .padding(
+                horizontal = Dimens.Normal,
+                vertical = Dimens.Small
+            )
+            .drawColoredShadow(
+                color = MaterialTheme.colorScheme.primary,
+                shadowRadius = 8.dp,
+                offsetY = 4.dp
+            ),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.background
         ),
-        elevation = CardDefaults.cardElevation(4.dp),
+        elevation = CardDefaults.cardElevation(0.dp),
         onClick = {
             onEvent(WorkoutOverviewUiEvent.OnDetailClicked(workoutWithExercises.workout.id))
         }
