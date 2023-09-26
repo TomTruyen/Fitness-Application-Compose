@@ -129,13 +129,19 @@ class WorkoutHistoryRepositoryImpl(
     }
 
     private suspend fun saveWorkoutHistoryResponses(responses: List<WorkoutHistoryResponse>) = transaction {
-        val histories = responses.map {
+        val responsesWithUniqueIds = responses.map { history ->
+            history.apply {
+                workout.id = getIdWithPrefix(workout.id, id)
+            }
+        }
+
+        val histories = responsesWithUniqueIds.map {
             it.toWorkoutHistory().apply {
                 workoutId = getIdWithPrefix(workoutId, FetchedData.Type.WORKOUT_HISTORY.identifier)
             }
         }
 
-        val workouts = responses.map { it.workout }.map {
+        val workouts = responsesWithUniqueIds.map { it.workout }.map {
             addPrefixToIds(it, FetchedData.Type.WORKOUT_HISTORY.identifier)
         }
 
