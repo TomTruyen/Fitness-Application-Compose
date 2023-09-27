@@ -33,6 +33,7 @@ import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.Dimens.MinButtonHeight
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutSet
+import com.tomtruyen.fitnessapplication.extensions.format
 import com.tomtruyen.fitnessapplication.model.RestAlertType
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.RestAlertDialog
@@ -81,11 +82,7 @@ fun WorkoutExerciseSet(
                 } else {
                     when (type) {
                         Exercise.ExerciseType.WEIGHT -> {
-                            val weight = try {
-                                lastPerformedSet.weight?.toInt()
-                            } catch(e: Exception) {
-                                lastPerformedSet.weight
-                            }
+                            val weight = lastPerformedSet.weight?.format()
 
                             if(lastPerformedSet.reps == null || weight == null) {
                                 "-"

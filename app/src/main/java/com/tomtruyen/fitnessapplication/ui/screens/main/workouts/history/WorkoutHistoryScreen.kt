@@ -40,6 +40,7 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutHistoryWithWorkout
+import com.tomtruyen.fitnessapplication.extensions.format
 import com.tomtruyen.fitnessapplication.ui.shared.modifiers.drawColoredShadow
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
 import com.tomtruyen.fitnessapplication.utils.TimeUtils
@@ -179,7 +180,7 @@ fun WorkoutHistoryItem(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            if(entry.totalWeight.toDouble() > 0) {
+            if(entry.totalWeight > 0) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -194,7 +195,7 @@ fun WorkoutHistoryItem(
                     )
 
                     Text(
-                        text = "${entry.totalWeight} ${entry.weightUnit}",
+                        text = "${entry.totalWeight.format()} ${entry.weightUnit}",
                         style = MaterialTheme.typography.bodyMedium.copy(
                             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                         ),

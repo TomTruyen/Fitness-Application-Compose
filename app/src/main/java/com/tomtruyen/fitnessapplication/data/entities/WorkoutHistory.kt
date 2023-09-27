@@ -9,7 +9,6 @@ import androidx.room.Relation
 import com.tomtruyen.fitnessapplication.networking.models.WorkoutHistoryResponse
 import com.tomtruyen.fitnessapplication.ui.screens.auth.login.LoginScreen
 import com.tomtruyen.fitnessapplication.utils.TimeUtils
-import java.lang.NumberFormatException
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
@@ -53,7 +52,7 @@ data class WorkoutHistoryWithWorkout(
     )
     val workoutWithExercises: WorkoutWithExercises
 ) {
-    val totalWeight get(): Number {
+    val totalWeight get(): Double {
         val weight = workoutWithExercises.exercises.sumOf {
             it.sets.sumOf setSumOf@ { set ->
                 val reps = set.reps ?: return@setSumOf 0.0
@@ -62,11 +61,7 @@ data class WorkoutHistoryWithWorkout(
             }
         }
 
-        return try {
-            weight.toInt()
-        } catch (e: NumberFormatException) {
-            weight
-        }
+        return weight
     }
 
     val weightUnit get() = workoutWithExercises.workout.unit
