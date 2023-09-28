@@ -2,29 +2,36 @@ package com.tomtruyen.fitnessapplication.navigation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandIn
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.fitnessapplication.ui.theme.ChineseSilver
 
 @Composable
 fun MainBottomNavigation(
@@ -41,34 +48,60 @@ fun MainBottomNavigation(
         NavigationBar(
             containerColor = Color.Transparent,
         ) {
-            BottomNavigation.items.forEach { item ->
-                val selected = item.route == backstackEntry.value?.destination?.route
-
-                NavigationBarItem(
-                    selected = selected,
-                    onClick = { navController.navigate(item.route) },
-                    label = {
-                        Text(
-                            text = stringResource(id = item.label),
-                        )
-                    },
-                    icon = {
-                        Icon(
-                            imageVector = item.icon,
-                            contentDescription = stringResource(id = item.label),
-                            modifier = if (item.icon == Icons.Filled.FitnessCenter) {
-                                Modifier.rotate(-45f)
-                            } else {
-                                Modifier
-                            }
-                        )
-                    },
-                    colors = NavigationBarItemDefaults.colors(
-                        indicatorColor = MaterialTheme.colorScheme.tertiary,
-                        selectedIconColor = MaterialTheme.colorScheme.onTertiary
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(top = Dimens.Small),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                BottomNavigation.items.forEach { item ->
+                    val selected = item.route == backstackEntry.value?.destination?.route
+                    BottomBarItem(
+                        navController = navController,
+                        item = item,
+                        selected = selected,
                     )
-                )
+                }
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BottomBarItem(
+    navController: NavController,
+    item: BottomNavigationItem,
+    selected: Boolean,
+) {
+    val size = 56.dp
+
+    Card(
+        modifier = Modifier.size(
+            width = size,
+            height = size,
+        ),
+        shape = FloatingActionButtonDefaults.shape,
+        onClick = {
+            navController.navigate(item.route)
+        },
+        colors = CardDefaults.cardColors(
+            contentColor = if(selected) Color.White else ChineseSilver,
+            containerColor = if(selected) MaterialTheme.colorScheme.primary else Color.Transparent,
+        )
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Icon(
+                imageVector = item.icon,
+                contentDescription = stringResource(id = item.label),
+                modifier = if (item.icon == Icons.Filled.FitnessCenter) {
+                    Modifier.rotate(-45f)
+                } else {
+                    Modifier
+                }.align(Alignment.Center)
+            )
         }
     }
 }

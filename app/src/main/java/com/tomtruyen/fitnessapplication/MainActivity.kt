@@ -26,6 +26,8 @@ import com.ramcosta.composedestinations.utils.currentDestinationAsState
 import com.ramcosta.composedestinations.utils.currentDestinationFlow
 import com.tomtruyen.fitnessapplication.extensions.navigateAndClearBackStack
 import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
+import com.tomtruyen.fitnessapplication.navigation.BottomNavigation
+import com.tomtruyen.fitnessapplication.navigation.BottomNavigationItem
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import com.tomtruyen.fitnessapplication.navigation.MainBottomNavigation
 import com.tomtruyen.fitnessapplication.navigation.NavArguments
@@ -33,9 +35,11 @@ import com.tomtruyen.fitnessapplication.ui.screens.NavGraphs
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.LoginScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ProfileScreenDestination
+import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutHistoryScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutOverviewScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutViewModel
+import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.history.WorkoutHistoryScreen
 import com.tomtruyen.fitnessapplication.ui.theme.FitnessApplicationTheme
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
@@ -73,11 +77,11 @@ class MainActivity : ComponentActivity() {
 
                 LaunchedEffect(destination) {
                     val isRootDestinations = destination in listOf(
-                        ProfileScreenDestination,
                         WorkoutOverviewScreenDestination,
-                        ExercisesScreenDestination
+                        ExercisesScreenDestination,
+                        WorkoutHistoryScreenDestination,
+                        ProfileScreenDestination,
                     )
-
 
                     val isExercisesFromWorkout = if(destination is ExercisesScreenDestination) {
                         // Get the isFromWorkout argument from the destination

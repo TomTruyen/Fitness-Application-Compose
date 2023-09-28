@@ -77,7 +77,6 @@ fun WorkoutOverviewScreen(
     LaunchedEffect(viewModel, context) {
         viewModel.navigation.collectLatest { navigationType ->
             when(navigationType) {
-                is WorkoutOverviewNavigationType.History -> navController.navigate(WorkoutHistoryScreenDestination)
                 is WorkoutOverviewNavigationType.CreateWorkout -> navController.navigate(
                     CreateWorkoutScreenDestination(id = null)
                 )
@@ -119,17 +118,6 @@ fun WorkoutOverviewScreenLayout(
                 navController = navController,
                 scrollBehavior = scrollBehavior
             ) {
-                IconButton(
-                    onClick = {
-                        onEvent(WorkoutOverviewUiEvent.OnHistoryClicked)
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.History,
-                        contentDescription = stringResource(id = R.string.history)
-                    )
-                }
-
                 IconButton(
                     onClick = {
                         onEvent(WorkoutOverviewUiEvent.OnCreateWorkoutClicked)

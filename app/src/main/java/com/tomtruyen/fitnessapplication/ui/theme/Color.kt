@@ -8,3 +8,6 @@ val SoftBlue = Color(0xFF3E82FC)
 val JordyBlue = Color(0xFF9AB8FF)
 val CharcoalBlack = Color(0xFF333333)
 val Firebrick = Color(0xFFB3261E)
+
+// New theme colors
+val ChineseSilver = Color(0xFFCACACA)

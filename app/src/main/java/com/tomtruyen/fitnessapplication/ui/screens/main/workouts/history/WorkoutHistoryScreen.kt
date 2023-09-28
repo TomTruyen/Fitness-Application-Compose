@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.outlined.FitnessCenter
 import androidx.compose.material.icons.outlined.Scale
@@ -19,15 +20,19 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -41,7 +46,9 @@ import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutHistoryWithWorkout
 import com.tomtruyen.fitnessapplication.extensions.format
+import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.WorkoutOverviewUiEvent
 import com.tomtruyen.fitnessapplication.ui.shared.modifiers.drawColoredShadow
+import com.tomtruyen.fitnessapplication.ui.shared.toolbars.CollapsingToolbar
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
 import com.tomtruyen.fitnessapplication.utils.TimeUtils
 import kotlinx.coroutines.flow.collectLatest
@@ -76,6 +83,7 @@ fun WorkoutHistoryScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutHistoryScreenLayout(
     snackbarHost: @Composable () -> Unit,
@@ -83,14 +91,19 @@ fun WorkoutHistoryScreenLayout(
     history: LazyPagingItems<WorkoutHistoryWithWorkout>,
     onEvent: (WorkoutHistoryUiEvent) -> Unit,
 ) {
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
     Scaffold(
         snackbarHost = snackbarHost,
         topBar = {
-            Toolbar(
+            CollapsingToolbar(
                 title = stringResource(id = R.string.history),
                 navController = navController,
+                scrollBehavior = scrollBehavior
             )
-        }
+        },
+        // nestedScroll modifier is required for the scroll behavior to work
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
         LazyColumn(
             modifier = Modifier.padding(it)
