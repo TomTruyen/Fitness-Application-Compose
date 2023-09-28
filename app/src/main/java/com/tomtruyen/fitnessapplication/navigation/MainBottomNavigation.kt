@@ -1,6 +1,10 @@
 package com.tomtruyen.fitnessapplication.navigation
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -22,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -74,6 +79,20 @@ fun BottomBarItem(
     item: BottomNavigationItem,
     selected: Boolean,
 ) {
+    val animationSpec: AnimationSpec<Color> = tween(100, 0, LinearEasing)
+
+    val animatedContentColor by animateColorAsState(
+        targetValue = if (selected) Color.White else ChineseSilver,
+        animationSpec = animationSpec,
+        label = ""
+    )
+
+    val animatedContainerColor by animateColorAsState(
+        targetValue = if (selected) MaterialTheme.colorScheme.primary else Color.Transparent,
+        animationSpec = animationSpec,
+        label = ""
+    )
+
     val size = 56.dp
 
     Card(
@@ -86,8 +105,8 @@ fun BottomBarItem(
             navController.navigate(item.route)
         },
         colors = CardDefaults.cardColors(
-            contentColor = if(selected) Color.White else ChineseSilver,
-            containerColor = if(selected) MaterialTheme.colorScheme.primary else Color.Transparent,
+            contentColor = animatedContentColor,
+            containerColor = animatedContainerColor,
         )
     ) {
         Box(
