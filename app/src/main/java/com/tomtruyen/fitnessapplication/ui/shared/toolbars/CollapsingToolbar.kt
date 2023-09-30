@@ -3,6 +3,7 @@ package com.tomtruyen.fitnessapplication.ui.shared.toolbars
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,12 +16,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.extensions.shouldShowNavigationIcon
 import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
+import com.tomtruyen.fitnessapplication.ui.theme.ChineseBlack
 import org.koin.compose.getKoin
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,7 +46,9 @@ fun CollapsingToolbar(
             Text(
                 text = title,
                 style = MaterialTheme.typography.headlineMedium.copy(
-                    fontSize = topAppBarTextSize
+                    fontSize = topAppBarTextSize,
+                    fontWeight = FontWeight.W500,
+                    color = ChineseBlack
                 )
             )
         },
@@ -53,8 +58,9 @@ fun CollapsingToolbar(
         ),
         navigationIcon = {
             if(navController.shouldShowNavigationIcon(isBottomBarVisible)) {
-                IconButton(
-                    onClick = { navController.popBackStack() }
+                Card (
+                    onClick = { navController.popBackStack() },
+
                 ) {
                     Icon(
                         imageVector = Icons.Filled.ChevronLeft,

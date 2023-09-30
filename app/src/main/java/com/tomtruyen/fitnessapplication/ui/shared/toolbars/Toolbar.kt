@@ -14,10 +14,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.extensions.shouldShowNavigationIcon
 import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
+import com.tomtruyen.fitnessapplication.ui.theme.ChineseBlack
 import org.koin.compose.getKoin
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,7 +34,11 @@ fun Toolbar(
 
     TopAppBar(
         title = {
-            Text(text = title)
+            Text(
+                text = title,
+                fontWeight = FontWeight.W500,
+                color = ChineseBlack
+            )
         },
         navigationIcon = {
             if(navController.shouldShowNavigationIcon(isBottomBarVisible)) {

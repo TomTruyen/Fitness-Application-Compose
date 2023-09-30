@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.ui.theme.Firebrick
+import com.tomtruyen.fitnessapplication.ui.theme.LighterRed
 
 sealed class SnackbarMessage(
     open val message: String? = null,
@@ -28,6 +28,6 @@ sealed class SnackbarMessage(
     class Error(
         override val message: String?,
         override val icon: ImageVector? = Icons.Filled.ErrorOutline,
-        override val backgroundColor: Color? = Firebrick,
+        override val backgroundColor: Color? = LighterRed,
     ) : SnackbarMessage(message, icon, backgroundColor)
 }

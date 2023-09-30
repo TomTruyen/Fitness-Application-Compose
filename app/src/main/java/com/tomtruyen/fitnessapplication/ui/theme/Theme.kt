@@ -23,11 +23,11 @@ private val DarkColorScheme = lightColorScheme(
     onBackground = ChineseBlack,
     primaryContainer = Topaz,
     onPrimaryContainer = White,
-    errorContainer = Firebrick,
+    errorContainer = LighterRed,
     onErrorContainer = White,
     surface = White,
     onSurface = ChineseBlack,
-    error = Firebrick,
+    error = LighterRed,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -41,11 +41,11 @@ private val LightColorScheme = lightColorScheme(
     onBackground = ChineseBlack,
     primaryContainer = Topaz,
     onPrimaryContainer = White,
-    errorContainer = Firebrick,
+    errorContainer = LighterRed,
     onErrorContainer = White,
     surface = White,
     onSurface = ChineseBlack,
-    error = Firebrick,
+    error = LighterRed,
 )
 
 @Composable

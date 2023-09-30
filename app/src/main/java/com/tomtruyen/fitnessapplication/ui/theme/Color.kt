@@ -10,7 +10,4 @@ val Cultured = Color(0xFFF6F6F6)
 val Topaz = Color(0xFFFFCB74)
 
 // Error Colors
-val Firebrick = Color(0xFFB3261E)
-
-// Success Color
-val Emerald = Color(0xFF2ECC71)
+val LighterRed = Color(0xFFFF5555)

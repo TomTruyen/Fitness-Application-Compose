@@ -64,7 +64,6 @@ fun WorkoutExerciseSet(
             text = "${setIndex + 1}",
             style = MaterialTheme.typography.bodyMedium.copy(
                 fontWeight = FontWeight.W500,
-                color = MaterialTheme.colorScheme.primary
             ),
             textAlign = TextAlign.Center,
             modifier = Modifier.width(MinButtonHeight)
