@@ -14,7 +14,6 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -66,10 +65,5 @@ fun CollapsingToolbar(
         },
         actions = actions,
         scrollBehavior = scrollBehavior,
-        modifier = if(scrollBehavior.state.collapsedFraction == 1f) {
-            Modifier.shadow(4.dp)
-        } else {
-            Modifier
-        }
     )
 }

@@ -13,37 +13,37 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = lightColorScheme(
-    primary = SoftBlue,
-    onPrimary = White,
-    secondary = CharcoalBlack,
-    onSecondary = ChineseWhite,
-    tertiary = JordyBlue,
+    primary = Topaz,
+    onPrimary = ChineseBlack,
+    secondary = Cultured,
+    onSecondary = ChineseBlack,
+    tertiary = ChineseBlack,
     onTertiary = White,
-    background = CharcoalBlack,
-    onBackground = ChineseWhite,
-    primaryContainer = JordyBlue,
-    onPrimaryContainer = ChineseBlack,
-    errorContainer = Firebrick,
-    onErrorContainer = ChineseBlack,
-    surface = ChineseBlack,
-    onSurface = ChineseWhite,
-    error = Firebrick
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = SoftBlue,
-    onPrimary = White,
-    secondary = ChineseWhite,
-    onSecondary = CharcoalBlack,
-    tertiary = JordyBlue,
-    onTertiary = White,
-    background = White,
+    background = Cultured,
     onBackground = ChineseBlack,
-    primaryContainer = JordyBlue,
+    primaryContainer = Topaz,
     onPrimaryContainer = White,
     errorContainer = Firebrick,
     onErrorContainer = White,
-    surface = ChineseWhite,
+    surface = White,
+    onSurface = ChineseBlack,
+    error = Firebrick,
+)
+
+private val LightColorScheme = lightColorScheme(
+    primary = Topaz,
+    onPrimary = ChineseBlack,
+    secondary = Cultured,
+    onSecondary = ChineseBlack,
+    tertiary = Topaz,
+    onTertiary = ChineseBlack,
+    background = Cultured,
+    onBackground = ChineseBlack,
+    primaryContainer = Topaz,
+    onPrimaryContainer = White,
+    errorContainer = Firebrick,
+    onErrorContainer = White,
+    surface = White,
     onSurface = ChineseBlack,
     error = Firebrick,
 )

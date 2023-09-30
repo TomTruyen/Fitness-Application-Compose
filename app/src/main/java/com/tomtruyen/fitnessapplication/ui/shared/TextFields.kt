@@ -27,12 +27,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.ui.theme.ChineseWhite
-import java.time.format.TextStyle
 
 
 object TextFields {
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Default(
         value: String?,
@@ -47,7 +44,7 @@ object TextFields {
         textStyle: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.bodyMedium,
         trailingIcon: @Composable (() -> Unit)? = null,
         keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-        containerColor: Color = MaterialTheme.colorScheme.surface,
+        containerColor: Color = Color.White,
         shape: Shape = MaterialTheme.shapes.medium,
         modifier: Modifier = Modifier
     ) {

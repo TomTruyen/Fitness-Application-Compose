@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -46,10 +47,7 @@ import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutHistoryWithWorkout
 import com.tomtruyen.fitnessapplication.extensions.format
-import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.WorkoutOverviewUiEvent
-import com.tomtruyen.fitnessapplication.ui.shared.modifiers.drawColoredShadow
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.CollapsingToolbar
-import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
 import com.tomtruyen.fitnessapplication.utils.TimeUtils
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -134,14 +132,9 @@ fun WorkoutHistoryItem(
             .padding(
                 horizontal = Dimens.Normal,
                 vertical = Dimens.Small
-            )
-            .drawColoredShadow(
-                color = MaterialTheme.colorScheme.primary,
-                shadowRadius = 8.dp,
-                offsetY = 4.dp
             ),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
+            containerColor = Color.White
         ),
         elevation = CardDefaults.cardElevation(0.dp),
         onClick = {

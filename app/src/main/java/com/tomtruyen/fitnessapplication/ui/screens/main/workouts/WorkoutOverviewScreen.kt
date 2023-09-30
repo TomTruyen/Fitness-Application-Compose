@@ -37,7 +37,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -57,7 +56,6 @@ import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutDetailScr
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutHistoryScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
-import com.tomtruyen.fitnessapplication.ui.shared.modifiers.drawColoredShadow
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.CollapsingToolbar
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -172,14 +170,9 @@ fun WorkoutListItem(
             .padding(
                 horizontal = Dimens.Normal,
                 vertical = Dimens.Small
-            )
-            .drawColoredShadow(
-                color = MaterialTheme.colorScheme.primary,
-                shadowRadius = 8.dp,
-                offsetY = 4.dp
             ),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
+            containerColor = Color.White
         ),
         elevation = CardDefaults.cardElevation(0.dp),
         onClick = {

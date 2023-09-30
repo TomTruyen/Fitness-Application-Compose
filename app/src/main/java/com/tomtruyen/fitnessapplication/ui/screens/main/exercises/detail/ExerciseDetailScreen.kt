@@ -166,7 +166,7 @@ fun ExerciseDetailScreenLayout(
                         ) { index, filter ->
                             ExerciseFilterChip(
                                 modifier = Modifier.padding(start = if (index == 0) Dimens.Normal else 0.dp),
-                                text = filter ?: "",
+                                text = filter?.lowercase()?.replaceFirstChar { it.uppercase() } ?: "",
                                 selected = true,
                             )
                         }

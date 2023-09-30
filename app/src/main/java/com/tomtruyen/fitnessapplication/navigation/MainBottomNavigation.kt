@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.fitnessapplication.ui.theme.ChineseBlack
 import com.tomtruyen.fitnessapplication.ui.theme.ChineseSilver
 
 @Composable
@@ -88,7 +89,7 @@ fun BottomBarItem(
     )
 
     val animatedContainerColor by animateColorAsState(
-        targetValue = if (selected) MaterialTheme.colorScheme.primary else Color.Transparent,
+        targetValue = if (selected) ChineseBlack else Color.Transparent,
         animationSpec = animationSpec,
         label = ""
     )
