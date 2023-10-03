@@ -32,7 +32,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.extensions.navigateAndClearBackStack
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.LoginScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.RegisterScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutOverviewScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
@@ -68,14 +67,12 @@ fun LoginScreen(
             when(navigationType) {
                 is LoginNavigationType.Home -> {
                     navController.navigateAndClearBackStack(
-                        destination = WorkoutOverviewScreenDestination,
-                        popUpTo = LoginScreenDestination
+                        destination = WorkoutOverviewScreenDestination
                     )
                 }
                 is LoginNavigationType.Register -> {
                     navController.navigateAndClearBackStack(
-                        destination = RegisterScreenDestination,
-                        popUpTo = LoginScreenDestination
+                        destination = RegisterScreenDestination
                     )
                 }
             }

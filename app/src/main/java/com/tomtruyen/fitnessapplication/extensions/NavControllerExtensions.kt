@@ -2,14 +2,10 @@ package com.tomtruyen.fitnessapplication.extensions
 
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.spec.Direction
-import com.tomtruyen.fitnessapplication.navigation.BottomNavigation
 
-fun NavController.navigateAndClearBackStack(
-    destination: Direction,
-    popUpTo: Direction,
-) {
+fun NavController.navigateAndClearBackStack(destination: Direction) {
     navigate(destination.route) {
-        popUpTo(popUpTo.route) {
+        popUpTo(this@navigateAndClearBackStack.graph.id) {
             inclusive = true
         }
     }

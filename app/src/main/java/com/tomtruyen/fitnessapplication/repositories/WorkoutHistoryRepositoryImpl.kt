@@ -64,7 +64,7 @@ class WorkoutHistoryRepositoryImpl(
                 callback = callback
             ) { document ->
                 val response = document.toObject(WorkoutResponse::class.java) ?: return@handleCompletionResult callback.onStopLoading()
-
+F
                 val lastWorkout = addPrefixToIds(response, FetchedData.Type.LAST_WORKOUT.identifier)
                 launchWithTransaction {
                     workoutRepository.saveWorkoutResponses(listOf(lastWorkout))

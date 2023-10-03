@@ -9,9 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,20 +24,16 @@ import com.ramcosta.composedestinations.utils.currentDestinationAsState
 import com.ramcosta.composedestinations.utils.currentDestinationFlow
 import com.tomtruyen.fitnessapplication.extensions.navigateAndClearBackStack
 import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
-import com.tomtruyen.fitnessapplication.navigation.BottomNavigation
-import com.tomtruyen.fitnessapplication.navigation.BottomNavigationItem
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import com.tomtruyen.fitnessapplication.navigation.MainBottomNavigation
 import com.tomtruyen.fitnessapplication.navigation.NavArguments
 import com.tomtruyen.fitnessapplication.ui.screens.NavGraphs
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.LoginScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ProfileScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutHistoryScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutOverviewScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutViewModel
-import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.history.WorkoutHistoryScreen
 import com.tomtruyen.fitnessapplication.ui.theme.FitnessApplicationTheme
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
@@ -69,8 +63,7 @@ class MainActivity : ComponentActivity() {
                 LaunchedEffect(Unit) {
                     if(userRepository.isLoggedIn()) {
                         navController.navigateAndClearBackStack(
-                            destination = WorkoutOverviewScreenDestination,
-                            popUpTo = LoginScreenDestination
+                            destination = WorkoutOverviewScreenDestination
                         )
                     }
                 }

@@ -31,7 +31,6 @@ import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.extensions.navigateAndClearBackStack
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.LoginScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.RegisterScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutOverviewScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
@@ -70,14 +69,12 @@ fun RegisterScreen(
             when(navigationType) {
                 is RegisterNavigationType.Home -> {
                     navController.navigateAndClearBackStack(
-                        destination = WorkoutOverviewScreenDestination,
-                        popUpTo = RegisterScreenDestination
+                        destination = WorkoutOverviewScreenDestination
                     )
                 }
                 is RegisterNavigationType.Login -> {
                     navController.navigateAndClearBackStack(
-                        destination = LoginScreenDestination,
-                        popUpTo = RegisterScreenDestination
+                        destination = LoginScreenDestination
                     )
                 }
             }

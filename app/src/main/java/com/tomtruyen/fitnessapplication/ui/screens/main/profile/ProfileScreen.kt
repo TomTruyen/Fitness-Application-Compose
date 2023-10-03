@@ -27,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -39,7 +38,6 @@ import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.extensions.navigateAndClearBackStack
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.LoginScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutOverviewScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.RestAlertDialog
@@ -83,8 +81,7 @@ fun ProfileScreen(
             when(navigationType) {
                 is ProfileNavigationType.Logout -> {
                     navController.navigateAndClearBackStack(
-                        destination = LoginScreenDestination,
-                        popUpTo = WorkoutOverviewScreenDestination
+                        destination = LoginScreenDestination
                     )
                 }
             }
