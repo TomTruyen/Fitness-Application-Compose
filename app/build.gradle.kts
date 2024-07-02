@@ -96,6 +96,10 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.extended)
 
+    // Navigation
+    implementation(libs.raamcosta.compose.destinations)
+    ksp(libs.raamcosta.compose.destinations.ksp)
+
     // Serialization
     implementation(libs.kotlinx.serialization.json)
 

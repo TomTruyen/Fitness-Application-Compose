@@ -1,16 +1,17 @@
 package com.tomtruyen.fitnessapplication.data
 
 import androidx.room.TypeConverter
-import com.google.gson.Gson
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class Converters {
     @TypeConverter
     fun fromListToString(list: List<String>): String {
-        return Gson().toJson(list)
+        return Json.encodeToString(list)
     }
 
     @TypeConverter
     fun fromStringToList(string: String): List<String> {
-        return Gson().fromJson(string, Array<String>::class.java).toList()
+        return Json.decodeFromString(string)
     }
 }

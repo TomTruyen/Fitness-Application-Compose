@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -155,9 +156,7 @@ fun ProfileScreenLayout(
                     unitDialogVisible = true
                 }
 
-                Divider(
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
-                )
+                HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
 
                 Text(
                     text = stringResource(id = R.string.rest_timer),
@@ -190,9 +189,7 @@ fun ProfileScreenLayout(
                     onEvent(ProfileUiEvent.RestVibrationEnabledChanged(it))
                 }
 
-                Divider(
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
-                )
+                HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
 
                 Text(
                     text = stringResource(id = R.string.contact_and_support),
@@ -213,9 +210,7 @@ fun ProfileScreenLayout(
                     )
                 }
 
-                Divider(
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
-                )
+                HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
 
                 Spacer(modifier = Modifier.weight(1f))
 
@@ -227,9 +222,7 @@ fun ProfileScreenLayout(
                         .padding(Dimens.Normal)
                 )
 
-                Divider(
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
-                )
+                HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
 
                 Text(
                     text = stringResource(

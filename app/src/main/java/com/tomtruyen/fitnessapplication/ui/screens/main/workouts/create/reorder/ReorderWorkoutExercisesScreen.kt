@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DragIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -168,9 +169,9 @@ fun ReorderListItem(
             )
         }
 
-        Divider(
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
+        HorizontalDivider(
             thickness = 1.dp,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
         )
     }
 }

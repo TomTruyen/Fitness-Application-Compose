@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
@@ -29,11 +30,11 @@ fun WorkoutExerciseTabLayout(
         containerColor = MaterialTheme.colorScheme.background,
         edgePadding = 0.dp,
         divider = {
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth(),
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
-                thickness = 1.dp
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
             )
         }
     ) {

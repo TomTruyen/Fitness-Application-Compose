@@ -38,6 +38,7 @@ import com.tomtruyen.fitnessapplication.ui.theme.FitnessApplicationTheme
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
@@ -111,7 +112,7 @@ class MainActivity : ComponentActivity() {
                                     navController.getBackStackEntry(NavGraphs.exercises.route)
                                 }
 
-                                getViewModel<ExercisesViewModel>(viewModelStoreOwner = parentEntry) {
+                                koinViewModel<ExercisesViewModel>(viewModelStoreOwner = parentEntry) {
                                     parametersOf(
                                         parentEntry.arguments?.getBoolean(NavArguments.IS_FROM_WORKOUT, false) ?: false
                                     )
@@ -123,7 +124,7 @@ class MainActivity : ComponentActivity() {
                                     navController.getBackStackEntry(NavGraphs.createWorkout.route)
                                 }
 
-                                getViewModel<CreateWorkoutViewModel>(viewModelStoreOwner = parentEntry) {
+                                koinViewModel<CreateWorkoutViewModel>(viewModelStoreOwner = parentEntry) {
                                     parametersOf(
                                         parentEntry.arguments?.getString(NavArguments.ID, null)
                                     )
