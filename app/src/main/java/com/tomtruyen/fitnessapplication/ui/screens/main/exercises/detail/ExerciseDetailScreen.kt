@@ -66,10 +66,10 @@ fun ExerciseDetailScreen(
     val loading by viewModel.loading.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewModel, context) {
-        viewModel.navigation.collectLatest { navigationType ->
-            when(navigationType) {
-                is ExerciseDetailNavigationType.Back -> navController.popBackStack()
-                is ExerciseDetailNavigationType.Edit -> navController.navigate(CreateExerciseScreenDestination(id = id))
+        viewModel.eventFlow.collectLatest { event ->
+            when(event) {
+                is ExerciseDetailUiEvent.NavigateBack -> navController.popBackStack()
+                is ExerciseDetailUiEvent.NavigateToEdit -> navController.navigate(CreateExerciseScreenDestination(id = id))
             }
         }
     }
@@ -79,7 +79,7 @@ fun ExerciseDetailScreen(
         navController = navController,
         exercise = exercise,
         loading = loading,
-        onEvent = viewModel::onEvent
+        onAction = viewModel::onAction
     )
 }
 
@@ -89,7 +89,7 @@ fun ExerciseDetailScreenLayout(
     navController: NavController,
     exercise: Exercise?,
     loading: Boolean,
-    onEvent: (ExerciseDetailUiEvent) -> Unit
+    onAction: (ExerciseDetailUiAction) -> Unit
 ) {
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
@@ -103,7 +103,7 @@ fun ExerciseDetailScreenLayout(
                 if(exercise?.isUserCreated == true) {
                     IconButton(
                         onClick = {
-                            onEvent(ExerciseDetailUiEvent.Edit)
+                            onAction(ExerciseDetailUiAction.Edit)
                         }
                     ) {
                         Icon(
@@ -215,7 +215,7 @@ fun ExerciseDetailScreenLayout(
                     title = R.string.title_delete_exercise,
                     message = R.string.message_delete_exercise,
                     onConfirm = {
-                        onEvent(ExerciseDetailUiEvent.Delete)
+                        onAction(ExerciseDetailUiAction.Delete)
                         confirmationDialogVisible = false
                     },
                     onDismiss = {

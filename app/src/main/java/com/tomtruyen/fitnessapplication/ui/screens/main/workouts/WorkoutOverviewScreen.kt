@@ -2,11 +2,7 @@ package com.tomtruyen.fitnessapplication.ui.screens.main.workouts
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,9 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -54,7 +48,6 @@ import com.tomtruyen.fitnessapplication.data.entities.WorkoutWithExercises
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.CreateWorkoutScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExecuteWorkoutScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutDetailScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutHistoryScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.CollapsingToolbar
@@ -74,16 +67,16 @@ fun WorkoutOverviewScreen(
     val loading by viewModel.loading.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewModel, context) {
-        viewModel.navigation.collectLatest { navigationType ->
-            when(navigationType) {
-                is WorkoutOverviewNavigationType.CreateWorkout -> navController.navigate(
+        viewModel.eventFlow.collectLatest { event ->
+            when(event) {
+                is WorkoutOverviewUiEvent.NavigateToCreateWorkout -> navController.navigate(
                     CreateWorkoutScreenDestination(id = null)
                 )
-                is WorkoutOverviewNavigationType.Detail -> navController.navigate(
-                    WorkoutDetailScreenDestination(navigationType.id)
+                is WorkoutOverviewUiEvent.NavigateToDetail -> navController.navigate(
+                    WorkoutDetailScreenDestination(event.id)
                 )
-                is WorkoutOverviewNavigationType.StartWorkout -> navController.navigate(
-                    ExecuteWorkoutScreenDestination(navigationType.id)
+                is WorkoutOverviewUiEvent.NavigateToStartWorkout -> navController.navigate(
+                    ExecuteWorkoutScreenDestination(event.id)
                 )
             }
         }
@@ -94,7 +87,7 @@ fun WorkoutOverviewScreen(
         navController = navController,
         workouts = workouts,
         loading = loading,
-        onEvent = viewModel::onEvent
+        onAction = viewModel::onAction
     )
 }
 
@@ -105,7 +98,7 @@ fun WorkoutOverviewScreenLayout(
     navController: NavController,
     workouts: List<WorkoutWithExercises>,
     loading: Boolean,
-    onEvent: (WorkoutOverviewUiEvent) -> Unit
+    onAction: (WorkoutOverviewUiAction) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
@@ -119,7 +112,7 @@ fun WorkoutOverviewScreenLayout(
             ) {
                 IconButton(
                     onClick = {
-                        onEvent(WorkoutOverviewUiEvent.OnCreateWorkoutClicked)
+                        onAction(WorkoutOverviewUiAction.OnCreateWorkoutClicked)
                     }
                 ) {
                     Icon(
@@ -146,7 +139,7 @@ fun WorkoutOverviewScreenLayout(
                 items(workouts) { workout ->
                     WorkoutListItem(
                         workoutWithExercises = workout,
-                        onEvent = onEvent,
+                        onAction = onAction,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -159,7 +152,7 @@ fun WorkoutOverviewScreenLayout(
 @Composable
 fun WorkoutListItem(
     workoutWithExercises: WorkoutWithExercises,
-    onEvent: (WorkoutOverviewUiEvent) -> Unit,
+    onAction: (WorkoutOverviewUiAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var expanded by remember {
@@ -177,7 +170,7 @@ fun WorkoutListItem(
         ),
         elevation = CardDefaults.cardElevation(0.dp),
         onClick = {
-            onEvent(WorkoutOverviewUiEvent.OnDetailClicked(workoutWithExercises.workout.id))
+            onAction(WorkoutOverviewUiAction.OnDetailClicked(workoutWithExercises.workout.id))
         }
     ) {
         Column(
@@ -241,7 +234,7 @@ fun WorkoutListItem(
                             .fillMaxWidth()
                             .padding(top = Dimens.Normal)
                     ) {
-                        onEvent(WorkoutOverviewUiEvent.OnStartWorkoutClicked(workoutWithExercises.workout.id))
+                        onAction(WorkoutOverviewUiAction.OnStartWorkoutClicked(workoutWithExercises.workout.id))
                     }
                 }
             }

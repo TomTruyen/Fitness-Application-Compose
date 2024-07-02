@@ -92,7 +92,7 @@ fun CreateWorkoutScreen(
 ) {
     val context = LocalContext.current
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val settings by viewModel.settings.collectAsStateWithLifecycle(initialValue = null)
     val loading by viewModel.loading.collectAsStateWithLifecycle()
 
@@ -101,13 +101,13 @@ fun CreateWorkoutScreen(
     )
 
     LaunchedEffect(viewModel, context) {
-        viewModel.navigation.collectLatest { navigationType ->
-            when(navigationType) {
-                is CreateWorkoutNavigationType.Back -> navController.popBackStack()
-                is CreateWorkoutNavigationType.ReorderExercise -> navController.navigate(
+        viewModel.eventFlow.collectLatest { event ->
+            when(event) {
+                is CreateWorkoutUiEvent.NavigateBack -> navController.popBackStack()
+                is CreateWorkoutUiEvent.NavigateToReorderExercise -> navController.navigate(
                     ReorderWorkoutExercisesScreenDestination
                 )
-                is CreateWorkoutNavigationType.AddExercise -> navController.navigate(ExercisesScreenDestination(isFromWorkout = true))
+                is CreateWorkoutUiEvent.NavigateToAddExercise -> navController.navigate(ExercisesScreenDestination(isFromWorkout = true))
             }
         }
     }
@@ -116,7 +116,7 @@ fun CreateWorkoutScreen(
         navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Exercise?>(NavArguments.EXERCISE, null)
             ?.collectLatest {
                 it?.let { exercise ->
-                    viewModel.onEvent(CreateWorkoutUiEvent.OnAddExercise(exercise))
+                    viewModel.onAction(CreateWorkoutUiAction.OnAddExercise(exercise))
 
                     navController.currentBackStackEntry?.savedStateHandle?.remove<Exercise>(NavArguments.EXERCISE)
                 }
@@ -135,7 +135,7 @@ fun CreateWorkoutScreen(
 
     LaunchedEffect(settings) {
         if(settings != null) {
-            viewModel.onEvent(CreateWorkoutUiEvent.OnSettingsChanged(settings))
+            viewModel.onAction(CreateWorkoutUiAction.OnSettingsChanged(settings))
         }
     }
 
@@ -145,7 +145,7 @@ fun CreateWorkoutScreen(
         state = state,
         loading = loading,
         pagerState = pagerState,
-        onEvent = viewModel::onEvent,
+        onAction = viewModel::onAction,
         onWorkoutEvent = viewModel::onWorkoutEvent
     )
 }
@@ -158,7 +158,7 @@ fun CreateWorkoutScreenLayout(
     state: CreateWorkoutUiState,
     loading: Boolean,
     pagerState: PagerState,
-    onEvent: (CreateWorkoutUiEvent) -> Unit,
+    onAction: (CreateWorkoutUiAction) -> Unit,
     onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
 ) {
     var workoutNameDialogVisible by remember { mutableStateOf(false) }
@@ -187,7 +187,7 @@ fun CreateWorkoutScreenLayout(
                 }
             ) {
                 if(state.workout.exercises.size > 1) {
-                    IconButton(onClick = { onEvent(CreateWorkoutUiEvent.OnReorderExerciseClicked) }) {
+                    IconButton(onClick = { onAction(CreateWorkoutUiAction.OnReorderExerciseClicked) }) {
                         Icon(
                             imageVector = Icons.Filled.FormatListNumbered,
                             contentDescription = stringResource(id = R.string.content_description_reorder_exercises),
@@ -199,7 +199,7 @@ fun CreateWorkoutScreenLayout(
                     IconButton(
                         onClick = {
                             if(state.workout.name.isNotEmpty()) {
-                                onEvent(CreateWorkoutUiEvent.Save(state.workout.name))
+                                onAction(CreateWorkoutUiAction.Save(state.workout.name))
                             } else {
                                 workoutNameDialogVisible = true
                             }
@@ -236,7 +236,7 @@ fun CreateWorkoutScreenLayout(
                         .animateContentSize(),
                     state = state,
                     pagerState = pagerState,
-                    onEvent = onEvent,
+                    onAction = onAction,
                     onWorkoutEvent = onWorkoutEvent
                 )
 
@@ -260,7 +260,7 @@ fun CreateWorkoutScreenLayout(
                         title = R.string.title_workout_name,
                         message = R.string.message_workout_name,
                         onConfirm = { name ->
-                            onEvent(CreateWorkoutUiEvent.Save(name))
+                            onAction(CreateWorkoutUiAction.Save(name))
                             workoutNameDialogVisible = false
                         },
                         onDismiss = {
@@ -281,7 +281,7 @@ fun WorkoutExerciseTabContent(
     modifier: Modifier = Modifier,
     state: CreateWorkoutUiState,
     pagerState: PagerState,
-    onEvent: (CreateWorkoutUiEvent) -> Unit,
+    onAction: (CreateWorkoutUiAction) -> Unit,
     onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
 ) {
     var restDialogVisible by remember { mutableStateOf(false) }
@@ -341,8 +341,8 @@ fun WorkoutExerciseTabContent(
                                 placeholder = stringResource(id = R.string.notes),
                                 value = workoutExercise.notes,
                                 onValueChange = { notes ->
-                                    onEvent(
-                                        CreateWorkoutUiEvent.OnExerciseNotesChanged(
+                                    onAction(
+                                        CreateWorkoutUiAction.OnExerciseNotesChanged(
                                             index,
                                             notes
                                         )
@@ -407,7 +407,7 @@ fun WorkoutExerciseTabContent(
                         title = R.string.title_delete_exercise,
                         message = R.string.message_delete_exercise_from_workout,
                         onConfirm = {
-                            onEvent(CreateWorkoutUiEvent.OnDeleteExerciseClicked(index))
+                            onAction(CreateWorkoutUiAction.OnDeleteExerciseClicked(index))
                             deleteConfirmationDialogVisible = false
                         },
                         onDismiss = {
@@ -423,10 +423,10 @@ fun WorkoutExerciseTabContent(
                             restDialogVisible = false
                         },
                         onConfirm = { rest, restEnabled ->
-                            onEvent(CreateWorkoutUiEvent.OnRestChanged(index, rest))
+                            onAction(CreateWorkoutUiAction.OnRestChanged(index, rest))
 
                             restEnabled?.let {
-                                onEvent(CreateWorkoutUiEvent.OnRestEnabledChanged(index, it))
+                                onAction(CreateWorkoutUiAction.OnRestEnabledChanged(index, it))
                             }
                             restDialogVisible = false
                         },
@@ -465,7 +465,7 @@ fun WorkoutExerciseTabContent(
                     .height(IntrinsicSize.Max)
                     .animateContentSize()
             ) {
-                onEvent(CreateWorkoutUiEvent.OnAddExerciseClicked)
+                onAction(CreateWorkoutUiAction.OnAddExerciseClicked)
             }
         }
     }

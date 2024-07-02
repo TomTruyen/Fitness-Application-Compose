@@ -5,25 +5,22 @@ import com.tomtruyen.fitnessapplication.base.SnackbarMessage
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutSet
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.networking.models.WorkoutExerciseResponse
-import com.tomtruyen.fitnessapplication.networking.models.WorkoutResponse
 import com.tomtruyen.fitnessapplication.repositories.interfaces.SettingsRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseEvent
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class CreateWorkoutViewModel(
     val id: String?,
     private val userRepository: UserRepository,
     private val workoutRepository: WorkoutRepository,
     settingsRepository: SettingsRepository
-): BaseViewModel<CreateWorkoutNavigationType>() {
-    private val isEditing = id != null
-
-    val state = MutableStateFlow(
-        CreateWorkoutUiState(isEditing = isEditing)
+): BaseViewModel<CreateWorkoutUiState, CreateWorkoutUiAction, CreateWorkoutUiEvent>(
+    initialState = CreateWorkoutUiState(
+        isEditing = id != null
     )
-
+) {
     val settings = settingsRepository.findSettings()
 
     init {
@@ -31,36 +28,38 @@ class CreateWorkoutViewModel(
     }
 
     private fun findWorkout() = launchLoading {
-        if(!isEditing || id == null) return@launchLoading
+        if(!uiState.value.isEditing || id == null) return@launchLoading
 
         workoutRepository.findWorkoutById(id)?.let {
-            state.value = state.value.copy(
-                initialWorkout = it.toWorkoutResponse(),
-                workout = it.toWorkoutResponse()
-            )
+            updateState { state ->
+                state.copy(
+                    initialWorkout = it.toWorkoutResponse(),
+                    workout = it.toWorkoutResponse()
+                )
+            }
         }
     }
 
-    private fun save(workoutName: String) = launchIO {
-        val userId = userRepository.getUser()?.uid ?: return@launchIO
+    private fun save(workoutName: String) = vmScope.launch {
+        val userId = userRepository.getUser()?.uid ?: return@launch
 
         isLoading(true)
 
-        val workout = state.value.workout.apply {
+        val workout = uiState.value.workout.apply {
             exercises.forEachIndexed { index, workoutExerciseResponse ->
                 workoutExerciseResponse.order = index
             }
             name = workoutName
-            unit = state.value.settings.unit
+            unit = uiState.value.settings.unit
         }
 
         workoutRepository.saveWorkout(
             userId = userId,
             workout = workout,
-            isUpdate = isEditing,
+            isUpdate = uiState.value.isEditing,
             callback = object: FirebaseCallback<Unit> {
                 override fun onSuccess(value: Unit) {
-                    navigate(CreateWorkoutNavigationType.Back)
+                    triggerEvent(CreateWorkoutUiEvent.NavigateBack)
                 }
 
                 override fun onError(error: String?) {
@@ -74,66 +73,71 @@ class CreateWorkoutViewModel(
         )
     }
 
-    fun onEvent(event: CreateWorkoutUiEvent) {
-        val currentState = state.value
+    override fun onAction(action: CreateWorkoutUiAction) {
 
-        when (event) {
-            is CreateWorkoutUiEvent.Save -> save(event.workoutName)
-            is CreateWorkoutUiEvent.OnSettingsChanged -> {
-                event.settings?.let {
-                    state.value = currentState.copy(settings = it)
+        when (action) {
+            is CreateWorkoutUiAction.Save -> save(action.workoutName)
+            is CreateWorkoutUiAction.OnSettingsChanged -> action.settings?.let { settings ->
+                updateState {
+                    it.copy(settings = settings)
                 }
             }
-            is CreateWorkoutUiEvent.OnExerciseNotesChanged -> {
-                state.value = currentState.copy(
-                    workout = currentState.workout.copy(
-                        exercises = currentState.workout.exercises.mapIndexed { index, exercise ->
-                            if (index == event.index) exercise.copy(notes = event.notes) else exercise
+            is CreateWorkoutUiAction.OnExerciseNotesChanged -> updateState {
+                it.copy(
+                    workout = it.workout.copy(
+                        exercises = it.workout.exercises.mapIndexed { index, exercise ->
+                            if (index == action.index) exercise.copy(notes = action.notes) else exercise
                         }
                     )
                 )
             }
-            is CreateWorkoutUiEvent.OnDeleteExerciseClicked -> {
-                state.value = currentState.copy(
-                    workout = currentState.workout.copy(
-                        exercises = currentState.workout.exercises.filterIndexed { index, _ -> index != event.index }
+            is CreateWorkoutUiAction.OnDeleteExerciseClicked -> updateState {
+                it.copy(
+                    workout = it.workout.copy(
+                        exercises = it.workout.exercises.filterIndexed { index, _ -> index != action.index }
                     ),
-                    selectedExerciseId = currentState.workout.exercises.getOrNull(
-                        if (event.index > 0) event.index - 1 else if (currentState.workout.exercises.size > 1) event.index + 1 else -1
+                    selectedExerciseId = it.workout.exercises.getOrNull(
+                        if (action.index > 0) action.index - 1 else if (it.workout.exercises.size > 1) action.index + 1 else -1
                     )?.id
                 )
             }
-            is CreateWorkoutUiEvent.OnReorderExerciseClicked -> navigate(CreateWorkoutNavigationType.ReorderExercise)
-            is CreateWorkoutUiEvent.OnAddExerciseClicked -> navigate(CreateWorkoutNavigationType.AddExercise)
-            is CreateWorkoutUiEvent.OnAddExercise -> {
+            is CreateWorkoutUiAction.OnReorderExerciseClicked -> triggerEvent(CreateWorkoutUiEvent.NavigateToReorderExercise)
+            is CreateWorkoutUiAction.OnAddExerciseClicked -> triggerEvent(CreateWorkoutUiEvent.NavigateToAddExercise)
+            is CreateWorkoutUiAction.OnAddExercise -> updateState {
                 val newExercise = WorkoutExerciseResponse(
-                    exercise = event.exercise,
-                    rest = currentState.settings.rest,
-                    restEnabled = currentState.settings.restEnabled,
+                    exercise = action.exercise,
+                    rest = it.settings.rest,
+                    restEnabled = it.settings.restEnabled,
                 ).apply { sets = listOf(WorkoutSet(workoutExerciseId = this@apply.id)) }
 
-                state.value = currentState.copy(
-                    workout = currentState.workout.copy(exercises = currentState.workout.exercises + newExercise),
-                    selectedExerciseId = event.exercise.id
+                it.copy(
+                    workout = it.workout.copy(
+                        exercises = it.workout.exercises + newExercise
+                    ),
+                    selectedExerciseId = action.exercise.id
                 )
             }
-            is CreateWorkoutUiEvent.OnReorderExercises -> {
-                state.value = currentState.copy(workout = currentState.workout.copy(exercises = event.exercises))
+            is CreateWorkoutUiAction.OnReorderExercises -> updateState {
+                it.copy(
+                    workout = it.workout.copy(
+                        exercises = action.exercises
+                    )
+                )
             }
-            is CreateWorkoutUiEvent.OnRestEnabledChanged -> {
-                state.value = currentState.copy(
-                    workout = currentState.workout.copy(
-                        exercises = currentState.workout.exercises.mapIndexed { index, exercise ->
-                            if (index == event.exerciseIndex) exercise.copy(restEnabled = event.enabled) else exercise
+            is CreateWorkoutUiAction.OnRestEnabledChanged -> updateState {
+                it.copy(
+                    workout = it.workout.copy(
+                        exercises = it.workout.exercises.mapIndexed { index, exercise ->
+                            if (index == action.exerciseIndex) exercise.copy(restEnabled = action.enabled) else exercise
                         }
                     )
                 )
             }
-            is CreateWorkoutUiEvent.OnRestChanged -> {
-                state.value = currentState.copy(
-                    workout = currentState.workout.copy(
-                        exercises = currentState.workout.exercises.mapIndexed { index, exercise ->
-                            if (index == event.exerciseIndex) exercise.copy(rest = event.rest) else exercise
+            is CreateWorkoutUiAction.OnRestChanged -> updateState {
+                it.copy(
+                    workout = it.workout.copy(
+                        exercises = it.workout.exercises.mapIndexed { index, exercise ->
+                            if (index == action.exerciseIndex) exercise.copy(rest = action.rest) else exercise
                         }
                     )
                 )
@@ -141,14 +145,11 @@ class CreateWorkoutViewModel(
         }
     }
 
-
     fun onWorkoutEvent(event: WorkoutExerciseEvent) {
-        val currentState = state.value
-
         when (event) {
-            is WorkoutExerciseEvent.OnRepsChanged -> {
-                state.value = currentState.copy(
-                    workout = currentState.workout.copyWithRepsChanged(
+            is WorkoutExerciseEvent.OnRepsChanged -> updateState {
+                it.copy(
+                    workout = it.workout.copyWithRepsChanged(
                         exerciseIndex = event.exerciseIndex,
                         setIndex = event.setIndex,
                         reps = event.reps
@@ -156,9 +157,9 @@ class CreateWorkoutViewModel(
                 )
             }
 
-            is WorkoutExerciseEvent.OnWeightChanged -> {
-                state.value = currentState.copy(
-                    workout = currentState.workout.copyWithWeightChanged(
+            is WorkoutExerciseEvent.OnWeightChanged -> updateState {
+                it.copy(
+                    workout = it.workout.copyWithWeightChanged(
                         exerciseIndex = event.exerciseIndex,
                         setIndex = event.setIndex,
                         weight = event.weight
@@ -166,9 +167,9 @@ class CreateWorkoutViewModel(
                 )
             }
 
-            is WorkoutExerciseEvent.OnTimeChanged -> {
-                state.value = currentState.copy(
-                    workout = currentState.workout.copyWithTimeChanged(
+            is WorkoutExerciseEvent.OnTimeChanged -> updateState {
+                it.copy(
+                    workout = it.workout.copyWithTimeChanged(
                         exerciseIndex = event.exerciseIndex,
                         setIndex = event.setIndex,
                         time = event.time
@@ -176,18 +177,18 @@ class CreateWorkoutViewModel(
                 )
             }
 
-            is WorkoutExerciseEvent.OnDeleteSetClicked -> {
-                state.value = currentState.copy(
-                    workout = currentState.workout.copyWithDeleteSet(
+            is WorkoutExerciseEvent.OnDeleteSetClicked -> updateState {
+                it.copy(
+                    workout = it.workout.copyWithDeleteSet(
                         exerciseIndex = event.exerciseIndex,
                         setIndex = event.setIndex
                     )
                 )
             }
 
-            is WorkoutExerciseEvent.OnAddSetClicked -> {
-                state.value = currentState.copy(
-                    workout = currentState.workout.copyWithAddSet(
+            is WorkoutExerciseEvent.OnAddSetClicked -> updateState {
+                it.copy(
+                    workout = it.workout.copyWithAddSet(
                         exerciseIndex = event.exerciseIndex,
                     )
                 )

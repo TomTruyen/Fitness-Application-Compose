@@ -51,7 +51,7 @@ fun LoginScreen(
 ) {
     val context = LocalContext.current
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val loading by viewModel.loading.collectAsStateWithLifecycle()
 
     LaunchedEffect(state.email) {
@@ -63,14 +63,14 @@ fun LoginScreen(
     }
 
     LaunchedEffect(viewModel, context) {
-        viewModel.navigation.collectLatest { navigationType ->
-            when(navigationType) {
-                is LoginNavigationType.Home -> {
+        viewModel.eventFlow.collectLatest { event ->
+            when(event) {
+                LoginUiEvent.NavigateToHome -> {
                     navController.navigateAndClearBackStack(
                         destination = WorkoutOverviewScreenDestination
                     )
                 }
-                is LoginNavigationType.Register -> {
+                LoginUiEvent.NavigateToRegister -> {
                     navController.navigateAndClearBackStack(
                         destination = RegisterScreenDestination
                     )
@@ -83,7 +83,7 @@ fun LoginScreen(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         state = state,
         loading = loading,
-        onEvent = viewModel::onEvent
+        onAction = viewModel::onAction
     )
 }
 
@@ -92,7 +92,7 @@ fun LoginScreenLayout(
     snackbarHost: @Composable () -> Unit,
     state: LoginUiState,
     loading: Boolean,
-    onEvent: (LoginUiEvent) -> Unit
+    onAction: (LoginUiAction) -> Unit
 ) {
     val isValid by remember(state) {
         derivedStateOf {
@@ -138,7 +138,7 @@ fun LoginScreenLayout(
                 TextFields.Default(
                     value = state.email,
                     onValueChange = { email ->
-                        onEvent(LoginUiEvent.EmailChanged(email))
+                        onAction(LoginUiAction.EmailChanged(email))
                     },
                     placeholder = stringResource(id = R.string.email),
                     error = state.emailValidationResult.errorMessage(),
@@ -154,7 +154,7 @@ fun LoginScreenLayout(
                 TextFields.Default(
                     value = state.password,
                     onValueChange = { password ->
-                        onEvent(LoginUiEvent.PasswordChanged(password))
+                        onAction(LoginUiAction.PasswordChanged(password))
                     },
                     placeholder = stringResource(id = R.string.password),
                     error = state.passwordValidationResult.errorMessage(),
@@ -173,7 +173,7 @@ fun LoginScreenLayout(
                     enabled = isValid && !loading,
                     onClick = {
                         focusManager.clearFocus()
-                        onEvent(LoginUiEvent.OnLoginClicked)
+                        onAction(LoginUiAction.OnLoginClicked)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -185,10 +185,10 @@ fun LoginScreenLayout(
                     enabled = !loading,
                     onClick = focusManager::clearFocus,
                     onSuccess = { idToken ->
-                        onEvent(LoginUiEvent.OnGoogleSignInSuccess(idToken))
+                        onAction(LoginUiAction.OnGoogleSignInSuccess(idToken))
                     },
                     onError = { error ->
-                        onEvent(LoginUiEvent.OnGoogleSignInFailed(error))
+                        onAction(LoginUiAction.OnGoogleSignInFailed(error))
                     }
                 )
 
@@ -196,7 +196,7 @@ fun LoginScreenLayout(
                     text = stringResource(id = R.string.need_account),
                     enabled = !loading,
                     onClick = {
-                        onEvent(LoginUiEvent.OnRegisterClicked)
+                        onAction(LoginUiAction.OnRegisterClicked)
                     },
                     modifier = Modifier.fillMaxWidth()
                 )

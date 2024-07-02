@@ -8,15 +8,17 @@ import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutHistoryRe
 class WorkoutHistoryViewModel(
     userRepository: UserRepository,
     workoutHistoryRepository: WorkoutHistoryRepository
-): BaseViewModel<WorkoutHistoryNavigationType>() {
+): BaseViewModel<WorkoutHistoryUiState, WorkoutHistoryUiAction, WorkoutHistoryUiEvent>(
+    initialState = WorkoutHistoryUiState()
+) {
     val history = workoutHistoryRepository.getWorkoutHistoriesPaginated(
-        userRepository.getUser()?.uid!!
+        userRepository.getUser()?.uid.orEmpty()
     ).cachedIn(vmScope)
 
-    fun onEvent(event: WorkoutHistoryUiEvent) {
-        when(event) {
-            is WorkoutHistoryUiEvent.OnDetailClicked -> {
-                navigate(WorkoutHistoryNavigationType.Detail(event.id))
+    override fun onAction(action: WorkoutHistoryUiAction) {
+        when(action) {
+            is WorkoutHistoryUiAction.OnDetailClicked -> {
+                triggerEvent(WorkoutHistoryUiEvent.NavigateToDetail(action.id))
             }
         }
     }

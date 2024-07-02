@@ -26,34 +26,46 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-open class BaseViewModel<TNavigationType>: ViewModel() {
+abstract class BaseViewModel<UIState, UIAction, UIEvent>(
+    initialState: UIState
+): ViewModel() {
     protected val vmScope = viewModelScope
-
-    val loading = MutableStateFlow(false)
-
-    private val navigationChannel = Channel<TNavigationType>()
-    val navigation = navigationChannel.receiveAsFlow()
 
     private var snackbarMessage by mutableStateOf<SnackbarMessage>(SnackbarMessage.Empty)
 
-    protected fun isLoading(loading: Boolean) = this.loading.tryEmit(loading)
+    private val _loading = MutableStateFlow(false)
+    val loading = _loading.asStateFlow()
 
-    protected fun launchLoading(block: suspend CoroutineScope.() -> Unit) = launchIO {
+    private val _uiState = MutableStateFlow(initialState)
+    val uiState = _uiState.asStateFlow()
+
+    private val _eventChannel = Channel<UIEvent>()
+    val eventFlow = _eventChannel.receiveAsFlow()
+
+    protected fun isLoading(loading: Boolean) {
+        _loading.update { loading }
+    }
+
+    protected fun launchLoading(block: suspend () -> Unit) = vmScope.launch {
         isLoading(true)
         block()
         isLoading(false)
     }
 
-    protected fun launchIO(block: suspend CoroutineScope.() -> Unit) = vmScope.launch(Dispatchers.IO) {
-        block()
+    protected fun updateState(block: (UIState) -> UIState) {
+        _uiState.update(block)
     }
 
-    protected fun navigate(navigationType: TNavigationType) = vmScope.launch {
-        navigationChannel.send(navigationType)
+    protected fun triggerEvent(event: UIEvent) = vmScope.launch {
+        _eventChannel.trySend(event)
     }
+
+    abstract fun onAction(action: UIAction)
 
     @Composable
     fun CreateSnackbarHost() {

@@ -1,6 +1,5 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.scaleIn
@@ -68,20 +67,22 @@ fun ExercisesScreen(
 ) {
     val context = LocalContext.current
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val loading by viewModel.loading.collectAsStateWithLifecycle()
     val exercises by viewModel.exercises.collectAsStateWithLifecycle(initialValue = emptyList())
 
     LaunchedEffect(viewModel, context) {
-        viewModel.navigation.collectLatest { navigationType ->
-            when(navigationType) {
-                is ExercisesNavigationType.Filter -> navController.navigate(ExercisesFilterScreenDestination)
-                is ExercisesNavigationType.Add -> navController.navigate(CreateExerciseScreenDestination(id = null))
-                is ExercisesNavigationType.Detail -> navController.navigate(ExerciseDetailScreenDestination(navigationType.id))
-                is ExercisesNavigationType.BackToWorkout -> {
+        viewModel.eventFlow.collectLatest { event ->
+            when(event) {
+                is ExercisesUiEvent.NavigateToFilter -> navController.navigate(ExercisesFilterScreenDestination)
+                is ExercisesUiEvent.NavigateToAdd -> navController.navigate(CreateExerciseScreenDestination(id = null))
+                is ExercisesUiEvent.NavigateToDetail -> navController.navigate(
+                    ExerciseDetailScreenDestination(event.id)
+                )
+                is ExercisesUiEvent.NavigateBackToWorkout -> {
                     navController.previousBackStackEntry?.savedStateHandle?.set(
                         NavArguments.EXERCISE,
-                        navigationType.exercise
+                        event.exercise
                     )
                     navController.popBackStack()
                 }
@@ -96,7 +97,7 @@ fun ExercisesScreen(
         state = state,
         exercises = exercises,
         loading = loading,
-        onEvent = viewModel::onEvent
+        onAction = viewModel::onAction
     )
 }
 
@@ -108,7 +109,7 @@ fun ExercisesScreenLayout(
     state: ExercisesUiState,
     exercises: List<Exercise>,
     loading: Boolean,
-    onEvent: (ExercisesUiEvent) -> Unit
+    onAction: (ExercisesUiAction) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
@@ -119,16 +120,16 @@ fun ExercisesScreenLayout(
                 SearchToolbar(
                     value = state.search,
                     onValueChange = { query ->
-                        onEvent(ExercisesUiEvent.OnSearchQueryChanged(query))
+                        onAction(ExercisesUiAction.OnSearchQueryChanged(query))
                     },
                     onClose = {
-                        onEvent(ExercisesUiEvent.OnSearchQueryChanged(""))
-                        onEvent(ExercisesUiEvent.OnToggleSearch)
+                        onAction(ExercisesUiAction.OnSearchQueryChanged(""))
+                        onAction(ExercisesUiAction.OnToggleSearch)
                     }
                 ) {
                     IconButton(
                         onClick = {
-                            onEvent(ExercisesUiEvent.OnFilterClicked)
+                            onAction(ExercisesUiAction.OnFilterClicked)
                         }
                     ) {
                         Icon(
@@ -145,7 +146,7 @@ fun ExercisesScreenLayout(
                     actions = {
                         IconButton(
                             onClick = {
-                                onEvent(ExercisesUiEvent.OnToggleSearch)
+                                onAction(ExercisesUiAction.OnToggleSearch)
                             }
                         ) {
                             Icon(
@@ -156,7 +157,7 @@ fun ExercisesScreenLayout(
 
                         IconButton(
                             onClick = {
-                                onEvent(ExercisesUiEvent.OnFilterClicked)
+                                onAction(ExercisesUiAction.OnFilterClicked)
                             }
                         ) {
                             Icon(
@@ -167,7 +168,7 @@ fun ExercisesScreenLayout(
 
                         IconButton(
                             onClick = {
-                                onEvent(ExercisesUiEvent.OnAddClicked)
+                                onAction(ExercisesUiAction.OnAddClicked)
                             }
                         ) {
                             Icon(
@@ -187,7 +188,7 @@ fun ExercisesScreenLayout(
           ) {
               FloatingActionButton(
                   onClick = {
-                      onEvent(ExercisesUiEvent.OnAddExerciseToWorkoutClicked(state.selectedExercise!!))
+                      onAction(ExercisesUiAction.OnAddExerciseToWorkoutClicked(state.selectedExercise!!))
                   }
               ) {
                 Icon(
@@ -228,7 +229,7 @@ fun ExercisesScreenLayout(
                                     )
                                 }
                             ) {
-                                onEvent(ExercisesUiEvent.OnRemoveFilterClicked(filter))
+                                onAction(ExercisesUiAction.OnRemoveFilterClicked(filter))
                             }
                         }
                     }
@@ -276,7 +277,7 @@ fun ExercisesScreenLayout(
                                 selected = state.selectedExercise?.id == exercise.id,
                                 showChevron = !state.isFromWorkout,
                             ) {
-                                onEvent(ExercisesUiEvent.OnExerciseClicked(exercise))
+                                onAction(ExercisesUiAction.OnExerciseClicked(exercise))
                             }
                         }
                     }

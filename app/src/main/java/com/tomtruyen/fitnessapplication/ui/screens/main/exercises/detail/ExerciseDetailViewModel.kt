@@ -2,20 +2,22 @@ package com.tomtruyen.fitnessapplication.ui.screens.main.exercises.detail
 
 import com.tomtruyen.fitnessapplication.base.BaseViewModel
 import com.tomtruyen.fitnessapplication.base.SnackbarMessage
-import com.tomtruyen.fitnessapplication.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
+import kotlinx.coroutines.launch
 
 class ExerciseDetailViewModel(
     private val id: String,
     private val exerciseRepository: ExerciseRepository,
     private val userRepository: UserRepository
-): BaseViewModel<ExerciseDetailNavigationType>() {
+): BaseViewModel<ExerciseDetailUiState, ExerciseDetailUiAction, ExerciseDetailUiEvent>(
+    initialState = ExerciseDetailUiState()
+) {
     val exercise = exerciseRepository.findExerciseById(id)
 
-    private fun delete() = launchIO {
-        val userId = userRepository.getUser()?.uid ?: return@launchIO
+    private fun delete() = vmScope.launch {
+        val userId = userRepository.getUser()?.uid ?: return@launch
 
         isLoading(true)
 
@@ -24,7 +26,7 @@ class ExerciseDetailViewModel(
             exerciseId = id,
             object: FirebaseCallback<Unit> {
                 override fun onSuccess(value: Unit) {
-                    navigate(ExerciseDetailNavigationType.Back)
+                    triggerEvent(ExerciseDetailUiEvent.NavigateBack)
                 }
 
                 override fun onError(error: String?) {
@@ -38,10 +40,10 @@ class ExerciseDetailViewModel(
         )
     }
 
-    fun onEvent(event: ExerciseDetailUiEvent) {
-        when(event) {
-            is ExerciseDetailUiEvent.Edit -> navigate(ExerciseDetailNavigationType.Edit(id))
-            is ExerciseDetailUiEvent.Delete -> delete()
+    override fun onAction(action: ExerciseDetailUiAction) {
+        when(action) {
+            is ExerciseDetailUiAction.Edit -> triggerEvent(ExerciseDetailUiEvent.NavigateToEdit(id))
+            is ExerciseDetailUiAction.Delete -> delete()
         }
     }
 }

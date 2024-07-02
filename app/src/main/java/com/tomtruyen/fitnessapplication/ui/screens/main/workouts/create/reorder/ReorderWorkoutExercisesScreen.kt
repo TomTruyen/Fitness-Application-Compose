@@ -1,10 +1,7 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.reorder
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DragIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -35,13 +31,12 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.navigation.CreateWorkoutNavGraph
-import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutUiEvent
+import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutUiAction
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutViewModel
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
 import kotlinx.coroutines.flow.collectLatest
 import org.burnoutcrew.reorderable.ReorderableItem
-import org.burnoutcrew.reorderable.detectReorder
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
@@ -55,18 +50,18 @@ fun ReorderWorkoutExercisesScreen(
     navController: NavController,
     parentViewModel: CreateWorkoutViewModel,
     viewModel: ReorderWorkoutExercisesViewModel = koinViewModel {
-        parametersOf(parentViewModel.state.value.workout.exercises)
+        parametersOf(parentViewModel.uiState.value.workout.exercises)
     }
 ) {
     val context = LocalContext.current
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewModel, context) {
-        viewModel.navigation.collectLatest { navigationType ->
-            when(navigationType) {
-                is ReorderWorkoutExercisesNavigationType.OnApplyReorder -> {
-                    parentViewModel.onEvent(CreateWorkoutUiEvent.OnReorderExercises(navigationType.exercises))
+        viewModel.eventFlow.collectLatest { event ->
+            when(event) {
+                is ReorderWorkoutExercisesUiEvent.OnApplyReorder -> {
+                    parentViewModel.onAction(CreateWorkoutUiAction.OnReorderExercises(event.exercises))
                     navController.popBackStack()
                 }
             }
@@ -77,7 +72,7 @@ fun ReorderWorkoutExercisesScreen(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
-        onEvent = viewModel::onEvent
+        onAction = viewModel::onAction
     )
 }
 
@@ -86,10 +81,10 @@ fun ReorderWorkoutExercisesScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: ReorderWorkoutExercisesUiState,
-    onEvent: (ReorderWorkoutExercisesUiEvent) -> Unit
+    onAction: (ReorderWorkoutExercisesUiAction) -> Unit
 ) {
     val reorderState = rememberReorderableLazyListState(onMove = { from, to ->
-        onEvent(ReorderWorkoutExercisesUiEvent.OnReorder(from.index, to.index))
+        onAction(ReorderWorkoutExercisesUiAction.OnReorder(from.index, to.index))
     })
     
     Scaffold(
@@ -135,7 +130,7 @@ fun ReorderWorkoutExercisesScreenLayout(
                     .fillMaxWidth()
                     .padding(Dimens.Normal)
             ) {
-                onEvent(ReorderWorkoutExercisesUiEvent.OnApplyReorder)
+                onAction(ReorderWorkoutExercisesUiAction.OnApplyReorder)
             }
         }
     }

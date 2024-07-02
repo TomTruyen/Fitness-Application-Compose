@@ -52,7 +52,7 @@ fun CreateExerciseScreen(
 ) {
     val context = LocalContext.current
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val loading by viewModel.loading.collectAsStateWithLifecycle()
     val categories by viewModel.categories.collectAsStateWithLifecycle(initialValue = emptyList())
     val equipment by viewModel.equipment.collectAsStateWithLifecycle(initialValue = emptyList())
@@ -64,9 +64,9 @@ fun CreateExerciseScreen(
     }
 
     LaunchedEffect(viewModel, context) {
-        viewModel.navigation.collectLatest { navigationType ->
-            when(navigationType) {
-                is CreateExerciseNavigationType.Back -> navController.popBackStack()
+        viewModel.eventFlow.collectLatest { event ->
+            when(event) {
+                is CreateExerciseUiEvent.NavigateBack -> navController.popBackStack()
             }
         }
     }
@@ -78,7 +78,7 @@ fun CreateExerciseScreen(
         loading = loading,
         categories = categories,
         equipment = equipment,
-        onEvent = viewModel::onEvent,
+        onAction = viewModel::onAction,
     )
 }
 
@@ -90,7 +90,7 @@ fun CreateExerciseScreenLayout(
     loading: Boolean,
     categories: List<String>,
     equipment: List<String>,
-    onEvent: (CreateExerciseUiEvent) -> Unit,
+    onAction: (CreateExerciseUiAction) -> Unit,
 ) {
     val isValid by remember(state) {
         derivedStateOf {
@@ -147,7 +147,7 @@ fun CreateExerciseScreenLayout(
                     TextFields.Default(
                         value = state.exercise.name,
                         onValueChange = { name ->
-                            onEvent(CreateExerciseUiEvent.OnExerciseNameChanged(name))
+                            onAction(CreateExerciseUiAction.OnExerciseNameChanged(name))
                         },
                         placeholder = stringResource(id = R.string.hint_name),
                         padding = PaddingValues(
@@ -162,8 +162,8 @@ fun CreateExerciseScreenLayout(
                         selectedOption = state.exercise.category ?: "",
                         error = state.categoryValidationResult.errorMessage(),
                         onOptionSelected = { category ->
-                            onEvent(
-                                CreateExerciseUiEvent.OnCategoryChanged(
+                            onAction(
+                                CreateExerciseUiAction.OnCategoryChanged(
                                     category
                                 )
                             )
@@ -175,8 +175,8 @@ fun CreateExerciseScreenLayout(
                         options = equipment,
                         selectedOption = state.exercise.equipment ?: equipment.firstOrNull() ?: "",
                         onOptionSelected = { equipment ->
-                            onEvent(
-                                CreateExerciseUiEvent.OnEquipmentChanged(
+                            onAction(
+                                CreateExerciseUiAction.OnEquipmentChanged(
                                     equipment
                                 )
                             )
@@ -189,8 +189,8 @@ fun CreateExerciseScreenLayout(
                         selectedOption = state.exercise.type,
                         error = state.typeValidationResult.errorMessage(),
                         onOptionSelected = { type ->
-                            onEvent(
-                                CreateExerciseUiEvent.OnTypeChanged(
+                            onAction(
+                                CreateExerciseUiAction.OnTypeChanged(
                                     type
                                 )
                             )
@@ -203,7 +203,7 @@ fun CreateExerciseScreenLayout(
                     enabled = isValid,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    onEvent(CreateExerciseUiEvent.OnSaveClicked)
+                    onAction(CreateExerciseUiAction.OnSaveClicked)
                 }
 
                 if(confirmationDialogVisible) {

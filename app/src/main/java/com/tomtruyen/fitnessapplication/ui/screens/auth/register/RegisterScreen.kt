@@ -49,7 +49,7 @@ fun RegisterScreen(
 ) {
     val context = LocalContext.current
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val loading by viewModel.loading.collectAsStateWithLifecycle()
 
     LaunchedEffect(state.email) {
@@ -65,14 +65,14 @@ fun RegisterScreen(
     }
 
     LaunchedEffect(viewModel, context) {
-        viewModel.navigation.collectLatest { navigationType ->
-            when(navigationType) {
-                is RegisterNavigationType.Home -> {
+        viewModel.eventFlow.collectLatest { event ->
+            when(event) {
+                RegisterUiEvent.NavigateToHome -> {
                     navController.navigateAndClearBackStack(
                         destination = WorkoutOverviewScreenDestination
                     )
                 }
-                is RegisterNavigationType.Login -> {
+                RegisterUiEvent.NavigateToLogin -> {
                     navController.navigateAndClearBackStack(
                         destination = LoginScreenDestination
                     )
@@ -85,7 +85,7 @@ fun RegisterScreen(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         state = state,
         loading = loading,
-        onEvent = viewModel::onEvent
+        onAction = viewModel::onAction
     )
 }
 
@@ -94,7 +94,7 @@ fun RegisterScreenLayout(
     snackbarHost: @Composable () -> Unit,
     state: RegisterUiState,
     loading: Boolean,
-    onEvent: (RegisterUiEvent) -> Unit
+    onAction: (RegisterUiAction) -> Unit
 ) {
     val isValid by remember(state) {
         derivedStateOf {
@@ -140,7 +140,7 @@ fun RegisterScreenLayout(
                 TextFields.Default(
                     value = state.email,
                     onValueChange = { email ->
-                        onEvent(RegisterUiEvent.EmailChanged(email))
+                        onAction(RegisterUiAction.EmailChanged(email))
                     },
                     placeholder = stringResource(id = R.string.email),
                     error = state.emailValidationResult.errorMessage(),
@@ -156,7 +156,7 @@ fun RegisterScreenLayout(
                 TextFields.Default(
                     value = state.password,
                     onValueChange = { password ->
-                        onEvent(RegisterUiEvent.PasswordChanged(password))
+                        onAction(RegisterUiAction.PasswordChanged(password))
                     },
                     placeholder = stringResource(id = R.string.password),
                     error = state.passwordValidationResult.errorMessage(),
@@ -173,7 +173,7 @@ fun RegisterScreenLayout(
                 TextFields.Default(
                     value = state.confirmPassword,
                     onValueChange = { confirmPassword ->
-                        onEvent(RegisterUiEvent.ConfirmPasswordChanged(confirmPassword))
+                        onAction(RegisterUiAction.ConfirmPasswordChanged(confirmPassword))
                     },
                     placeholder = stringResource(id = R.string.password_repeat),
                     error = state.confirmPasswordValidationResult.errorMessage(),
@@ -192,7 +192,7 @@ fun RegisterScreenLayout(
                     text = stringResource(id = R.string.register),
                     enabled = isValid,
                     onClick = {
-                        onEvent(RegisterUiEvent.OnRegisterClicked)
+                        onAction(RegisterUiAction.OnRegisterClicked)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -202,7 +202,7 @@ fun RegisterScreenLayout(
                 Buttons.Text(
                     text = stringResource(id = R.string.have_an_account),
                     onClick = {
-                        onEvent(RegisterUiEvent.OnLoginClicked)
+                        onAction(RegisterUiAction.OnLoginClicked)
                     },
                     modifier = Modifier.fillMaxWidth()
                 )

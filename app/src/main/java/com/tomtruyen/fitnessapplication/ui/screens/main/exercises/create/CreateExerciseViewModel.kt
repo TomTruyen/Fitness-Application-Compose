@@ -8,20 +8,17 @@ import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseReposito
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 class CreateExerciseViewModel(
     private val id: String?,
     private val exerciseRepository: ExerciseRepository,
     private val userRepository: UserRepository
-): BaseViewModel<CreateExerciseNavigationType>() {
-    private val isEditing = id != null
-
-    val state = MutableStateFlow(
-        CreateExerciseUiState(
-            isEditing = isEditing
-        )
+): BaseViewModel<CreateExerciseUiState, CreateExerciseUiAction, CreateExerciseUiEvent>(
+    initialState = CreateExerciseUiState(
+        isEditing = id != null
     )
-
+) {
     val categories = exerciseRepository.findCategories()
     val equipment = exerciseRepository.findEquipment().map {
         listOf(Exercise.DEFAULT_DROPDOWN_VALUE) + it
@@ -32,32 +29,34 @@ class CreateExerciseViewModel(
     }
 
     private fun findExercise() = launchLoading {
-        if(!isEditing || id == null) return@launchLoading
+        if(!uiState.value.isEditing || id == null) return@launchLoading
 
         exerciseRepository.findUserExerciseById(id)?.let {
-            state.value = state.value.copy(
-                initialExercise = it,
-                exercise = it
-            )
+            updateState { state ->
+                state.copy(
+                    initialExercise = it,
+                    exercise = it
+                )
+            }
         }
     }
 
-    private fun save() = launchIO {
-        val userId = userRepository.getUser()?.uid ?: return@launchIO
+    private fun save() = vmScope.launch {
+        val userId = userRepository.getUser()?.uid ?: return@launch
 
         isLoading(true)
 
-        val exercise = state.value.exercise.apply {
+        val exercise = uiState.value.exercise.apply {
             if(equipment == Exercise.DEFAULT_DROPDOWN_VALUE) equipment = null
         }
 
         exerciseRepository.saveUserExercise(
             userId = userId,
             exercise = exercise,
-            isUpdate = isEditing,
+            isUpdate = uiState.value.isEditing,
             object: FirebaseCallback<Unit> {
                 override fun onSuccess(value: Unit) {
-                    navigate(CreateExerciseNavigationType.Back)
+                    triggerEvent(CreateExerciseUiEvent.NavigateBack)
                 }
 
                 override fun onError(error: String?) {
@@ -71,37 +70,37 @@ class CreateExerciseViewModel(
         )
     }
 
-    fun onEvent(event: CreateExerciseUiEvent) {
-        when(event) {
-            is CreateExerciseUiEvent.OnExerciseNameChanged -> {
-                state.value = state.value.copy(
-                    exercise = state.value.exercise.copy(
-                        name = event.name
+    override fun onAction(action: CreateExerciseUiAction) {
+        when(action) {
+            is CreateExerciseUiAction.OnExerciseNameChanged -> updateState {
+                it.copy(
+                    exercise = it.exercise.copy(
+                        name = action.name
                     )
                 )
             }
-            is CreateExerciseUiEvent.OnCategoryChanged -> {
-                state.value = state.value.copy(
-                    exercise = state.value.exercise.copy(
-                        category = event.category
+            is CreateExerciseUiAction.OnCategoryChanged -> updateState {
+                it.copy(
+                    exercise = it.exercise.copy(
+                        category = action.category
                     )
                 )
             }
-            is CreateExerciseUiEvent.OnEquipmentChanged -> {
-                state.value = state.value.copy(
-                    exercise = state.value.exercise.copy(
-                        equipment = event.equipment
+            is CreateExerciseUiAction.OnEquipmentChanged -> updateState {
+                it.copy(
+                    exercise = it.exercise.copy(
+                        equipment = action.equipment
                     )
                 )
             }
-            is CreateExerciseUiEvent.OnTypeChanged -> {
-                state.value = state.value.copy(
-                    exercise = state.value.exercise.copy(
-                        type = event.type
+            is CreateExerciseUiAction.OnTypeChanged -> updateState {
+                it.copy(
+                    exercise = it.exercise.copy(
+                        type = action.type
                     )
                 )
             }
-            is CreateExerciseUiEvent.OnSaveClicked -> save()
+            is CreateExerciseUiAction.OnSaveClicked -> save()
         }
     }
 }

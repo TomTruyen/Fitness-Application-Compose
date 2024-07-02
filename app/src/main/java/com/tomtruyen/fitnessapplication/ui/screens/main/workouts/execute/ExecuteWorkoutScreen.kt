@@ -2,22 +2,16 @@ package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.execute
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkOut
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,55 +25,38 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.outlined.Timer
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScrollableTabRow
-import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.data.entities.WorkoutExerciseWithExercisesAndSets
 import com.tomtruyen.fitnessapplication.data.entities.WorkoutWithExercises
 import com.tomtruyen.fitnessapplication.model.StopwatchTimer
-import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutUiEvent
-import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutUiState
-import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.RestTimeSelector
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
-import com.tomtruyen.fitnessapplication.ui.shared.dialogs.ConfirmationDialog
-import com.tomtruyen.fitnessapplication.ui.shared.dialogs.RestAlertDialog
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseSet
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseSetHeader
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseEvent
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseTabLayout
-import com.tomtruyen.fitnessapplication.utils.TimeUtils
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -96,7 +73,7 @@ fun ExecuteWorkoutScreen(
 ) {
     val context = LocalContext.current
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val lastEntryForWorkout by viewModel.lastEntryForWorkout.collectAsStateWithLifecycle(initialValue = null)
     val loading by viewModel.loading.collectAsStateWithLifecycle()
 
@@ -113,12 +90,12 @@ fun ExecuteWorkoutScreen(
     }
 
     LaunchedEffect(context, viewModel) {
-        viewModel.navigation.collectLatest { navigationType ->
-            when(navigationType) {
-                is ExecuteWorkoutNavigationType.NextExercise -> {
+        viewModel.eventFlow.collectLatest { event ->
+            when(event) {
+                is ExecuteWorkoutUiEvent.NavigateToNextExercise -> {
                     pagerState.animateScrollToPage(pagerState.currentPage + 1)
                 }
-                is ExecuteWorkoutNavigationType.Finish -> {
+                is ExecuteWorkoutUiEvent.NavigateToFinish -> {
                     navController.popBackStack()
                 }
             }
@@ -133,7 +110,7 @@ fun ExecuteWorkoutScreen(
         loading = loading,
         pagerState = pagerState,
         stopwatchTimer = stopwatchTimer,
-        onEvent = viewModel::onEvent,
+        onAction = viewModel::onAction,
         onWorkoutEvent = viewModel::onWorkoutEvent
     )
 }
@@ -148,7 +125,7 @@ fun ExecuteWorkoutScreenLayout(
     loading: Boolean,
     pagerState: PagerState,
     stopwatchTimer: StopwatchTimer,
-    onEvent: (ExecuteWorkoutUiEvent) -> Unit,
+    onAction: (ExecuteWorkoutUiAction) -> Unit,
     onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
 ) {
     Scaffold(
@@ -184,7 +161,7 @@ fun ExecuteWorkoutScreenLayout(
                 IconButton(
                     onClick = {
                         stopwatchTimer.stop()
-                        onEvent(ExecuteWorkoutUiEvent.FinishWorkout(stopwatchTimer.currentTime))
+                        onAction(ExecuteWorkoutUiAction.FinishWorkout(stopwatchTimer.currentTime))
                     }
                 ) {
                     Icon(
@@ -218,7 +195,7 @@ fun ExecuteWorkoutScreenLayout(
                     state = state,
                     lastEntryForWorkout = lastEntryForWorkout,
                     pagerState = pagerState,
-                    onEvent = onEvent,
+                    onAction = onAction,
                     onWorkoutEvent = onWorkoutEvent
                 )
             }
@@ -233,7 +210,7 @@ fun WorkoutExerciseTabContent(
     state: ExecuteWorkoutUiState,
     lastEntryForWorkout: WorkoutWithExercises?,
     pagerState: PagerState,
-    onEvent: (ExecuteWorkoutUiEvent) -> Unit,
+    onAction: (ExecuteWorkoutUiAction) -> Unit,
     onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
 ) {
     Column(
@@ -316,7 +293,7 @@ fun WorkoutExerciseTabContent(
                     .animateContentSize()
                     .padding(Dimens.Normal),
             ) {
-                onEvent(ExecuteWorkoutUiEvent.NextExercise)
+                onAction(ExecuteWorkoutUiAction.NextExercise)
             }
         }
     }

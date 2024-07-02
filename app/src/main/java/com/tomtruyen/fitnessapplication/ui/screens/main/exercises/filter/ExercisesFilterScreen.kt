@@ -29,8 +29,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
-import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesNavigationType
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiEvent
+import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiAction
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiState
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesViewModel
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
@@ -47,14 +47,14 @@ fun ExercisesFilterScreen(
 ) {
     val context = LocalContext.current
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val equipment by viewModel.equipment.collectAsStateWithLifecycle(initialValue = emptyList())
     val categories by viewModel.categories.collectAsStateWithLifecycle(initialValue = emptyList())
 
     LaunchedEffect(viewModel, context) {
-        viewModel.navigation.collectLatest { navigationType ->
+        viewModel.eventFlow.collectLatest { navigationType ->
             when (navigationType) {
-                is ExercisesNavigationType.Back -> navController.popBackStack()
+                is ExercisesUiEvent.NavigateBack -> navController.popBackStack()
                 else -> Unit
             }
         }
@@ -66,7 +66,7 @@ fun ExercisesFilterScreen(
         state = state,
         equipment = equipment,
         categories = categories,
-        onEvent = viewModel::onEvent
+        onAction = viewModel::onAction
     )
 }
 
@@ -78,7 +78,7 @@ fun ExercisesFilterScreenLayout(
     state: ExercisesUiState,
     equipment: List<String>,
     categories: List<String>,
-    onEvent: (ExercisesUiEvent) -> Unit
+    onAction: (ExercisesUiAction) -> Unit
 ) {
     Scaffold(
         snackbarHost = snackbarHost,
@@ -94,7 +94,7 @@ fun ExercisesFilterScreenLayout(
                     ),
                     modifier = Modifier.align(Alignment.CenterVertically),
                 ) {
-                    onEvent(ExercisesUiEvent.OnClearFilterClicked)
+                    onAction(ExercisesUiAction.OnClearFilterClicked)
                 }
             }
         }
@@ -119,7 +119,7 @@ fun ExercisesFilterScreenLayout(
             ) {
                 categories.forEach { category ->
                     ExerciseFilterChip(category, state.filter.categories.contains(category)) {
-                        onEvent(ExercisesUiEvent.OnCategoryFilterChanged(category))
+                        onAction(ExercisesUiAction.OnCategoryFilterChanged(category))
                     }
                 }
             }
@@ -139,7 +139,7 @@ fun ExercisesFilterScreenLayout(
             ) {
                 equipment.forEach { equipment ->
                     ExerciseFilterChip(equipment, state.filter.equipment.contains(equipment)) {
-                        onEvent(ExercisesUiEvent.OnEquipmentFilterChanged(equipment))
+                        onAction(ExercisesUiAction.OnEquipmentFilterChanged(equipment))
                     }
                 }
             }

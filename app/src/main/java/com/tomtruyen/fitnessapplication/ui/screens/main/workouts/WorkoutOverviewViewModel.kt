@@ -10,7 +10,9 @@ import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepositor
 class WorkoutOverviewViewModel(
     private val userRepository: UserRepository,
     private val workoutRepository: WorkoutRepository
-): BaseViewModel<WorkoutOverviewNavigationType>() {
+): BaseViewModel<WorkoutOverviewUiState, WorkoutOverviewUiAction, WorkoutOverviewUiEvent>(
+    initialState = WorkoutOverviewUiState()
+) {
     val workouts = workoutRepository.findWorkoutsAsync()
 
     init {
@@ -35,11 +37,11 @@ class WorkoutOverviewViewModel(
         )
     }
 
-    fun onEvent(event: WorkoutOverviewUiEvent) {
-        when(event) {
-            is WorkoutOverviewUiEvent.OnCreateWorkoutClicked -> navigate(WorkoutOverviewNavigationType.CreateWorkout)
-            is WorkoutOverviewUiEvent.OnDetailClicked -> navigate(WorkoutOverviewNavigationType.Detail(event.id))
-            is WorkoutOverviewUiEvent.OnStartWorkoutClicked -> navigate(WorkoutOverviewNavigationType.StartWorkout(event.id))
+    override fun onAction(action: WorkoutOverviewUiAction) {
+        when(action) {
+            is WorkoutOverviewUiAction.OnCreateWorkoutClicked -> triggerEvent(WorkoutOverviewUiEvent.NavigateToCreateWorkout)
+            is WorkoutOverviewUiAction.OnDetailClicked -> triggerEvent(WorkoutOverviewUiEvent.NavigateToDetail(action.id))
+            is WorkoutOverviewUiAction.OnStartWorkoutClicked -> triggerEvent(WorkoutOverviewUiEvent.NavigateToStartWorkout(action.id))
         }
     }
 }

@@ -16,12 +16,10 @@ class ExercisesViewModel(
     private val isFromWorkout: Boolean,
     private val exerciseRepository: ExerciseRepository,
     private val userRepository: UserRepository
-): BaseViewModel<ExercisesNavigationType>() {
-    val state = MutableStateFlow(
-        ExercisesUiState(isFromWorkout = isFromWorkout)
-    )
-
-    val exercises = state.flatMapLatest {
+): BaseViewModel<ExercisesUiState, ExercisesUiAction, ExercisesUiEvent>(
+    initialState = ExercisesUiState(isFromWorkout = isFromWorkout)
+) {
+    val exercises = uiState.flatMapLatest {
         exerciseRepository.findExercises(it.search, it.filter)
     }
 
@@ -53,42 +51,50 @@ class ExercisesViewModel(
         }
     }
 
-    fun onEvent(event: ExercisesUiEvent) {
-        val currentState = state.value
-
-        when (event) {
-            is ExercisesUiEvent.OnToggleSearch -> state.value = currentState.copy(searching = !currentState.searching)
-            is ExercisesUiEvent.OnSearchQueryChanged -> state.value = currentState.copy(search = event.query)
-            is ExercisesUiEvent.OnCategoryFilterChanged -> state.value = currentState.copy(
-                filter = currentState.filter.copy().apply {
-                    tryAddCategory(event.category)
-                }
-            )
-            is ExercisesUiEvent.OnEquipmentFilterChanged -> state.value = currentState.copy(
-                filter = currentState.filter.copy().apply {
-                    tryAddEquipment(event.equipment)
-                }
-            )
-            is ExercisesUiEvent.OnClearFilterClicked -> state.value = currentState.copy(filter = ExerciseFilter())
-            is ExercisesUiEvent.OnRemoveFilterClicked -> state.value = currentState.copy(
-                filter = currentState.filter.copy(
-                    categories = currentState.filter.categories.toMutableList().apply { remove(event.filter) },
-                    equipment = currentState.filter.equipment.toMutableList().apply { remove(event.filter) }
-                )
-            )
-            is ExercisesUiEvent.OnFilterClicked -> navigate(ExercisesNavigationType.Filter)
-            is ExercisesUiEvent.OnAddClicked -> navigate(ExercisesNavigationType.Add)
-            is ExercisesUiEvent.OnExerciseClicked -> {
-                if (isFromWorkout) {
-                    state.value = currentState.copy(
-                        selectedExercise = if (currentState.selectedExercise == event.exercise) null else event.exercise
+    override fun onAction(action: ExercisesUiAction) {
+        when (action) {
+            is ExercisesUiAction.OnToggleSearch -> updateState {
+                it.copy(searching = !it.searching)
+            }
+            is ExercisesUiAction.OnSearchQueryChanged -> updateState {
+                it.copy(search = action.query)
+            }
+            is ExercisesUiAction.OnCategoryFilterChanged -> updateState {
+                it.copy(filter = it.filter.copy().apply {
+                    tryAddCategory(action.category)
+                })
+            }
+            is ExercisesUiAction.OnEquipmentFilterChanged -> updateState {
+                it.copy(filter = it.filter.copy().apply {
+                    tryAddEquipment(action.equipment)
+                })
+            }
+            is ExercisesUiAction.OnClearFilterClicked -> updateState {
+                it.copy(filter = ExerciseFilter())
+            }
+            is ExercisesUiAction.OnRemoveFilterClicked -> updateState {
+                it.copy(
+                    filter = it.filter.copy(
+                        categories = it.filter.categories.toMutableList().apply { remove(action.filter) },
+                        equipment = it.filter.equipment.toMutableList().apply { remove(action.filter) }
                     )
+                )
+            }
+            is ExercisesUiAction.OnFilterClicked -> triggerEvent(ExercisesUiEvent.NavigateToFilter)
+            is ExercisesUiAction.OnAddClicked -> triggerEvent(ExercisesUiEvent.NavigateToAdd)
+            is ExercisesUiAction.OnExerciseClicked -> {
+                if (isFromWorkout) {
+                    updateState {
+                        it.copy(
+                            selectedExercise = if (it.selectedExercise == action.exercise) null else action.exercise
+                        )
+                    }
                 } else {
-                    navigate(ExercisesNavigationType.Detail(event.exercise.id))
+                    triggerEvent(ExercisesUiEvent.NavigateToDetail(action.exercise.id))
                 }
             }
-            is ExercisesUiEvent.OnAddExerciseToWorkoutClicked -> {
-                navigate(ExercisesNavigationType.BackToWorkout(event.exercise))
+            is ExercisesUiAction.OnAddExerciseToWorkoutClicked -> {
+                triggerEvent(ExercisesUiEvent.NavigateBackToWorkout(action.exercise))
             }
         }
     }

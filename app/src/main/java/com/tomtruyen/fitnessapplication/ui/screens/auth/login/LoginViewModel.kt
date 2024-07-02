@@ -5,17 +5,16 @@ import com.tomtruyen.fitnessapplication.base.BaseViewModel
 import com.tomtruyen.fitnessapplication.base.SnackbarMessage
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
-import kotlinx.coroutines.flow.MutableStateFlow
 
 class LoginViewModel(
     private val userRepository: UserRepository
-): BaseViewModel<LoginNavigationType>() {
-    val state = MutableStateFlow(LoginUiState())
-
+): BaseViewModel<LoginUiState, LoginUiAction, LoginUiEvent>(
+    initialState = LoginUiState()
+) {
     private val callback by lazy {
         object: FirebaseCallback<FirebaseUser?> {
             override fun onSuccess(value: FirebaseUser?) {
-                navigate(LoginNavigationType.Home)
+                triggerEvent(LoginUiEvent.NavigateToHome)
             }
 
             override fun onError(error: String?) {
@@ -31,8 +30,8 @@ class LoginViewModel(
     private fun login() {
         isLoading(true)
         userRepository.login(
-            email = state.value.email ?: "",
-            password = state.value.password ?: "",
+            email = uiState.value.email.orEmpty(),
+            password = uiState.value.password.orEmpty(),
             callback = callback
         )
     }
@@ -42,26 +41,18 @@ class LoginViewModel(
         userRepository.loginWithGoogle(idToken, callback)
     }
 
-    fun onEvent(event: LoginUiEvent) {
-        when(event) {
-            is LoginUiEvent.EmailChanged -> {
-                state.value = state.value.copy(email = event.email)
+    override fun onAction(action: LoginUiAction) {
+        when(action) {
+            is LoginUiAction.EmailChanged -> updateState {
+                it.copy(email = action.email)
             }
-            is LoginUiEvent.PasswordChanged -> {
-                state.value = state.value.copy(password = event.password)
+            is LoginUiAction.PasswordChanged -> updateState {
+                it.copy(password = action.password)
             }
-            is LoginUiEvent.OnLoginClicked -> {
-                login()
-            }
-            is LoginUiEvent.OnGoogleSignInSuccess -> {
-                loginWithGoogle(idToken = event.idToken)
-            }
-            is LoginUiEvent.OnGoogleSignInFailed -> {
-                showSnackbar(SnackbarMessage.Error(event.error))
-            }
-            is LoginUiEvent.OnRegisterClicked -> {
-                navigate(LoginNavigationType.Register)
-            }
+            is LoginUiAction.OnGoogleSignInFailed -> showSnackbar(SnackbarMessage.Error(action.error))
+            is LoginUiAction.OnGoogleSignInSuccess -> loginWithGoogle(action.idToken)
+            LoginUiAction.OnLoginClicked -> login()
+            LoginUiAction.OnRegisterClicked -> triggerEvent(LoginUiEvent.NavigateToRegister)
         }
     }
 }

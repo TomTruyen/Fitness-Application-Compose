@@ -5,21 +5,20 @@ import com.tomtruyen.fitnessapplication.base.BaseViewModel
 import com.tomtruyen.fitnessapplication.base.SnackbarMessage
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
-import kotlinx.coroutines.flow.MutableStateFlow
 
 class RegisterViewModel(
     private val userRepository: UserRepository
-): BaseViewModel<RegisterNavigationType>() {
-    val state = MutableStateFlow(RegisterUiState())
-
+): BaseViewModel<RegisterUiState, RegisterUiAction, RegisterUiEvent>(
+    initialState = RegisterUiState()
+) {
     fun register() {
         isLoading(true)
         userRepository.register(
-            email = state.value.email ?: "",
-            password = state.value.password ?: "",
+            email = uiState.value.email ?: "",
+            password = uiState.value.password ?: "",
             callback = object: FirebaseCallback<FirebaseUser?> {
                 override fun onSuccess(value: FirebaseUser?) {
-                    navigate(RegisterNavigationType.Home)
+                    triggerEvent(RegisterUiEvent.NavigateToHome)
                 }
 
                 override fun onError(error: String?) {
@@ -33,23 +32,19 @@ class RegisterViewModel(
         )
     }
 
-    fun onEvent(event: RegisterUiEvent) {
-        when(event) {
-            is RegisterUiEvent.EmailChanged -> {
-                state.value = state.value.copy(email = event.email)
+    override fun onAction(action: RegisterUiAction) {
+        when(action) {
+            is RegisterUiAction.EmailChanged -> updateState {
+                it.copy(email = action.email)
             }
-            is RegisterUiEvent.PasswordChanged -> {
-                state.value = state.value.copy(password = event.password)
+            is RegisterUiAction.PasswordChanged -> updateState {
+                it.copy(password = action.password)
             }
-            is RegisterUiEvent.ConfirmPasswordChanged -> {
-                state.value = state.value.copy(confirmPassword = event.confirmPassword)
+            is RegisterUiAction.ConfirmPasswordChanged -> updateState {
+                it.copy(confirmPassword = action.confirmPassword)
             }
-            is RegisterUiEvent.OnRegisterClicked -> {
-                register()
-            }
-            is RegisterUiEvent.OnLoginClicked -> {
-                navigate(RegisterNavigationType.Login)
-            }
+            is RegisterUiAction.OnRegisterClicked -> register()
+            is RegisterUiAction.OnLoginClicked -> triggerEvent(RegisterUiEvent.NavigateToLogin)
         }
     }
 }

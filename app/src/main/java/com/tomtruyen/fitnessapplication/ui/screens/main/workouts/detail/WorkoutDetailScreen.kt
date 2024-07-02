@@ -50,19 +50,19 @@ fun WorkoutDetailScreen(
 ) {
     val context = LocalContext.current
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val loading by viewModel.loading.collectAsStateWithLifecycle()
     val workout by viewModel.workout.collectAsStateWithLifecycle(initialValue = null)
 
     LaunchedEffect(context, viewModel) {
-        viewModel.navigation.collectLatest { navigationType ->
-            when(navigationType) {
-                is WorkoutDetailNavigationType.Edit -> {
-                    navController.navigate(CreateWorkoutScreenDestination(navigationType.id))
+        viewModel.eventFlow.collectLatest { event ->
+            when(event) {
+                is WorkoutDetailUiEvent.NavigateToEdit -> {
+                    navController.navigate(CreateWorkoutScreenDestination(event.id))
                 }
-                is WorkoutDetailNavigationType.Back -> navController.popBackStack()
-                is WorkoutDetailNavigationType.StartWorkout -> {
-                    navController.navigate(ExecuteWorkoutScreenDestination(navigationType.id))
+                is WorkoutDetailUiEvent.NavigateBack -> navController.popBackStack()
+                is WorkoutDetailUiEvent.NavigateToStartWorkout -> {
+                    navController.navigate(ExecuteWorkoutScreenDestination(event.id))
                 }
             }
         }
@@ -74,7 +74,7 @@ fun WorkoutDetailScreen(
         state = state,
         loading = loading,
         workoutWithExercise = workout,
-        onEvent = viewModel::onEvent
+        onAction = viewModel::onAction
     )
 }
 
@@ -85,7 +85,7 @@ fun WorkoutDetailScreenLayout(
     state: WorkoutDetailUiState,
     loading: Boolean,
     workoutWithExercise: WorkoutWithExercises?,
-    onEvent: (WorkoutDetailUiEvent) -> Unit
+    onAction: (WorkoutDetailUiAction) -> Unit
 ) {
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
@@ -98,7 +98,7 @@ fun WorkoutDetailScreenLayout(
             ) {
                 IconButton(
                     onClick = {
-                        onEvent(WorkoutDetailUiEvent.Edit)
+                        onAction(WorkoutDetailUiAction.Edit)
                     }
                 ) {
                     Icon(
@@ -140,7 +140,7 @@ fun WorkoutDetailScreenLayout(
                     text = stringResource(id = R.string.start_workout),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    onEvent(WorkoutDetailUiEvent.StartWorkout)
+                    onAction(WorkoutDetailUiAction.StartWorkout)
                 }
 
                 if (confirmationDialogVisible) {
@@ -148,7 +148,7 @@ fun WorkoutDetailScreenLayout(
                         title = R.string.title_delete_workout,
                         message = R.string.message_delete_workout,
                         onConfirm = {
-                            onEvent(WorkoutDetailUiEvent.Delete)
+                            onAction(WorkoutDetailUiAction.Delete)
                             confirmationDialogVisible = false
                         },
                         onDismiss = {

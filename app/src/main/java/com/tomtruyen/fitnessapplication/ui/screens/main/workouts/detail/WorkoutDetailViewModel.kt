@@ -3,22 +3,21 @@ package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.detail
 import com.tomtruyen.fitnessapplication.base.BaseViewModel
 import com.tomtruyen.fitnessapplication.base.SnackbarMessage
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
-import com.tomtruyen.fitnessapplication.networking.models.WorkoutResponse
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepository
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class WorkoutDetailViewModel(
     private val id: String,
     private val workoutRepository: WorkoutRepository,
     private val userRepository: UserRepository
-): BaseViewModel<WorkoutDetailNavigationType>() {
-    val state = MutableStateFlow(WorkoutDetailUiState())
-
+): BaseViewModel<WorkoutDetailUiState, WorkoutDetailUiAction, WorkoutDetailUiEvent>(
+    initialState = WorkoutDetailUiState()
+) {
     val workout = workoutRepository.findWorkoutByIdAsync(id)
 
-    private fun delete() = launchIO {
-        val userId = userRepository.getUser()?.uid ?: return@launchIO
+    private fun delete() = vmScope.launch {
+        val userId = userRepository.getUser()?.uid ?: return@launch
 
         isLoading(true)
 
@@ -27,7 +26,7 @@ class WorkoutDetailViewModel(
             workoutId = id,
             object: FirebaseCallback<Unit> {
                 override fun onSuccess(value: Unit) {
-                    navigate(WorkoutDetailNavigationType.Back)
+                    triggerEvent(WorkoutDetailUiEvent.NavigateBack)
                 }
 
                 override fun onError(error: String?) {
@@ -41,13 +40,13 @@ class WorkoutDetailViewModel(
         )
     }
 
-    fun onEvent(event: WorkoutDetailUiEvent) {
-        when(event) {
-            is WorkoutDetailUiEvent.Edit -> {
-                navigate(WorkoutDetailNavigationType.Edit(id))
+    override fun onAction(action: WorkoutDetailUiAction) {
+        when(action) {
+            is WorkoutDetailUiAction.Edit -> {
+                triggerEvent(WorkoutDetailUiEvent.NavigateToEdit(id))
             }
-            is WorkoutDetailUiEvent.Delete -> delete()
-            is WorkoutDetailUiEvent.StartWorkout -> navigate(WorkoutDetailNavigationType.StartWorkout(id))
+            is WorkoutDetailUiAction.Delete -> delete()
+            is WorkoutDetailUiAction.StartWorkout -> triggerEvent(WorkoutDetailUiEvent.NavigateToStartWorkout(id))
         }
     }
 }

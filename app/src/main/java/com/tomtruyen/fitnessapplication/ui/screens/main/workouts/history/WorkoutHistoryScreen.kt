@@ -1,6 +1,5 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.history
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,16 +10,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FitnessCenter
-import androidx.compose.material.icons.outlined.FitnessCenter
-import androidx.compose.material.icons.outlined.Scale
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -31,13 +26,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.paging.compose.LazyPagingItems
@@ -65,9 +58,9 @@ fun WorkoutHistoryScreen(
     val history = viewModel.history.collectAsLazyPagingItems()
 
     LaunchedEffect(context, viewModel) {
-        viewModel.navigation.collectLatest { navigationType ->
-            when(navigationType) {
-                is WorkoutHistoryNavigationType.Detail -> {
+        viewModel.eventFlow.collectLatest { event ->
+            when(event) {
+                is WorkoutHistoryUiEvent.NavigateToDetail -> {
                     // TODO: Implement -- This is for a future update
                 }
             }
@@ -78,7 +71,7 @@ fun WorkoutHistoryScreen(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         history = history,
-        onEvent = viewModel::onEvent
+        onAction = viewModel::onAction
     )
 }
 
@@ -88,7 +81,7 @@ fun WorkoutHistoryScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
     history: LazyPagingItems<WorkoutHistoryWithWorkout>,
-    onEvent: (WorkoutHistoryUiEvent) -> Unit,
+    onAction: (WorkoutHistoryUiAction) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
@@ -114,7 +107,7 @@ fun WorkoutHistoryScreenLayout(
 
                 WorkoutHistoryItem(
                     entry = entry!!,
-                    onEvent = onEvent
+                    onAction = onAction
                 )
             }
         }
@@ -125,7 +118,7 @@ fun WorkoutHistoryScreenLayout(
 @Composable
 fun WorkoutHistoryItem(
     entry: WorkoutHistoryWithWorkout,
-    onEvent: (WorkoutHistoryUiEvent) -> Unit,
+    onAction: (WorkoutHistoryUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -139,7 +132,7 @@ fun WorkoutHistoryItem(
         ),
         elevation = CardDefaults.cardElevation(0.dp),
         onClick = {
-            onEvent(WorkoutHistoryUiEvent.OnDetailClicked(entry.history.id))
+            onAction(WorkoutHistoryUiAction.OnDetailClicked(entry.history.id))
         }
     ) {
         // Just basic information like total weight, time

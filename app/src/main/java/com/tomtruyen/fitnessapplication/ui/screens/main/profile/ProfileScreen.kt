@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -60,16 +59,8 @@ fun ProfileScreen(
 ) {
     val context = LocalContext.current
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val loading by viewModel.loading.collectAsStateWithLifecycle()
-
-    LaunchedEffect(Unit) {
-        viewModel.settings.collectLatest { settings ->
-            settings?.let {
-                viewModel.setSettings(it)
-            }
-        }
-    }
 
     DisposableEffect(Unit) {
         onDispose {
@@ -78,9 +69,9 @@ fun ProfileScreen(
     }
 
     LaunchedEffect(viewModel, context) {
-        viewModel.navigation.collectLatest { navigationType ->
+        viewModel.eventFlow.collectLatest { navigationType ->
             when(navigationType) {
-                is ProfileNavigationType.Logout -> {
+                is ProfileUiEvent.Logout -> {
                     navController.navigateAndClearBackStack(
                         destination = LoginScreenDestination
                     )
@@ -94,7 +85,7 @@ fun ProfileScreen(
         navController = navController,
         state = state,
         loading = loading,
-        onEvent = viewModel::onEvent
+        onAction = viewModel::onAction
     )
 }
 
@@ -105,7 +96,7 @@ fun ProfileScreenLayout(
     navController: NavController,
     state: ProfileUiState,
     loading: Boolean,
-    onEvent: (ProfileUiEvent) -> Unit
+    onAction: (ProfileUiAction) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -179,14 +170,14 @@ fun ProfileScreenLayout(
                     title = stringResource(id = R.string.rest_timer_enabled),
                     checked = state.settings.restEnabled
                 ) {
-                    onEvent(ProfileUiEvent.RestEnabledChanged(it))
+                    onAction(ProfileUiAction.RestEnabledChanged(it))
                 }
 
                 SwitchListItem(
                     title = stringResource(id = R.string.vibrate_upon_finish),
                     checked = state.settings.restVibrationEnabled
                 ) {
-                    onEvent(ProfileUiEvent.RestVibrationEnabledChanged(it))
+                    onAction(ProfileUiAction.RestVibrationEnabledChanged(it))
                 }
 
                 HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
@@ -216,7 +207,7 @@ fun ProfileScreenLayout(
 
                 Buttons.Default(
                     text = stringResource(id = R.string.logout),
-                    onClick = { onEvent(ProfileUiEvent.Logout) },
+                    onClick = { onAction(ProfileUiAction.Logout) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(Dimens.Normal)
@@ -246,7 +237,7 @@ fun ProfileScreenLayout(
                         unitDialogVisible = false
                     },
                     onConfirm = { unit ->
-                        onEvent(ProfileUiEvent.UnitChanged(unit))
+                        onAction(ProfileUiAction.UnitChanged(unit))
                         unitDialogVisible = false
                     },
                     unit = state.settings.unit
@@ -259,7 +250,7 @@ fun ProfileScreenLayout(
                         restDialogVisible = false
                     },
                     onConfirm = { rest, _ ->
-                        onEvent(ProfileUiEvent.RestChanged(rest))
+                        onAction(ProfileUiAction.RestChanged(rest))
                         restDialogVisible = false
                     },
                     rest = state.settings.rest

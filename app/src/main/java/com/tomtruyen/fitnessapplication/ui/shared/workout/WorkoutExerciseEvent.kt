@@ -1,7 +1,5 @@
 package com.tomtruyen.fitnessapplication.ui.shared.workout
 
-import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutUiEvent
-
 sealed class WorkoutExerciseEvent(
     open val exerciseIndex: Int,
 ) {

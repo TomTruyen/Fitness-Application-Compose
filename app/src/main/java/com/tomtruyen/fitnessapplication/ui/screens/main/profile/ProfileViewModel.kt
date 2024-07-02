@@ -8,26 +8,21 @@ import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.SettingsRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.launch
 
 class ProfileViewModel(
     private val globalProvider: GlobalProvider,
     private val userRepository: UserRepository,
     private val settingsRepository: SettingsRepository
-): BaseViewModel<ProfileNavigationType>() {
-    val state = MutableStateFlow(ProfileUiState())
-
-    val settings = settingsRepository.findSettings()
-
+): BaseViewModel<ProfileUiState, ProfileUiAction, ProfileUiEvent>(
+    initialState = ProfileUiState()
+) {
     init {
         getSettings()
-    }
-
-    fun setSettings(settings: Settings) {
-        state.value = state.value.copy(
-            settings = settings,
-            initialSettings = if(state.value.initialSettings == null) settings else state.value.initialSettings
-        )
+        observeSettings()
     }
 
     private fun getSettings() {
@@ -48,11 +43,25 @@ class ProfileViewModel(
         )
     }
 
+    private fun observeSettings() = vmScope.launch {
+        settingsRepository.findSettings()
+            .distinctUntilChanged()
+            .filterNotNull()
+            .collectLatest { settings ->
+                updateState {
+                    it.copy(
+                        settings = settings,
+                        initialSettings = it.initialSettings ?: settings
+                    )
+                }
+            }
+    }
+
     fun saveSettings() {
-        if(state.value.settings == state.value.initialSettings) return
+        if(uiState.value.settings == uiState.value.initialSettings) return
 
         val userId = userRepository.getUser()?.uid ?: return
-        val settings = state.value.settings
+        val settings = uiState.value.settings
 
         isLoading(true)
 
@@ -79,22 +88,25 @@ class ProfileViewModel(
 
     private fun logout() {
         userRepository.logout()
-        navigate(ProfileNavigationType.Logout)
+        triggerEvent(ProfileUiEvent.Logout)
     }
 
-    fun onEvent(event: ProfileUiEvent) {
-        val currentState = state.value
-        val newSettings = currentState.settings.copy()
-
-        when (event) {
-            is ProfileUiEvent.UnitChanged -> newSettings.unit = event.value
-            is ProfileUiEvent.RestChanged -> newSettings.rest = event.value
-            is ProfileUiEvent.RestEnabledChanged -> newSettings.restEnabled = event.value
-            is ProfileUiEvent.RestVibrationEnabledChanged -> newSettings.restVibrationEnabled = event.value
-            is ProfileUiEvent.Logout -> logout()
+    override fun onAction(action: ProfileUiAction) {
+        when (action) {
+            is ProfileUiAction.UnitChanged -> updateState {
+                it.copy(settings = it.settings.copy(unit = action.value))
+            }
+            is ProfileUiAction.RestChanged -> updateState {
+                it.copy(settings = it.settings.copy(rest = action.value))
+            }
+            is ProfileUiAction.RestEnabledChanged -> updateState {
+                it.copy(settings = it.settings.copy(restEnabled = action.value))
+            }
+            is ProfileUiAction.RestVibrationEnabledChanged -> updateState {
+                it.copy(settings = it.settings.copy(restVibrationEnabled = action.value))
+            }
+            is ProfileUiAction.Logout -> logout()
         }
-
-        state.value = currentState.copy(settings = newSettings)
     }
 
 }
