@@ -34,7 +34,7 @@ data class Exercise(
     }
 
     @get:Ignore
-    val typeEnum get() = ExerciseType.values().firstOrNull { it.value.lowercase() == type } ?: ExerciseType.WEIGHT
+    val typeEnum get() = ExerciseType.entries.firstOrNull { it.value.lowercase() == type } ?: ExerciseType.WEIGHT
 
     enum class ExerciseType(val value: String) {
         WEIGHT("Weight"),

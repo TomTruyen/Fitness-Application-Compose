@@ -1,7 +1,6 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises.detail
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -35,8 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
+import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.navigate
 import com.tomtruyen.fitnessapplication.Dimens
@@ -85,7 +83,6 @@ fun ExerciseDetailScreen(
     )
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ExerciseDetailScreenLayout(
     snackbarHost: @Composable () -> Unit,
@@ -140,7 +137,7 @@ fun ExerciseDetailScreenLayout(
             ) {
                 if (exercise?.imageDetail != null || exercise?.image != null) {
                     item {
-                        GlideImage(
+                        AsyncImage(
                             model = exercise.imageDetail ?: exercise.image,
                             contentDescription = exercise.name,
                             contentScale = ContentScale.Fit,

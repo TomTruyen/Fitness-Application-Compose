@@ -41,7 +41,7 @@ fun UnitAlertDialog(
         },
         text = {
             Column {
-                Settings.UnitType.values().forEach { unit ->
+                Settings.UnitType.entries.forEach { unit ->
                     RadioListItem(
                         title = unit.value,
                         selected = selectedUnit == unit.value,

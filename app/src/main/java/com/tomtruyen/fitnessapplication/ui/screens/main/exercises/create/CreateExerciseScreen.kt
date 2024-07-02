@@ -101,7 +101,7 @@ fun CreateExerciseScreenLayout(
         }
     }
 
-    val types = Exercise.ExerciseType.values().map { it.value }
+    val types = Exercise.ExerciseType.entries.map { it.value }
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     BackHandler(enabled = !confirmationDialogVisible) {

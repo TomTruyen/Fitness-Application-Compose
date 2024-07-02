@@ -1,13 +1,18 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.googleServices)
-    alias(libs.plugins.secretsGradle)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.crashlytics)
-    alias(libs.plugins.kapt)
-    alias(libs.plugins.androidGitVersion)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.git.version)
+    alias(libs.plugins.google.crashlytics)
+    alias(libs.plugins.google.ksp)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose.compiler)
+    alias(libs.plugins.secrets.gradle)
+    alias(libs.plugins.kotlin.serialization)
+
     id("kotlin-parcelize")
 }
 
@@ -53,20 +58,18 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
+
+
     buildFeatures {
         compose = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -74,63 +77,54 @@ android {
     }
 }
 
+tasks.withType<KotlinCompile> {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+    }
+}
+
 dependencies {
     // Compose + Material3
-    implementation(libs.core.ktx)
-    implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.lifecycle.runtime.compose)
-    implementation(libs.activity.compose)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.ui)
-    implementation(libs.ui.graphics)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.material3)
-    implementation(libs.material.icons.extended)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
 
-    // Gson
-    implementation(libs.gson)
+    // Serialization
+    implementation(libs.kotlinx.serialization.json)
 
     // Koin
-    implementation(libs.koin)
+    implementation(libs.insert.koin.compose)
 
     // Firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.firestore)
-    implementation(libs.firebase.crashlytics)
-    implementation(libs.play.services.auth)
+    implementation(platform(libs.google.firebase.bom))
+    implementation(libs.google.firebase.analytics)
+    implementation(libs.google.firebase.auth)
+    implementation(libs.google.firebase.firestore)
+    implementation(libs.google.firebase.crashlytics)
+    implementation(libs.google.play.services.auth)
 
     // Room
-    implementation(libs.room)
-    kapt(libs.room.compiler)
-
-    // Raamcosta Compose Navigation
-    implementation(libs.raamcosta.compose.destinations)
-    ksp(libs.raamcosta.compose.destinations.ksp)
-
-    // Glide
-    implementation(libs.glide)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     // Reorderable (Drag & Drop) Lazy Column
-    implementation(libs.reorderable)
+    implementation(libs.compose.reorderable)
 
     // Paging 3
-    implementation(libs.paging.runtime)
-    implementation(libs.paging.compose)
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
 
-    // Unit Testing
-    testImplementation(libs.junit)
-    testImplementation(libs.koin.test.junit)
-
-    // Android Testing
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.ui.test.junit4)
+    // Images
+    implementation(libs.coil.kt.compose)
 
     // Debug Only
-    debugImplementation(libs.leakcanary)
-    debugImplementation(libs.ui.tooling)
-    debugImplementation(libs.ui.test.manifest)
+    debugImplementation(libs.squareup.leakcanary)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }
