@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.fitnessapplication.ui.theme.BlueGrey
 
 object Buttons {
     @Composable
@@ -16,13 +17,13 @@ object Buttons {
         text: String,
         modifier: Modifier = Modifier,
         enabled: Boolean = true,
-        shape: Shape = MaterialTheme.shapes.medium,
+        shape: Shape = MaterialTheme.shapes.small,
         minButtonSize: Dp = Dimens.MinButtonHeight,
         colors: ButtonColors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
-            disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-            disabledContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f)
+            disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
+            disabledContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
         ),
         contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
         onClick: () -> Unit,
@@ -48,8 +49,10 @@ object Buttons {
         text: String,
         modifier: Modifier = Modifier,
         enabled: Boolean = true,
-        shape: Shape = MaterialTheme.shapes.medium,
-        colors: ButtonColors = ButtonDefaults.textButtonColors(),
+        shape: Shape = MaterialTheme.shapes.small,
+        colors: ButtonColors = ButtonDefaults.textButtonColors(
+            contentColor = BlueGrey
+        ),
         onClick: () -> Unit,
     ) {
         TextButton(
@@ -73,7 +76,7 @@ object Buttons {
         icon: ImageVector,
         modifier: Modifier = Modifier,
         enabled: Boolean = true,
-        shape: Shape = MaterialTheme.shapes.medium,
+        shape: Shape = MaterialTheme.shapes.small,
         colors: ButtonColors = ButtonDefaults.textButtonColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,

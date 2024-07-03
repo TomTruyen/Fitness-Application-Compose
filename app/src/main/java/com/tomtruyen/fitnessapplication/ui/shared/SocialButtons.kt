@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.helpers.GoogleSignInHelper
+import com.tomtruyen.fitnessapplication.ui.theme.BlueGrey
+import com.tomtruyen.fitnessapplication.ui.theme.LavenderMist
 
 object SocialButtons {
     @Composable
@@ -35,7 +39,7 @@ object SocialButtons {
         text: String,
         modifier: Modifier = Modifier,
         enabled: Boolean = true,
-        shape: Shape = MaterialTheme.shapes.medium,
+        shape: Shape = MaterialTheme.shapes.small,
         onClick: () -> Unit = {},
         onSuccess: (String) -> Unit,
         onError: (String?) -> Unit
@@ -82,26 +86,25 @@ object SocialButtons {
                 .defaultMinSize(
                     minHeight = Dimens.MinButtonHeight,
                 )
-                .fillMaxWidth()
-                .padding(top = Dimens.Tiny)
-                .clip(MaterialTheme.shapes.medium),
+                .fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.onBackground
+                containerColor = MaterialTheme.colorScheme.background,
+                contentColor = MaterialTheme.colorScheme.onBackground
+            ),
+            border = BorderStroke(
+                width = 1.dp,
+                color = LavenderMist
             )
         ) {
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_logo_google),
                 contentDescription = null,
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(16.dp),
             )
-            Spacer(modifier = Modifier.width(Dimens.Tiny))
-            Text(
-                modifier = Modifier.padding(vertical = Dimens.Small),
-                text = text,
-                style = TextStyle(
-                    color = MaterialTheme.colorScheme.background
-                )
-            )
+
+            Spacer(modifier = Modifier.width(Dimens.Small))
+
+            Text(text = text)
         }
     }
 }

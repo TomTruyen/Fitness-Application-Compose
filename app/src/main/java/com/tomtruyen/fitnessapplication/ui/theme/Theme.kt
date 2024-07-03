@@ -13,13 +13,13 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = lightColorScheme(
-    primary = Topaz,
-    onPrimary = ChineseBlack,
+    primary = ChineseBlack,
+    onPrimary = White,
     secondary = Cultured,
     onSecondary = ChineseBlack,
     tertiary = ChineseBlack,
     onTertiary = White,
-    background = Cultured,
+    background = White,
     onBackground = ChineseBlack,
     primaryContainer = Topaz,
     onPrimaryContainer = White,
@@ -31,13 +31,13 @@ private val DarkColorScheme = lightColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Topaz,
-    onPrimary = ChineseBlack,
+    primary = ChineseBlack,
+    onPrimary = White,
     secondary = Cultured,
     onSecondary = ChineseBlack,
     tertiary = Topaz,
     onTertiary = ChineseBlack,
-    background = Cultured,
+    background = White,
     onBackground = ChineseBlack,
     primaryContainer = Topaz,
     onPrimaryContainer = White,

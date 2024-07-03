@@ -38,7 +38,7 @@
     <string name="subtitle_login">Sign in to continue on your path</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
-    <string name="login">Sign in</string>
+    <string name="login">Sign in with Email</string>
     <string name="button_login_google">Sign in with Google</string>
 
     <!-- Register -->
@@ -108,4 +108,5 @@
     <string name="next_exercise">Next exercise</string>
     <string name="last">Last</string>
     <string name="history">History</string>
+    <string name="label_or">Or</string>
 </resources>

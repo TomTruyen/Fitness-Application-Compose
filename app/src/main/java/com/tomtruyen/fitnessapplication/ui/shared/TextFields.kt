@@ -27,6 +27,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
+import com.tomtruyen.fitnessapplication.ui.theme.BlueGrey
+import com.tomtruyen.fitnessapplication.ui.theme.LavenderMist
 
 
 object TextFields {
@@ -45,7 +47,7 @@ object TextFields {
         trailingIcon: @Composable (() -> Unit)? = null,
         keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
         containerColor: Color = Color.White,
-        shape: Shape = MaterialTheme.shapes.medium,
+        shape: Shape = MaterialTheme.shapes.small,
         modifier: Modifier = Modifier
     ) {
         val focusManager = LocalFocusManager.current
@@ -68,7 +70,7 @@ object TextFields {
                     Icon(
                         imageVector = icon,
                         contentDescription = contentDescription,
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        tint = BlueGrey
                     )
                 }
             }
@@ -91,17 +93,18 @@ object TextFields {
                         focusManager.clearFocus()
                     }
                 ),
-                modifier = if(!error.isNullOrEmpty()) {
-                    Modifier
-                        .fillMaxWidth()
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.error,
-                            shape = shape
-                        )
-                } else {
-                    Modifier.fillMaxWidth()
-                }.animateContentSize(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(
+                        width = 1.dp,
+                        color = if(error.isNullOrBlank()) {
+                            LavenderMist
+                        } else {
+                            MaterialTheme.colorScheme.error
+                        },
+                        shape = shape
+                    )
+                    .animateContentSize(),
             ) { innerTextField ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -113,7 +116,7 @@ object TextFields {
                         )
                         .padding(padding)
                 ) {
-                    BoxWithConstraints(
+                    Box(
                         modifier = Modifier.weight(1f)
                             .animateContentSize(),
                         contentAlignment = if(textStyle.textAlign == TextAlign.Center) {
@@ -126,7 +129,7 @@ object TextFields {
                             Text(
                                 text = placeholder,
                                 style = textStyle.copy(
-                                    color = textStyle.color.copy(alpha = 0.6f)
+                                    color = BlueGrey
                                 ),
                                 textAlign = textStyle.textAlign,
                                 modifier = Modifier.fillMaxWidth()
@@ -138,7 +141,7 @@ object TextFields {
 
                     if(trailing != null) {
                         Box(
-                            modifier = Modifier.size(28.dp),
+                            modifier = Modifier.size(20.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             trailing.invoke()

@@ -141,7 +141,7 @@ fun ExecuteWorkoutScreenLayout(
                         .animateContentSize()
                         .background(
                             color = MaterialTheme.colorScheme.surface,
-                            shape = MaterialTheme.shapes.medium
+                            shape = MaterialTheme.shapes.small
                         )
                         .padding(Dimens.Small),
                     verticalAlignment = Alignment.CenterVertically,

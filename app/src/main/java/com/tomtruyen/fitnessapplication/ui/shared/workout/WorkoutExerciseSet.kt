@@ -178,9 +178,9 @@ fun WorkoutExerciseSet(
                     .animateContentSize()
                     .background(
                         color = MaterialTheme.colorScheme.surface,
-                        shape = MaterialTheme.shapes.medium
+                        shape = MaterialTheme.shapes.small
                     )
-                    .clip(MaterialTheme.shapes.medium)
+                    .clip(MaterialTheme.shapes.small)
                     .clickable {
                         timeDialogVisible = true
                     }

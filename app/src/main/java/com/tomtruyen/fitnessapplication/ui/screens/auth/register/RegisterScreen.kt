@@ -2,6 +2,7 @@ package com.tomtruyen.fitnessapplication.ui.screens.auth.register
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -35,6 +36,7 @@ import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutOverviewS
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
+import com.tomtruyen.fitnessapplication.ui.theme.BlueGrey
 import com.tomtruyen.fitnessapplication.validation.errorMessage
 import com.tomtruyen.fitnessapplication.validation.isValid
 import kotlinx.coroutines.flow.collectLatest
@@ -119,6 +121,8 @@ fun RegisterScreenLayout(
                     .verticalScroll(rememberScrollState())
                     .padding(Dimens.Normal)
             ) {
+                Spacer(modifier = Modifier.weight(1f))
+
                 Text(
                     text = stringResource(id = R.string.title_register),
                     style = MaterialTheme.typography.headlineLarge.copy(
@@ -129,8 +133,9 @@ fun RegisterScreenLayout(
                 )
                 Text(
                     text = stringResource(id = R.string.subtitle_register),
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        color = BlueGrey,
+                        fontWeight = FontWeight.Normal
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -198,6 +203,8 @@ fun RegisterScreenLayout(
                         .fillMaxWidth()
                         .padding(top = Dimens.Normal)
                 )
+
+                Spacer(modifier = Modifier.weight(1f))
 
                 Buttons.Text(
                     text = stringResource(id = R.string.have_an_account),
