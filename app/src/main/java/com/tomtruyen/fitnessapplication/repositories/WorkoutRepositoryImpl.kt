@@ -42,7 +42,7 @@ class WorkoutRepositoryImpl(
                     setFetchSuccessful(FetchedData.Type.WORKOUTS.identifier)
                 }
             ) {
-                val workouts = it.toObject(WorkoutsResponse::class.java)?.data ?: emptyList()
+                val workouts = it.toObject(WorkoutsResponse::class.java)?.data.orEmpty()
 
                 launchWithTransaction {
                     workoutDao.deleteAll()

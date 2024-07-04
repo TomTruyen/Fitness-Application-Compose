@@ -35,7 +35,7 @@ class WorkoutHistoryPagingSource(
                 query.startAfter(it).get().await()
             }
 
-            val data = firstVisibleDocument?.toObject(WorkoutHistoriesResponse::class.java)?.data ?: emptyList()
+            val data = firstVisibleDocument?.toObject(WorkoutHistoriesResponse::class.java)?.data.orEmpty()
 
             val savedHistories = withContext(Dispatchers.IO) {
                 onSaveResponse(data).join()

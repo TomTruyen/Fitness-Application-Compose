@@ -32,19 +32,19 @@ open class TextValidator private constructor(
     /**
      * This implementation of the validate function will validate the view based on the rules that are added to this validator.
      */
-    private fun validate(context: Context): ValidationResult {
+    private fun validate(): ValidationResult {
         val localText = text ?: return ValidationResult.Invalid(setOf())
         val validationResult = rules.foldRight(ValidationResult.Valid as ValidationResult) { rule, acc ->
             val isValid = rule.validationRule(localText)
-            val result = if (isValid) ValidationResult.Valid else ValidationResult.Invalid(setOf(rule.errorMessage(context)))
+            val result = if (isValid) ValidationResult.Valid else ValidationResult.Invalid(setOf(rule.errorMessage))
             return@foldRight acc combine result
         }
         return validationResult
     }
 
-    fun validate(context: Context, text: String?): ValidationResult {
+    fun validate(text: String?): ValidationResult {
         setText(text)
-        return validate(context)
+        return validate()
     }
 
     private fun setText(text: String?) {

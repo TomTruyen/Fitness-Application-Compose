@@ -9,7 +9,7 @@ sealed class ValidationResult {
     /**
      * A [Valid] [ValidationResult] means that the validation was successful.
      */
-    object Valid : ValidationResult()
+    data object Valid : ValidationResult()
 
     /**
      * An [Invalid] [ValidationResult] means that the validation failed.
@@ -23,7 +23,7 @@ sealed class ValidationResult {
     infix fun combine(other: ValidationResult): ValidationResult {
         return when (other) {
             is Valid -> this
-            is Invalid -> Invalid(((this as? Invalid)?.messages ?: emptySet()) + other.messages)
+            is Invalid -> Invalid(((this as? Invalid)?.messages.orEmpty()) + other.messages)
         }
     }
 

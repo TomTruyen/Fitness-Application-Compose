@@ -80,7 +80,7 @@ object TextFields {
 
         Column(modifier = modifier) {
             BasicTextField(
-                value = value ?: "",
+                value = value.orEmpty(),
                 onValueChange = onValueChange,
                 readOnly = readOnly,
                 enabled = enabled,

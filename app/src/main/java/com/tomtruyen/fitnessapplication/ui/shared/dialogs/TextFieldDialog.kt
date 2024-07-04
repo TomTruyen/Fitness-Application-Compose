@@ -50,7 +50,7 @@ fun TextFieldDialog(
 
     LaunchedEffect(text) {
         if(text != null) {
-            textValidation = validator.validate(context, text)
+            textValidation = validator.validate(text)
         }
     }
 

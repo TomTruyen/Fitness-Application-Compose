@@ -54,12 +54,6 @@ fun CreateExerciseScreen(
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(state.exercise) {
-        state.validateName(context)
-        state.validateCategory(context)
-        state.validateType(context)
-    }
-
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
             when(event) {

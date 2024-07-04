@@ -267,7 +267,7 @@ fun ExercisesScreenLayout(
 
                             ListItem(
                                 title = exercise.displayName,
-                                message = exercise.category ?: "",
+                                message = exercise.category.orEmpty(),
                                 selected = state.selectedExercise?.id == exercise.id,
                                 showChevron = !state.isFromWorkout,
                             ) {

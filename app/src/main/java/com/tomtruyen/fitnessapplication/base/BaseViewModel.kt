@@ -97,7 +97,7 @@ abstract class BaseViewModel<UIState, UIAction, UIEvent>(
                     }
 
                     Text(
-                        text = snackbarMessage.message ?: "",
+                        text = snackbarMessage.message.orEmpty(),
                         color = Color.White,
                         modifier = Modifier
                             .padding(start = Dimens.Small)

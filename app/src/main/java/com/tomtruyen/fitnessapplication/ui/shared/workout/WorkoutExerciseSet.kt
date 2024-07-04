@@ -110,7 +110,7 @@ fun WorkoutExerciseSet(
             // Weight
             Exercise.ExerciseType.WEIGHT -> {
                 TextFields.Default(
-                    value = set.repsText ?: "",
+                    value = set.repsText.orEmpty(),
                     onValueChange = { reps ->
                         // Check if value can be cast to int, if not don't update the value
                         if (reps.isNotEmpty() && reps.toIntOrNull() == null) return@Default
@@ -140,7 +140,7 @@ fun WorkoutExerciseSet(
                 Spacer(modifier = Modifier.width(Dimens.Small))
 
                 TextFields.Default(
-                    value = set.weightText ?: "",
+                    value = set.weightText.orEmpty(),
                     onValueChange = { weight ->
                         val filteredWeight = weight.replace(",", ".")
 

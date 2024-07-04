@@ -46,7 +46,7 @@ class ExerciseRepositoryImpl(
                 },
                 callback = callback
             ) {
-                val exercises = it.toObject(ExercisesResponse::class.java)?.data ?: emptyList()
+                val exercises = it.toObject(ExercisesResponse::class.java)?.data.orEmpty()
 
                 launchWithTransaction {
                     exerciseDao.deleteAllNonUserExercises()
@@ -71,7 +71,7 @@ class ExerciseRepositoryImpl(
                 },
                 callback = callback
             ) {
-                val exercises = it.toObject(UserExercisesResponse::class.java)?.exercises ?: emptyList()
+                val exercises = it.toObject(UserExercisesResponse::class.java)?.exercises.orEmpty()
 
                 launchWithTransaction {
                     exerciseDao.deleteAllUserExercises()

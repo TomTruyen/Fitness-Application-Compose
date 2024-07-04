@@ -26,8 +26,8 @@ class RegisterViewModel(
     fun register() {
         isLoading(true)
         userRepository.register(
-            email = uiState.value.email ?: "",
-            password = uiState.value.password ?: "",
+            email = uiState.value.email.orEmpty(),
+            password = uiState.value.password.orEmpty(),
             callback = object: FirebaseCallback<FirebaseUser?> {
                 override fun onSuccess(value: FirebaseUser?) {
                     triggerEvent(RegisterUiEvent.NavigateToHome)
@@ -47,13 +47,22 @@ class RegisterViewModel(
     override fun onAction(action: RegisterUiAction) {
         when(action) {
             is RegisterUiAction.EmailChanged -> updateState {
-                it.copy(email = action.email)
+                it.copy(
+                    email = action.email,
+                    emailValidationResult = it.validateEmail(action.email)
+                )
             }
             is RegisterUiAction.PasswordChanged -> updateState {
-                it.copy(password = action.password)
+                it.copy(
+                    password = action.password,
+                    passwordValidationResult = it.validatePassword(action.password)
+                )
             }
             is RegisterUiAction.ConfirmPasswordChanged -> updateState {
-                it.copy(confirmPassword = action.confirmPassword)
+                it.copy(
+                    confirmPassword = action.confirmPassword,
+                    confirmPasswordValidationResult = it.validateConfirmPassword(action.confirmPassword)
+                )
             }
             is RegisterUiAction.OnRegisterClicked -> register()
             is RegisterUiAction.OnLoginClicked -> triggerEvent(RegisterUiEvent.NavigateToLogin)

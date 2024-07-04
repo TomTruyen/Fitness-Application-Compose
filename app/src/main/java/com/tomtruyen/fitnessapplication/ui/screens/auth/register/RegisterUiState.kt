@@ -15,31 +15,18 @@ data class RegisterUiState(
     val email: String? = null,
     val password: String? = null,
     val confirmPassword: String? = null,
-    var emailValidationResult: MutableState<ValidationResult?> = mutableStateOf(null),
-    var passwordValidationResult: MutableState<ValidationResult?> = mutableStateOf(null),
-    var confirmPasswordValidationResult: MutableState<ValidationResult?> = mutableStateOf(null),
+
+    var emailValidationResult: ValidationResult? = null,
+    var passwordValidationResult: ValidationResult? = null,
+    var confirmPasswordValidationResult: ValidationResult? = null,
 
     val loading: Boolean = false,
 ) {
     private val emailValidator = TextValidator.withRules(EmailRule())
     private val passwordValidator = TextValidator.withRules(PasswordRule())
-    private val confirmPasswordValidator = TextValidator.withRules(PasswordRule(), MatchingPasswordsRule(password ?: ""))
+    private val confirmPasswordValidator = TextValidator.withRules(PasswordRule(), MatchingPasswordsRule(password.orEmpty()))
 
-    fun validateEmail(context: Context) {
-        if(email == null) return // Don't validate if email is null (not entered anything yet)
-
-        emailValidationResult.value = emailValidator.validate(context, email)
-    }
-
-    fun validatePassword(context: Context) {
-        if(password == null) return // Don't validate if password is null (not entered anything yet)
-
-        passwordValidationResult.value = passwordValidator.validate(context, password)
-    }
-
-    fun validateConfirmPassword(context: Context) {
-        if(confirmPassword == null) return // Don't validate if password is null (not entered anything yet)
-
-        confirmPasswordValidationResult.value = confirmPasswordValidator.validate(context, confirmPassword)
-    }
+    fun validateEmail(email: String) = emailValidator.validate(email)
+    fun validatePassword(password: String) = passwordValidator.validate(password)
+    fun validateConfirmPassword(confirmPassword: String) = confirmPasswordValidator.validate(confirmPassword)
 }

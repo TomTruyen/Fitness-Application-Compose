@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -41,6 +42,7 @@ import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutOverviewS
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.SocialButtons
+import com.tomtruyen.fitnessapplication.ui.shared.TextDivider
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 import com.tomtruyen.fitnessapplication.ui.theme.BlueGrey
 import com.tomtruyen.fitnessapplication.ui.theme.LavenderMist
@@ -58,14 +60,6 @@ fun LoginScreen(
     val context = LocalContext.current
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-
-    LaunchedEffect(state.email) {
-        state.validateEmail(context)
-    }
-
-    LaunchedEffect(state.password) {
-        state.validatePassword(context)
-    }
 
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
@@ -113,118 +107,92 @@ fun LoginScreenLayout(
             modifier = Modifier.padding(it)
         ) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
                     .padding(Dimens.Normal)
             ) {
-                Spacer(modifier = Modifier.weight(1f))
-
-                Text(
-                    text = stringResource(id = R.string.title_login),
-                    style = MaterialTheme.typography.headlineLarge.copy(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.SemiBold
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Text(
-                    text = stringResource(id = R.string.subtitle_login),
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = BlueGrey,
-                        fontWeight = FontWeight.Normal
-                    ),
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(Dimens.Small, Alignment.CenterVertically),
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = Dimens.Normal)
-                )
-
-                TextFields.Default(
-                    value = state.email,
-                    onValueChange = { email ->
-                        onAction(LoginUiAction.EmailChanged(email))
-                    },
-                    placeholder = stringResource(id = R.string.email),
-                    error = state.emailValidationResult.errorMessage(),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Email,
-                        imeAction = ImeAction.Next
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = Dimens.Normal)
-                )
-
-                TextFields.Default(
-                    value = state.password,
-                    onValueChange = { password ->
-                        onAction(LoginUiAction.PasswordChanged(password))
-                    },
-                    placeholder = stringResource(id = R.string.password),
-                    error = state.passwordValidationResult.errorMessage(),
-                    obscureText = true,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Done
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = Dimens.Small)
-                )
-
-                Buttons.Default(
-                    text = stringResource(id = R.string.login),
-                    enabled = isValid && !state.loading,
-                    onClick = {
-                        focusManager.clearFocus()
-                        onAction(LoginUiAction.OnLoginClicked)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = Dimens.Normal)
-                )
-
-                // ----- OR ----- Divider
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = Dimens.Normal),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(Dimens.Small)
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState())
                 ) {
-                    HorizontalDivider(
-                        modifier = Modifier.weight(1f),
-                        color = LavenderMist,
-                        thickness = 1.dp
+                    Text(
+                        text = stringResource(id = R.string.title_login),
+                        style = MaterialTheme.typography.headlineLarge.copy(
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontWeight = FontWeight.SemiBold
+                        ),
                     )
 
                     Text(
-                        text = stringResource(id = R.string.label_or).uppercase(),
-                        color = BlueGrey
+                        text = stringResource(id = R.string.subtitle_login),
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            color = BlueGrey,
+                            fontWeight = FontWeight.Normal
+                        ),
                     )
 
-                    HorizontalDivider(
-                        modifier = Modifier.weight(1f),
-                        color = LavenderMist,
-                        thickness = 1.dp
+                    Spacer(modifier = Modifier.height(Dimens.Large))
+
+                    TextFields.Default(
+                        value = state.email,
+                        onValueChange = { email ->
+                            onAction(LoginUiAction.EmailChanged(email))
+                        },
+                        placeholder = stringResource(id = R.string.email),
+                        error = state.emailValidationResult.errorMessage(),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Email,
+                            imeAction = ImeAction.Next
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    TextFields.Default(
+                        value = state.password,
+                        onValueChange = { password ->
+                            onAction(LoginUiAction.PasswordChanged(password))
+                        },
+                        placeholder = stringResource(id = R.string.password),
+                        error = state.passwordValidationResult.errorMessage(),
+                        obscureText = true,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Done
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Buttons.Default(
+                        text = stringResource(id = R.string.login),
+                        enabled = isValid && !state.loading,
+                        onClick = {
+                            focusManager.clearFocus()
+                            onAction(LoginUiAction.OnLoginClicked)
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    TextDivider(
+                        text = stringResource(id = R.string.label_or),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = Dimens.Normal)
+                    )
+
+                    SocialButtons.Google(
+                        text = stringResource(id = R.string.button_login_google),
+                        enabled = !state.loading,
+                        onClick = focusManager::clearFocus,
+                        onSuccess = { idToken ->
+                            onAction(LoginUiAction.OnGoogleSignInSuccess(idToken))
+                        },
+                        onError = { error ->
+                            onAction(LoginUiAction.OnGoogleSignInFailed(error))
+                        }
                     )
                 }
-
-                SocialButtons.Google(
-                    text = stringResource(id = R.string.button_login_google),
-                    enabled = !state.loading,
-                    onClick = focusManager::clearFocus,
-                    onSuccess = { idToken ->
-                        onAction(LoginUiAction.OnGoogleSignInSuccess(idToken))
-                    },
-                    onError = { error ->
-                        onAction(LoginUiAction.OnGoogleSignInFailed(error))
-                    }
-                )
-
-                Spacer(modifier = Modifier.weight(1f))
 
                 Buttons.Text(
                     text = stringResource(id = R.string.need_account),

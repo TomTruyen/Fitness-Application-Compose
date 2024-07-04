@@ -94,7 +94,7 @@ fun ExerciseDetailScreenLayout(
         snackbarHost = snackbarHost,
         topBar = {
             Toolbar(
-                title = state.exercise?.name ?: "",
+                title = state.exercise?.name.orEmpty(),
                 navController = navController
             ) {
                 if(state.exercise?.isUserCreated == true) {
@@ -160,7 +160,7 @@ fun ExerciseDetailScreenLayout(
                         ) { index, filter ->
                             ExerciseFilterChip(
                                 modifier = Modifier.padding(start = if (index == 0) Dimens.Normal else 0.dp),
-                                text = filter?.lowercase()?.replaceFirstChar { it.uppercase() } ?: "",
+                                text = filter?.lowercase()?.replaceFirstChar { it.uppercase() }.orEmpty(),
                                 selected = true,
                             )
                         }

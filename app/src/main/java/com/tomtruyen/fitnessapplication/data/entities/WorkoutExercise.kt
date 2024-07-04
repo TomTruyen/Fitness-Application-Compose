@@ -61,7 +61,7 @@ data class WorkoutExerciseWithExercisesAndSets(
 ) {
     fun toWorkoutExerciseResponse() = WorkoutExerciseResponse(
         id = workoutExercise.id,
-        notes = workoutExercise.notes ?: "",
+        notes = workoutExercise.notes.orEmpty(),
         rest = workoutExercise.rest,
         restEnabled = workoutExercise.restEnabled,
         order = workoutExercise.order,

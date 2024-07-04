@@ -18,28 +18,16 @@ data class CreateExerciseUiState(
     val categories: List<String> = emptyList(),
     val equipment: List<String> = emptyList(),
 
-    var nameValidationResult: MutableState<ValidationResult?> = mutableStateOf(null),
-    var categoryValidationResult: MutableState<ValidationResult?> = mutableStateOf(null),
-    var typeValidationResult: MutableState<ValidationResult?> = mutableStateOf(null),
+    var nameValidationResult: ValidationResult? = null,
+    var categoryValidationResult: ValidationResult? = null,
+    var typeValidationResult: ValidationResult? = null,
 
     val loading: Boolean = false,
 ) {
     private val requiredValidator = TextValidator.withRules(RequiredRule())
 
-    fun validateName(context: Context) {
-        if(exercise.name == null) return // Don't validate if email is null (not entered anything yet)
-
-        nameValidationResult.value = requiredValidator.validate(context, exercise.name)
-    }
-
-    fun validateCategory(context: Context) {
-        if(exercise.category == null) return // Don't validate if email is null (not entered anything yet)
-
-        categoryValidationResult.value = requiredValidator.validate(context, exercise.category)
-    }
-
-    fun validateType(context: Context) {
-        typeValidationResult.value = requiredValidator.validate(context, exercise.type)
-    }
+    fun validateName(name: String) = requiredValidator.validate(name)
+    fun validateCategory(category: String) = requiredValidator.validate(category)
+    fun validateType(type: String) = requiredValidator.validate(type)
 }
 

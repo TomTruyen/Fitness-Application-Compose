@@ -98,15 +98,17 @@ class CreateExerciseViewModel(
             is CreateExerciseUiAction.OnExerciseNameChanged -> updateState {
                 it.copy(
                     exercise = it.exercise.copy(
-                        name = action.name
-                    )
+                        name = action.name,
+                    ),
+                    nameValidationResult = it.validateName(action.name)
                 )
             }
             is CreateExerciseUiAction.OnCategoryChanged -> updateState {
                 it.copy(
                     exercise = it.exercise.copy(
                         category = action.category
-                    )
+                    ),
+                    categoryValidationResult = it.validateCategory(action.category)
                 )
             }
             is CreateExerciseUiAction.OnEquipmentChanged -> updateState {
@@ -120,7 +122,8 @@ class CreateExerciseViewModel(
                 it.copy(
                     exercise = it.exercise.copy(
                         type = action.type
-                    )
+                    ),
+                    typeValidationResult = it.validateType(action.type)
                 )
             }
             is CreateExerciseUiAction.OnSaveClicked -> save()

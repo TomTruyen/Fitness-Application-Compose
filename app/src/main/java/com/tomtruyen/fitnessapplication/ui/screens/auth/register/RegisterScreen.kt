@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -53,18 +54,6 @@ fun RegisterScreen(
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(state.email) {
-        state.validateEmail(context)
-    }
-
-    LaunchedEffect(state.password) {
-        state.validatePassword(context)
-    }
-
-    LaunchedEffect(state.confirmPassword) {
-        state.validateConfirmPassword(context)
-    }
-
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
@@ -111,100 +100,92 @@ fun RegisterScreenLayout(
             modifier = Modifier.padding(it)
         ) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
                     .padding(Dimens.Normal)
             ) {
-                Spacer(modifier = Modifier.weight(1f))
-
-                Text(
-                    text = stringResource(id = R.string.title_register),
-                    style = MaterialTheme.typography.headlineLarge.copy(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.SemiBold
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Text(
-                    text = stringResource(id = R.string.subtitle_register),
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = BlueGrey,
-                        fontWeight = FontWeight.Normal
-                    ),
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(Dimens.Small, Alignment.CenterVertically),
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = Dimens.Normal)
-                )
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.title_register),
+                        style = MaterialTheme.typography.headlineLarge.copy(
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                    )
 
-                TextFields.Default(
-                    value = state.email,
-                    onValueChange = { email ->
-                        onAction(RegisterUiAction.EmailChanged(email))
-                    },
-                    placeholder = stringResource(id = R.string.email),
-                    error = state.emailValidationResult.errorMessage(),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Email,
-                        imeAction = ImeAction.Next
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = Dimens.Normal)
-                )
+                    Text(
+                        text = stringResource(id = R.string.subtitle_register),
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            color = BlueGrey,
+                            fontWeight = FontWeight.Normal
+                        ),
+                    )
 
-                TextFields.Default(
-                    value = state.password,
-                    onValueChange = { password ->
-                        onAction(RegisterUiAction.PasswordChanged(password))
-                    },
-                    placeholder = stringResource(id = R.string.password),
-                    error = state.passwordValidationResult.errorMessage(),
-                    obscureText = true,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Next
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = Dimens.Small)
-                )
+                    Spacer(modifier = Modifier.height(Dimens.Large))
 
-                TextFields.Default(
-                    value = state.confirmPassword,
-                    onValueChange = { confirmPassword ->
-                        onAction(RegisterUiAction.ConfirmPasswordChanged(confirmPassword))
-                    },
-                    placeholder = stringResource(id = R.string.password_repeat),
-                    error = state.confirmPasswordValidationResult.errorMessage(),
-                    obscureText = true,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Done
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = Dimens.Small)
-                )
+                    TextFields.Default(
+                        value = state.email,
+                        onValueChange = { email ->
+                            onAction(RegisterUiAction.EmailChanged(email))
+                        },
+                        placeholder = stringResource(id = R.string.email),
+                        error = state.emailValidationResult.errorMessage(),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Email,
+                            imeAction = ImeAction.Next
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    TextFields.Default(
+                        value = state.password,
+                        onValueChange = { password ->
+                            onAction(RegisterUiAction.PasswordChanged(password))
+                        },
+                        placeholder = stringResource(id = R.string.password),
+                        error = state.passwordValidationResult.errorMessage(),
+                        obscureText = true,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Next
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    TextFields.Default(
+                        value = state.confirmPassword,
+                        onValueChange = { confirmPassword ->
+                            onAction(RegisterUiAction.ConfirmPasswordChanged(confirmPassword))
+                        },
+                        placeholder = stringResource(id = R.string.password_repeat),
+                        error = state.confirmPasswordValidationResult.errorMessage(),
+                        obscureText = true,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Done
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
 
 
-                Buttons.Default(
-                    text = stringResource(id = R.string.register),
-                    enabled = isValid && !state.loading,
-                    onClick = {
-                        onAction(RegisterUiAction.OnRegisterClicked)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = Dimens.Normal)
-                )
-
-                Spacer(modifier = Modifier.weight(1f))
+                    Buttons.Default(
+                        text = stringResource(id = R.string.register),
+                        enabled = isValid && !state.loading,
+                        onClick = {
+                            onAction(RegisterUiAction.OnRegisterClicked)
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
 
                 Buttons.Text(
                     text = stringResource(id = R.string.have_an_account),
+                    enabled = !state.loading,
                     onClick = {
                         onAction(RegisterUiAction.OnLoginClicked)
                     },
