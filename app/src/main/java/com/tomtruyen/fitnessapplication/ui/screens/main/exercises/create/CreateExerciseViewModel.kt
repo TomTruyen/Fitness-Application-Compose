@@ -7,6 +7,8 @@ import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -19,13 +21,12 @@ class CreateExerciseViewModel(
         isEditing = id != null
     )
 ) {
-    val categories = exerciseRepository.findCategories()
-    val equipment = exerciseRepository.findEquipment().map {
-        listOf(Exercise.DEFAULT_DROPDOWN_VALUE) + it
-    }
-
     init {
         findExercise()
+
+        observeLoading()
+        observeCategories()
+        observeEquipment()
     }
 
     private fun findExercise() = launchLoading {
@@ -38,6 +39,28 @@ class CreateExerciseViewModel(
                     exercise = it
                 )
             }
+        }
+    }
+
+    private fun observeLoading() = vmScope.launch {
+        loading.collectLatest { loading ->
+            updateState { it.copy(loading = loading) }
+        }
+    }
+
+    private fun observeCategories() = vmScope.launch {
+        exerciseRepository.findCategories()
+            .distinctUntilChanged()
+            .collectLatest { categories ->
+                updateState { it.copy(categories = categories) }
+            }
+    }
+
+    private fun observeEquipment() = vmScope.launch {
+        exerciseRepository.findEquipment().map {
+            listOf(Exercise.DEFAULT_DROPDOWN_VALUE) + it
+        }.distinctUntilChanged().collectLatest { equipment ->
+            updateState { it.copy(equipment = equipment) }
         }
     }
 

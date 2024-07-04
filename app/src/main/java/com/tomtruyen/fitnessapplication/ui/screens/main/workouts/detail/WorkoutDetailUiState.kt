@@ -1,4 +1,9 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.detail
 
-// TODO --> Convert to data class
-class WorkoutDetailUiState
+import com.tomtruyen.fitnessapplication.data.entities.WorkoutWithExercises
+
+data class WorkoutDetailUiState(
+    val workout: WorkoutWithExercises? = null,
+
+    val loading: Boolean = false
+)

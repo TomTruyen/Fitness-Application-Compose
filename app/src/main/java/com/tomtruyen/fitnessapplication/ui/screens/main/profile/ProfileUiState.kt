@@ -5,5 +5,7 @@ import com.tomtruyen.fitnessapplication.data.entities.Settings
 
 data class ProfileUiState(
     val initialSettings: Settings? = null,
-    val settings: Settings = Settings()
+    val settings: Settings = Settings(),
+
+    val loading: Boolean = false,
 )

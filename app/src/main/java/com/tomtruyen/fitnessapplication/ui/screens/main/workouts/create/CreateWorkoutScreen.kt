@@ -93,8 +93,6 @@ fun CreateWorkoutScreen(
     val context = LocalContext.current
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val settings by viewModel.settings.collectAsStateWithLifecycle(initialValue = null)
-    val loading by viewModel.loading.collectAsStateWithLifecycle()
 
     val pagerState = rememberPagerState(
         pageCount = { state.workout.exercises.size }
@@ -133,17 +131,10 @@ fun CreateWorkoutScreen(
         }
     }
 
-    LaunchedEffect(settings) {
-        if(settings != null) {
-            viewModel.onAction(CreateWorkoutUiAction.OnSettingsChanged(settings))
-        }
-    }
-
     CreateWorkoutScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
-        loading = loading,
         pagerState = pagerState,
         onAction = viewModel::onAction,
         onWorkoutEvent = viewModel::onWorkoutEvent
@@ -156,7 +147,6 @@ fun CreateWorkoutScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: CreateWorkoutUiState,
-    loading: Boolean,
     pagerState: PagerState,
     onAction: (CreateWorkoutUiAction) -> Unit,
     onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
@@ -218,7 +208,7 @@ fun CreateWorkoutScreenLayout(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize(),
-            loading = loading,
+            loading = state.loading,
         ) {
             Column(
                 modifier = Modifier.fillMaxSize()

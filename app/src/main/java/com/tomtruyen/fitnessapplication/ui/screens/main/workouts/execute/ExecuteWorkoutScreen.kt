@@ -74,8 +74,6 @@ fun ExecuteWorkoutScreen(
     val context = LocalContext.current
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val lastEntryForWorkout by viewModel.lastEntryForWorkout.collectAsStateWithLifecycle(initialValue = null)
-    val loading by viewModel.loading.collectAsStateWithLifecycle()
 
     val stopwatchTimer = remember {
         StopwatchTimer()
@@ -106,8 +104,6 @@ fun ExecuteWorkoutScreen(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
-        lastEntryForWorkout = lastEntryForWorkout,
-        loading = loading,
         pagerState = pagerState,
         stopwatchTimer = stopwatchTimer,
         onAction = viewModel::onAction,
@@ -121,8 +117,6 @@ fun ExecuteWorkoutScreenLayout(
     snackbarHost : @Composable () -> Unit,
     navController: NavController,
     state: ExecuteWorkoutUiState,
-    lastEntryForWorkout: WorkoutWithExercises?,
-    loading: Boolean,
     pagerState: PagerState,
     stopwatchTimer: StopwatchTimer,
     onAction: (ExecuteWorkoutUiAction) -> Unit,
@@ -173,7 +167,7 @@ fun ExecuteWorkoutScreenLayout(
         }
     ) {
         BoxWithLoader(
-            loading = loading,
+            loading = state.loading,
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize()
@@ -193,7 +187,7 @@ fun ExecuteWorkoutScreenLayout(
                         .weight(1f)
                         .animateContentSize(),
                     state = state,
-                    lastEntryForWorkout = lastEntryForWorkout,
+                    lastEntryForWorkout = state.lastEntryForWorkout,
                     pagerState = pagerState,
                     onAction = onAction,
                     onWorkoutEvent = onWorkoutEvent

@@ -9,7 +9,13 @@ import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseReposito
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ExercisesViewModel(
@@ -19,13 +25,6 @@ class ExercisesViewModel(
 ): BaseViewModel<ExercisesUiState, ExercisesUiAction, ExercisesUiEvent>(
     initialState = ExercisesUiState(isFromWorkout = isFromWorkout)
 ) {
-    val exercises = uiState.flatMapLatest {
-        exerciseRepository.findExercises(it.search, it.filter)
-    }
-
-    val categories = exerciseRepository.findCategories()
-    val equipment = exerciseRepository.findEquipment()
-
     private val callback by lazy {
         object: FirebaseCallback<List<Exercise>> {
             override fun onError(error: String?) {
@@ -39,16 +38,53 @@ class ExercisesViewModel(
     }
 
     init {
-        getExercises()
+        fetchExercises()
+
+        observeLoading()
+        observeExercises()
+        observeCategories()
+        observeEquipment()
     }
 
-    private fun getExercises() {
+    private fun fetchExercises() {
         isLoading(true)
         exerciseRepository.getExercises(callback)
 
         userRepository.getUser()?.let {
             exerciseRepository.getUserExercises(it.uid, callback)
         }
+    }
+
+    private fun observeLoading() = vmScope.launch {
+        loading.collectLatest { loading ->
+            updateState { it.copy(loading = loading) }
+        }
+    }
+
+    private fun observeExercises() = vmScope.launch {
+        uiState.distinctUntilChanged { old, new ->
+            old.search == new.search && old.filter == new.filter
+        }.flatMapLatest {
+            exerciseRepository.findExercises(it.search, it.filter)
+        }.distinctUntilChanged().collectLatest { exercises ->
+            updateState { it.copy(exercises = exercises) }
+        }
+    }
+
+    private fun observeCategories() = vmScope.launch {
+        exerciseRepository.findCategories()
+            .distinctUntilChanged()
+            .collectLatest { categories ->
+                updateState { it.copy(categories = categories) }
+            }
+    }
+
+    private fun observeEquipment() = vmScope.launch {
+        exerciseRepository.findEquipment()
+            .distinctUntilChanged()
+            .collectLatest { equipment ->
+                updateState { it.copy(equipment = equipment) }
+            }
     }
 
     override fun onAction(action: ExercisesUiAction) {

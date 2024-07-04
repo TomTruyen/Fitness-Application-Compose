@@ -58,7 +58,6 @@ fun LoginScreen(
     val context = LocalContext.current
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val loading by viewModel.loading.collectAsStateWithLifecycle()
 
     LaunchedEffect(state.email) {
         state.validateEmail(context)
@@ -88,7 +87,6 @@ fun LoginScreen(
     LoginScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         state = state,
-        loading = loading,
         onAction = viewModel::onAction
     )
 }
@@ -97,7 +95,6 @@ fun LoginScreen(
 fun LoginScreenLayout(
     snackbarHost: @Composable () -> Unit,
     state: LoginUiState,
-    loading: Boolean,
     onAction: (LoginUiAction) -> Unit
 ) {
     val isValid by remember(state) {
@@ -112,7 +109,7 @@ fun LoginScreenLayout(
         snackbarHost = snackbarHost
     ) {
         BoxWithLoader(
-            loading = loading,
+            loading = state.loading,
             modifier = Modifier.padding(it)
         ) {
             Column(
@@ -179,7 +176,7 @@ fun LoginScreenLayout(
 
                 Buttons.Default(
                     text = stringResource(id = R.string.login),
-                    enabled = isValid && !loading,
+                    enabled = isValid && !state.loading,
                     onClick = {
                         focusManager.clearFocus()
                         onAction(LoginUiAction.OnLoginClicked)
@@ -217,7 +214,7 @@ fun LoginScreenLayout(
 
                 SocialButtons.Google(
                     text = stringResource(id = R.string.button_login_google),
-                    enabled = !loading,
+                    enabled = !state.loading,
                     onClick = focusManager::clearFocus,
                     onSuccess = { idToken ->
                         onAction(LoginUiAction.OnGoogleSignInSuccess(idToken))
@@ -231,7 +228,7 @@ fun LoginScreenLayout(
 
                 Buttons.Text(
                     text = stringResource(id = R.string.need_account),
-                    enabled = !loading,
+                    enabled = !state.loading,
                     onClick = {
                         onAction(LoginUiAction.OnRegisterClicked)
                     },

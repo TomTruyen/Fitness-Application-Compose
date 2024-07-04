@@ -68,8 +68,6 @@ fun ExercisesScreen(
     val context = LocalContext.current
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val loading by viewModel.loading.collectAsStateWithLifecycle()
-    val exercises by viewModel.exercises.collectAsStateWithLifecycle(initialValue = emptyList())
 
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
@@ -95,8 +93,6 @@ fun ExercisesScreen(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
-        exercises = exercises,
-        loading = loading,
         onAction = viewModel::onAction
     )
 }
@@ -107,8 +103,6 @@ fun ExercisesScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: ExercisesUiState,
-    exercises: List<Exercise>,
-    loading: Boolean,
     onAction: (ExercisesUiAction) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
@@ -202,7 +196,7 @@ fun ExercisesScreenLayout(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
         BoxWithLoader(
-            loading = loading,
+            loading = state.loading,
             modifier = Modifier.padding(it)
         ) {
             Column(
@@ -241,7 +235,7 @@ fun ExercisesScreenLayout(
                 ) {
                     var currentLetter: Char?
 
-                    itemsIndexed(exercises) { index, exercise ->
+                    itemsIndexed(state.exercises) { index, exercise ->
                         Column(
                             modifier = Modifier.fillMaxWidth()
                         ) {
@@ -249,7 +243,7 @@ fun ExercisesScreenLayout(
                             val exerciseNameFirstLetter = exercise.displayName.first().uppercaseChar()
 
                             val isNewLetterSection = if (index > 0) {
-                                val previousExercise = exercises[index - 1]
+                                val previousExercise = state.exercises[index - 1]
                                 exerciseNameFirstLetter != previousExercise.displayName.first().uppercaseChar()
                             } else {
                                 true

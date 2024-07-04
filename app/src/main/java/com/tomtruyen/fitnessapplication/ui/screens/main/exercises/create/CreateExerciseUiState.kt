@@ -14,9 +14,15 @@ data class CreateExerciseUiState(
     val initialExercise: Exercise = Exercise(),
     val exercise: Exercise = Exercise(),
     val isEditing: Boolean = false,
+
+    val categories: List<String> = emptyList(),
+    val equipment: List<String> = emptyList(),
+
     var nameValidationResult: MutableState<ValidationResult?> = mutableStateOf(null),
     var categoryValidationResult: MutableState<ValidationResult?> = mutableStateOf(null),
     var typeValidationResult: MutableState<ValidationResult?> = mutableStateOf(null),
+
+    val loading: Boolean = false,
 ) {
     private val requiredValidator = TextValidator.withRules(RequiredRule())
 

@@ -9,4 +9,10 @@ data class ExercisesUiState(
     val searching: Boolean = false,
     val filter: ExerciseFilter = ExerciseFilter(),
     val selectedExercise: Exercise? = null,
+
+    val exercises: List<Exercise> = emptyList(),
+    val categories: List<String> = emptyList(),
+    val equipment: List<String> = emptyList(),
+
+    val loading: Boolean = false,
 )

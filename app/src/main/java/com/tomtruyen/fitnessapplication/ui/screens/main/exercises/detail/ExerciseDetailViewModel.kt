@@ -5,6 +5,9 @@ import com.tomtruyen.fitnessapplication.base.SnackbarMessage
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
 class ExerciseDetailViewModel(
@@ -14,7 +17,25 @@ class ExerciseDetailViewModel(
 ): BaseViewModel<ExerciseDetailUiState, ExerciseDetailUiAction, ExerciseDetailUiEvent>(
     initialState = ExerciseDetailUiState()
 ) {
-    val exercise = exerciseRepository.findExerciseById(id)
+    init {
+        observeLoading()
+        observeExercise()
+    }
+
+    private fun observeLoading() = vmScope.launch {
+        loading.collectLatest { loading ->
+            updateState { it.copy(loading = loading) }
+        }
+    }
+
+    private fun observeExercise() = vmScope.launch {
+        exerciseRepository.findExerciseById(id)
+            .filterNotNull()
+            .distinctUntilChanged()
+            .collectLatest { exercise ->
+                updateState { it.copy(exercise = exercise) }
+            }
+    }
 
     private fun delete() = vmScope.launch {
         val userId = userRepository.getUser()?.uid ?: return@launch

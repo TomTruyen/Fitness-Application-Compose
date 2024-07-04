@@ -21,11 +21,13 @@ class ProfileViewModel(
     initialState = ProfileUiState()
 ) {
     init {
-        getSettings()
+        fetchSettings()
+
         observeSettings()
+        observeLoading()
     }
 
-    private fun getSettings() {
+    private fun fetchSettings() {
         val userId = userRepository.getUser()?.uid ?: return
         isLoading(true)
 
@@ -55,6 +57,12 @@ class ProfileViewModel(
                     )
                 }
             }
+    }
+
+    private fun observeLoading() = vmScope.launch {
+        loading.collectLatest { loading ->
+            updateState { it.copy(loading = loading) }
+        }
     }
 
     fun saveSettings() {

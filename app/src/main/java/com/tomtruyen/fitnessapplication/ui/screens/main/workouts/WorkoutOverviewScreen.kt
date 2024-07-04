@@ -63,8 +63,7 @@ fun WorkoutOverviewScreen(
 ) {
     val context = LocalContext.current
 
-    val workouts by viewModel.workouts.collectAsStateWithLifecycle(initialValue = emptyList())
-    val loading by viewModel.loading.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
@@ -85,8 +84,7 @@ fun WorkoutOverviewScreen(
     WorkoutOverviewScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
-        workouts = workouts,
-        loading = loading,
+        state = state,
         onAction = viewModel::onAction
     )
 }
@@ -96,8 +94,7 @@ fun WorkoutOverviewScreen(
 fun WorkoutOverviewScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
-    workouts: List<WorkoutWithExercises>,
-    loading: Boolean,
+    state: WorkoutOverviewUiState,
     onAction: (WorkoutOverviewUiAction) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
@@ -129,14 +126,14 @@ fun WorkoutOverviewScreenLayout(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize(),
-            loading = loading,
+            loading = state.loading,
         ) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .animateContentSize(),
             ) {
-                items(workouts) { workout ->
+                items(state.workouts) { workout ->
                     WorkoutListItem(
                         workoutWithExercises = workout,
                         onAction = onAction,

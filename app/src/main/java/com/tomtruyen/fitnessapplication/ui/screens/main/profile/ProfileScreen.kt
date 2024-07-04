@@ -60,7 +60,6 @@ fun ProfileScreen(
     val context = LocalContext.current
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val loading by viewModel.loading.collectAsStateWithLifecycle()
 
     DisposableEffect(Unit) {
         onDispose {
@@ -84,7 +83,6 @@ fun ProfileScreen(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
-        loading = loading,
         onAction = viewModel::onAction
     )
 }
@@ -95,7 +93,6 @@ fun ProfileScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: ProfileUiState,
-    loading: Boolean,
     onAction: (ProfileUiAction) -> Unit
 ) {
     val context = LocalContext.current
@@ -120,7 +117,7 @@ fun ProfileScreenLayout(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
         BoxWithLoader(
-            loading = loading,
+            loading = state.loading,
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize()

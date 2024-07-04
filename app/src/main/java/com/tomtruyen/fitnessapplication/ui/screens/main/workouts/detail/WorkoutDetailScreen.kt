@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,8 +52,6 @@ fun WorkoutDetailScreen(
     val context = LocalContext.current
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val loading by viewModel.loading.collectAsStateWithLifecycle()
-    val workout by viewModel.workout.collectAsStateWithLifecycle(initialValue = null)
 
     LaunchedEffect(context, viewModel) {
         viewModel.eventFlow.collectLatest { event ->
@@ -72,8 +71,6 @@ fun WorkoutDetailScreen(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
-        loading = loading,
-        workoutWithExercise = workout,
         onAction = viewModel::onAction
     )
 }
@@ -83,17 +80,19 @@ fun WorkoutDetailScreenLayout(
     snackbarHost : @Composable () -> Unit,
     navController: NavController,
     state: WorkoutDetailUiState,
-    loading: Boolean,
-    workoutWithExercise: WorkoutWithExercises?,
     onAction: (WorkoutDetailUiAction) -> Unit
 ) {
+    val workoutWithExercise by remember(state) {
+        derivedStateOf { state.workout }
+    }
+
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     Scaffold(
         snackbarHost = snackbarHost,
         topBar = {
             Toolbar(
-                title = workoutWithExercise?.workout?.name ?: "",
+                title = workoutWithExercise?.workout?.name.orEmpty(),
                 navController = navController
             ) {
                 IconButton(
@@ -121,7 +120,7 @@ fun WorkoutDetailScreenLayout(
         }
     ) {
         BoxWithLoader(
-            loading = loading,
+            loading = state.loading,
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize()

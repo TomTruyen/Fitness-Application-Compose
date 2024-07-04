@@ -9,5 +9,7 @@ data class CreateWorkoutUiState(
     val workout: WorkoutResponse = WorkoutResponse(),
     val settings: Settings = Settings(),
     val selectedExerciseId: String? = null,
+
+    val loading: Boolean = false,
 )
 

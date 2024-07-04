@@ -48,8 +48,6 @@ fun ExercisesFilterScreen(
     val context = LocalContext.current
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val equipment by viewModel.equipment.collectAsStateWithLifecycle(initialValue = emptyList())
-    val categories by viewModel.categories.collectAsStateWithLifecycle(initialValue = emptyList())
 
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { navigationType ->
@@ -64,8 +62,6 @@ fun ExercisesFilterScreen(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
-        equipment = equipment,
-        categories = categories,
         onAction = viewModel::onAction
     )
 }
@@ -76,8 +72,6 @@ fun ExercisesFilterScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: ExercisesUiState,
-    equipment: List<String>,
-    categories: List<String>,
     onAction: (ExercisesUiAction) -> Unit
 ) {
     Scaffold(
@@ -117,7 +111,7 @@ fun ExercisesFilterScreenLayout(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(Dimens.Small)
             ) {
-                categories.forEach { category ->
+                state.categories.forEach { category ->
                     ExerciseFilterChip(category, state.filter.categories.contains(category)) {
                         onAction(ExercisesUiAction.OnCategoryFilterChanged(category))
                     }
@@ -137,7 +131,7 @@ fun ExercisesFilterScreenLayout(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(Dimens.Small)
             ) {
-                equipment.forEach { equipment ->
+                state.equipment.forEach { equipment ->
                     ExerciseFilterChip(equipment, state.filter.equipment.contains(equipment)) {
                         onAction(ExercisesUiAction.OnEquipmentFilterChanged(equipment))
                     }

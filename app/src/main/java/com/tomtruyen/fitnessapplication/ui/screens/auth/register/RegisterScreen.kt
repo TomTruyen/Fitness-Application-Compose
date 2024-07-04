@@ -52,7 +52,6 @@ fun RegisterScreen(
     val context = LocalContext.current
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val loading by viewModel.loading.collectAsStateWithLifecycle()
 
     LaunchedEffect(state.email) {
         state.validateEmail(context)
@@ -86,7 +85,6 @@ fun RegisterScreen(
     RegisterScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         state = state,
-        loading = loading,
         onAction = viewModel::onAction
     )
 }
@@ -95,7 +93,6 @@ fun RegisterScreen(
 fun RegisterScreenLayout(
     snackbarHost: @Composable () -> Unit,
     state: RegisterUiState,
-    loading: Boolean,
     onAction: (RegisterUiAction) -> Unit
 ) {
     val isValid by remember(state) {
@@ -110,7 +107,7 @@ fun RegisterScreenLayout(
         snackbarHost = snackbarHost
     ) {
         BoxWithLoader(
-            loading = loading,
+            loading = state.loading,
             modifier = Modifier.padding(it)
         ) {
             Column(
@@ -195,7 +192,7 @@ fun RegisterScreenLayout(
 
                 Buttons.Default(
                     text = stringResource(id = R.string.register),
-                    enabled = isValid,
+                    enabled = isValid && !state.loading,
                     onClick = {
                         onAction(RegisterUiAction.OnRegisterClicked)
                     },

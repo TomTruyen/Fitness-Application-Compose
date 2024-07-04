@@ -5,6 +5,8 @@ import com.tomtruyen.fitnessapplication.base.BaseViewModel
 import com.tomtruyen.fitnessapplication.base.SnackbarMessage
 import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val userRepository: UserRepository
@@ -24,6 +26,16 @@ class LoginViewModel(
             override fun onStopLoading() {
                 isLoading(false)
             }
+        }
+    }
+
+    init {
+        observeLoading()
+    }
+
+    private fun observeLoading() = vmScope.launch {
+        loading.collectLatest { loading ->
+            updateState { it.copy(loading = loading) }
         }
     }
 

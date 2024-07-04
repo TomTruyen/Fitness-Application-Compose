@@ -18,6 +18,8 @@ data class RegisterUiState(
     var emailValidationResult: MutableState<ValidationResult?> = mutableStateOf(null),
     var passwordValidationResult: MutableState<ValidationResult?> = mutableStateOf(null),
     var confirmPasswordValidationResult: MutableState<ValidationResult?> = mutableStateOf(null),
+
+    val loading: Boolean = false,
 ) {
     private val emailValidator = TextValidator.withRules(EmailRule())
     private val passwordValidator = TextValidator.withRules(PasswordRule())

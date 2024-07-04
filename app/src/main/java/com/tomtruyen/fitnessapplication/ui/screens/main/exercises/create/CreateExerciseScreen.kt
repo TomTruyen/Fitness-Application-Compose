@@ -53,9 +53,6 @@ fun CreateExerciseScreen(
     val context = LocalContext.current
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val loading by viewModel.loading.collectAsStateWithLifecycle()
-    val categories by viewModel.categories.collectAsStateWithLifecycle(initialValue = emptyList())
-    val equipment by viewModel.equipment.collectAsStateWithLifecycle(initialValue = emptyList())
 
     LaunchedEffect(state.exercise) {
         state.validateName(context)
@@ -75,9 +72,6 @@ fun CreateExerciseScreen(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
-        loading = loading,
-        categories = categories,
-        equipment = equipment,
         onAction = viewModel::onAction,
     )
 }
@@ -87,9 +81,6 @@ fun CreateExerciseScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: CreateExerciseUiState,
-    loading: Boolean,
-    categories: List<String>,
-    equipment: List<String>,
     onAction: (CreateExerciseUiAction) -> Unit,
 ) {
     val isValid by remember(state) {
@@ -129,7 +120,7 @@ fun CreateExerciseScreenLayout(
         }
     ) {
         BoxWithLoader(
-            loading = loading,
+            loading = state.loading,
             modifier = Modifier.padding(it)
         ) {
             Column(
@@ -158,8 +149,8 @@ fun CreateExerciseScreenLayout(
 
                     Dropdown(
                         placeholder = stringResource(id = R.string.hint_category),
-                        options = categories,
-                        selectedOption = state.exercise.category ?: "",
+                        options = state.categories,
+                        selectedOption = state.exercise.category.orEmpty(),
                         error = state.categoryValidationResult.errorMessage(),
                         onOptionSelected = { category ->
                             onAction(
@@ -172,8 +163,8 @@ fun CreateExerciseScreenLayout(
 
                     Dropdown(
                         placeholder = stringResource(id = R.string.hint_equipment),
-                        options = equipment,
-                        selectedOption = state.exercise.equipment ?: equipment.firstOrNull() ?: "",
+                        options = state.equipment,
+                        selectedOption = state.exercise.equipment ?: state.equipment.firstOrNull().orEmpty(),
                         onOptionSelected = { equipment ->
                             onAction(
                                 CreateExerciseUiAction.OnEquipmentChanged(

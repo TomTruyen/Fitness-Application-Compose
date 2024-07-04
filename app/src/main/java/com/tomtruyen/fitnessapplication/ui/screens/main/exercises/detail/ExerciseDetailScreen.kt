@@ -62,8 +62,7 @@ fun ExerciseDetailScreen(
 ) {
     val context = LocalContext.current
 
-    val exercise by viewModel.exercise.collectAsStateWithLifecycle(initialValue = null)
-    val loading by viewModel.loading.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
@@ -77,8 +76,7 @@ fun ExerciseDetailScreen(
     ExerciseDetailScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
-        exercise = exercise,
-        loading = loading,
+        state = state,
         onAction = viewModel::onAction
     )
 }
@@ -87,8 +85,7 @@ fun ExerciseDetailScreen(
 fun ExerciseDetailScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
-    exercise: Exercise?,
-    loading: Boolean,
+    state: ExerciseDetailUiState,
     onAction: (ExerciseDetailUiAction) -> Unit
 ) {
     var confirmationDialogVisible by remember { mutableStateOf(false) }
@@ -97,10 +94,10 @@ fun ExerciseDetailScreenLayout(
         snackbarHost = snackbarHost,
         topBar = {
             Toolbar(
-                title = exercise?.name ?: "",
+                title = state.exercise?.name ?: "",
                 navController = navController
             ) {
-                if(exercise?.isUserCreated == true) {
+                if(state.exercise?.isUserCreated == true) {
                     IconButton(
                         onClick = {
                             onAction(ExerciseDetailUiAction.Edit)
@@ -130,16 +127,16 @@ fun ExerciseDetailScreenLayout(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize(),
-            loading = loading,
+            loading = state.loading,
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
             ) {
-                if (exercise?.imageDetail != null || exercise?.image != null) {
+                if (state.exercise?.imageDetail != null || state.exercise?.image != null) {
                     item {
                         AsyncImage(
-                            model = exercise.imageDetail ?: exercise.image,
-                            contentDescription = exercise.name,
+                            model = state.exercise.imageDetail ?: state.exercise.image,
+                            contentDescription = state.exercise.name,
                             contentScale = ContentScale.Fit,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -156,9 +153,9 @@ fun ExerciseDetailScreenLayout(
                     ) {
                         itemsIndexed(
                             arrayOf(
-                                exercise?.category,
-                                exercise?.equipment,
-                                exercise?.type
+                                state.exercise?.category,
+                                state.exercise?.equipment,
+                                state.exercise?.type
                             ).filter { !it.isNullOrBlank() }
                         ) { index, filter ->
                             ExerciseFilterChip(
@@ -170,7 +167,7 @@ fun ExerciseDetailScreenLayout(
                     }
                 }
 
-                if (exercise?.steps?.isNotEmpty() == true) {
+                if (state.exercise?.steps?.isNotEmpty() == true) {
                     item {
                         Text(
                             text = stringResource(id = R.string.exercise_detail_steps_title),
@@ -184,7 +181,7 @@ fun ExerciseDetailScreenLayout(
                         )
                     }
 
-                    itemsIndexed(exercise.steps) { index, step ->
+                    itemsIndexed(state.exercise.steps) { index, step ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()

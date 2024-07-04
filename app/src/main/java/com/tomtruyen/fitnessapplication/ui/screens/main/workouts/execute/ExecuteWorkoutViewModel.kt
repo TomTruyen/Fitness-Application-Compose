@@ -9,6 +9,9 @@ import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutHistoryRe
 import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseEvent
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
 class ExecuteWorkoutViewModel(
@@ -19,11 +22,13 @@ class ExecuteWorkoutViewModel(
 ): BaseViewModel<ExecuteWorkoutUiState, ExecuteWorkoutUiAction, ExecuteWorkoutUiEvent>(
     initialState = ExecuteWorkoutUiState()
 ) {
-    val lastEntryForWorkout = historyRepository.findLastEntryForWorkout(id)
-
     init {
         findWorkout()
-        getLastEntryForWorkout()
+
+        fetchLastEntryForWorkout()
+
+        observeLoading()
+        observeLastEntryForWorkout()
     }
 
     private fun findWorkout() = vmScope.launch {
@@ -36,7 +41,26 @@ class ExecuteWorkoutViewModel(
         }
     }
 
-    private fun getLastEntryForWorkout() = vmScope.launch {
+    private fun observeLoading() = vmScope.launch {
+        loading.collectLatest { loading ->
+            updateState { it.copy(loading = loading) }
+        }
+    }
+
+    private fun observeLastEntryForWorkout() = vmScope.launch {
+        historyRepository.findLastEntryForWorkout(id)
+            .filterNotNull()
+            .distinctUntilChanged()
+            .collectLatest { entry ->
+                updateState { state ->
+                    state.copy(
+                        lastEntryForWorkout = entry
+                    )
+                }
+            }
+    }
+
+    private fun fetchLastEntryForWorkout() = vmScope.launch {
         val userId = userRepository.getUser()?.uid ?: return@launch
 
         isLoading(true)

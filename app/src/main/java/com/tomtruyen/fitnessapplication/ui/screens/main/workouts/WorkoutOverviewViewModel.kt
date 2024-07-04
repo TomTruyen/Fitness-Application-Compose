@@ -6,6 +6,9 @@ import com.tomtruyen.fitnessapplication.model.FirebaseCallback
 import com.tomtruyen.fitnessapplication.networking.models.WorkoutResponse
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepository
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 
 class WorkoutOverviewViewModel(
     private val userRepository: UserRepository,
@@ -13,13 +16,28 @@ class WorkoutOverviewViewModel(
 ): BaseViewModel<WorkoutOverviewUiState, WorkoutOverviewUiAction, WorkoutOverviewUiEvent>(
     initialState = WorkoutOverviewUiState()
 ) {
-    val workouts = workoutRepository.findWorkoutsAsync()
-
     init {
-        getWorkouts()
+        fetchWorkouts()
+
+        observeWorkouts()
+        observeLoading()
     }
 
-    private fun getWorkouts() {
+    private fun observeLoading() = vmScope.launch {
+        loading.collectLatest { loading ->
+            updateState { it.copy(loading = loading) }
+        }
+    }
+
+    private fun observeWorkouts() = vmScope.launch {
+        workoutRepository.findWorkoutsAsync()
+            .distinctUntilChanged()
+            .collectLatest { workouts ->
+                updateState { it.copy(workouts = workouts) }
+            }
+    }
+
+    private fun fetchWorkouts() {
         val userId = userRepository.getUser()?.uid ?: return
 
         isLoading(true)

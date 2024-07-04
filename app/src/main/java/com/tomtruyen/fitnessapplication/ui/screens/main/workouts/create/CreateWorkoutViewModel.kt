@@ -9,22 +9,26 @@ import com.tomtruyen.fitnessapplication.repositories.interfaces.SettingsReposito
 import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
 import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseEvent
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
 class CreateWorkoutViewModel(
     val id: String?,
     private val userRepository: UserRepository,
     private val workoutRepository: WorkoutRepository,
-    settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository
 ): BaseViewModel<CreateWorkoutUiState, CreateWorkoutUiAction, CreateWorkoutUiEvent>(
     initialState = CreateWorkoutUiState(
         isEditing = id != null
     )
 ) {
-    val settings = settingsRepository.findSettings()
-
     init {
         findWorkout()
+
+        observeLoading()
+        observeSettings()
     }
 
     private fun findWorkout() = launchLoading {
@@ -38,6 +42,21 @@ class CreateWorkoutViewModel(
                 )
             }
         }
+    }
+
+    private fun observeLoading() = vmScope.launch {
+        loading.collectLatest { loading ->
+            updateState { it.copy(loading = loading) }
+        }
+    }
+
+    private fun observeSettings() = vmScope.launch {
+        settingsRepository.findSettings()
+            .filterNotNull()
+            .distinctUntilChanged()
+            .collectLatest { settings ->
+                updateState { it.copy(settings = settings) }
+            }
     }
 
     private fun save(workoutName: String) = vmScope.launch {
@@ -77,11 +96,6 @@ class CreateWorkoutViewModel(
 
         when (action) {
             is CreateWorkoutUiAction.Save -> save(action.workoutName)
-            is CreateWorkoutUiAction.OnSettingsChanged -> action.settings?.let { settings ->
-                updateState {
-                    it.copy(settings = settings)
-                }
-            }
             is CreateWorkoutUiAction.OnExerciseNotesChanged -> updateState {
                 it.copy(
                     workout = it.workout.copy(
