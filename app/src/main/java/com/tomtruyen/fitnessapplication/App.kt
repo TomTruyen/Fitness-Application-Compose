@@ -6,9 +6,13 @@ import com.tomtruyen.data.di.repositoryModule
 import com.tomtruyen.fitnessapplication.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
+import org.koin.core.context.unloadKoinModules
 
 class App: Application() {
+
+
     override fun onCreate() {
         super.onCreate()
 
@@ -19,7 +23,20 @@ class App: Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(appModule, databaseModule, repositoryModule)
+            modules(koinModules)
+        }
+    }
+
+    companion object {
+        private val koinModules = listOf(
+            appModule,
+            databaseModule,
+            repositoryModule
+        )
+
+        fun reloadKoinModules() {
+            unloadKoinModules(koinModules)
+            loadKoinModules(koinModules)
         }
     }
 }

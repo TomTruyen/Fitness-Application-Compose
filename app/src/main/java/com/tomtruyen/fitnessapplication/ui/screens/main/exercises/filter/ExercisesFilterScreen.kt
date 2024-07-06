@@ -25,10 +25,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.ramcosta.composedestinations.annotation.Destination
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiEvent
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiAction
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiState
@@ -38,8 +36,6 @@ import com.tomtruyen.fitnessapplication.ui.shared.ExerciseFilterChip
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
 import kotlinx.coroutines.flow.collectLatest
 
-@ExercisesNavGraph
-@Destination
 @Composable
 fun ExercisesFilterScreen(
     navController: NavController,

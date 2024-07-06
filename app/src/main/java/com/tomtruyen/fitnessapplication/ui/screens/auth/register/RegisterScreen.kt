@@ -27,24 +27,18 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.extensions.navigateAndClearBackStack
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.LoginScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutOverviewScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 import com.tomtruyen.core.designsystem.theme.BlueGrey
 import com.tomtruyen.core.validation.errorMessage
 import com.tomtruyen.core.validation.isValid
+import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
-@RootNavGraph
-@Destination
 @Composable
 fun RegisterScreen(
     navController: NavController,
@@ -58,14 +52,14 @@ fun RegisterScreen(
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
                 RegisterUiEvent.NavigateToHome -> {
-                    navController.navigateAndClearBackStack(
-                        destination = WorkoutOverviewScreenDestination
-                    )
+                    navController.navigate(Screen.Workout.Graph) {
+                        popUpTo(Screen.Auth.Graph) {
+                            inclusive = true
+                        }
+                    }
                 }
                 RegisterUiEvent.NavigateToLogin -> {
-                    navController.navigateAndClearBackStack(
-                        destination = LoginScreenDestination
-                    )
+                    navController.navigate(Screen.Auth.Login)
                 }
             }
         }

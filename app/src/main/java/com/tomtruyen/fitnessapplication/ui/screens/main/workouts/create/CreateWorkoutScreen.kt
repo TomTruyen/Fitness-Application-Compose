@@ -55,16 +55,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.navigate
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.fitnessapplication.navigation.CreateWorkoutNavGraph
 import com.tomtruyen.fitnessapplication.navigation.NavArguments
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.ReorderWorkoutExercisesScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseEvent
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
@@ -78,13 +72,9 @@ import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseSet
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseSetHeader
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseTabLayout
 import com.tomtruyen.core.common.utils.TimeUtils
+import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 
-@OptIn(ExperimentalFoundationApi::class)
-@CreateWorkoutNavGraph(start = true)
-@Destination(
-    navArgsDelegate = CreateWorkoutNavArgsDelegate::class,
-)
 @Composable
 fun CreateWorkoutScreen(
     navController: NavController,
@@ -103,9 +93,9 @@ fun CreateWorkoutScreen(
             when(event) {
                 is CreateWorkoutUiEvent.NavigateBack -> navController.popBackStack()
                 is CreateWorkoutUiEvent.NavigateToReorderExercise -> navController.navigate(
-                    ReorderWorkoutExercisesScreenDestination
+                    Screen.Workout.ReorderExercises
                 )
-                is CreateWorkoutUiEvent.NavigateToAddExercise -> navController.navigate(ExercisesScreenDestination(isFromWorkout = true))
+                is CreateWorkoutUiEvent.NavigateToAddExercise -> navController.navigate(Screen.Exercise.Overview(isFromWorkout = true))
             }
         }
     }

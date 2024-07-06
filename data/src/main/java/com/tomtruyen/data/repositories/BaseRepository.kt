@@ -42,7 +42,7 @@ open class BaseRepository(
     ) {
         val identifier = overrideIdentifier ?: identifier
 
-        if(identifier == null || force || DataFetchTracker.isFetched(identifier)) {
+        if(identifier == null || force || !DataFetchTracker.isFetched(identifier)) {
             block()
             return
         }

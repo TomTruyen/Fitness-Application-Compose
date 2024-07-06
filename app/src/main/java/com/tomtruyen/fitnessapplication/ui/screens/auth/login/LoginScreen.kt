@@ -27,15 +27,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.navigation.NavController
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
 import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.extensions.navigateAndClearBackStack
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.RegisterScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutOverviewScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.SocialButtons
@@ -44,10 +39,9 @@ import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 import com.tomtruyen.core.designsystem.theme.BlueGrey
 import com.tomtruyen.core.validation.errorMessage
 import com.tomtruyen.core.validation.isValid
+import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 
-@RootNavGraph(start = true)
-@Destination
 @Composable
 fun LoginScreen(
     navController: NavController,
@@ -61,14 +55,14 @@ fun LoginScreen(
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
                 LoginUiEvent.NavigateToHome -> {
-                    navController.navigateAndClearBackStack(
-                        destination = WorkoutOverviewScreenDestination
-                    )
+                    navController.navigate(Screen.Workout.Graph) {
+                        popUpTo(Screen.Auth.Graph) {
+                            inclusive = true
+                        }
+                    }
                 }
                 LoginUiEvent.NavigateToRegister -> {
-                    navController.navigateAndClearBackStack(
-                        destination = RegisterScreenDestination
-                    )
+                    navController.navigate(Screen.Auth.Register)
                 }
             }
         }

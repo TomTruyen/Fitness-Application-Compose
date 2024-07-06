@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Column
@@ -39,23 +40,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
-import com.ramcosta.composedestinations.navigation.navigate
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.data.entities.WorkoutWithExercises
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.CreateWorkoutScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExecuteWorkoutScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutDetailScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.CollapsingToolbar
+import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
-@RootNavGraph
-@Destination
 @Composable
 fun WorkoutOverviewScreen(
     navController: NavController,
@@ -69,13 +62,13 @@ fun WorkoutOverviewScreen(
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
                 is WorkoutOverviewUiEvent.NavigateToCreateWorkout -> navController.navigate(
-                    CreateWorkoutScreenDestination(id = null)
+                    Screen.Workout.Create()
                 )
                 is WorkoutOverviewUiEvent.NavigateToDetail -> navController.navigate(
-                    WorkoutDetailScreenDestination(event.id)
+                    Screen.Workout.Detail(event.id)
                 )
                 is WorkoutOverviewUiEvent.NavigateToStartWorkout -> navController.navigate(
-                    ExecuteWorkoutScreenDestination(event.id)
+                    Screen.Workout.Execute(event.id)
                 )
             }
         }
@@ -163,7 +156,7 @@ fun WorkoutListItem(
                 vertical = Dimens.Small
             ),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(0.dp),
         onClick = {
@@ -183,7 +176,7 @@ fun WorkoutListItem(
                 Text(
                     text = workoutWithExercises.workout.name,
                     style = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.W500
                     ),
                     modifier = Modifier.weight(1f)
@@ -197,7 +190,7 @@ fun WorkoutListItem(
                     Icon(
                         imageVector = Icons.Filled.KeyboardArrowDown,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimary,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.rotate(
                             if(expanded) 180f else 0f
                         )

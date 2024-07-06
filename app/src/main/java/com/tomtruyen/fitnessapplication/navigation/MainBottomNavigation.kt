@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.navigation
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.AnimationSpec
@@ -23,10 +24,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -38,13 +40,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.core.designsystem.theme.ChineseBlack
 import com.tomtruyen.core.designsystem.theme.ChineseSilver
+import com.tomtruyen.navigation.extensions.getScreenRoute
 
 @Composable
 fun MainBottomNavigation(
     navController: NavController,
     showBottomBar: Boolean,
 ) {
-    val backstackEntry = navController.currentBackStackEntryAsState()
+    val backstackEntry by navController.currentBackStackEntryAsState()
 
     AnimatedVisibility(
         visible = showBottomBar,
@@ -61,7 +64,10 @@ fun MainBottomNavigation(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 BottomNavigation.items.forEach { item ->
-                    val selected = item.route == backstackEntry.value?.destination?.route
+                    val selected by remember(backstackEntry) {
+                        mutableStateOf(backstackEntry?.getScreenRoute() == item.screen.route  )
+                    }
+
                     BottomBarItem(
                         navController = navController,
                         item = item,
@@ -73,7 +79,6 @@ fun MainBottomNavigation(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomBarItem(
     navController: NavController,
@@ -103,7 +108,7 @@ fun BottomBarItem(
         ),
         shape = FloatingActionButtonDefaults.shape,
         onClick = {
-            navController.navigate(item.route)
+            navController.navigate(item.screen)
         },
         colors = CardDefaults.cardColors(
             contentColor = animatedContentColor,

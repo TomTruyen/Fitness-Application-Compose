@@ -1,5 +1,6 @@
 package com.tomtruyen.data.repositories
 
+import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.tomtruyen.data.firebase.extensions.handleCompletionResult
 import com.tomtruyen.data.firebase.models.FirebaseCallback

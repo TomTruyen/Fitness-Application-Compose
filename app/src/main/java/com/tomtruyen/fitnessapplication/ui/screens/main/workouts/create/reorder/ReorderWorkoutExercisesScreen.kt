@@ -27,10 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.ramcosta.composedestinations.annotation.Destination
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.navigation.CreateWorkoutNavGraph
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutUiAction
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutViewModel
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
@@ -43,8 +41,6 @@ import org.burnoutcrew.reorderable.reorderable
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
-@CreateWorkoutNavGraph
-@Destination
 @Composable
 fun ReorderWorkoutExercisesScreen(
     navController: NavController,

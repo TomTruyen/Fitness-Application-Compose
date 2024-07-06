@@ -1,5 +1,6 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises
 
+import android.util.Log
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.base.SnackbarMessage
 import com.tomtruyen.data.entities.Exercise

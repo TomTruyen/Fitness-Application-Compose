@@ -1,91 +1,88 @@
 package com.tomtruyen.fitnessapplication
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
-import com.ramcosta.composedestinations.DestinationsNavHost
-import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
-import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
-import com.ramcosta.composedestinations.navigation.dependency
-import com.ramcosta.composedestinations.utils.currentDestinationAsState
-import com.ramcosta.composedestinations.utils.currentDestinationFlow
-import com.tomtruyen.fitnessapplication.extensions.navigateAndClearBackStack
+import androidx.navigation.toRoute
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.fitnessapplication.navigation.MainBottomNavigation
-import com.tomtruyen.fitnessapplication.navigation.NavArguments
-import com.tomtruyen.fitnessapplication.ui.screens.NavGraphs
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.ProfileScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutHistoryScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutOverviewScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesViewModel
-import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutViewModel
 import com.tomtruyen.core.designsystem.theme.FitnessApplicationTheme
+import com.tomtruyen.fitnessapplication.ui.screens.auth.login.LoginScreen
+import com.tomtruyen.fitnessapplication.ui.screens.auth.register.RegisterScreen
+import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesScreen
+import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesViewModel
+import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create.CreateExerciseScreen
+import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.detail.ExerciseDetailScreen
+import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.filter.ExercisesFilterScreen
+import com.tomtruyen.fitnessapplication.ui.screens.main.profile.ProfileScreen
+import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.WorkoutOverviewScreen
+import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutScreen
+import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutViewModel
+import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.reorder.ReorderWorkoutExercisesScreen
+import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.detail.WorkoutDetailScreen
+import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.execute.ExecuteWorkoutScreen
+import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.history.WorkoutHistoryScreen
 import com.tomtruyen.models.Global
-import org.koin.android.ext.android.getKoin
+import com.tomtruyen.navigation.Screen
+import com.tomtruyen.navigation.extensions.getScreenRoute
 import org.koin.android.ext.android.inject
-import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.koinViewModel
+import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.core.parameter.parametersOf
 
-@OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
 class MainActivity : ComponentActivity() {
     private val userRepository by inject<UserRepository>()
 
+    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             FitnessApplicationTheme {
                 val navController = rememberNavController()
-                val navHostEngine = rememberAnimatedNavHostEngine(
-                    navHostContentAlignment = Alignment.TopCenter,
-                    rootDefaultAnimations = RootNavGraphDefaultAnimations.ACCOMPANIST_FADING,
-                )
 
                 var isBottomBarVisible by Global.isBottomBarVisible
 
-                val destination by navController.currentDestinationFlow.collectAsStateWithLifecycle(
-                    initialValue = navController.currentDestinationAsState()
-                )
+                val backStackEntry by navController.currentBackStackEntryAsState()
 
                 LaunchedEffect(Unit) {
                     if(userRepository.isLoggedIn()) {
-                        navController.navigateAndClearBackStack(
-                            destination = WorkoutOverviewScreenDestination
-                        )
+                        navController.navigate(Screen.Workout.Graph) {
+                            popUpTo(Screen.Auth.Graph) {
+                                inclusive = true
+                            }
+                        }
                     }
                 }
 
-                LaunchedEffect(destination) {
-                    val isRootDestinations = destination in listOf(
-                        WorkoutOverviewScreenDestination,
-                        ExercisesScreenDestination,
-                        WorkoutHistoryScreenDestination,
-                        ProfileScreenDestination,
-                    )
+                LaunchedEffect(backStackEntry) {
+                    val route = backStackEntry.getScreenRoute()
 
-                    val isExercisesFromWorkout = if(destination is ExercisesScreenDestination) {
-                        // Get the isFromWorkout argument from the destination
-                        navController.getBackStackEntry((destination as ExercisesScreenDestination).route)
-                            .let {
-                                it.arguments?.getBoolean(NavArguments.IS_FROM_WORKOUT, false) ?: false
-                            }
-                    } else {
-                        false
-                    }
+                    val topLevelDestinations = listOf(
+                        Screen.Workout.Overview,
+                        Screen.Exercise.Overview(false),
+                        Screen.Workout.HistoryOverview,
+                        Screen.Profile
+                    ).mapNotNull { it.route }
+
+                    val isRootDestinations = topLevelDestinations.contains(route)
+
+                    val isExercisesFromWorkout = if(route == Screen.Exercise.Overview::class.qualifiedName) {
+                        backStackEntry?.toRoute<Screen.Exercise.Overview>()?.isFromWorkout ?: false
+                    } else false
 
                     isBottomBarVisible = isRootDestinations && !isExercisesFromWorkout
                 }
@@ -99,40 +96,141 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 ) {
-                    DestinationsNavHost(
-                        navGraph = NavGraphs.root,
-                        engine = navHostEngine,
+                    NavHost(
+                        modifier = Modifier.padding(it),
                         navController = navController,
-                        dependenciesContainerBuilder = {
-                            dependency(navController)
-
-                            // Required to have a SharedViewModel
-                            dependency(NavGraphs.exercises) {
-                                val parentEntry = remember(navBackStackEntry) {
-                                    navController.getBackStackEntry(NavGraphs.exercises.route)
-                                }
-
-                                koinViewModel<ExercisesViewModel>(viewModelStoreOwner = parentEntry) {
-                                    parametersOf(
-                                        parentEntry.arguments?.getBoolean(NavArguments.IS_FROM_WORKOUT, false) ?: false
-                                    )
-                                }
+                        startDestination = Screen.Auth.Graph
+                    ) {
+                        navigation<Screen.Auth.Graph>(
+                            startDestination = Screen.Auth.Login
+                        ) {
+                            composable<Screen.Auth.Login> {
+                                LoginScreen(navController)
                             }
 
-                            dependency(NavGraphs.createWorkout) {
-                                val parentEntry = remember(navBackStackEntry) {
-                                    navController.getBackStackEntry(NavGraphs.createWorkout.route)
-                                }
-
-                                koinViewModel<CreateWorkoutViewModel>(viewModelStoreOwner = parentEntry) {
-                                    parametersOf(
-                                        parentEntry.arguments?.getString(NavArguments.ID, null)
-                                    )
-                                }
+                            composable<Screen.Auth.Register> {
+                                RegisterScreen(navController)
                             }
-                        },
-                        modifier = Modifier.padding(it)
-                    )
+                        }
+
+                        composable<Screen.Profile> {
+                            ProfileScreen(navController)
+                        }
+
+                        navigation<Screen.Workout.Graph>(
+                            startDestination = Screen.Workout.Overview
+                        ) {
+                            composable<Screen.Workout.Overview> {
+                                WorkoutOverviewScreen(navController)
+                            }
+
+                            composable<Screen.Workout.Detail> { backStackEntry ->
+                                val args = backStackEntry.toRoute<Screen.Workout.Detail>()
+
+                                WorkoutDetailScreen(
+                                    id = args.id,
+                                    navController = navController
+                                )
+                            }
+
+                            composable<Screen.Workout.Create> { backStackEntry ->
+                                val args = backStackEntry.toRoute<Screen.Workout.Create>()
+
+                                val parentEntry =
+                                    navController.getBackStackEntry<Screen.Workout.Graph>()
+
+                                val viewModel = koinNavViewModel<CreateWorkoutViewModel>(
+                                    viewModelStoreOwner = parentEntry,
+                                    parameters = { parametersOf(args.id) }
+                                )
+
+                                CreateWorkoutScreen(
+                                    navController = navController,
+                                    viewModel = viewModel
+                                )
+                            }
+
+                            composable<Screen.Workout.Execute> { backStackEntry ->
+                                val args = backStackEntry.toRoute<Screen.Workout.Execute>()
+
+                                ExecuteWorkoutScreen(
+                                    id = args.id,
+                                    navController = navController
+                                )
+                            }
+
+                            composable<Screen.Workout.HistoryOverview> {
+                                WorkoutHistoryScreen(navController)
+                            }
+
+                            composable<Screen.Workout.ReorderExercises> {
+                                val parentEntry =
+                                    navController.getBackStackEntry<Screen.Workout.Graph>()
+
+                                val viewModel = koinNavViewModel<CreateWorkoutViewModel>(
+                                    viewModelStoreOwner = parentEntry
+                                )
+
+                                ReorderWorkoutExercisesScreen(
+                                    navController = navController,
+                                    parentViewModel = viewModel
+                                )
+                            }
+                        }
+
+                        navigation<Screen.Exercise.Graph>(
+                            startDestination = Screen.Exercise.Overview(false)
+                        ) {
+                            composable<Screen.Exercise.Overview> { backStackEntry ->
+                                val args = backStackEntry.toRoute<Screen.Exercise.Overview>()
+
+                                val parentEntry =
+                                    navController.getBackStackEntry<Screen.Exercise.Graph>()
+
+                                val viewModel = koinNavViewModel<ExercisesViewModel>(
+                                    viewModelStoreOwner = parentEntry,
+                                    parameters = { parametersOf(args.isFromWorkout) }
+                                )
+
+                                ExercisesScreen(
+                                    navController = navController,
+                                    viewModel = viewModel
+                                )
+                            }
+
+                            composable<Screen.Exercise.Detail> { backStackEntry ->
+                                val args = backStackEntry.toRoute<Screen.Exercise.Detail>()
+
+                                ExerciseDetailScreen(
+                                    id = args.id,
+                                    navController = navController
+                                )
+                            }
+
+                            composable<Screen.Exercise.Create> { backStackEntry ->
+                                val args = backStackEntry.toRoute<Screen.Exercise.Create>()
+
+                                CreateExerciseScreen(
+                                    id = args.id,
+                                    navController = navController
+                                )
+                            }
+
+                            composable<Screen.Exercise.Filter> {
+                                val parentEntry =
+                                    navController.getBackStackEntry<Screen.Exercise.Graph>()
+
+                                val viewModel = koinNavViewModel<ExercisesViewModel>(
+                                    viewModelStoreOwner = parentEntry,
+                                )
+
+                                ExercisesFilterScreen(
+                                    navController = navController,
+                                    viewModel = viewModel
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

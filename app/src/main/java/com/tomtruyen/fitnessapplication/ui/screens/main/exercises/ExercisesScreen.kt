@@ -39,26 +39,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.navigate
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
 import com.tomtruyen.fitnessapplication.navigation.NavArguments
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.CreateExerciseScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExerciseDetailScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesFilterScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.CollapsingToolbar
 import com.tomtruyen.fitnessapplication.ui.shared.ExerciseFilterChip
 import com.tomtruyen.fitnessapplication.ui.shared.listitems.ListItem
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.SearchToolbar
+import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 
-@ExercisesNavGraph(start = true)
-@Destination(
-    navArgsDelegate = ExercisesNavArgsDelegate::class
-)
 @Composable
 fun ExercisesScreen(
     navController: NavController,
@@ -71,10 +62,10 @@ fun ExercisesScreen(
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
-                is ExercisesUiEvent.NavigateToFilter -> navController.navigate(ExercisesFilterScreenDestination)
-                is ExercisesUiEvent.NavigateToAdd -> navController.navigate(CreateExerciseScreenDestination(id = null))
+                is ExercisesUiEvent.NavigateToFilter -> navController.navigate(Screen.Exercise.Filter)
+                is ExercisesUiEvent.NavigateToAdd -> navController.navigate(Screen.Exercise.Create())
                 is ExercisesUiEvent.NavigateToDetail -> navController.navigate(
-                    ExerciseDetailScreenDestination(event.id)
+                    Screen.Exercise.Detail(event.id)
                 )
                 is ExercisesUiEvent.NavigateBackToWorkout -> {
                     navController.previousBackStackEntry?.savedStateHandle?.set(

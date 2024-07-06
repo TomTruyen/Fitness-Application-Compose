@@ -1,5 +1,6 @@
 package com.tomtruyen.data.repositories
 
+import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.tomtruyen.data.dao.ExerciseDao
 import com.tomtruyen.data.entities.Exercise

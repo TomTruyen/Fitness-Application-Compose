@@ -24,7 +24,7 @@ private val DarkColorScheme = lightColorScheme(
     onPrimaryContainer = White,
     errorContainer = LighterRed,
     onErrorContainer = White,
-    surface = White,
+    surface = LavenderMist,
     onSurface = ChineseBlack,
     error = LighterRed,
 )
@@ -42,7 +42,7 @@ private val LightColorScheme = lightColorScheme(
     onPrimaryContainer = White,
     errorContainer = LighterRed,
     onErrorContainer = White,
-    surface = White,
+    surface = LavenderMist,
     onSurface = ChineseBlack,
     error = LighterRed,
 )

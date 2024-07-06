@@ -31,13 +31,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.tomtruyen.fitnessapplication.BuildConfig
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.extensions.navigateAndClearBackStack
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.LoginScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.RestAlertDialog
@@ -47,11 +43,10 @@ import com.tomtruyen.fitnessapplication.ui.shared.listitems.ListItem
 import com.tomtruyen.fitnessapplication.ui.shared.listitems.SwitchListItem
 import com.tomtruyen.core.common.utils.EmailUtils
 import com.tomtruyen.core.common.utils.TimeUtils
+import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
-@RootNavGraph
-@Destination
 @Composable
 fun ProfileScreen(
     navController: NavController,
@@ -71,9 +66,7 @@ fun ProfileScreen(
         viewModel.eventFlow.collectLatest { navigationType ->
             when(navigationType) {
                 is ProfileUiEvent.Logout -> {
-                    navController.navigateAndClearBackStack(
-                        destination = LoginScreenDestination
-                    )
+                    navController.navigate(Screen.Auth.Login)
                 }
             }
         }

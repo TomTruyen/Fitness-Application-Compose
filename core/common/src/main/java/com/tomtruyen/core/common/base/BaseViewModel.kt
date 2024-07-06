@@ -27,6 +27,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class BaseViewModel<UIState, UIAction, UIEvent>(
     initialState: UIState
@@ -48,7 +50,7 @@ abstract class BaseViewModel<UIState, UIAction, UIEvent>(
         _loading.update { loading }
     }
 
-    protected fun launchLoading(block: suspend () -> Unit) = vmScope.launch {
+    protected fun launchLoading(context: CoroutineContext = EmptyCoroutineContext, block: suspend () -> Unit) = vmScope.launch(context) {
         isLoading(true)
         block()
         isLoading(false)

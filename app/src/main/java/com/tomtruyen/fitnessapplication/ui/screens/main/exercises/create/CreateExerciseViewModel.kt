@@ -5,6 +5,7 @@ import com.tomtruyen.core.common.base.SnackbarMessage
 import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -27,7 +28,7 @@ class CreateExerciseViewModel(
         observeEquipment()
     }
 
-    private fun findExercise() = launchLoading {
+    private fun findExercise() = launchLoading(Dispatchers.IO) {
         if(!uiState.value.isEditing || id == null) return@launchLoading
 
         exerciseRepository.findUserExerciseById(id)?.let {

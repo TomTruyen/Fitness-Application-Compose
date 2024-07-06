@@ -8,6 +8,7 @@ import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseEvent
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -30,7 +31,7 @@ class ExecuteWorkoutViewModel(
         observeLastEntryForWorkout()
     }
 
-    private fun findWorkout() = vmScope.launch {
+    private fun findWorkout() = vmScope.launch(Dispatchers.IO) {
         workoutRepository.findWorkoutById(id)?.let {
             updateState { state ->
                 state.copy(

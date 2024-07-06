@@ -8,6 +8,7 @@ import com.tomtruyen.data.entities.Settings
 import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
+import com.tomtruyen.fitnessapplication.App
 import com.tomtruyen.fitnessapplication.di.appModule
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -99,8 +100,7 @@ class ProfileViewModel(
     private fun logout() {
         userRepository.logout()
 
-        unloadKoinModules(appModule)
-        loadKoinModules(appModule)
+        App.reloadKoinModules()
 
         triggerEvent(ProfileUiEvent.Logout)
     }

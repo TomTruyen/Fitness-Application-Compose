@@ -8,6 +8,7 @@ import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseEvent
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -30,7 +31,7 @@ class CreateWorkoutViewModel(
         observeSettings()
     }
 
-    private fun findWorkout() = launchLoading {
+    private fun findWorkout() = launchLoading(Dispatchers.IO) {
         if(!uiState.value.isEditing || id == null) return@launchLoading
 
         workoutRepository.findWorkoutById(id)?.let {

@@ -10,6 +10,7 @@ internal fun Project.configureKoin(
     commonExtension.apply {
         dependencies {
             add("implementation", libs.findLibrary("insert.koin.compose").get())
+            add("implementation", libs.findLibrary("insert.koin.compose.navigation").get())
         }
     }
 }

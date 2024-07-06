@@ -19,15 +19,38 @@ import org.koin.dsl.module
 val appModule = module {
     // ViewModels
     viewModelOf(::LoginViewModel)
+
     viewModelOf(::RegisterViewModel)
+
     viewModelOf(::ProfileViewModel)
+
     viewModelOf(::WorkoutOverviewViewModel)
-    viewModelOf(::WorkoutDetailViewModel)
-    viewModelOf(::ExecuteWorkoutViewModel)
-    viewModel { (id: String?) -> CreateWorkoutViewModel(id, get(), get(), get()) }
+
+    viewModel { (id: String) ->
+        WorkoutDetailViewModel(id, get(), get())
+    }
+
+    viewModel { (id: String) ->
+        ExecuteWorkoutViewModel(id, get(), get(), get())
+    }
+
+    viewModel { (id: String?) ->
+        CreateWorkoutViewModel(id, get(), get(), get())
+    }
+
     viewModelOf(::ReorderWorkoutExercisesViewModel)
-    viewModelOf(::ExercisesViewModel)
-    viewModelOf(::ExerciseDetailViewModel)
-    viewModel { (id: String?) -> CreateExerciseViewModel(id, get(), get()) }
+
+    viewModel { (isFromWorkout: Boolean) ->
+        ExercisesViewModel(isFromWorkout, get(), get())
+    }
+
+    viewModel { (id: String) ->
+        ExerciseDetailViewModel(id, get(), get())
+    }
+
+    viewModel { (id: String?) ->
+        CreateExerciseViewModel(id, get(), get())
+    }
+
     viewModelOf(::WorkoutHistoryViewModel)
 }

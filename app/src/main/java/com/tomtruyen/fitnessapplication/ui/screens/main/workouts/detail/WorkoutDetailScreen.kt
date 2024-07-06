@@ -23,23 +23,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
-import com.ramcosta.composedestinations.navigation.navigate
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.CreateWorkoutScreenDestination
-import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExecuteWorkoutScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.ConfirmationDialog
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
+import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
-@RootNavGraph
-@Destination
 @Composable
 fun WorkoutDetailScreen(
     id: String,
@@ -56,11 +50,11 @@ fun WorkoutDetailScreen(
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
                 is WorkoutDetailUiEvent.NavigateToEdit -> {
-                    navController.navigate(CreateWorkoutScreenDestination(event.id))
+                    navController.navigate(Screen.Workout.Create(event.id))
                 }
                 is WorkoutDetailUiEvent.NavigateBack -> navController.popBackStack()
                 is WorkoutDetailUiEvent.NavigateToStartWorkout -> {
-                    navController.navigate(ExecuteWorkoutScreenDestination(event.id))
+                    navController.navigate(Screen.Workout.Execute(event.id))
                 }
             }
         }

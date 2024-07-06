@@ -88,6 +88,7 @@ dependencies {
 
     implementation(project(":data"))
     implementation(project(":models"))
+    implementation(project(":navigation"))
 
     // Auth
     implementation(libs.google.play.services.auth)
@@ -96,9 +97,10 @@ dependencies {
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
 
-    // Navigation
-    implementation(libs.raamcosta.compose.destinations)
-    ksp(libs.raamcosta.compose.destinations.ksp)
+    implementation(libs.androidx.navigation.compose)
+//     Navigation
+//    implementation(libs.raamcosta.compose.destinations)
+//    ksp(libs.raamcosta.compose.destinations.ksp)
 
     // Reorderable (Drag & Drop) Lazy Column
     implementation(libs.compose.reorderable)
