@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -38,7 +39,6 @@ import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.execute.Execute
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.history.WorkoutHistoryScreen
 import com.tomtruyen.models.Global
 import com.tomtruyen.navigation.Screen
-import com.tomtruyen.navigation.extensions.getScreenRoute
 import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.koinViewModel
 import org.koin.androidx.compose.navigation.koinNavViewModel
@@ -69,22 +69,18 @@ class MainActivity : ComponentActivity() {
                 }
 
                 LaunchedEffect(backStackEntry) {
-                    val route = backStackEntry.getScreenRoute()
-
-                    val topLevelDestinations = listOf(
+                    val isRootDestination = listOf(
                         Screen.Workout.Overview,
                         Screen.Exercise.Overview(false),
                         Screen.Workout.HistoryOverview,
                         Screen.Profile
-                    ).mapNotNull { it.route }
+                    ).any { backStackEntry?.destination?.hasRoute(it::class) ?: false }
 
-                    val isRootDestinations = topLevelDestinations.contains(route)
-
-                    val isExercisesFromWorkout = if(route == Screen.Exercise.Overview::class.qualifiedName) {
+                    val isExercisesFromWorkout = if(backStackEntry?.destination?.hasRoute<Screen.Exercise.Overview>() == true) {
                         backStackEntry?.toRoute<Screen.Exercise.Overview>()?.isFromWorkout ?: false
                     } else false
 
-                    isBottomBarVisible = isRootDestinations && !isExercisesFromWorkout
+                    isBottomBarVisible = isRootDestination && !isExercisesFromWorkout
                 }
 
                 Scaffold(

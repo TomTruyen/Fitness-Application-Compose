@@ -358,7 +358,7 @@ fun WorkoutExerciseTabContent(
                             WorkoutExerciseSet(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .animateItemPlacement(),
+                                    .animateItem(),
                                 exerciseIndex = index,
                                 setIndex = setIndex,
                                 set = set,

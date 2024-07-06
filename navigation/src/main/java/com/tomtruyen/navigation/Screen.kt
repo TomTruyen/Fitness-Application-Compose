@@ -3,9 +3,6 @@ package com.tomtruyen.navigation
 import kotlinx.serialization.Serializable
 
 sealed interface Screen {
-    val route: String?
-        get() = this::class.qualifiedName
-
     sealed interface Auth: Screen {
         @Serializable
         data object Graph: Auth

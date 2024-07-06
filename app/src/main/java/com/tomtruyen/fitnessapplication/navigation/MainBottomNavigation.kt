@@ -36,11 +36,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.core.designsystem.theme.ChineseBlack
 import com.tomtruyen.core.designsystem.theme.ChineseSilver
-import com.tomtruyen.navigation.extensions.getScreenRoute
 
 @Composable
 fun MainBottomNavigation(
@@ -65,7 +65,7 @@ fun MainBottomNavigation(
             ) {
                 BottomNavigation.items.forEach { item ->
                     val selected by remember(backstackEntry) {
-                        mutableStateOf(backstackEntry?.getScreenRoute() == item.screen.route  )
+                        mutableStateOf(backstackEntry?.destination?.hasRoute(item.screen::class) ?: false)
                     }
 
                     BottomBarItem(
