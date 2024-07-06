@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.ui.theme.LighterRed
+import com.tomtruyen.core.designsystem.theme.LighterRed
 
 sealed class SnackbarMessage(
     open val message: String? = null,

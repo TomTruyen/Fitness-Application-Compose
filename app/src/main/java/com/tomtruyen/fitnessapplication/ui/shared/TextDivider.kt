@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.fitnessapplication.Dimens
-import com.tomtruyen.fitnessapplication.ui.theme.BlueGrey
-import com.tomtruyen.fitnessapplication.ui.theme.LavenderMist
+import com.tomtruyen.core.designsystem.theme.BlueGrey
+import com.tomtruyen.core.designsystem.theme.LavenderMist
 
 @Composable
 fun TextDivider(

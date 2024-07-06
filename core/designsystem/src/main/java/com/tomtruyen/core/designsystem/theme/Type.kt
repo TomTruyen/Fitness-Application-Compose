@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.ui.theme
+package com.tomtruyen.core.designsystem.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

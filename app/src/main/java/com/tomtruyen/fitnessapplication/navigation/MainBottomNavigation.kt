@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.tomtruyen.fitnessapplication.Dimens
-import com.tomtruyen.fitnessapplication.ui.theme.ChineseBlack
-import com.tomtruyen.fitnessapplication.ui.theme.ChineseSilver
+import com.tomtruyen.core.designsystem.theme.ChineseBlack
+import com.tomtruyen.core.designsystem.theme.ChineseSilver
 
 @Composable
 fun MainBottomNavigation(

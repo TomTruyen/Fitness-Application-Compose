@@ -27,8 +27,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.ui.theme.BlueGrey
-import com.tomtruyen.fitnessapplication.ui.theme.LavenderMist
+import com.tomtruyen.core.designsystem.theme.BlueGrey
+import com.tomtruyen.core.designsystem.theme.LavenderMist
 
 
 object TextFields {

@@ -34,7 +34,7 @@ import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutHistorySc
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutOverviewScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutViewModel
-import com.tomtruyen.fitnessapplication.ui.theme.FitnessApplicationTheme
+import com.tomtruyen.core.designsystem.theme.FitnessApplicationTheme
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.getViewModel

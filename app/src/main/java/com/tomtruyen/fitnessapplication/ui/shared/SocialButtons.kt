@@ -31,8 +31,8 @@ import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.core.common.R as CommonR
 import com.tomtruyen.fitnessapplication.helpers.GoogleSignInHelper
-import com.tomtruyen.fitnessapplication.ui.theme.BlueGrey
-import com.tomtruyen.fitnessapplication.ui.theme.LavenderMist
+import com.tomtruyen.core.designsystem.theme.BlueGrey
+import com.tomtruyen.core.designsystem.theme.LavenderMist
 
 object SocialButtons {
     @Composable

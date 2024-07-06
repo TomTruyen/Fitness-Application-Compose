@@ -41,7 +41,7 @@ import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.SocialButtons
 import com.tomtruyen.fitnessapplication.ui.shared.TextDivider
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
-import com.tomtruyen.fitnessapplication.ui.theme.BlueGrey
+import com.tomtruyen.core.designsystem.theme.BlueGrey
 import com.tomtruyen.core.validation.errorMessage
 import com.tomtruyen.core.validation.isValid
 import kotlinx.coroutines.flow.collectLatest

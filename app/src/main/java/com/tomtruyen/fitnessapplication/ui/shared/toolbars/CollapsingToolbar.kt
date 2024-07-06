@@ -23,7 +23,7 @@ import androidx.navigation.NavController
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.extensions.shouldShowNavigationIcon
 import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
-import com.tomtruyen.fitnessapplication.ui.theme.ChineseBlack
+import com.tomtruyen.core.designsystem.theme.ChineseBlack
 import org.koin.compose.getKoin
 
 @OptIn(ExperimentalMaterial3Api::class)
