@@ -3,7 +3,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    alias(libs.plugins.android.application)
+    id("com.tomtruyen.android.application")
+    id("com.tomtruyen.android.application.compose")
+
     alias(libs.plugins.android.git.version)
     alias(libs.plugins.google.crashlytics)
     alias(libs.plugins.google.ksp)
@@ -84,18 +86,6 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
-    // Compose + Material3
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.icons.extended)
-
     // Navigation
     implementation(libs.raamcosta.compose.destinations)
     ksp(libs.raamcosta.compose.destinations.ksp)
@@ -130,5 +120,4 @@ dependencies {
 
     // Debug Only
     debugImplementation(libs.squareup.leakcanary)
-    debugImplementation(libs.androidx.compose.ui.tooling)
 }
