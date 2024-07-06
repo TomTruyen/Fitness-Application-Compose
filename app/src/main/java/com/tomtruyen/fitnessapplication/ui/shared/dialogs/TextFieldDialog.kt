@@ -22,10 +22,10 @@ import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
-import com.tomtruyen.fitnessapplication.validation.TextValidator
-import com.tomtruyen.fitnessapplication.validation.ValidationResult
-import com.tomtruyen.fitnessapplication.validation.errorMessage
-import com.tomtruyen.fitnessapplication.validation.rules.RequiredRule
+import com.tomtruyen.core.validation.TextValidator
+import com.tomtruyen.core.validation.ValidationResult
+import com.tomtruyen.core.validation.errorMessage
+import com.tomtruyen.core.validation.rules.RequiredRule
 
 @Composable
 fun TextFieldDialog(
@@ -41,7 +41,9 @@ fun TextFieldDialog(
     dismissButtonColors: ButtonColors = ButtonDefaults.textButtonColors(
         contentColor = MaterialTheme.colorScheme.onSurface
     ),
-    validator: TextValidator = TextValidator.withRules(RequiredRule()),
+    validator: TextValidator = TextValidator.withRules(
+        RequiredRule()
+    ),
 ) {
     val context = LocalContext.current
 

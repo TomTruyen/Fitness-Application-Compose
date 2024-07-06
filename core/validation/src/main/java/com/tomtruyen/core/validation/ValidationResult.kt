@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.validation
+package com.tomtruyen.core.validation
 
 /**
  * A [ValidationResult] is the result of a validation.

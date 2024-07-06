@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.validation
+package com.tomtruyen.core.validation
 
 import android.content.Context
 import org.koin.core.component.KoinComponent

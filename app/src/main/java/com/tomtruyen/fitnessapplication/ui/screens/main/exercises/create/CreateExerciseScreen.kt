@@ -34,8 +34,8 @@ import com.tomtruyen.fitnessapplication.ui.shared.dialogs.ConfirmationDialog
 import com.tomtruyen.fitnessapplication.ui.shared.Dropdown
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
-import com.tomtruyen.fitnessapplication.validation.errorMessage
-import com.tomtruyen.fitnessapplication.validation.isValid
+import com.tomtruyen.core.validation.errorMessage
+import com.tomtruyen.core.validation.isValid
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf

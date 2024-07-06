@@ -38,8 +38,8 @@ import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 import com.tomtruyen.fitnessapplication.ui.theme.BlueGrey
-import com.tomtruyen.fitnessapplication.validation.errorMessage
-import com.tomtruyen.fitnessapplication.validation.isValid
+import com.tomtruyen.core.validation.errorMessage
+import com.tomtruyen.core.validation.isValid
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 

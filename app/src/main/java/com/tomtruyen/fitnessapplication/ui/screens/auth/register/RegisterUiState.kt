@@ -1,15 +1,10 @@
 package com.tomtruyen.fitnessapplication.ui.screens.auth.register
 
-import android.content.Context
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import com.tomtruyen.fitnessapplication.validation.TextValidator
-import com.tomtruyen.fitnessapplication.validation.ValidationResult
-import com.tomtruyen.fitnessapplication.validation.rules.EmailRule
-import com.tomtruyen.fitnessapplication.validation.rules.MatchingPasswordsRule
-import com.tomtruyen.fitnessapplication.validation.rules.PasswordRule
+import com.tomtruyen.core.validation.TextValidator
+import com.tomtruyen.core.validation.ValidationResult
+import com.tomtruyen.core.validation.rules.EmailRule
+import com.tomtruyen.core.validation.rules.MatchingPasswordsRule
+import com.tomtruyen.core.validation.rules.PasswordRule
 
 data class RegisterUiState(
     val email: String? = null,
@@ -24,7 +19,10 @@ data class RegisterUiState(
 ) {
     private val emailValidator = TextValidator.withRules(EmailRule())
     private val passwordValidator = TextValidator.withRules(PasswordRule())
-    private val confirmPasswordValidator = TextValidator.withRules(PasswordRule(), MatchingPasswordsRule(password.orEmpty()))
+    private val confirmPasswordValidator = TextValidator.withRules(
+        PasswordRule(),
+        MatchingPasswordsRule(password.orEmpty())
+    )
 
     fun validateEmail(email: String) = emailValidator.validate(email)
     fun validatePassword(password: String) = passwordValidator.validate(password)

@@ -29,6 +29,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
+import com.tomtruyen.core.common.R as CommonR
 import com.tomtruyen.fitnessapplication.helpers.GoogleSignInHelper
 import com.tomtruyen.fitnessapplication.ui.theme.BlueGrey
 import com.tomtruyen.fitnessapplication.ui.theme.LavenderMist
@@ -59,7 +60,7 @@ object SocialButtons {
                 if(idToken != null) {
                     onSuccess(idToken)
                 } else {
-                    onError(context.getString(R.string.error_google_sign_in_failed))
+                    onError(context.getString(CommonR.string.error_google_sign_in_failed))
                 }
             }
         }
@@ -77,7 +78,7 @@ object SocialButtons {
                         val intentSenderRequest = IntentSenderRequest.Builder(intentSender).build()
                         signInResultLauncher.launch(intentSenderRequest)
                     } else {
-                        onError(context.getString(R.string.error_google_sign_in_failed))
+                        onError(context.getString(CommonR.string.error_google_sign_in_failed))
                     }
                 }
             },

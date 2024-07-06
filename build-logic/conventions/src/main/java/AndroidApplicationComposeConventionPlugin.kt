@@ -1,5 +1,6 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.tomtruyen.buildlogic.configureAndroidCompose
+import com.tomtruyen.buildlogic.configureKoin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
@@ -13,5 +14,6 @@ class AndroidApplicationComposeConventionPlugin: Plugin<Project> {
         }
 
         configureAndroidCompose(extensions.getByType<ApplicationExtension>())
+        configureKoin(extensions.getByType<ApplicationExtension>())
     }
 }

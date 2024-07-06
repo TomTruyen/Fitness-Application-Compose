@@ -86,15 +86,15 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
+    implementation(project(":core:common"))
+    implementation(project(":core:validation"))
+
     // Navigation
     implementation(libs.raamcosta.compose.destinations)
     ksp(libs.raamcosta.compose.destinations.ksp)
 
     // Serialization
     implementation(libs.kotlinx.serialization.json)
-
-    // Koin
-    implementation(libs.insert.koin.compose)
 
     // Firebase
     implementation(platform(libs.google.firebase.bom))

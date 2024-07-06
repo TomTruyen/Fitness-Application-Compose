@@ -1,14 +1,9 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create
 
-import android.content.Context
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import com.tomtruyen.fitnessapplication.data.entities.Exercise
-import com.tomtruyen.fitnessapplication.validation.TextValidator
-import com.tomtruyen.fitnessapplication.validation.ValidationResult
-import com.tomtruyen.fitnessapplication.validation.rules.RequiredRule
+import com.tomtruyen.core.validation.TextValidator
+import com.tomtruyen.core.validation.ValidationResult
+import com.tomtruyen.core.validation.rules.RequiredRule
 
 data class CreateExerciseUiState(
     val initialExercise: Exercise = Exercise(),

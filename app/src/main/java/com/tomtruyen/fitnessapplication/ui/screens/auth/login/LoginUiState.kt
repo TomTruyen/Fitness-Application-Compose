@@ -1,9 +1,9 @@
 package com.tomtruyen.fitnessapplication.ui.screens.auth.login
 
-import com.tomtruyen.fitnessapplication.validation.TextValidator
-import com.tomtruyen.fitnessapplication.validation.ValidationResult
-import com.tomtruyen.fitnessapplication.validation.rules.EmailRule
-import com.tomtruyen.fitnessapplication.validation.rules.RequiredRule
+import com.tomtruyen.core.validation.TextValidator
+import com.tomtruyen.core.validation.ValidationResult
+import com.tomtruyen.core.validation.rules.EmailRule
+import com.tomtruyen.core.validation.rules.RequiredRule
 
 data class LoginUiState(
     val email: String? = null,

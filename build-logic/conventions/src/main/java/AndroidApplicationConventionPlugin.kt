@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.ApplicationExtension
+import com.tomtruyen.buildlogic.configureKoin
 import com.tomtruyen.buildlogic.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -15,6 +16,7 @@ class AndroidApplicationConventionPlugin: Plugin<Project> {
 
         extensions.configure<ApplicationExtension> {
             configureKotlinAndroid(this)
+            configureKoin(this)
 
             defaultConfig.targetSdk = 34
         }

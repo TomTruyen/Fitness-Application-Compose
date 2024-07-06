@@ -2,7 +2,6 @@ package com.tomtruyen.fitnessapplication.ui.screens.auth.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -45,9 +42,8 @@ import com.tomtruyen.fitnessapplication.ui.shared.SocialButtons
 import com.tomtruyen.fitnessapplication.ui.shared.TextDivider
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 import com.tomtruyen.fitnessapplication.ui.theme.BlueGrey
-import com.tomtruyen.fitnessapplication.ui.theme.LavenderMist
-import com.tomtruyen.fitnessapplication.validation.errorMessage
-import com.tomtruyen.fitnessapplication.validation.isValid
+import com.tomtruyen.core.validation.errorMessage
+import com.tomtruyen.core.validation.isValid
 import kotlinx.coroutines.flow.collectLatest
 
 @RootNavGraph(start = true)

@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.validation
+package com.tomtruyen.core.validation
 
 fun ValidationResult?.errorMessage(): String? = (this as? ValidationResult.Invalid)?.messages?.firstOrNull()
 

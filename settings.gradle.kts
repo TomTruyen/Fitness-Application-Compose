@@ -18,3 +18,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "Fitness Application"
 include(":app")
+include(":core")
+include(":core:validation")
+include(":core:common")

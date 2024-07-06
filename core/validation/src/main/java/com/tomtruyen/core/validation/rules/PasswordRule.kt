@@ -1,13 +1,13 @@
-package com.tomtruyen.fitnessapplication.validation.rules
+package com.tomtruyen.core.validation.rules
 
 import android.content.Context
-import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.validation.TextRule
+import com.tomtruyen.core.common.R as CommonR
+import com.tomtruyen.core.validation.TextRule
 import org.koin.java.KoinJavaComponent.getKoin
 
 class PasswordRule(
     override val context: Context = getKoin().get(),
-    override val message: Int = R.string.error_weak_password
+    override val message: Int = CommonR.string.error_weak_password
 ) : TextRule() {
     companion object {
         private const val PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{6,}$"

@@ -1,6 +1,4 @@
-package com.tomtruyen.fitnessapplication.validation
-
-import android.content.Context
+package com.tomtruyen.core.validation
 
 @Suppress("UNUSED_EXPRESSION")
 open class TextValidator private constructor(
@@ -36,7 +34,11 @@ open class TextValidator private constructor(
         val localText = text ?: return ValidationResult.Invalid(setOf())
         val validationResult = rules.foldRight(ValidationResult.Valid as ValidationResult) { rule, acc ->
             val isValid = rule.validationRule(localText)
-            val result = if (isValid) ValidationResult.Valid else ValidationResult.Invalid(setOf(rule.errorMessage))
+            val result = if (isValid) ValidationResult.Valid else ValidationResult.Invalid(
+                setOf(
+                    rule.errorMessage
+                )
+            )
             return@foldRight acc combine result
         }
         return validationResult
