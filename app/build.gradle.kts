@@ -5,17 +5,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("com.tomtruyen.android.application")
     id("com.tomtruyen.android.application.compose")
+    id("com.tomtruyen.firebase.application")
 
     alias(libs.plugins.android.git.version)
     alias(libs.plugins.google.crashlytics)
-    alias(libs.plugins.google.ksp)
     alias(libs.plugins.google.services)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.secrets.gradle)
-    alias(libs.plugins.kotlin.serialization)
-
-    id("kotlin-parcelize")
 }
 
 androidGitVersion {
@@ -90,31 +86,22 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:validation"))
 
-    // Navigation
-    implementation(libs.raamcosta.compose.destinations)
-    ksp(libs.raamcosta.compose.destinations.ksp)
+    implementation(project(":data"))
+    implementation(project(":models"))
 
-    // Serialization
-    implementation(libs.kotlinx.serialization.json)
-
-    // Firebase
-    implementation(platform(libs.google.firebase.bom))
-    implementation(libs.google.firebase.analytics)
-    implementation(libs.google.firebase.auth)
-    implementation(libs.google.firebase.firestore)
-    implementation(libs.google.firebase.crashlytics)
+    // Auth
     implementation(libs.google.play.services.auth)
-
-    // Room
-    implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
-
-    // Reorderable (Drag & Drop) Lazy Column
-    implementation(libs.compose.reorderable)
 
     // Paging 3
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
+
+    // Navigation
+    implementation(libs.raamcosta.compose.destinations)
+    ksp(libs.raamcosta.compose.destinations.ksp)
+
+    // Reorderable (Drag & Drop) Lazy Column
+    implementation(libs.compose.reorderable)
 
     // Images
     implementation(libs.coil.kt.compose)

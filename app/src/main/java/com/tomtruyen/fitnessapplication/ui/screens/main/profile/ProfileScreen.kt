@@ -45,8 +45,8 @@ import com.tomtruyen.fitnessapplication.ui.shared.dialogs.UnitAlertDialog
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.CollapsingToolbar
 import com.tomtruyen.fitnessapplication.ui.shared.listitems.ListItem
 import com.tomtruyen.fitnessapplication.ui.shared.listitems.SwitchListItem
-import com.tomtruyen.fitnessapplication.utils.EmailUtils
-import com.tomtruyen.fitnessapplication.utils.TimeUtils
+import com.tomtruyen.core.common.utils.EmailUtils
+import com.tomtruyen.core.common.utils.TimeUtils
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
@@ -63,7 +63,7 @@ fun ProfileScreen(
 
     DisposableEffect(Unit) {
         onDispose {
-            viewModel.saveSettings()
+            viewModel.saveSettings(context)
         }
     }
 
@@ -194,7 +194,7 @@ fun ProfileScreenLayout(
                     message = stringResource(id = R.string.message_report_an_issue),
                 ) {
                     emailLauncher.launch(
-                        EmailUtils.getEmailIntent(context)
+                        EmailUtils.getEmailIntent(context, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
                     )
                 }
 

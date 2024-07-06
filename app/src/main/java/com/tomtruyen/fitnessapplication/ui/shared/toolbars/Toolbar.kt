@@ -18,8 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.extensions.shouldShowNavigationIcon
-import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
 import com.tomtruyen.core.designsystem.theme.ChineseBlack
+import com.tomtruyen.models.Global
 import org.koin.compose.getKoin
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,7 +30,7 @@ fun Toolbar(
     onNavigateUp: () -> Unit = { navController.popBackStack() },
     actions: @Composable RowScope.() -> Unit = {},
 ) {
-    val isBottomBarVisible by getKoin().get<GlobalProvider>().isBottomBarVisible
+    val isBottomBarVisible by Global.isBottomBarVisible
 
     TopAppBar(
         title = {

@@ -1,12 +1,10 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create
 
-import com.tomtruyen.fitnessapplication.base.BaseViewModel
-import com.tomtruyen.fitnessapplication.base.SnackbarMessage
-import com.tomtruyen.fitnessapplication.data.entities.Exercise
-import com.tomtruyen.fitnessapplication.model.FirebaseCallback
-import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
-import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.tomtruyen.core.common.base.BaseViewModel
+import com.tomtruyen.core.common.base.SnackbarMessage
+import com.tomtruyen.data.firebase.models.FirebaseCallback
+import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
+import com.tomtruyen.data.repositories.interfaces.UserRepository
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -58,7 +56,7 @@ class CreateExerciseViewModel(
 
     private fun observeEquipment() = vmScope.launch {
         exerciseRepository.findEquipment().map {
-            listOf(Exercise.DEFAULT_DROPDOWN_VALUE) + it
+            listOf(com.tomtruyen.data.entities.Exercise.DEFAULT_DROPDOWN_VALUE) + it
         }.distinctUntilChanged().collectLatest { equipment ->
             updateState { it.copy(equipment = equipment) }
         }
@@ -70,7 +68,7 @@ class CreateExerciseViewModel(
         isLoading(true)
 
         val exercise = uiState.value.exercise.apply {
-            if(equipment == Exercise.DEFAULT_DROPDOWN_VALUE) equipment = null
+            if(equipment == com.tomtruyen.data.entities.Exercise.DEFAULT_DROPDOWN_VALUE) equipment = null
         }
 
         exerciseRepository.saveUserExercise(

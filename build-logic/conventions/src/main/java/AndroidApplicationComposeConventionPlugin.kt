@@ -11,6 +11,8 @@ class AndroidApplicationComposeConventionPlugin: Plugin<Project> {
             apply("com.android.application")
             apply("com.google.devtools.ksp")
             apply("org.jetbrains.kotlin.plugin.compose")
+            apply("org.jetbrains.kotlin.plugin.serialization")
+            apply("kotlin-parcelize")
         }
 
         configureAndroidCompose(extensions.getByType<ApplicationExtension>())

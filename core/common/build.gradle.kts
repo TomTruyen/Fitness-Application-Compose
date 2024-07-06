@@ -1,5 +1,6 @@
 plugins {
     id("com.tomtruyen.android.library")
+    id("com.tomtruyen.android.library.compose")
 }
 
 android {

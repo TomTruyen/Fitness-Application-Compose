@@ -1,20 +1,16 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises
 
-import com.tomtruyen.fitnessapplication.base.BaseViewModel
-import com.tomtruyen.fitnessapplication.base.SnackbarMessage
-import com.tomtruyen.fitnessapplication.data.entities.Exercise
-import com.tomtruyen.fitnessapplication.model.ExerciseFilter
-import com.tomtruyen.fitnessapplication.model.FirebaseCallback
-import com.tomtruyen.fitnessapplication.repositories.interfaces.ExerciseRepository
-import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
+import com.tomtruyen.core.common.base.BaseViewModel
+import com.tomtruyen.core.common.base.SnackbarMessage
+import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.models.ExerciseFilter
+import com.tomtruyen.data.firebase.models.FirebaseCallback
+import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
+import com.tomtruyen.data.repositories.interfaces.UserRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -106,7 +102,7 @@ class ExercisesViewModel(
                 })
             }
             is ExercisesUiAction.OnClearFilterClicked -> updateState {
-                it.copy(filter = ExerciseFilter())
+                it.copy(filter = com.tomtruyen.models.ExerciseFilter())
             }
             is ExercisesUiAction.OnRemoveFilterClicked -> updateState {
                 it.copy(

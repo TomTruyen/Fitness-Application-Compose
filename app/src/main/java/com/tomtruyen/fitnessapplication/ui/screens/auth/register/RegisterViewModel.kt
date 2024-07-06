@@ -1,10 +1,10 @@
 package com.tomtruyen.fitnessapplication.ui.screens.auth.register
 
 import com.google.firebase.auth.FirebaseUser
-import com.tomtruyen.fitnessapplication.base.BaseViewModel
-import com.tomtruyen.fitnessapplication.base.SnackbarMessage
-import com.tomtruyen.fitnessapplication.model.FirebaseCallback
-import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
+import com.tomtruyen.core.common.base.BaseViewModel
+import com.tomtruyen.core.common.base.SnackbarMessage
+import com.tomtruyen.data.firebase.models.FirebaseCallback
+import com.tomtruyen.data.repositories.interfaces.UserRepository
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 

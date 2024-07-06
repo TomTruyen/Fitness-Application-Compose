@@ -34,7 +34,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -46,8 +45,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.data.entities.WorkoutWithExercises
-import com.tomtruyen.fitnessapplication.model.StopwatchTimer
+import com.tomtruyen.core.common.utils.StopwatchTimer
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
@@ -202,7 +200,7 @@ fun ExecuteWorkoutScreenLayout(
 fun WorkoutExerciseTabContent(
     modifier: Modifier = Modifier,
     state: ExecuteWorkoutUiState,
-    lastEntryForWorkout: WorkoutWithExercises?,
+    lastEntryForWorkout: com.tomtruyen.data.entities.WorkoutWithExercises?,
     pagerState: PagerState,
     onAction: (ExecuteWorkoutUiAction) -> Unit,
     onWorkoutEvent: (WorkoutExerciseEvent) -> Unit

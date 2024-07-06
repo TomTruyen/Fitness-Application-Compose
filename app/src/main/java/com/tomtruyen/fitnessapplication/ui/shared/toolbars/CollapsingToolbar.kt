@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.extensions.shouldShowNavigationIcon
-import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
 import com.tomtruyen.core.designsystem.theme.ChineseBlack
+import com.tomtruyen.models.Global
 import org.koin.compose.getKoin
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,7 +34,7 @@ fun CollapsingToolbar(
     scrollBehavior: TopAppBarScrollBehavior,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
-    val isBottomBarVisible by getKoin().get<GlobalProvider>().isBottomBarVisible
+    val isBottomBarVisible by Global.isBottomBarVisible
 
     // Calculate Size of Title on Expand/Collapse
     val collapsed = 22

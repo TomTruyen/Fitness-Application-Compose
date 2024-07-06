@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.model.RestAlertType
+import com.tomtruyen.models.RestAlertType
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.numberpickers.NumberPicker
 import com.tomtruyen.fitnessapplication.ui.shared.listitems.SwitchListItem
@@ -31,7 +31,7 @@ fun RestAlertDialog(
     onDismiss: () -> Unit,
     rest: Int,
     restEnabled: Boolean? = null,
-    type: RestAlertType = RestAlertType.REST_TIME
+    type: com.tomtruyen.models.RestAlertType = com.tomtruyen.models.RestAlertType.REST_TIME
 ) {
     var selectedRestValue by remember { mutableIntStateOf(rest) }
     var selectedRestEnabled by remember { mutableStateOf(restEnabled) }
@@ -60,7 +60,7 @@ fun RestAlertDialog(
                 }
 
                 when(type) {
-                    RestAlertType.REST_TIME -> RestTimeLayout(
+                    com.tomtruyen.models.RestAlertType.REST_TIME -> RestTimeLayout(
                         value = selectedRestValue,
                         onValueChange = { rest ->
                             if(selectedRestEnabled == false) return@RestTimeLayout
@@ -69,7 +69,7 @@ fun RestAlertDialog(
                         enabled = selectedRestEnabled ?: true
                     )
 
-                    RestAlertType.SET_TIME -> SetTimeLayout(
+                    com.tomtruyen.models.RestAlertType.SET_TIME -> SetTimeLayout(
                         value = selectedRestValue,
                         onValueChange = { rest ->
                             if(selectedRestEnabled == false) return@SetTimeLayout

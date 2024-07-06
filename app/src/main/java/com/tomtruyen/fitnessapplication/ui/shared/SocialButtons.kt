@@ -9,10 +9,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -20,19 +18,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.core.common.R as CommonR
-import com.tomtruyen.fitnessapplication.helpers.GoogleSignInHelper
-import com.tomtruyen.core.designsystem.theme.BlueGrey
+import com.tomtruyen.data.firebase.auth.GoogleSignInHelper
 import com.tomtruyen.core.designsystem.theme.LavenderMist
+import com.tomtruyen.fitnessapplication.BuildConfig
 
 object SocialButtons {
     @Composable
@@ -48,7 +44,7 @@ object SocialButtons {
         val context = LocalContext.current
 
         val client = remember { GoogleSignInHelper.getGoogleSignInClient(context) }
-        val request = remember { GoogleSignInHelper.getGoogleSignInRequest() }
+        val request = remember { GoogleSignInHelper.getGoogleSignInRequest(BuildConfig.GOOGLE_SERVER_CLIENT_ID) }
 
         val signInResultLauncher = rememberLauncherForActivityResult(
             ActivityResultContracts.StartIntentSenderForResult()

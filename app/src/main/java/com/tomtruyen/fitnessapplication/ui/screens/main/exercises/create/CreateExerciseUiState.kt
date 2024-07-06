@@ -1,13 +1,13 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create
 
-import com.tomtruyen.fitnessapplication.data.entities.Exercise
+import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.core.validation.TextValidator
 import com.tomtruyen.core.validation.ValidationResult
 import com.tomtruyen.core.validation.rules.RequiredRule
 
 data class CreateExerciseUiState(
-    val initialExercise: Exercise = Exercise(),
-    val exercise: Exercise = Exercise(),
+    val initialExercise: com.tomtruyen.data.entities.Exercise = com.tomtruyen.data.entities.Exercise(),
+    val exercise: com.tomtruyen.data.entities.Exercise = com.tomtruyen.data.entities.Exercise(),
     val isEditing: Boolean = false,
 
     val categories: List<String> = emptyList(),

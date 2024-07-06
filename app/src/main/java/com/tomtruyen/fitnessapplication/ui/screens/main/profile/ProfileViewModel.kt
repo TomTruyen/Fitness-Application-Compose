@@ -1,20 +1,22 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.profile
 
+import android.content.Context
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.base.BaseViewModel
-import com.tomtruyen.fitnessapplication.base.SnackbarMessage
-import com.tomtruyen.fitnessapplication.data.entities.Settings
-import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
-import com.tomtruyen.fitnessapplication.model.FirebaseCallback
-import com.tomtruyen.fitnessapplication.repositories.interfaces.SettingsRepository
-import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
+import com.tomtruyen.core.common.base.BaseViewModel
+import com.tomtruyen.core.common.base.SnackbarMessage
+import com.tomtruyen.data.entities.Settings
+import com.tomtruyen.data.firebase.models.FirebaseCallback
+import com.tomtruyen.data.repositories.interfaces.SettingsRepository
+import com.tomtruyen.data.repositories.interfaces.UserRepository
+import com.tomtruyen.fitnessapplication.di.appModule
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import org.koin.core.context.loadKoinModules
+import org.koin.core.context.unloadKoinModules
 
 class ProfileViewModel(
-    private val globalProvider: GlobalProvider,
     private val userRepository: UserRepository,
     private val settingsRepository: SettingsRepository
 ): BaseViewModel<ProfileUiState, ProfileUiAction, ProfileUiEvent>(
@@ -65,7 +67,7 @@ class ProfileViewModel(
         }
     }
 
-    fun saveSettings() {
+    fun saveSettings(context: Context) {
         if(uiState.value.settings == uiState.value.initialSettings) return
 
         val userId = userRepository.getUser()?.uid ?: return
@@ -79,7 +81,7 @@ class ProfileViewModel(
             callback = object: FirebaseCallback<Settings> {
                 override fun onSuccess(value: Settings) {
                     showSnackbar(
-                        SnackbarMessage.Success(globalProvider.context.getString(R.string.settings_saved))
+                        SnackbarMessage.Success(context.getString(R.string.settings_saved))
                     )
                 }
 
@@ -96,6 +98,10 @@ class ProfileViewModel(
 
     private fun logout() {
         userRepository.logout()
+
+        unloadKoinModules(appModule)
+        loadKoinModules(appModule)
+
         triggerEvent(ProfileUiEvent.Logout)
     }
 

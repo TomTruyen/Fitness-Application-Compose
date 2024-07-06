@@ -27,6 +27,7 @@ gradlePlugin {
     plugins {
         registerApplicationConventionPlugins()
         registerLibraryConventionPlugins()
+        registerFirebaseConventionPlugin()
     }
 }
 
@@ -51,5 +52,17 @@ fun NamedDomainObjectContainer<PluginDeclaration>.registerLibraryConventionPlugi
     register("androidLibraryCompose") {
         id = "com.tomtruyen.android.library.compose"
         implementationClass = "AndroidLibraryComposeConventionPlugin"
+    }
+}
+
+fun NamedDomainObjectContainer<PluginDeclaration>.registerFirebaseConventionPlugin() {
+    register("firebaseLibrary") {
+        id = "com.tomtruyen.firebase.library"
+        implementationClass = "FirebaseLibraryConventionPlugin"
+    }
+
+    register("firebaseLibraryCompose") {
+        id = "com.tomtruyen.firebase.application"
+        implementationClass = "FirebaseApplicationConventionPlugin"
     }
 }

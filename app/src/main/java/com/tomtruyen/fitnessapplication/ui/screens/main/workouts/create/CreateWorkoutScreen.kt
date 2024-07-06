@@ -59,10 +59,10 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.navigate
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.data.entities.Exercise
+import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.navigation.CreateWorkoutNavGraph
 import com.tomtruyen.fitnessapplication.navigation.NavArguments
-import com.tomtruyen.fitnessapplication.networking.models.WorkoutExerciseResponse
+import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExercisesScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ReorderWorkoutExercisesScreenDestination
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseEvent
@@ -77,7 +77,7 @@ import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseSet
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseSetHeader
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseTabLayout
-import com.tomtruyen.fitnessapplication.utils.TimeUtils
+import com.tomtruyen.core.common.utils.TimeUtils
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -111,12 +111,12 @@ fun CreateWorkoutScreen(
     }
 
     LaunchedEffect(Unit, navController) {
-        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Exercise?>(NavArguments.EXERCISE, null)
+        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<com.tomtruyen.data.entities.Exercise?>(NavArguments.EXERCISE, null)
             ?.collectLatest {
                 it?.let { exercise ->
                     viewModel.onAction(CreateWorkoutUiAction.OnAddExercise(exercise))
 
-                    navController.currentBackStackEntry?.savedStateHandle?.remove<Exercise>(NavArguments.EXERCISE)
+                    navController.currentBackStackEntry?.savedStateHandle?.remove<com.tomtruyen.data.entities.Exercise>(NavArguments.EXERCISE)
                 }
             }
     }

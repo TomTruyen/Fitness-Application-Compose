@@ -1,6 +1,8 @@
 package com.tomtruyen.fitnessapplication
 
 import android.app.Application
+import com.tomtruyen.data.di.databaseModule
+import com.tomtruyen.data.di.repositoryModule
 import com.tomtruyen.fitnessapplication.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -17,7 +19,7 @@ class App: Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(appModule)
+            modules(appModule, databaseModule, repositoryModule)
         }
     }
 }

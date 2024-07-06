@@ -39,10 +39,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.data.entities.WorkoutHistoryWithWorkout
-import com.tomtruyen.fitnessapplication.extensions.format
+import com.tomtruyen.core.common.extensions.format
 import com.tomtruyen.fitnessapplication.ui.shared.toolbars.CollapsingToolbar
-import com.tomtruyen.fitnessapplication.utils.TimeUtils
+import com.tomtruyen.core.common.utils.TimeUtils
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
@@ -80,7 +79,7 @@ fun WorkoutHistoryScreen(
 fun WorkoutHistoryScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
-    history: LazyPagingItems<WorkoutHistoryWithWorkout>,
+    history: LazyPagingItems<com.tomtruyen.data.entities.WorkoutHistoryWithWorkout>,
     onAction: (WorkoutHistoryUiAction) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
@@ -117,7 +116,7 @@ fun WorkoutHistoryScreenLayout(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutHistoryItem(
-    entry: WorkoutHistoryWithWorkout,
+    entry: com.tomtruyen.data.entities.WorkoutHistoryWithWorkout,
     onAction: (WorkoutHistoryUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {

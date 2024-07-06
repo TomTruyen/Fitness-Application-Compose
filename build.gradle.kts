@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.secrets.gradle) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.google.ksp) apply false
 }
 
 true // Needed to make the Suppress annotation work for the plugins block

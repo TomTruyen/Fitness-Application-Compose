@@ -26,7 +26,7 @@ import androidx.navigation.NavController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.data.entities.Exercise
+import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.fitnessapplication.navigation.ExercisesNavGraph
 import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
@@ -86,7 +86,7 @@ fun CreateExerciseScreenLayout(
         }
     }
 
-    val types = Exercise.ExerciseType.entries.map { it.value }
+    val types = com.tomtruyen.data.entities.Exercise.ExerciseType.entries.map { it.value }
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     BackHandler(enabled = !confirmationDialogVisible) {

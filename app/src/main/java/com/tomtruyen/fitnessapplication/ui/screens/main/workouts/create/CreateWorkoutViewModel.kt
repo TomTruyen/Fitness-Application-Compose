@@ -1,13 +1,12 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create
 
-import com.tomtruyen.fitnessapplication.base.BaseViewModel
-import com.tomtruyen.fitnessapplication.base.SnackbarMessage
-import com.tomtruyen.fitnessapplication.data.entities.WorkoutSet
-import com.tomtruyen.fitnessapplication.model.FirebaseCallback
-import com.tomtruyen.fitnessapplication.networking.models.WorkoutExerciseResponse
-import com.tomtruyen.fitnessapplication.repositories.interfaces.SettingsRepository
-import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
-import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepository
+import com.tomtruyen.core.common.base.BaseViewModel
+import com.tomtruyen.core.common.base.SnackbarMessage
+import com.tomtruyen.data.firebase.models.FirebaseCallback
+import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
+import com.tomtruyen.data.repositories.interfaces.SettingsRepository
+import com.tomtruyen.data.repositories.interfaces.UserRepository
+import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseEvent
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -122,7 +121,7 @@ class CreateWorkoutViewModel(
                     exercise = action.exercise,
                     rest = it.settings.rest,
                     restEnabled = it.settings.restEnabled,
-                ).apply { sets = listOf(WorkoutSet(workoutExerciseId = this@apply.id)) }
+                ).apply { sets = listOf(com.tomtruyen.data.entities.WorkoutSet(workoutExerciseId = this@apply.id)) }
 
                 it.copy(
                     workout = it.workout.copy(

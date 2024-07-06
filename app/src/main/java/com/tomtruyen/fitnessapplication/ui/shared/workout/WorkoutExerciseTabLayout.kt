@@ -14,7 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.tomtruyen.fitnessapplication.networking.models.WorkoutExerciseResponse
+import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)

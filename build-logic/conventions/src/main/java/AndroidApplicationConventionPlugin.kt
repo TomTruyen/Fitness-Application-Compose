@@ -12,6 +12,9 @@ class AndroidApplicationConventionPlugin: Plugin<Project> {
             apply("com.android.application")
             apply("org.jetbrains.kotlin.android")
             apply("com.google.gms.google-services")
+            apply("com.google.devtools.ksp")
+            apply("org.jetbrains.kotlin.plugin.serialization")
+            apply("kotlin-parcelize")
         }
 
         extensions.configure<ApplicationExtension> {

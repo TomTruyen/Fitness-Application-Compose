@@ -1,14 +1,13 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.execute
 
-import com.tomtruyen.fitnessapplication.base.BaseViewModel
-import com.tomtruyen.fitnessapplication.base.SnackbarMessage
-import com.tomtruyen.fitnessapplication.model.FirebaseCallback
-import com.tomtruyen.fitnessapplication.networking.models.WorkoutHistoryResponse
-import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
-import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutHistoryRepository
-import com.tomtruyen.fitnessapplication.repositories.interfaces.WorkoutRepository
+import com.tomtruyen.core.common.base.BaseViewModel
+import com.tomtruyen.core.common.base.SnackbarMessage
+import com.tomtruyen.data.firebase.models.FirebaseCallback
+import com.tomtruyen.data.firebase.models.WorkoutHistoryResponse
+import com.tomtruyen.data.repositories.interfaces.UserRepository
+import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
+import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseEvent
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull

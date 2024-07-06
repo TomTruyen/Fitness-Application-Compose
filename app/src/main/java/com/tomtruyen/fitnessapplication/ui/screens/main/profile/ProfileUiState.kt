@@ -1,11 +1,10 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.profile
 
-import com.google.firebase.auth.FirebaseUser
-import com.tomtruyen.fitnessapplication.data.entities.Settings
+import com.tomtruyen.data.entities.Settings
 
 data class ProfileUiState(
-    val initialSettings: Settings? = null,
-    val settings: Settings = Settings(),
+    val initialSettings: com.tomtruyen.data.entities.Settings? = null,
+    val settings: com.tomtruyen.data.entities.Settings = com.tomtruyen.data.entities.Settings(),
 
     val loading: Boolean = false,
 )

@@ -44,7 +44,7 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.navigate
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.data.entities.WorkoutWithExercises
+import com.tomtruyen.data.entities.WorkoutWithExercises
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.CreateWorkoutScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.ExecuteWorkoutScreenDestination
 import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutDetailScreenDestination
@@ -148,7 +148,7 @@ fun WorkoutOverviewScreenLayout(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutListItem(
-    workoutWithExercises: WorkoutWithExercises,
+    workoutWithExercises: com.tomtruyen.data.entities.WorkoutWithExercises,
     onAction: (WorkoutOverviewUiAction) -> Unit,
     modifier: Modifier = Modifier
 ) {

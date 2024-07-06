@@ -17,11 +17,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.data.entities.Exercise
+import com.tomtruyen.data.entities.Exercise
 
 @Composable
 fun WorkoutExerciseSetHeader(
-    exercise: Exercise,
+    exercise: com.tomtruyen.data.entities.Exercise,
     hasMultipleSets: Boolean,
     isExecute: Boolean = false,
     unit: String
@@ -57,7 +57,7 @@ fun WorkoutExerciseSetHeader(
         }
 
         when(exercise.typeEnum) {
-            Exercise.ExerciseType.WEIGHT -> {
+            com.tomtruyen.data.entities.Exercise.ExerciseType.WEIGHT -> {
                 Text(
                     text = stringResource(id = R.string.reps).uppercase(),
                     textAlign = TextAlign.Center,
@@ -83,7 +83,7 @@ fun WorkoutExerciseSetHeader(
                 )
             }
 
-            Exercise.ExerciseType.TIME -> {
+            com.tomtruyen.data.entities.Exercise.ExerciseType.TIME -> {
                 Text(
                     text = stringResource(id = R.string.time).uppercase(),
                     textAlign = TextAlign.Center,

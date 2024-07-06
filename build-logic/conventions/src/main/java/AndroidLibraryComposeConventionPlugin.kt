@@ -11,6 +11,9 @@ class AndroidLibraryComposeConventionPlugin: Plugin<Project> {
         with(pluginManager) {
             apply("com.android.library")
             apply("org.jetbrains.kotlin.plugin.compose")
+            apply("com.google.devtools.ksp")
+            apply("org.jetbrains.kotlin.plugin.serialization")
+            apply("kotlin-parcelize")
         }
 
         configureAndroidCompose(extensions.getByType<LibraryExtension>())

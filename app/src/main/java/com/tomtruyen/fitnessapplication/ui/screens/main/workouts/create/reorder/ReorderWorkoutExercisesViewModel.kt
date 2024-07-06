@@ -1,7 +1,7 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.reorder
 
-import com.tomtruyen.fitnessapplication.base.BaseViewModel
-import com.tomtruyen.fitnessapplication.networking.models.WorkoutExerciseResponse
+import com.tomtruyen.core.common.base.BaseViewModel
+import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
 
 class ReorderWorkoutExercisesViewModel(
     exercises: List<WorkoutExerciseResponse>

@@ -1,12 +1,9 @@
 package com.tomtruyen.fitnessapplication.ui.shared.dialogs
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -16,8 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.data.entities.Exercise
-import com.tomtruyen.fitnessapplication.data.entities.Settings
+import com.tomtruyen.data.entities.Settings
 import com.tomtruyen.fitnessapplication.ui.shared.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.listitems.RadioListItem
 
@@ -41,7 +37,7 @@ fun UnitAlertDialog(
         },
         text = {
             Column {
-                Settings.UnitType.entries.forEach { unit ->
+                com.tomtruyen.data.entities.Settings.UnitType.entries.forEach { unit ->
                     RadioListItem(
                         title = unit.value,
                         selected = selectedUnit == unit.value,

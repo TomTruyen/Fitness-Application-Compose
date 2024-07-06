@@ -31,22 +31,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import com.tomtruyen.fitnessapplication.Dimens
 import com.tomtruyen.fitnessapplication.Dimens.MinButtonHeight
-import com.tomtruyen.fitnessapplication.data.entities.Exercise
-import com.tomtruyen.fitnessapplication.data.entities.WorkoutSet
-import com.tomtruyen.fitnessapplication.extensions.format
-import com.tomtruyen.fitnessapplication.model.RestAlertType
+import com.tomtruyen.core.common.extensions.format
 import com.tomtruyen.fitnessapplication.ui.shared.TextFields
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.RestAlertDialog
-import com.tomtruyen.fitnessapplication.utils.TimeUtils
+import com.tomtruyen.core.common.utils.TimeUtils
 
 @Composable
 fun WorkoutExerciseSet(
     modifier: Modifier = Modifier,
     exerciseIndex: Int,
     setIndex: Int,
-    set: WorkoutSet,
-    lastPerformedSet: WorkoutSet? = null,
-    type: Exercise.ExerciseType,
+    set: com.tomtruyen.data.entities.WorkoutSet,
+    lastPerformedSet: com.tomtruyen.data.entities.WorkoutSet? = null,
+    type: com.tomtruyen.data.entities.Exercise.ExerciseType,
     hasMultipleSets: Boolean = false,
     isExecute: Boolean = false,
     onEvent: (WorkoutExerciseEvent) -> Unit,
@@ -80,7 +77,7 @@ fun WorkoutExerciseSet(
                     "-"
                 } else {
                     when (type) {
-                        Exercise.ExerciseType.WEIGHT -> {
+                        com.tomtruyen.data.entities.Exercise.ExerciseType.WEIGHT -> {
                             val weight = lastPerformedSet.weight?.format()
 
                             if(lastPerformedSet.reps == null || weight == null) {
@@ -89,7 +86,7 @@ fun WorkoutExerciseSet(
                                 "${lastPerformedSet.reps}x${weight}"
                             }
                         }
-                        Exercise.ExerciseType.TIME -> {
+                        com.tomtruyen.data.entities.Exercise.ExerciseType.TIME -> {
                             if(lastPerformedSet.time == null) {
                                 "-"
                             } else {
@@ -108,7 +105,7 @@ fun WorkoutExerciseSet(
 
         when(type) {
             // Weight
-            Exercise.ExerciseType.WEIGHT -> {
+            com.tomtruyen.data.entities.Exercise.ExerciseType.WEIGHT -> {
                 TextFields.Default(
                     value = set.repsText.orEmpty(),
                     onValueChange = { reps ->
@@ -170,7 +167,7 @@ fun WorkoutExerciseSet(
             }
 
             // Time
-            Exercise.ExerciseType.TIME -> Text(
+            com.tomtruyen.data.entities.Exercise.ExerciseType.TIME -> Text(
                 text = TimeUtils.formatSeconds(set.time?.toLong() ?: 0L),
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -214,7 +211,7 @@ fun WorkoutExerciseSet(
                     timeDialogVisible = false
                 },
                 rest = set.time ?: 0,
-                type = RestAlertType.SET_TIME
+                type = com.tomtruyen.models.RestAlertType.SET_TIME
             )
         }
     }

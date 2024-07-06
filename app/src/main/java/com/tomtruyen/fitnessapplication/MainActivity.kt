@@ -23,8 +23,7 @@ import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.utils.currentDestinationAsState
 import com.ramcosta.composedestinations.utils.currentDestinationFlow
 import com.tomtruyen.fitnessapplication.extensions.navigateAndClearBackStack
-import com.tomtruyen.fitnessapplication.helpers.GlobalProvider
-import com.tomtruyen.fitnessapplication.repositories.interfaces.UserRepository
+import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.fitnessapplication.navigation.MainBottomNavigation
 import com.tomtruyen.fitnessapplication.navigation.NavArguments
 import com.tomtruyen.fitnessapplication.ui.screens.NavGraphs
@@ -35,6 +34,7 @@ import com.tomtruyen.fitnessapplication.ui.screens.destinations.WorkoutOverviewS
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutViewModel
 import com.tomtruyen.core.designsystem.theme.FitnessApplicationTheme
+import com.tomtruyen.models.Global
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.getViewModel
@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                     rootDefaultAnimations = RootNavGraphDefaultAnimations.ACCOMPANIST_FADING,
                 )
 
-                var isBottomBarVisible by getKoin().get<GlobalProvider>().isBottomBarVisible
+                var isBottomBarVisible by Global.isBottomBarVisible
 
                 val destination by navController.currentDestinationFlow.collectAsStateWithLifecycle(
                     initialValue = navController.currentDestinationAsState()
