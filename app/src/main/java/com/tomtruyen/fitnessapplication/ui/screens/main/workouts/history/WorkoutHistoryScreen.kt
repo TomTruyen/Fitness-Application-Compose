@@ -35,10 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.core.common.extensions.format
-import com.tomtruyen.fitnessapplication.ui.shared.toolbars.CollapsingToolbar
+import com.tomtruyen.core.ui.toolbars.CollapsingToolbar
 import com.tomtruyen.core.common.utils.TimeUtils
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel

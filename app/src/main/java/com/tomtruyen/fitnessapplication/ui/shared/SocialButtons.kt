@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.core.common.R as CommonR
 import com.tomtruyen.data.firebase.auth.GoogleSignInHelper

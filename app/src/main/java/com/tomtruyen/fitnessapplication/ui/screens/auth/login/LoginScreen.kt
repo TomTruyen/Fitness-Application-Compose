@@ -29,14 +29,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.navigation.NavController
 import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
-import com.tomtruyen.fitnessapplication.ui.shared.Buttons
+import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.SocialButtons
-import com.tomtruyen.fitnessapplication.ui.shared.TextDivider
-import com.tomtruyen.fitnessapplication.ui.shared.TextFields
+import com.tomtruyen.core.ui.TextDivider
+import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.designsystem.theme.BlueGrey
+import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.validation.errorMessage
 import com.tomtruyen.core.validation.isValid
 import com.tomtruyen.navigation.Screen
@@ -92,7 +92,7 @@ fun LoginScreenLayout(
     Scaffold(
         snackbarHost = snackbarHost
     ) {
-        BoxWithLoader(
+        LoadingContainer(
             loading = state.loading,
             modifier = Modifier.padding(it)
         ) {

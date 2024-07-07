@@ -84,6 +84,7 @@ tasks.withType<KotlinCompile> {
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
+    implementation(project(":core:ui"))
     implementation(project(":core:validation"))
 
     implementation(project(":data"))
@@ -97,10 +98,8 @@ dependencies {
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
 
+    // Navigation
     implementation(libs.androidx.navigation.compose)
-//     Navigation
-//    implementation(libs.raamcosta.compose.destinations)
-//    ksp(libs.raamcosta.compose.destinations.ksp)
 
     // Reorderable (Drag & Drop) Lazy Column
     implementation(libs.compose.reorderable)

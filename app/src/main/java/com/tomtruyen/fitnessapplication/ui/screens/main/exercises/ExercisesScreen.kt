@@ -39,14 +39,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.navigation.NavArguments
-import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
-import com.tomtruyen.fitnessapplication.ui.shared.toolbars.CollapsingToolbar
-import com.tomtruyen.fitnessapplication.ui.shared.ExerciseFilterChip
-import com.tomtruyen.fitnessapplication.ui.shared.listitems.ListItem
-import com.tomtruyen.fitnessapplication.ui.shared.toolbars.SearchToolbar
+import com.tomtruyen.core.ui.toolbars.CollapsingToolbar
+import com.tomtruyen.core.ui.Chip
+import com.tomtruyen.core.ui.LoadingContainer
+import com.tomtruyen.core.ui.listitems.ListItem
+import com.tomtruyen.core.ui.toolbars.SearchToolbar
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 
@@ -185,7 +185,7 @@ fun ExercisesScreenLayout(
         // nestedScroll modifier is required for the scroll behavior to work
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
-        BoxWithLoader(
+        LoadingContainer(
             loading = state.loading,
             modifier = Modifier.padding(it)
         ) {
@@ -200,7 +200,7 @@ fun ExercisesScreenLayout(
                         horizontalArrangement = Arrangement.spacedBy(Dimens.Small)
                     ) {
                         itemsIndexed(state.filter.categories + state.filter.equipment) { index, filter ->
-                            ExerciseFilterChip(
+                            Chip(
                                 modifier = Modifier.padding(start = if(index == 0) Dimens.Normal else 0.dp),
                                 text = filter,
                                 selected = true,

@@ -41,17 +41,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.core.common.utils.StopwatchTimer
-import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
-import com.tomtruyen.fitnessapplication.ui.shared.Buttons
-import com.tomtruyen.fitnessapplication.ui.shared.TextFields
+import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.LoadingContainer
+import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseSet
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseSetHeader
-import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
+import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseEvent
-import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseTabLayout
+import com.tomtruyen.core.ui.TabLayout
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -159,7 +159,7 @@ fun ExecuteWorkoutScreenLayout(
             }
         }
     ) {
-        BoxWithLoader(
+        LoadingContainer(
             loading = state.loading,
             modifier = Modifier
                 .padding(it)
@@ -169,8 +169,8 @@ fun ExecuteWorkoutScreenLayout(
                 modifier = Modifier.fillMaxSize()
             ) {
                 AnimatedVisibility(visible = state.workout.exercises.isNotEmpty()) {
-                    WorkoutExerciseTabLayout(
-                        exercises = state.workout.exercises,
+                    TabLayout(
+                        items = state.workout.exercises.map { it.exercise.displayName },
                         state = pagerState
                     )
                 }

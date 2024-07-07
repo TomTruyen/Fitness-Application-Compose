@@ -23,14 +23,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
-import com.tomtruyen.fitnessapplication.ui.shared.Buttons
-import com.tomtruyen.fitnessapplication.ui.shared.dialogs.ConfirmationDialog
-import com.tomtruyen.fitnessapplication.ui.shared.Dropdown
-import com.tomtruyen.fitnessapplication.ui.shared.TextFields
-import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
+import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
+import com.tomtruyen.core.ui.Dropdown
+import com.tomtruyen.core.ui.LoadingContainer
+import com.tomtruyen.core.ui.TextFields
+import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.validation.errorMessage
 import com.tomtruyen.core.validation.isValid
 import kotlinx.coroutines.flow.collectLatest
@@ -108,7 +108,7 @@ fun CreateExerciseScreenLayout(
             )
         }
     ) {
-        BoxWithLoader(
+        LoadingContainer(
             loading = state.loading,
             modifier = Modifier.padding(it)
         ) {

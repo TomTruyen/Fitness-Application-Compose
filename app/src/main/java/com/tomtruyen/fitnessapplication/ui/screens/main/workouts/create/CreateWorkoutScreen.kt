@@ -55,23 +55,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.navigation.NavArguments
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseEvent
-import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
-import com.tomtruyen.fitnessapplication.ui.shared.Buttons
-import com.tomtruyen.fitnessapplication.ui.shared.EmptyState
-import com.tomtruyen.fitnessapplication.ui.shared.TextFields
-import com.tomtruyen.fitnessapplication.ui.shared.dialogs.ConfirmationDialog
+import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.EmptyState
+import com.tomtruyen.core.ui.TextFields
+import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.RestAlertDialog
-import com.tomtruyen.fitnessapplication.ui.shared.dialogs.TextFieldDialog
-import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
+import com.tomtruyen.core.ui.dialogs.TextFieldDialog
+import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseSet
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseSetHeader
-import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseTabLayout
+import com.tomtruyen.core.ui.TabLayout
 import com.tomtruyen.core.common.utils.TimeUtils
+import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 
@@ -194,7 +194,7 @@ fun CreateWorkoutScreenLayout(
             }
         }
     ) {
-        BoxWithLoader(
+        LoadingContainer(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize(),
@@ -204,8 +204,8 @@ fun CreateWorkoutScreenLayout(
                 modifier = Modifier.fillMaxSize()
             ) {
                 AnimatedVisibility(visible = state.workout.exercises.isNotEmpty()) {
-                    WorkoutExerciseTabLayout(
-                        exercises = state.workout.exercises,
+                    TabLayout(
+                        items = state.workout.exercises.map { it.exercise.displayName },
                         state = pagerState
                     )
                 }
@@ -239,6 +239,7 @@ fun CreateWorkoutScreenLayout(
                     TextFieldDialog(
                         title = R.string.title_workout_name,
                         message = R.string.message_workout_name,
+                        placeholder = R.string.title_workout_name,
                         onConfirm = { name ->
                             onAction(CreateWorkoutUiAction.Save(name))
                             workoutNameDialogVisible = false

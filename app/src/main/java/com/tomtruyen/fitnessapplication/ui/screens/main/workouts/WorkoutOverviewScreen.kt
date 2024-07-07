@@ -1,6 +1,5 @@
 package com.tomtruyen.fitnessapplication.ui.screens.main.workouts
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Column
@@ -32,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -40,11 +38,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
-import com.tomtruyen.fitnessapplication.ui.shared.Buttons
-import com.tomtruyen.fitnessapplication.ui.shared.toolbars.CollapsingToolbar
+import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.LoadingContainer
+import com.tomtruyen.core.ui.toolbars.CollapsingToolbar
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -115,7 +113,7 @@ fun WorkoutOverviewScreenLayout(
         // nestedScroll modifier is required for the scroll behavior to work
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
-        BoxWithLoader(
+        LoadingContainer(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize(),

@@ -32,17 +32,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.fitnessapplication.BuildConfig
-import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
-import com.tomtruyen.fitnessapplication.ui.shared.Buttons
+import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.RestAlertDialog
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.UnitAlertDialog
-import com.tomtruyen.fitnessapplication.ui.shared.toolbars.CollapsingToolbar
-import com.tomtruyen.fitnessapplication.ui.shared.listitems.ListItem
-import com.tomtruyen.fitnessapplication.ui.shared.listitems.SwitchListItem
+import com.tomtruyen.core.ui.toolbars.CollapsingToolbar
+import com.tomtruyen.core.ui.listitems.ListItem
+import com.tomtruyen.core.ui.listitems.SwitchListItem
 import com.tomtruyen.core.common.utils.EmailUtils
 import com.tomtruyen.core.common.utils.TimeUtils
+import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -109,7 +109,7 @@ fun ProfileScreenLayout(
         // nestedScroll modifier is required for the scroll behavior to work
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
-        BoxWithLoader(
+        LoadingContainer(
             loading = state.loading,
             modifier = Modifier
                 .padding(it)

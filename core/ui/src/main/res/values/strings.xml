@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="content_description_hide_password">Hide password</string>
+    <string name="content_description_show_password">Show password</string>
+    <string name="content_description_back">Back</string>
+    <string name="search">Search</string>
+    <string name="content_description_clear">Clear</string>
+</resources>

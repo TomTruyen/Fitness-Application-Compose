@@ -25,15 +25,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiEvent
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiAction
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesUiState
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesViewModel
-import com.tomtruyen.fitnessapplication.ui.shared.Buttons
-import com.tomtruyen.fitnessapplication.ui.shared.ExerciseFilterChip
-import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
+import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.Chip
+import com.tomtruyen.core.ui.toolbars.Toolbar
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -108,7 +108,7 @@ fun ExercisesFilterScreenLayout(
                 horizontalArrangement = Arrangement.spacedBy(Dimens.Small)
             ) {
                 state.categories.forEach { category ->
-                    ExerciseFilterChip(category, state.filter.categories.contains(category)) {
+                    Chip(category, state.filter.categories.contains(category)) {
                         onAction(ExercisesUiAction.OnCategoryFilterChanged(category))
                     }
                 }
@@ -128,7 +128,7 @@ fun ExercisesFilterScreenLayout(
                 horizontalArrangement = Arrangement.spacedBy(Dimens.Small)
             ) {
                 state.equipment.forEach { equipment ->
-                    ExerciseFilterChip(equipment, state.filter.equipment.contains(equipment)) {
+                    Chip(equipment, state.filter.equipment.contains(equipment)) {
                         onAction(ExercisesUiAction.OnEquipmentFilterChanged(equipment))
                     }
                 }

@@ -13,9 +13,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.data.entities.Settings
-import com.tomtruyen.fitnessapplication.ui.shared.Buttons
-import com.tomtruyen.fitnessapplication.ui.shared.listitems.RadioListItem
+import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.listitems.RadioListItem
 
 @Composable
 fun UnitAlertDialog(

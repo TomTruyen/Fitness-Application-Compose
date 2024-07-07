@@ -16,12 +16,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.models.RestAlertType
-import com.tomtruyen.fitnessapplication.ui.shared.Buttons
-import com.tomtruyen.fitnessapplication.ui.shared.numberpickers.NumberPicker
-import com.tomtruyen.fitnessapplication.ui.shared.listitems.SwitchListItem
+import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.NumberPicker
+import com.tomtruyen.core.ui.listitems.SwitchListItem
 import com.tomtruyen.fitnessapplication.ui.shared.numberpickers.MinutesAndSecondsPicker
 import java.util.concurrent.TimeUnit
 

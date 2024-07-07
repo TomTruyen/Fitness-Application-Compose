@@ -29,10 +29,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import com.tomtruyen.fitnessapplication.Dimens
-import com.tomtruyen.fitnessapplication.Dimens.MinButtonHeight
+import com.tomtruyen.core.designsystem.Dimens
+import com.tomtruyen.core.designsystem.Dimens.MinButtonHeight
 import com.tomtruyen.core.common.extensions.format
-import com.tomtruyen.fitnessapplication.ui.shared.TextFields
+import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.fitnessapplication.ui.shared.dialogs.RestAlertDialog
 import com.tomtruyen.core.common.utils.TimeUtils
 

@@ -27,12 +27,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
-import com.tomtruyen.fitnessapplication.ui.shared.Buttons
-import com.tomtruyen.fitnessapplication.ui.shared.TextFields
+import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.designsystem.theme.BlueGrey
+import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.validation.errorMessage
 import com.tomtruyen.core.validation.isValid
 import com.tomtruyen.navigation.Screen
@@ -89,7 +89,7 @@ fun RegisterScreenLayout(
     Scaffold(
         snackbarHost = snackbarHost
     ) {
-        BoxWithLoader(
+        LoadingContainer(
             loading = state.loading,
             modifier = Modifier.padding(it)
         ) {

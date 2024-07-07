@@ -34,6 +34,7 @@ object BottomNavigation {
         ),
     )
 }
+
 data class BottomNavigationItem(
     @StringRes val label: Int,
     val icon: ImageVector,

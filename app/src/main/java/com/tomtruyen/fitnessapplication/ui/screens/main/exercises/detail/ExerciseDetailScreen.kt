@@ -35,12 +35,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.tomtruyen.fitnessapplication.Dimens
+import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.fitnessapplication.R
-import com.tomtruyen.fitnessapplication.ui.shared.BoxWithLoader
-import com.tomtruyen.fitnessapplication.ui.shared.dialogs.ConfirmationDialog
-import com.tomtruyen.fitnessapplication.ui.shared.ExerciseFilterChip
-import com.tomtruyen.fitnessapplication.ui.shared.toolbars.Toolbar
+import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
+import com.tomtruyen.core.ui.Chip
+import com.tomtruyen.core.ui.LoadingContainer
+import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -117,7 +117,7 @@ fun ExerciseDetailScreenLayout(
             }
         }
     ) {
-        BoxWithLoader(
+        LoadingContainer(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize(),
@@ -152,7 +152,7 @@ fun ExerciseDetailScreenLayout(
                                 state.exercise?.type
                             ).filter { !it.isNullOrBlank() }
                         ) { index, filter ->
-                            ExerciseFilterChip(
+                            Chip(
                                 modifier = Modifier.padding(start = if (index == 0) Dimens.Normal else 0.dp),
                                 text = filter?.lowercase()?.replaceFirstChar { it.uppercase() }.orEmpty(),
                                 selected = true,
