@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.ui.screens.main.profile
+package com.tomtruyen.feature.profile
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,21 +31,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.tomtruyen.fitnessapplication.BuildConfig
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.core.ui.Buttons
-import com.tomtruyen.fitnessapplication.ui.shared.dialogs.RestAlertDialog
-import com.tomtruyen.fitnessapplication.ui.shared.dialogs.UnitAlertDialog
 import com.tomtruyen.core.ui.toolbars.CollapsingToolbar
 import com.tomtruyen.core.ui.listitems.ListItem
 import com.tomtruyen.core.ui.listitems.SwitchListItem
 import com.tomtruyen.core.common.utils.EmailUtils
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.ui.LoadingContainer
+import com.tomtruyen.core.ui.dialogs.RestAlertDialog
+import com.tomtruyen.core.ui.dialogs.UnitAlertDialog
+import com.tomtruyen.data.entities.Settings
+import com.tomtruyen.models.providers.BuildConfigFieldProvider
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @Composable
 fun ProfileScreen(
@@ -90,6 +91,8 @@ fun ProfileScreenLayout(
 ) {
     val context = LocalContext.current
 
+    val buildConfigFieldProvider = koinInject<BuildConfigFieldProvider>()
+
     var unitDialogVisible by remember { mutableStateOf(false) }
     var restDialogVisible by remember { mutableStateOf(false) }
 
@@ -101,7 +104,7 @@ fun ProfileScreenLayout(
         snackbarHost = snackbarHost,
         topBar = {
             CollapsingToolbar(
-                title = stringResource(id = R.string.profile),
+                title = stringResource(id = R.string.title_profile),
                 navController =  navController,
                 scrollBehavior = scrollBehavior
             )
@@ -121,7 +124,7 @@ fun ProfileScreenLayout(
                     .verticalScroll(rememberScrollState())
             ) {
                 Text(
-                    text = stringResource(id = R.string.units),
+                    text = stringResource(id = R.string.label_units),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.W500
                     ),
@@ -131,7 +134,7 @@ fun ProfileScreenLayout(
                 )
 
                 ListItem(
-                    title = stringResource(id = R.string.weight_unit),
+                    title = stringResource(id = R.string.label_weight_unit),
                     message = state.settings.unit,
                 ) {
                     unitDialogVisible = true
@@ -140,7 +143,7 @@ fun ProfileScreenLayout(
                 HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
 
                 Text(
-                    text = stringResource(id = R.string.rest_timer),
+                    text = stringResource(id = R.string.label_rest_timer),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.W500
                     ),
@@ -150,21 +153,21 @@ fun ProfileScreenLayout(
                 )
 
                 ListItem(
-                    title = stringResource(id = R.string.default_rest_timer),
+                    title = stringResource(id = R.string.label_default_rest_timer),
                     message = TimeUtils.formatSeconds(state.settings.rest.toLong()),
                 ) {
                     restDialogVisible = true
                 }
 
                 SwitchListItem(
-                    title = stringResource(id = R.string.rest_timer_enabled),
+                    title = stringResource(id = R.string.label_rest_timer_enabled),
                     checked = state.settings.restEnabled
                 ) {
                     onAction(ProfileUiAction.RestEnabledChanged(it))
                 }
 
                 SwitchListItem(
-                    title = stringResource(id = R.string.vibrate_upon_finish),
+                    title = stringResource(id = R.string.label_vibrate_upon_finish),
                     checked = state.settings.restVibrationEnabled
                 ) {
                     onAction(ProfileUiAction.RestVibrationEnabledChanged(it))
@@ -173,7 +176,7 @@ fun ProfileScreenLayout(
                 HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
 
                 Text(
-                    text = stringResource(id = R.string.contact_and_support),
+                    text = stringResource(id = R.string.label_contact_and_support),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.W500
                     ),
@@ -183,11 +186,11 @@ fun ProfileScreenLayout(
                 )
 
                 ListItem(
-                    title = stringResource(id = R.string.report_an_issue),
-                    message = stringResource(id = R.string.message_report_an_issue),
+                    title = stringResource(id = R.string.label_report_an_issue),
+                    message = stringResource(id = R.string.label_message_report_an_issue),
                 ) {
                     emailLauncher.launch(
-                        EmailUtils.getEmailIntent(context, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
+                        EmailUtils.getEmailIntent(context)
                     )
                 }
 
@@ -196,7 +199,7 @@ fun ProfileScreenLayout(
                 Spacer(modifier = Modifier.weight(1f))
 
                 Buttons.Default(
-                    text = stringResource(id = R.string.logout),
+                    text = stringResource(id = R.string.button_logout),
                     onClick = { onAction(ProfileUiAction.Logout) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -207,9 +210,9 @@ fun ProfileScreenLayout(
 
                 Text(
                     text = stringResource(
-                        id = R.string.version_and_build,
-                        BuildConfig.VERSION_NAME,
-                        BuildConfig.VERSION_CODE
+                        id = R.string.label_version_and_build,
+                        buildConfigFieldProvider.versionName,
+                        buildConfigFieldProvider.versionCode
                     ),
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
@@ -223,6 +226,7 @@ fun ProfileScreenLayout(
 
             if(unitDialogVisible) {
                 UnitAlertDialog(
+                    units = Settings.UnitType.entries.map { it.value },
                     onDismiss = {
                         unitDialogVisible = false
                     },

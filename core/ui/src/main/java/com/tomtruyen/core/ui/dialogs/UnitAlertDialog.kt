@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.ui.shared.dialogs
+package com.tomtruyen.core.ui.dialogs
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.AlertDialog
@@ -12,12 +12,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.R
 import com.tomtruyen.core.ui.listitems.RadioListItem
 
 @Composable
 fun UnitAlertDialog(
+    units: List<String>,
     onConfirm: (String) -> Unit,
     onDismiss: () -> Unit,
     unit: String,
@@ -28,7 +29,7 @@ fun UnitAlertDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = stringResource(id = R.string.weight_unit),
+                text = stringResource(id = R.string.label_weight_unit),
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.W500
                 )
@@ -36,12 +37,12 @@ fun UnitAlertDialog(
         },
         text = {
             Column {
-                com.tomtruyen.data.entities.Settings.UnitType.entries.forEach { unit ->
+                units.forEach { unit ->
                     RadioListItem(
-                        title = unit.value,
-                        selected = selectedUnit == unit.value,
+                        title = unit,
+                        selected = selectedUnit == unit,
                         onCheckedChange = {
-                            selectedUnit = unit.value
+                            selectedUnit = unit
                         }
                     )
                 }

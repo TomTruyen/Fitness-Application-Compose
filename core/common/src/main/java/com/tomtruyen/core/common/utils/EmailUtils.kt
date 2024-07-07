@@ -4,13 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.tomtruyen.core.common.R
+import com.tomtruyen.models.providers.BuildConfigFieldProvider
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-object EmailUtils {
-    private fun getDeviceInfo(
-        context: Context,
-        versionName: String,
-        versionCode: Int
-    ): String {
+object EmailUtils: KoinComponent {
+    private val buildConfigFieldProvider: BuildConfigFieldProvider by inject()
+
+    private fun getDeviceInfo(context: Context): String {
         val screenWidth = context.resources.displayMetrics.widthPixels
         val screenHeight = context.resources.displayMetrics.heightPixels
         val deviceModel = android.os.Build.MODEL
@@ -26,19 +27,15 @@ object EmailUtils {
         Android Version: $androidVersion (API $androidSDKVersion)
         Screen Width: $screenWidth px
         Screen Height: $screenHeight px
-        App Version: $versionName ($versionCode)
+        App Version: ${buildConfigFieldProvider.versionName} (${buildConfigFieldProvider.versionCode})
         --------------------
     """.trimIndent()
     }
 
-    fun getEmailIntent(
-        context: Context,
-        versionName: String,
-        versionCode: Int
-    ): Intent {
-        val subject = context.getString(R.string.support_email_subject, versionName)
+    fun getEmailIntent(context: Context): Intent {
+        val subject = context.getString(R.string.support_email_subject, buildConfigFieldProvider.versionName)
         val recipient = "tom.truyen@gmail.com"
-        val deviceInfo = getDeviceInfo(context, versionName, versionCode)
+        val deviceInfo = getDeviceInfo(context)
 
         val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("mailto:")

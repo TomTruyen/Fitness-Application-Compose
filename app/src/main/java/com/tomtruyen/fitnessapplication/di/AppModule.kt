@@ -4,7 +4,9 @@ import com.tomtruyen.feature.auth.login.LoginViewModel
 import com.tomtruyen.feature.auth.register.RegisterViewModel
 import com.tomtruyen.fitnessapplication.BuildConfig
 import com.tomtruyen.fitnessapplication.providers.CredentialProviderImpl
-import com.tomtruyen.fitnessapplication.ui.screens.main.profile.ProfileViewModel
+import com.tomtruyen.feature.profile.ProfileViewModel
+import com.tomtruyen.fitnessapplication.providers.BuildConfigFieldProviderImpl
+import com.tomtruyen.fitnessapplication.providers.KoinReloadProviderImpl
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.WorkoutOverviewViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.reorder.ReorderWorkoutExercisesViewModel
@@ -14,7 +16,9 @@ import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create.CreateE
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.detail.WorkoutDetailViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.execute.ExecuteWorkoutViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.history.WorkoutHistoryViewModel
+import com.tomtruyen.models.providers.BuildConfigFieldProvider
 import com.tomtruyen.models.providers.CredentialProvider
+import com.tomtruyen.models.providers.KoinReloadProvider
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
@@ -24,6 +28,17 @@ val appModule = module {
         CredentialProviderImpl(
             googleServerClientId = BuildConfig.GOOGLE_SERVER_CLIENT_ID
         )
+    }
+
+    single<BuildConfigFieldProvider> {
+        BuildConfigFieldProviderImpl(
+            versionName = BuildConfig.VERSION_NAME,
+            versionCode = BuildConfig.VERSION_CODE
+        )
+    }
+
+    single<KoinReloadProvider> {
+        KoinReloadProviderImpl()
     }
 
     // ViewModels

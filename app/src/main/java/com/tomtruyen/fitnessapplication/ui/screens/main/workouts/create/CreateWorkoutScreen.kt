@@ -64,7 +64,7 @@ import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.EmptyState
 import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
-import com.tomtruyen.fitnessapplication.ui.shared.dialogs.RestAlertDialog
+import com.tomtruyen.core.ui.dialogs.RestAlertDialog
 import com.tomtruyen.core.ui.dialogs.TextFieldDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.fitnessapplication.ui.shared.workout.WorkoutExerciseSet

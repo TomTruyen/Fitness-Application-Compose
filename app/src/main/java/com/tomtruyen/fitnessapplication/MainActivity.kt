@@ -28,7 +28,7 @@ import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesViewM
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create.CreateExerciseScreen
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.detail.ExerciseDetailScreen
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.filter.ExercisesFilterScreen
-import com.tomtruyen.fitnessapplication.ui.screens.main.profile.ProfileScreen
+import com.tomtruyen.feature.profile.ProfileScreen
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.WorkoutOverviewScreen
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutScreen
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutViewModel
@@ -108,7 +108,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable<Screen.Profile> {
-                            ProfileScreen(navController)
+                            com.tomtruyen.feature.profile.ProfileScreen(navController)
                         }
 
                         navigation<Screen.Workout.Graph>(

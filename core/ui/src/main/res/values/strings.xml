@@ -3,6 +3,11 @@
     <string name="content_description_hide_password">Hide password</string>
     <string name="content_description_show_password">Show password</string>
     <string name="content_description_back">Back</string>
-    <string name="search">Search</string>
     <string name="content_description_clear">Clear</string>
+
+    <string name="label_weight_unit">Weight unit</string>
+
+    <string name="search">Search</string>
+    <string name="title_rest_timer">Rest timer</string>
+    <string name="label_rest_timer_enabled">Rest timer enabled</string>
 </resources>

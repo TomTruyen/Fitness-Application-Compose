@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.ui.shared.numberpickers
+package com.tomtruyen.core.ui
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.material3.LocalTextStyle
@@ -11,10 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import com.tomtruyen.core.ui.NumberPicker
 import kotlin.math.abs
 @Composable
-fun MinutesAndSecondsPicker(
+fun RestTimePicker(
     modifier: Modifier = Modifier,
     value: Int,
     leadingZero: Boolean = true,

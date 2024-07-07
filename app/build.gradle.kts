@@ -94,6 +94,8 @@ dependencies {
     implementation(project(":feature:auth:login"))
     implementation(project(":feature:auth:register"))
 
+    implementation(project(":feature:profile"))
+
     // Auth
     implementation(libs.google.play.services.auth)
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_profile">Profile</string>
+
+    <string name="label_version_and_build">Version: %s - Build: %d</string>
+    <string name="label_report_an_issue">Report an issue</string>
+    <string name="label_message_report_an_issue">Found a problem? Send us the detail</string>
+    <string name="label_contact_and_support">Contact and support</string>
+    <string name="label_vibrate_upon_finish">Vibrate upon finish</string>
+    <string name="label_rest_timer_enabled">Rest timer enabled</string>
+    <string name="label_default_rest_timer">Default rest time</string>
+    <string name="label_rest_timer">Rest timer</string>
+    <string name="label_weight_unit">Weight unit</string>
+    <string name="label_units">Units</string>
+
+    <string name="button_logout">Logout</string>
+
+    <string name="alert_settings_saved">Settings saved</string>
+</resources>

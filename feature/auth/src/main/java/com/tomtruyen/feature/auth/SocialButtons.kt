@@ -27,8 +27,6 @@ import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.common.R as CommonR
 import com.tomtruyen.data.firebase.auth.GoogleSignInHelper
 import com.tomtruyen.core.designsystem.theme.LavenderMist
-import com.tomtruyen.models.providers.CredentialProvider
-import org.koin.compose.koinInject
 
 object SocialButtons {
     @Composable
@@ -43,10 +41,8 @@ object SocialButtons {
     ) {
         val context = LocalContext.current
 
-        val credentialProvider = koinInject<CredentialProvider>()
-
         val client = remember { GoogleSignInHelper.getGoogleSignInClient(context) }
-        val request = remember { GoogleSignInHelper.getGoogleSignInRequest(credentialProvider.googleServerClientId) }
+        val request = remember { GoogleSignInHelper.getGoogleSignInRequest() }
 
         val signInResultLauncher = rememberLauncherForActivityResult(
             ActivityResultContracts.StartIntentSenderForResult()

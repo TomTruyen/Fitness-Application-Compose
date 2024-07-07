@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.ui.shared.dialogs
+package com.tomtruyen.core.ui.dialogs
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,11 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.NumberPicker
+import com.tomtruyen.core.ui.R
+import com.tomtruyen.core.ui.RestTimePicker
 import com.tomtruyen.core.ui.listitems.SwitchListItem
-import com.tomtruyen.fitnessapplication.ui.shared.numberpickers.MinutesAndSecondsPicker
+import com.tomtruyen.models.RestAlertType
 import java.util.concurrent.TimeUnit
 
 @Composable
@@ -30,7 +31,7 @@ fun RestAlertDialog(
     onDismiss: () -> Unit,
     rest: Int,
     restEnabled: Boolean? = null,
-    type: com.tomtruyen.models.RestAlertType = com.tomtruyen.models.RestAlertType.REST_TIME
+    type: RestAlertType = RestAlertType.REST_TIME
 ) {
     var selectedRestValue by remember { mutableIntStateOf(rest) }
     var selectedRestEnabled by remember { mutableStateOf(restEnabled) }
@@ -39,7 +40,7 @@ fun RestAlertDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = stringResource(id = R.string.rest_timer),
+                text = stringResource(id = R.string.title_rest_timer),
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.W500
                 )
@@ -51,7 +52,7 @@ fun RestAlertDialog(
             ) {
                 if(restEnabled != null) {
                     SwitchListItem(
-                        title = stringResource(id = R.string.rest_timer_enabled),
+                        title = stringResource(id = R.string.label_rest_timer_enabled),
                         checked = selectedRestEnabled ?: false,
                     ) {
                         selectedRestEnabled = it
@@ -59,7 +60,7 @@ fun RestAlertDialog(
                 }
 
                 when(type) {
-                    com.tomtruyen.models.RestAlertType.REST_TIME -> RestTimeLayout(
+                    RestAlertType.REST_TIME -> RestTimeLayout(
                         value = selectedRestValue,
                         onValueChange = { rest ->
                             if(selectedRestEnabled == false) return@RestTimeLayout
@@ -68,7 +69,7 @@ fun RestAlertDialog(
                         enabled = selectedRestEnabled ?: true
                     )
 
-                    com.tomtruyen.models.RestAlertType.SET_TIME -> SetTimeLayout(
+                    RestAlertType.SET_TIME -> SetTimeLayout(
                         value = selectedRestValue,
                         onValueChange = { rest ->
                             if(selectedRestEnabled == false) return@SetTimeLayout
@@ -127,7 +128,7 @@ fun SetTimeLayout(
     value: Int,
     onValueChange: (Int) -> Unit,
 ) {
-    MinutesAndSecondsPicker(
+    RestTimePicker(
         modifier = Modifier.fillMaxWidth(),
         value = value,
         onValueChange = onValueChange,

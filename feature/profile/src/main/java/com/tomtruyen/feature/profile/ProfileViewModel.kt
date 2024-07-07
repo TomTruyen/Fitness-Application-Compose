@@ -1,25 +1,22 @@
-package com.tomtruyen.fitnessapplication.ui.screens.main.profile
+package com.tomtruyen.feature.profile
 
 import android.content.Context
-import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.base.SnackbarMessage
 import com.tomtruyen.data.entities.Settings
 import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
-import com.tomtruyen.fitnessapplication.App
-import com.tomtruyen.fitnessapplication.di.appModule
+import com.tomtruyen.models.providers.KoinReloadProvider
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import org.koin.core.context.loadKoinModules
-import org.koin.core.context.unloadKoinModules
 
 class ProfileViewModel(
     private val userRepository: UserRepository,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val koinReloadProvider: KoinReloadProvider,
 ): BaseViewModel<ProfileUiState, ProfileUiAction, ProfileUiEvent>(
     initialState = ProfileUiState()
 ) {
@@ -82,7 +79,7 @@ class ProfileViewModel(
             callback = object: FirebaseCallback<Settings> {
                 override fun onSuccess(value: Settings) {
                     showSnackbar(
-                        SnackbarMessage.Success(context.getString(R.string.settings_saved))
+                        SnackbarMessage.Success(context.getString(R.string.alert_settings_saved))
                     )
                 }
 
@@ -100,7 +97,7 @@ class ProfileViewModel(
     private fun logout() {
         userRepository.logout()
 
-        App.reloadKoinModules()
+        koinReloadProvider.reload()
 
         triggerEvent(ProfileUiEvent.Logout)
     }

@@ -33,8 +33,9 @@ import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.Dimens.MinButtonHeight
 import com.tomtruyen.core.common.extensions.format
 import com.tomtruyen.core.ui.TextFields
-import com.tomtruyen.fitnessapplication.ui.shared.dialogs.RestAlertDialog
+import com.tomtruyen.core.ui.dialogs.RestAlertDialog
 import com.tomtruyen.core.common.utils.TimeUtils
+import com.tomtruyen.models.RestAlertType
 
 @Composable
 fun WorkoutExerciseSet(
@@ -211,7 +212,7 @@ fun WorkoutExerciseSet(
                     timeDialogVisible = false
                 },
                 rest = set.time ?: 0,
-                type = com.tomtruyen.models.RestAlertType.SET_TIME
+                type = RestAlertType.SET_TIME
             )
         }
     }

@@ -11,6 +11,7 @@ internal fun Project.configureKoin(
         dependencies {
             add("implementation", libs.findLibrary("insert.koin.compose").get())
             add("implementation", libs.findLibrary("insert.koin.compose.navigation").get())
+            add("implementation", libs.findLibrary("insert.koin.core").get())
         }
     }
 }
