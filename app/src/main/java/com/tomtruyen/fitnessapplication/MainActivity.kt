@@ -23,19 +23,19 @@ import com.tomtruyen.fitnessapplication.navigation.MainBottomNavigation
 import com.tomtruyen.core.designsystem.theme.FitnessApplicationTheme
 import com.tomtruyen.feature.auth.login.LoginScreen
 import com.tomtruyen.feature.auth.register.RegisterScreen
-import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesScreen
-import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesViewModel
-import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create.CreateExerciseScreen
-import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.detail.ExerciseDetailScreen
-import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.filter.ExercisesFilterScreen
+import com.tomtruyen.feature.exercises.ExercisesScreen
+import com.tomtruyen.feature.exercises.ExercisesViewModel
+import com.tomtruyen.feature.exercises.create.CreateExerciseScreen
+import com.tomtruyen.feature.exercises.detail.ExerciseDetailScreen
+import com.tomtruyen.feature.exercises.filter.ExercisesFilterScreen
 import com.tomtruyen.feature.profile.ProfileScreen
-import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.WorkoutOverviewScreen
-import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutScreen
-import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutViewModel
-import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.reorder.ReorderWorkoutExercisesScreen
-import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.detail.WorkoutDetailScreen
-import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.execute.ExecuteWorkoutScreen
-import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.history.WorkoutHistoryScreen
+import com.tomtruyen.feature.workouts.WorkoutsScreen
+import com.tomtruyen.feature.workouts.create.CreateWorkoutScreen
+import com.tomtruyen.feature.workouts.create.CreateWorkoutViewModel
+import com.tomtruyen.feature.workouts.create.reorder.ReorderWorkoutExercisesScreen
+import com.tomtruyen.feature.workouts.detail.WorkoutDetailScreen
+import com.tomtruyen.feature.workouts.execute.ExecuteWorkoutScreen
+import com.tomtruyen.feature.workouts.history.WorkoutHistoryScreen
 import com.tomtruyen.models.Global
 import com.tomtruyen.navigation.Screen
 import org.koin.android.ext.android.inject
@@ -108,14 +108,14 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable<Screen.Profile> {
-                            com.tomtruyen.feature.profile.ProfileScreen(navController)
+                            ProfileScreen(navController)
                         }
 
                         navigation<Screen.Workout.Graph>(
                             startDestination = Screen.Workout.Overview
                         ) {
                             composable<Screen.Workout.Overview> {
-                                WorkoutOverviewScreen(navController)
+                                WorkoutsScreen(navController)
                             }
 
                             composable<Screen.Workout.Detail> { backStackEntry ->
@@ -154,7 +154,9 @@ class MainActivity : ComponentActivity() {
                             }
 
                             composable<Screen.Workout.HistoryOverview> {
-                                WorkoutHistoryScreen(navController)
+                                WorkoutHistoryScreen(
+                                    navController
+                                )
                             }
 
                             composable<Screen.Workout.ReorderExercises> {

@@ -4,10 +4,17 @@
     <string name="placeholder_email">Email</string>
     <string name="placeholder_password">Password</string>
     <string name="placeholder_password_repeat">Repeat password</string>
-
+    <string name="placeholder_name">Name</string>
+    <string name="placeholder_category">Category</string>
+    <string name="placeholder_equipment">Equipment</string>
+    <string name="placeholder_type">Type</string>
 
     <!-- Labels -->
     <string name="label_or">Or</string>
+
+    <!-- Alerts -->
+    <string name="title_unsaved_changes">Unsaved changes</string>
+    <string name="message_unsaved_changes">Are you sure you want to leave? All unsaved changes will be lost.</string>
 
     <!-- Errors -->
     <string name="error_weak_password">Password is too weak</string>
@@ -18,4 +25,15 @@
     <string name="error_passwords_match">Passwords don\'t match</string>
     <string name="error_google_sign_in_failed">Google sign in failed</string>
     <string name="support_email_subject">Support Request (%s)</string>
+
+    <!-- Buttons -->
+    <string name="button_save">Save</string>
+    <string name="button_discard">Discard</string>
+    <string name="button_delete">Delete</string>
+    <string name="button_clear">Clear</string>
+    <string name="button_apply">Apply</string>
+
+    <!-- Content Descriptions -->
+    <string name="content_description_edit">Edit</string>
+    <string name="content_description_delete">Delete</string>
 </resources>

@@ -1,76 +1,9 @@
 <resources>
     <string name="app_name">Fitness Application</string>
 
-    <!-- Content Descriptions -->
-    <string name="content_description_filter">Filter</string>
-    <string name="content_description_search">Search</string>
-    <string name="content_description_create_exercise">Create exercise</string>
-    <string name="content_description_edit">Edit</string>
-    <string name="content_description_delete">Delete</string>
-    <string name="content_description_reorder_exercises">Reorder exercises</string>
-    <string name="content_description_add_exercise_to_workout">Add exercise to workout</string>
-    <string name="content_description_delete_exercise">Delete exercise</string>
-    <string name="content_description_save_workout">Save workout</string>
-    <string name="content_description_finish_workout">Finish workout</string>
-
     <!-- Bottom Navigation -->
     <string name="workouts">Workouts</string>
     <string name="profile">Profile</string>
     <string name="exercises">Exercises</string>
-
-    <!-- App Content -->
-
-    <!-- Login -->
-
-
-    <!-- Register -->
-
-    <!-- Profile -->
-
-    <!-- Exercises -->
-    <string name="filter">Filter</string>
-    <string name="clear">Clear</string>
-    <string name="categories">Categories</string>
-    <string name="equipment">Equipment</string>
-    <string name="exercise_detail_steps_title">How to perform:</string>
-    <string name="edit_exercise">Edit exercise</string>
-    <string name="create_exercise">Create exercise</string>
-    <string name="hint_name">Name</string>
-    <string name="save">Save</string>
-    <string name="hint_type">Type</string>
-    <string name="hint_equipment">Equipment</string>
-    <string name="hint_category">Category</string>
-    <string name="delete">Delete</string>
-    <string name="title_delete_exercise">Delete exercise</string>
-    <string name="message_delete_exercise">Are you sure you want to delete this exercise? This action can\'t be undone.</string>
-    <string name="title_unsaved_changes">Unsaved changes</string>
-    <string name="message_unsaved_changes">Are you sure you want to leave? All unsaved changes will be lost.</string>
-    <string name="discard">Discard</string>
-    <string name="rest_timer">Rest timer</string>
-    <string name="rest_timer_enabled">Rest timer enabled</string>
-    <string name="weight_unit">Weight unit</string>
-
-    <!-- Workouts -->
-    <string name="create_workout">Create workout</string>
-    <string name="add_exercise">Add exercise</string>
-    <string name="reorder_exercises">Reorder exercises</string>
-    <string name="apply">Apply</string>
-    <string name="notes">Notes (optional)</string>
-    <string name="message_delete_exercise_from_workout">Are you sure you want to remove this exercise from your workout?</string>
-    <string name="set">Set</string>
-    <string name="reps">Reps</string>
-    <string name="time">Time</string>
-    <string name="add_set">Add set</string>
-    <string name="title_workout_name">Workout name</string>
-    <string name="message_workout_name">Please enter a name for your workout</string>
-    <string name="rest">Rest</string>
-    <string name="start">Start</string>
-    <string name="workout_empty_title">No exercises added</string>
-    <string name="workout_empty_subtitle">Click on \'Add Exercise\' to add your first exercise</string>
-    <string name="start_workout">Start workout</string>
-    <string name="title_delete_workout">Delete workout</string>
-    <string name="message_delete_workout">Are you sure you want to delete this workout? This action can\'t be undone.</string>
-    <string name="next_exercise">Next exercise</string>
-    <string name="last">Last</string>
     <string name="history">History</string>
 </resources>

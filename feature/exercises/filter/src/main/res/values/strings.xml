@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_filter">Filter</string>
+    <string name="label_categories">Categories</string>
+    <string name="label_equipment">Equipment</string>
+</resources>

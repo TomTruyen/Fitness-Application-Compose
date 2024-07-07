@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_exercises">Exercises</string>
+
+    <string name="content_description_filter">Filter</string>
+    <string name="content_description_search">Search</string>
+    <string name="content_description_create_exercise">Create exercise</string>
+    <string name="content_description_add_exercise_to_workout">Add exercise to workout</string>
+</resources>

@@ -11,8 +11,6 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.unloadKoinModules
 
 class App: Application() {
-
-
     override fun onCreate() {
         super.onCreate()
 

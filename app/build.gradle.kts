@@ -46,11 +46,11 @@ android {
     buildTypes {
         debug {
             isDebuggable = true
-            signingConfig = signingConfigs.getByName("release")
+//            signingConfig = signingConfigs.getByName("release")
         }
 
         release {
-            signingConfig = signingConfigs.getByName("release")
+//            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             isDebuggable = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -96,21 +96,23 @@ dependencies {
 
     implementation(project(":feature:profile"))
 
+    implementation(project(":feature:exercises"))
+    implementation(project(":feature:exercises:create"))
+    implementation(project(":feature:exercises:detail"))
+    implementation(project(":feature:exercises:filter"))
+
+    implementation(project(":feature:workouts"))
+    implementation(project(":feature:workouts:create"))
+    implementation(project(":feature:workouts:detail"))
+    implementation(project(":feature:workouts:execute"))
+    implementation(project(":feature:workouts:history"))
+
     // Auth
     implementation(libs.google.play.services.auth)
 
     // Paging 3
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
-
-    // Navigation
-    implementation(libs.androidx.navigation.compose)
-
-    // Reorderable (Drag & Drop) Lazy Column
-    implementation(libs.compose.reorderable)
-
-    // Images
-    implementation(libs.coil.kt.compose)
 
     // Debug Only
     debugImplementation(libs.squareup.leakcanary)

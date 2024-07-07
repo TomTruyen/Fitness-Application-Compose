@@ -1,3 +1,0 @@
-package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.history
-
-class WorkoutHistoryUiState
