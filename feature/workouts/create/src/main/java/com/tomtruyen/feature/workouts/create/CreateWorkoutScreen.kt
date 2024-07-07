@@ -68,6 +68,7 @@ import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.ui.TabLayout
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.ui.LoadingContainer
+import com.tomtruyen.feature.workouts.create.components.RestTimeSelector
 import com.tomtruyen.feature.workouts.shared.WorkoutExerciseEvent
 import com.tomtruyen.feature.workouts.shared.ui.WorkoutExerciseSet
 import com.tomtruyen.feature.workouts.shared.ui.WorkoutExerciseSetHeader
@@ -450,45 +451,6 @@ fun WorkoutExerciseTabContent(
                 onAction(CreateWorkoutUiAction.OnAddExerciseClicked)
             }
         }
-    }
-}
-
-@Composable
-fun RestTimeSelector(
-    modifier: Modifier = Modifier,
-    workoutExercise: WorkoutExerciseResponse,
-    onClick: () -> Unit = {}
-) {
-    Row(
-        modifier = modifier
-            .wrapContentWidth()
-            .padding(vertical = Dimens.Normal)
-            .defaultMinSize(
-                minWidth = 100.dp
-            )
-            .animateContentSize()
-            .background(
-                color = MaterialTheme.colorScheme.surface,
-                shape = MaterialTheme.shapes.small
-            )
-            .clip(MaterialTheme.shapes.small)
-            .clickable {
-                onClick()
-            }
-            .padding(Dimens.Normal)
-            .alpha(if (workoutExercise.restEnabled) 1f else 0.5f),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            imageVector = Icons.Outlined.Timer,
-            contentDescription = null,
-        )
-
-        Text(
-            text = TimeUtils.formatSeconds(workoutExercise.rest.toLong()),
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(start = Dimens.Small)
-        )
     }
 }
 

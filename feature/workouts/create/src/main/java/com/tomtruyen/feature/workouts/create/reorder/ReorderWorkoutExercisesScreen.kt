@@ -33,6 +33,7 @@ import com.tomtruyen.feature.workouts.create.CreateWorkoutViewModel
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.feature.workouts.create.R
+import com.tomtruyen.feature.workouts.create.reorder.components.ReorderListItem
 import kotlinx.coroutines.flow.collectLatest
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
@@ -130,40 +131,5 @@ fun ReorderWorkoutExercisesScreenLayout(
                 onAction(ReorderWorkoutExercisesUiAction.OnApplyReorder)
             }
         }
-    }
-}
-
-@Composable
-fun ReorderListItem(
-    title: String,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth()
-                .padding(Dimens.Normal),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Filled.DragIndicator,
-                contentDescription = null,
-            )
-
-            Text(
-                text = title,
-                modifier = Modifier
-                    .weight(1f)
-                    .animateContentSize()
-                    .padding(start = Dimens.Small)
-            )
-        }
-
-        HorizontalDivider(
-            thickness = 1.dp,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
-        )
     }
 }

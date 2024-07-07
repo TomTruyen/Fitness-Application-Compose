@@ -39,6 +39,8 @@ import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.common.extensions.format
 import com.tomtruyen.core.ui.toolbars.CollapsingToolbar
 import com.tomtruyen.core.common.utils.TimeUtils
+import com.tomtruyen.data.entities.WorkoutHistoryWithWorkout
+import com.tomtruyen.feature.workouts.history.components.WorkoutHistoryItem
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
@@ -103,100 +105,6 @@ fun WorkoutHistoryScreenLayout(
                     entry = entry!!,
                     onAction = onAction
                 )
-            }
-        }
-    }
-}
-
-@Composable
-fun WorkoutHistoryItem(
-    entry: com.tomtruyen.data.entities.WorkoutHistoryWithWorkout,
-    onAction: (WorkoutHistoryUiAction) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Card(
-        modifier = modifier
-            .padding(
-                horizontal = Dimens.Normal,
-                vertical = Dimens.Small
-            ),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White
-        ),
-        elevation = CardDefaults.cardElevation(0.dp),
-        onClick = {
-            onAction(WorkoutHistoryUiAction.OnDetailClicked(entry.history.id))
-        }
-    ) {
-        // Just basic information like total weight, time
-        Column(
-            modifier = Modifier.fillMaxWidth()
-                .padding(Dimens.Small)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = entry.workoutWithExercises.workout.name,
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontWeight = FontWeight.W500
-                    ),
-                    modifier = Modifier.weight(1f)
-                )
-
-                Spacer(modifier = Modifier.width(Dimens.Small))
-
-                Icon(
-                    imageVector = Icons.Outlined.Timer,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                    modifier = Modifier.size(Dimens.Normal)
-                )
-
-                Text(
-                    text = entry.history.formattedDuration,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-                    ),
-                    modifier = Modifier.padding(start = Dimens.Tiny)
-                )
-            }
-
-            Text(
-                text = TimeUtils.formatDate(
-                    dateMillis = entry.history.createdAt
-                ),
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            if(entry.totalWeight > 0) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.FitnessCenter,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                        modifier = Modifier
-                            .size(Dimens.Normal)
-                            .rotate(-45f)
-                    )
-
-                    Text(
-                        text = "${entry.totalWeight.format()} ${entry.weightUnit}",
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-                        ),
-                        modifier = Modifier.weight(1f)
-                            .padding(start = Dimens.Tiny)
-                    )
-                }
             }
         }
     }
