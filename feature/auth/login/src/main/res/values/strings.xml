@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_login">Welcome back!</string>
+    <string name="subtitle_login">Sign in to continue on your path</string>
+
+    <string name="button_login_with_email">Sign in with Email</string>
+    <string name="button_login_google">Sign in with Google</string>
+    <string name="button_need_account">Need an account?</string>
+</resources>

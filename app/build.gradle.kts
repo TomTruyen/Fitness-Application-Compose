@@ -91,6 +91,9 @@ dependencies {
     implementation(project(":models"))
     implementation(project(":navigation"))
 
+    implementation(project(":feature:auth:login"))
+    implementation(project(":feature:auth:register"))
+
     // Auth
     implementation(libs.google.play.services.auth)
 

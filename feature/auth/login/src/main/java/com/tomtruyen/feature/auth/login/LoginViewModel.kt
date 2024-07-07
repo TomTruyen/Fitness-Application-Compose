@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.ui.screens.auth.login
+package com.tomtruyen.feature.auth.login
 
 import com.google.firebase.auth.FirebaseUser
 import com.tomtruyen.core.common.base.BaseViewModel

@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.ui.screens.auth.login
+package com.tomtruyen.feature.auth.login
 
 sealed class LoginUiAction {
     data class EmailChanged(val email: String): LoginUiAction()

@@ -21,20 +21,9 @@
     <!-- App Content -->
 
     <!-- Login -->
-    <string name="title_login">Welcome back!</string>
-    <string name="subtitle_login">Sign in to continue on your path</string>
-    <string name="password">Password</string>
-    <string name="email">Email</string>
-    <string name="login">Sign in with Email</string>
-    <string name="button_login_google">Sign in with Google</string>
+
 
     <!-- Register -->
-    <string name="need_account">Need an account?</string>
-    <string name="password_repeat">Repeat password</string>
-    <string name="title_register">Let\'s get started!</string>
-    <string name="subtitle_register">Create an account to get started</string>
-    <string name="register">Sign up with Email</string>
-    <string name="have_an_account">Already have an account?</string>
 
     <!-- Profile -->
     <string name="logout">Logout</string>
@@ -93,5 +82,4 @@
     <string name="next_exercise">Next exercise</string>
     <string name="last">Last</string>
     <string name="history">History</string>
-    <string name="label_or">Or</string>
 </resources>

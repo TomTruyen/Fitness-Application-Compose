@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_register">Let\'s get started!</string>
+    <string name="subtitle_register">Create an account to get started</string>
+    <string name="button_register_with_email">Sign up with Email</string>
+    <string name="button_have_an_account">Already have an account?</string>
+</resources>

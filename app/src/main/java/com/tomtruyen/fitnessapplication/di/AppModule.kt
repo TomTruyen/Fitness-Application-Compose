@@ -1,7 +1,9 @@
 package com.tomtruyen.fitnessapplication.di
 
-import com.tomtruyen.fitnessapplication.ui.screens.auth.login.LoginViewModel
-import com.tomtruyen.fitnessapplication.ui.screens.auth.register.RegisterViewModel
+import com.tomtruyen.feature.auth.login.LoginViewModel
+import com.tomtruyen.feature.auth.register.RegisterViewModel
+import com.tomtruyen.fitnessapplication.BuildConfig
+import com.tomtruyen.fitnessapplication.providers.CredentialProviderImpl
 import com.tomtruyen.fitnessapplication.ui.screens.main.profile.ProfileViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.WorkoutOverviewViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.CreateWorkoutViewModel
@@ -12,11 +14,18 @@ import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create.CreateE
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.detail.WorkoutDetailViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.execute.ExecuteWorkoutViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.history.WorkoutHistoryViewModel
+import com.tomtruyen.models.providers.CredentialProvider
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
 val appModule = module {
+    single<CredentialProvider> {
+        CredentialProviderImpl(
+            googleServerClientId = BuildConfig.GOOGLE_SERVER_CLIENT_ID
+        )
+    }
+
     // ViewModels
     viewModelOf(::LoginViewModel)
 

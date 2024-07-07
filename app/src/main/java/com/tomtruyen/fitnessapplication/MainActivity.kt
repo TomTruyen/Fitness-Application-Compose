@@ -2,7 +2,6 @@ package com.tomtruyen.fitnessapplication
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,8 +21,8 @@ import androidx.navigation.toRoute
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.fitnessapplication.navigation.MainBottomNavigation
 import com.tomtruyen.core.designsystem.theme.FitnessApplicationTheme
-import com.tomtruyen.fitnessapplication.ui.screens.auth.login.LoginScreen
-import com.tomtruyen.fitnessapplication.ui.screens.auth.register.RegisterScreen
+import com.tomtruyen.feature.auth.login.LoginScreen
+import com.tomtruyen.feature.auth.register.RegisterScreen
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesScreen
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.ExercisesViewModel
 import com.tomtruyen.fitnessapplication.ui.screens.main.exercises.create.CreateExerciseScreen
@@ -40,7 +39,6 @@ import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.history.Workout
 import com.tomtruyen.models.Global
 import com.tomtruyen.navigation.Screen
 import org.koin.android.ext.android.inject
-import org.koin.androidx.compose.koinViewModel
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.core.parameter.parametersOf
 

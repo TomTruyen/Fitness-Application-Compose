@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.ui.shared
+package com.tomtruyen.feature.auth
 
 import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -24,11 +24,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.core.common.R as CommonR
 import com.tomtruyen.data.firebase.auth.GoogleSignInHelper
 import com.tomtruyen.core.designsystem.theme.LavenderMist
-import com.tomtruyen.fitnessapplication.BuildConfig
+import com.tomtruyen.models.providers.CredentialProvider
+import org.koin.compose.koinInject
 
 object SocialButtons {
     @Composable
@@ -43,8 +43,10 @@ object SocialButtons {
     ) {
         val context = LocalContext.current
 
+        val credentialProvider = koinInject<CredentialProvider>()
+
         val client = remember { GoogleSignInHelper.getGoogleSignInClient(context) }
-        val request = remember { GoogleSignInHelper.getGoogleSignInRequest(BuildConfig.GOOGLE_SERVER_CLIENT_ID) }
+        val request = remember { GoogleSignInHelper.getGoogleSignInRequest(credentialProvider.googleServerClientId) }
 
         val signInResultLauncher = rememberLauncherForActivityResult(
             ActivityResultContracts.StartIntentSenderForResult()

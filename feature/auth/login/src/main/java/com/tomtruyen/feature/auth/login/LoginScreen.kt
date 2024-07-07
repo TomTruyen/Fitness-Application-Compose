@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.ui.screens.auth.register
+package com.tomtruyen.feature.auth.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,28 +21,31 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import org.koin.androidx.compose.koinViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.fitnessapplication.R
 import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.TextDivider
 import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.designsystem.theme.BlueGrey
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.validation.errorMessage
 import com.tomtruyen.core.validation.isValid
+import com.tomtruyen.feature.auth.SocialButtons
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
-import org.koin.androidx.compose.koinViewModel
+import com.tomtruyen.core.common.R as CommonR
 
 @Composable
-fun RegisterScreen(
+fun LoginScreen(
     navController: NavController,
-    viewModel: RegisterViewModel = koinViewModel()
+    viewModel: LoginViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
 
@@ -51,21 +54,21 @@ fun RegisterScreen(
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
-                RegisterUiEvent.NavigateToHome -> {
+                LoginUiEvent.NavigateToHome -> {
                     navController.navigate(Screen.Workout.Graph) {
                         popUpTo(Screen.Auth.Graph) {
                             inclusive = true
                         }
                     }
                 }
-                RegisterUiEvent.NavigateToLogin -> {
-                    navController.navigate(Screen.Auth.Login)
+                LoginUiEvent.NavigateToRegister -> {
+                    navController.navigate(Screen.Auth.Register)
                 }
             }
         }
     }
 
-    RegisterScreenLayout(
+    LoginScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         state = state,
         onAction = viewModel::onAction
@@ -73,18 +76,18 @@ fun RegisterScreen(
 }
 
 @Composable
-fun RegisterScreenLayout(
+fun LoginScreenLayout(
     snackbarHost: @Composable () -> Unit,
-    state: RegisterUiState,
-    onAction: (RegisterUiAction) -> Unit
+    state: LoginUiState,
+    onAction: (LoginUiAction) -> Unit
 ) {
     val isValid by remember(state) {
         derivedStateOf {
-            state.emailValidationResult.isValid()
-                    && state.passwordValidationResult.isValid()
-                    && state.confirmPasswordValidationResult.isValid()
+            state.emailValidationResult.isValid() && state.passwordValidationResult.isValid()
         }
     }
+
+    val focusManager = LocalFocusManager.current
 
     Scaffold(
         snackbarHost = snackbarHost
@@ -105,7 +108,7 @@ fun RegisterScreenLayout(
                         .verticalScroll(rememberScrollState())
                 ) {
                     Text(
-                        text = stringResource(id = R.string.title_register),
+                        text = stringResource(id = R.string.title_login),
                         style = MaterialTheme.typography.headlineLarge.copy(
                             color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.SemiBold
@@ -113,7 +116,7 @@ fun RegisterScreenLayout(
                     )
 
                     Text(
-                        text = stringResource(id = R.string.subtitle_register),
+                        text = stringResource(id = R.string.subtitle_login),
                         style = MaterialTheme.typography.titleMedium.copy(
                             color = BlueGrey,
                             fontWeight = FontWeight.Normal
@@ -125,9 +128,9 @@ fun RegisterScreenLayout(
                     TextFields.Default(
                         value = state.email,
                         onValueChange = { email ->
-                            onAction(RegisterUiAction.EmailChanged(email))
+                            onAction(LoginUiAction.EmailChanged(email))
                         },
-                        placeholder = stringResource(id = R.string.email),
+                        placeholder = stringResource(id = CommonR.string.placeholder_email),
                         error = state.emailValidationResult.errorMessage(),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
@@ -139,25 +142,10 @@ fun RegisterScreenLayout(
                     TextFields.Default(
                         value = state.password,
                         onValueChange = { password ->
-                            onAction(RegisterUiAction.PasswordChanged(password))
+                            onAction(LoginUiAction.PasswordChanged(password))
                         },
-                        placeholder = stringResource(id = R.string.password),
+                        placeholder = stringResource(id = CommonR.string.placeholder_password),
                         error = state.passwordValidationResult.errorMessage(),
-                        obscureText = true,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Next
-                        ),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    TextFields.Default(
-                        value = state.confirmPassword,
-                        onValueChange = { confirmPassword ->
-                            onAction(RegisterUiAction.ConfirmPasswordChanged(confirmPassword))
-                        },
-                        placeholder = stringResource(id = R.string.password_repeat),
-                        error = state.confirmPasswordValidationResult.errorMessage(),
                         obscureText = true,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,
@@ -166,22 +154,41 @@ fun RegisterScreenLayout(
                         modifier = Modifier.fillMaxWidth()
                     )
 
-
                     Buttons.Default(
-                        text = stringResource(id = R.string.register),
+                        text = stringResource(id = R.string.button_login_with_email),
                         enabled = isValid && !state.loading,
                         onClick = {
-                            onAction(RegisterUiAction.OnRegisterClicked)
+                            focusManager.clearFocus()
+                            onAction(LoginUiAction.OnLoginClicked)
                         },
                         modifier = Modifier.fillMaxWidth()
+                    )
+
+                    TextDivider(
+                        text = stringResource(id = CommonR.string.label_or),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = Dimens.Normal)
+                    )
+
+                    SocialButtons.Google(
+                        text = stringResource(id = R.string.button_login_google),
+                        enabled = !state.loading,
+                        onClick = focusManager::clearFocus,
+                        onSuccess = { idToken ->
+                            onAction(LoginUiAction.OnGoogleSignInSuccess(idToken))
+                        },
+                        onError = { error ->
+                            onAction(LoginUiAction.OnGoogleSignInFailed(error))
+                        }
                     )
                 }
 
                 Buttons.Text(
-                    text = stringResource(id = R.string.have_an_account),
+                    text = stringResource(id = R.string.button_need_account),
                     enabled = !state.loading,
                     onClick = {
-                        onAction(RegisterUiAction.OnLoginClicked)
+                        onAction(LoginUiAction.OnRegisterClicked)
                     },
                     modifier = Modifier.fillMaxWidth()
                 )

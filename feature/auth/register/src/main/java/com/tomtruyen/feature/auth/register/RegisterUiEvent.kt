@@ -1,6 +1,7 @@
-package com.tomtruyen.fitnessapplication.ui.screens.auth.register
+package com.tomtruyen.feature.auth.register
 
 sealed class RegisterUiEvent {
     data object NavigateToHome: RegisterUiEvent()
+
     data object NavigateToLogin: RegisterUiEvent()
 }

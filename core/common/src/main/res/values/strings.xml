@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Placeholders -->
+    <string name="placeholder_email">Email</string>
+    <string name="placeholder_password">Password</string>
+    <string name="placeholder_password_repeat">Repeat password</string>
+
+
+    <!-- Labels -->
+    <string name="label_or">Or</string>
+
     <!-- Errors -->
     <string name="error_weak_password">Password is too weak</string>
     <string name="error_wrong_credentials">Invalid credentials</string>
