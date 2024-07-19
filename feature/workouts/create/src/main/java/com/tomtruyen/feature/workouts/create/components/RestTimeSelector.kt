@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.workouts.create.components
+package com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
