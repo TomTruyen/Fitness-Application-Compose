@@ -2,6 +2,8 @@ package com.tomtruyen.feature.exercises
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
@@ -30,7 +32,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -95,6 +99,12 @@ fun ExercisesScreenLayout(
     onAction: (ExercisesUiAction) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
+    val filters by remember {
+        derivedStateOf {
+            state.filter.categories + state.filter.equipment
+        }
+    }
 
     Scaffold(
         snackbarHost = snackbarHost,
@@ -191,14 +201,18 @@ fun ExercisesScreenLayout(
             Column(
                 modifier = Modifier.fillMaxSize(),
             ) {
-                if(state.filter.categories.isNotEmpty() || state.filter.equipment.isNotEmpty()) {
+                AnimatedVisibility(
+                    visible = filters.isNotEmpty(),
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
                     LazyRow(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = Dimens.Tiny),
                         horizontalArrangement = Arrangement.spacedBy(Dimens.Small)
                     ) {
-                        itemsIndexed(state.filter.categories + state.filter.equipment) { index, filter ->
+                        itemsIndexed(filters) { index, filter ->
                             Chip(
                                 modifier = Modifier.padding(start = if(index == 0) Dimens.Normal else 0.dp),
                                 text = filter,
@@ -229,17 +243,11 @@ fun ExercisesScreenLayout(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             // Add Text with First Letter of Exercise Name when it changes
-                            val exerciseNameFirstLetter = exercise.displayName.first().uppercaseChar()
+                            val currentFirstLetter = exercise.displayName.first().uppercaseChar()
+                            val previousFirstLetter = state.exercises.getOrNull(index - 1)?.displayName?.first()?.uppercaseChar()
 
-                            val isNewLetterSection = if (index > 0) {
-                                val previousExercise = state.exercises[index - 1]
-                                exerciseNameFirstLetter != previousExercise.displayName.first().uppercaseChar()
-                            } else {
-                                true
-                            }
-
-                            if(isNewLetterSection) {
-                                currentLetter = exerciseNameFirstLetter
+                            if(currentFirstLetter != previousFirstLetter) {
+                                currentLetter = currentFirstLetter
 
                                 Text(
                                     text = currentLetter.toString(),

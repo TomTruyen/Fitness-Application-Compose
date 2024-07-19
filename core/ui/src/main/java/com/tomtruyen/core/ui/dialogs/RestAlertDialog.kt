@@ -1,5 +1,8 @@
 package com.tomtruyen.core.ui.dialogs
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -50,7 +53,11 @@ fun RestAlertDialog(
             Column(
                 verticalArrangement = Arrangement.spacedBy(Dimens.Normal)
             ) {
-                if(restEnabled != null) {
+                AnimatedVisibility(
+                    visible = restEnabled != null,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
                     SwitchListItem(
                         title = stringResource(id = R.string.label_rest_timer_enabled),
                         checked = selectedRestEnabled ?: false,

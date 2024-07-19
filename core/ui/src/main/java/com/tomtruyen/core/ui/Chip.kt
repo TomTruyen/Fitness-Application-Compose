@@ -19,7 +19,9 @@ fun Chip(
     FilterChip(
         modifier = modifier,
         selected = selected,
-        onClick = onClick ?: {},
+        onClick = {
+            onClick?.invoke()
+        },
         trailingIcon = trailingIcon,
         label = {
             Text(text = text)

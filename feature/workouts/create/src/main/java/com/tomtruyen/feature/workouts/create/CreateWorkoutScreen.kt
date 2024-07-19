@@ -40,6 +40,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -72,6 +73,7 @@ import com.tomtruyen.feature.workouts.create.components.RestTimeSelector
 import com.tomtruyen.feature.workouts.shared.WorkoutExerciseEvent
 import com.tomtruyen.feature.workouts.shared.ui.WorkoutExerciseSet
 import com.tomtruyen.feature.workouts.shared.ui.WorkoutExerciseSetHeader
+import com.tomtruyen.fitnessapplication.ui.screens.main.workouts.create.components.RestTimeSelector
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import com.tomtruyen.core.common.R as CommonR
@@ -144,6 +146,12 @@ fun CreateWorkoutScreenLayout(
     onAction: (CreateWorkoutUiAction) -> Unit,
     onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
 ) {
+    val exercises by remember {
+        derivedStateOf {
+            state.workout.exercises
+        }
+    }
+
     var workoutNameDialogVisible by remember { mutableStateOf(false) }
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
@@ -162,14 +170,14 @@ fun CreateWorkoutScreenLayout(
                 title = stringResource(id = R.string.title_create_workout),
                 navController = navController,
                 onNavigateUp = {
-                    if(state.workout.exercises != state.initialWorkout.exercises) {
+                    if(exercises != state.initialWorkout.exercises) {
                         confirmationDialogVisible = true
                     } else {
                         navController.popBackStack()
                     }
                 }
             ) {
-                if(state.workout.exercises.size > 1) {
+                if(exercises.size > 1) {
                     IconButton(onClick = { onAction(CreateWorkoutUiAction.OnReorderExerciseClicked) }) {
                         Icon(
                             imageVector = Icons.Filled.FormatListNumbered,
@@ -178,7 +186,7 @@ fun CreateWorkoutScreenLayout(
                     }
                 }
 
-                if(state.workout.exercises.isNotEmpty()) {
+                if(exercises.isNotEmpty()) {
                     IconButton(
                         onClick = {
                             if(state.workout.name.isNotEmpty()) {
@@ -206,7 +214,7 @@ fun CreateWorkoutScreenLayout(
             Column(
                 modifier = Modifier.fillMaxSize()
             ) {
-                AnimatedVisibility(visible = state.workout.exercises.isNotEmpty()) {
+                AnimatedVisibility(visible = exercises.isNotEmpty()) {
                     TabLayout(
                         items = state.workout.exercises.map { it.exercise.displayName },
                         state = pagerState
@@ -271,13 +279,11 @@ fun WorkoutExerciseTabContent(
     var deleteConfirmationDialogVisible by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         if(state.workout.exercises.isEmpty()) {
             EmptyState(
-                modifier = modifier
-                    .fillMaxWidth(),
+                modifier = modifier.fillMaxWidth(),
                 icon = {
                     Box(
                         modifier = Modifier
@@ -453,4 +459,3 @@ fun WorkoutExerciseTabContent(
         }
     }
 }
-

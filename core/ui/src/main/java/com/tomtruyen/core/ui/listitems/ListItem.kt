@@ -1,6 +1,9 @@
 package com.tomtruyen.core.ui.listitems
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -59,7 +62,11 @@ fun ListItem(
             )
         }
 
-        if(showChevron) {
+        AnimatedVisibility(
+            visible = showChevron,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
             Icon(
                 imageVector = Icons.Filled.ChevronRight,
                 contentDescription = null

@@ -1,5 +1,8 @@
 package com.tomtruyen.core.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,7 +16,11 @@ fun TextFieldPlaceholder(
     placeholder: String,
     textStyle: TextStyle
 ) {
-    if(value.isNullOrBlank()) {
+    AnimatedVisibility(
+        visible = value.isNullOrBlank(),
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
         Text(
             text = placeholder,
             style = textStyle.copy(

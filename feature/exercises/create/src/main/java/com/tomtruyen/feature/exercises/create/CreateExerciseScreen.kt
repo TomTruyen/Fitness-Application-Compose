@@ -32,6 +32,7 @@ import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.validation.errorMessage
 import com.tomtruyen.core.validation.isValid
+import com.tomtruyen.data.entities.Exercise
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -81,7 +82,10 @@ fun CreateExerciseScreenLayout(
         }
     }
 
-    val types = com.tomtruyen.data.entities.Exercise.ExerciseType.entries.map { it.value }
+    val types = remember {
+        Exercise.ExerciseType.entries.map { it.value }
+    }
+
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     BackHandler(enabled = !confirmationDialogVisible) {

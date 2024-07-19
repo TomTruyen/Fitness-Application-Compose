@@ -46,17 +46,19 @@ object TextFields {
 
         var obscureTextVisible by rememberSaveable { mutableStateOf(false) }
 
-        val trailing = if(obscureText) {
-            {
-                PasswordEyeToggle(
-                    obscureTextVisible = obscureTextVisible,
-                    onToggle = {
-                        obscureTextVisible = !obscureTextVisible
-                    }
-                )
+        val trailing = remember(obscureText) {
+            if(obscureText) {
+                {
+                    PasswordEyeToggle(
+                        obscureTextVisible = obscureTextVisible,
+                        onToggle = {
+                            obscureTextVisible = !obscureTextVisible
+                        }
+                    )
+                }
+            } else {
+                trailingIcon
             }
-        } else {
-            trailingIcon
         }
 
         Column(modifier = modifier) {

@@ -27,8 +27,7 @@ fun TabLayout(
         edgePadding = 0.dp,
         divider = {
             HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 thickness = 1.dp,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
             )
