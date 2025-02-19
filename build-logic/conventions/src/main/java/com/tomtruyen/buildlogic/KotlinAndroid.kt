@@ -3,6 +3,7 @@ package com.tomtruyen.buildlogic
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -11,7 +12,7 @@ internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension<*, *, *, *, *, *>
 ) {
     commonExtension.apply {
-        compileSdk = 34
+        compileSdk = 35
 
         defaultConfig {
             minSdk = 26
@@ -47,6 +48,8 @@ internal fun Project.configureKotlinAndroid(
 
         // Serialization
         add("implementation", libs.findLibrary("kotlinx.serialization.json").get())
+
+        add("implementation", libs.findLibrary("kotlinx.coroutines.core").get())
 
         add("coreLibraryDesugaring", libs.findLibrary("android.desugarJdkLibs").get())
     }

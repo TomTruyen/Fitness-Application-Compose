@@ -28,12 +28,12 @@ if(file(rootProject.projectDir.absolutePath + "/signing.gradle").exists()) {
 
 android {
     namespace = "com.tomtruyen.fitnessapplication"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.tomtruyen.fitnessapplication"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionName = androidGitVersion.name()
         versionCode = androidGitVersion.code()
 
@@ -46,11 +46,11 @@ android {
     buildTypes {
         debug {
             isDebuggable = true
-//            signingConfig = signingConfigs.getByName("release")
+            signingConfig = signingConfigs.getByName("release")
         }
 
         release {
-//            signingConfig = signingConfigs.getByName("release")
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             isDebuggable = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -106,9 +106,6 @@ dependencies {
     implementation(project(":feature:workouts:detail"))
     implementation(project(":feature:workouts:execute"))
     implementation(project(":feature:workouts:history"))
-
-    // Auth
-    implementation(libs.google.play.services.auth)
 
     // Paging 3
     implementation(libs.androidx.paging.runtime)

@@ -1,24 +1,26 @@
 [versions]
-agp = "8.5.0"
-android-desugar-jdk-libs = "2.0.4"
+agp = "8.5.2"
+android-desugar-jdk-libs = "2.1.4"
 android-git-version = "0.4.14"
-androidx-activity-compose = "1.9.0"
-androidx-compose-bom = "2024.06.00"
-androidx-core-ktx = "1.13.1"
-androidx-lifecycle-runtime-ktx = "2.8.3"
-androidx-navigation = "2.8.0-beta04"
+androidx-activity-compose = "1.10.0"
+androidx-compose-bom = "2025.02.00"
+androidx-core-ktx = "1.15.0"
+androidx-credentials = "1.5.0-rc01"
+androidx-lifecycle-runtime-ktx = "2.8.7"
+androidx-navigation = "2.8.7"
 androidx-room = "2.6.1"
 coil-kt-compose = "2.6.0"
 compose-reorderable = "0.9.6"
-google-crashlytics-plugin = "3.0.2"
-google-play-services-auth = "21.2.0"
-google-firebase-bom = "33.1.1"
+google-crashlytics-plugin = "3.0.3"
+google-identity-googleid = "1.1.1"
+google-firebase-bom = "33.9.0"
 google-ksp = "2.0.0-1.0.22"
-androidx-paging = "3.3.0"
+androidx-paging = "3.3.6"
 google-services = "4.4.2"
 insert-koin-compose = "3.5.6"
 kotlin = "2.0.0"
 kotlinx-serialization-json = "1.6.3"
+kotlinx-coroutines = "1.10.1"
 secrets-gradle = "2.0.1"
 squareup-leakcanary = "2.12"
 junit = "4.13.2"
@@ -39,6 +41,8 @@ androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graph
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
+androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "androidx-credentials" }
+androidx-credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "androidx-credentials" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-runtime-ktx" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle-runtime-ktx" }
 androidx-paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "androidx-paging" }
@@ -51,6 +55,7 @@ compose-reorderable = { group = "org.burnoutcrew.composereorderable", name = "re
 insert-koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "insert-koin-compose" }
 insert-koin-compose-navigation = { group = "io.insert-koin", name = "koin-androidx-compose-navigation", version.ref = "insert-koin-compose" }
 insert-koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "insert-koin-compose" }
+google-identity-googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "google-identity-googleid" }
 google-ksp-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "google-ksp" }
 google-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "google-firebase-bom" }
 google-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
@@ -58,8 +63,8 @@ google-firebase-auth = { group = "com.google.firebase", name = "firebase-auth-kt
 google-firebase-encoders = { group = "com.google.firebase", name = "firebase-encoders" }
 google-firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore-ktx" }
 google-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
-google-play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "google-play-services-auth" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 squareup-leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "squareup-leakcanary" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

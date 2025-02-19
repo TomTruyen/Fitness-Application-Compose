@@ -5,6 +5,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.tomtruyen.data.entities.Settings
+import com.tomtruyen.data.firebase.auth.GoogleSignInHelper
 import com.tomtruyen.data.firebase.extensions.handleCompletionResult
 import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
@@ -53,6 +54,7 @@ class UserRepositoryImpl(
     override fun logout() {
         scope.launch {
             database.clearAllTables()
+            GoogleSignInHelper.signOut(context)
         }
 
         auth.signOut()

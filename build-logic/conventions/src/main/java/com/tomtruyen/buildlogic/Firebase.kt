@@ -17,7 +17,10 @@ internal fun Project.configureFirebase(
             add("implementation", libs.findLibrary("google.firebase.crashlytics").get())
             add("implementation", libs.findLibrary("google.firebase.encoders").get())
             add("implementation", libs.findLibrary("google.firebase.firestore").get())
-            add("implementation", libs.findLibrary("google.play.services.auth").get())
+
+            add("implementation", libs.findLibrary("androidx.credentials").get())
+            add("implementation", libs.findLibrary("androidx.credentials.play.services.auth").get())
+            add("implementation", libs.findLibrary("google.identity.googleid").get())
         }
     }
 }

@@ -1,9 +1,6 @@
 package com.tomtruyen.feature.auth
 
-import android.app.Activity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
@@ -17,16 +14,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.credentials.CustomCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.common.R as CommonR
 import com.tomtruyen.data.firebase.auth.GoogleSignInHelper
 import com.tomtruyen.core.designsystem.theme.LavenderMist
+import kotlinx.coroutines.launch
 
 object SocialButtons {
     @Composable
@@ -41,23 +42,10 @@ object SocialButtons {
     ) {
         val context = LocalContext.current
 
-        val client = remember { GoogleSignInHelper.getGoogleSignInClient(context) }
+        val scope = rememberCoroutineScope()
+
+        val credentialManager = remember { GoogleSignInHelper.getCredentialManager(context) }
         val request = remember { GoogleSignInHelper.getGoogleSignInRequest() }
-
-        val signInResultLauncher = rememberLauncherForActivityResult(
-            ActivityResultContracts.StartIntentSenderForResult()
-        ) { result ->
-            if(result.resultCode == Activity.RESULT_OK && result.data != null) {
-                val credential = client.getSignInCredentialFromIntent(result.data)
-                val idToken = credential.googleIdToken
-
-                if(idToken != null) {
-                    onSuccess(idToken)
-                } else {
-                    onError(context.getString(CommonR.string.error_google_sign_in_failed))
-                }
-            }
-        }
 
         Button(
             enabled = enabled,
@@ -65,13 +53,28 @@ object SocialButtons {
                 // Side effect on click
                 onClick()
 
+
                 // Sign in with Google
-                client.beginSignIn(request).addOnCompleteListener { task ->
-                    if(task.isSuccessful) {
-                        val intentSender = task.result.pendingIntent.intentSender
-                        val intentSenderRequest = IntentSenderRequest.Builder(intentSender).build()
-                        signInResultLauncher.launch(intentSenderRequest)
-                    } else {
+                scope.launch {
+                    try {
+                        val result = credentialManager.getCredential(
+                            request = request,
+                            context = context
+                        )
+
+                        when(val credential = result.credential) {
+                            is CustomCredential -> {
+                                if(credential.type != GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                                    throw Exception("Invalid credential type")
+                                }
+
+                                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+
+                                onSuccess(googleIdTokenCredential.idToken)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e("GoogleSignIn", "Failed to sign in with Google", e)
                         onError(context.getString(CommonR.string.error_google_sign_in_failed))
                     }
                 }

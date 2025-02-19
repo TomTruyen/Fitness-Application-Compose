@@ -1,8 +1,10 @@
 package com.tomtruyen.data.firebase.auth
 
 import android.content.Context
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.Identity
+import androidx.credentials.ClearCredentialStateRequest
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.tomtruyen.models.providers.CredentialProvider
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -10,14 +12,21 @@ import org.koin.core.component.inject
 object GoogleSignInHelper: KoinComponent {
     private val credentialProvider: CredentialProvider by inject()
 
-    fun getGoogleSignInClient(context: Context) = Identity.getSignInClient(context)
+    fun getCredentialManager(context: Context) = CredentialManager.create(context)
 
-    fun getGoogleSignInRequest() = BeginSignInRequest.builder()
-        .setGoogleIdTokenRequestOptions(
-            BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                .setSupported(true)
-                .setServerClientId(credentialProvider.googleServerClientId)
+    fun getGoogleSignInRequest() = GetCredentialRequest.Builder()
+        .setPreferImmediatelyAvailableCredentials(false)
+        .addCredentialOption(
+            GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(false)
+                .setServerClientId(credentialProvider.googleServerClientId)
+                .setAutoSelectEnabled(true)
                 .build()
         ).build()
+
+    suspend fun signOut(context: Context) {
+        getCredentialManager(context).clearCredentialState(
+            ClearCredentialStateRequest(requestType = ClearCredentialStateRequest.TYPE_CLEAR_CREDENTIAL_STATE)
+        )
+    }
 }
