@@ -65,13 +65,15 @@ object SocialButtons {
                         when(val credential = result.credential) {
                             is CustomCredential -> {
                                 if(credential.type != GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                                    throw Exception("Invalid credential type")
+                                    throw Exception("Invalid credential type for CustomCredential: ${credential.type}")
                                 }
 
                                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
 
                                 onSuccess(googleIdTokenCredential.idToken)
                             }
+
+                            else -> throw Exception("Invalid credential: $credential")
                         }
                     } catch (e: Exception) {
                         Log.e("GoogleSignIn", "Failed to sign in with Google", e)
