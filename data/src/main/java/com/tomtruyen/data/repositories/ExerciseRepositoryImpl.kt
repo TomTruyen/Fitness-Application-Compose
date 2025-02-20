@@ -10,6 +10,8 @@ import com.tomtruyen.data.firebase.models.ExercisesResponse
 import com.tomtruyen.data.firebase.models.UserExercisesResponse
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.models.DataFetchTracker
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class ExerciseRepositoryImpl(
     private val exerciseDao: ExerciseDao
@@ -81,7 +83,7 @@ class ExerciseRepositoryImpl(
         exercise: Exercise,
         isUpdate: Boolean,
         callback: FirebaseCallback<Unit>
-    ) {
+    ) = withContext(Dispatchers.IO) {
         exercise.isUserCreated = true
 
         val exercises = exerciseDao.findAllUserExercises().toMutableList().apply {
@@ -111,8 +113,8 @@ class ExerciseRepositoryImpl(
         userId: String,
         exerciseId: String,
         callback: FirebaseCallback<Unit>
-    ) {
-        val exercise = exerciseDao.findUserExerciseById(exerciseId) ?: return callback.onStopLoading()
+    ) = withContext(Dispatchers.IO) {
+        val exercise = exerciseDao.findUserExerciseById(exerciseId) ?: return@withContext callback.onStopLoading()
 
         // No need to check if document exists, because if it doesn't then this exercise shouldn't exist either
         db.collection(USER_EXERCISE_COLLECTION_NAME)

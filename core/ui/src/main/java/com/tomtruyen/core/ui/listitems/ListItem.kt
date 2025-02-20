@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import com.tomtruyen.core.designsystem.Dimens
 
 @Composable
@@ -30,9 +31,7 @@ fun ListItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
-                onClick()
-            }
+            .clickable(onClick = onClick)
             .padding(Dimens.Normal),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -43,22 +42,14 @@ fun ListItem(
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    color = if(selected) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.onBackground
-                    }
-                ),
+                    fontWeight = if(selected) FontWeight.Bold else FontWeight.Normal
+                )
             )
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodySmall.copy(
-                    color = if(selected) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-                    }
-                ),
+                    fontWeight = if(selected) FontWeight.Bold else FontWeight.Normal
+                )
             )
         }
 

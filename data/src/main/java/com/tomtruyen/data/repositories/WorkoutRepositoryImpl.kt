@@ -1,12 +1,13 @@
 package com.tomtruyen.data.repositories
 
-import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.tomtruyen.data.firebase.extensions.handleCompletionResult
 import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.firebase.models.WorkoutResponse
 import com.tomtruyen.data.firebase.models.WorkoutsResponse
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class WorkoutRepositoryImpl(
     private val workoutDao: com.tomtruyen.data.dao.WorkoutDao,
@@ -49,7 +50,7 @@ class WorkoutRepositoryImpl(
         workout: WorkoutResponse,
         isUpdate: Boolean,
         callback: FirebaseCallback<Unit>
-    ) {
+    ) = withContext(Dispatchers.IO) {
         val workouts = workoutDao.findWorkouts().map {
             it.toWorkoutResponse()
         }.toMutableList().apply {
@@ -79,8 +80,8 @@ class WorkoutRepositoryImpl(
         userId: String,
         workoutId: String,
         callback: FirebaseCallback<Unit>
-    ) {
-        val workout = workoutDao.findById(workoutId)?.toWorkoutResponse() ?: return callback.onStopLoading()
+    ) = withContext(Dispatchers.IO) {
+        val workout = workoutDao.findById(workoutId)?.toWorkoutResponse() ?: return@withContext callback.onStopLoading()
 
         db.collection(USER_WORKOUT_COLLECTION_NAME)
             .document(userId)

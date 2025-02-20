@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.java.KoinJavaComponent.inject
 
@@ -26,7 +27,9 @@ open class BaseRepository(
     protected val db = Firebase.firestore
     protected val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    protected suspend fun <T> transaction(block: suspend () -> T) = database.withTransaction(block)
+    protected suspend fun <T> transaction(block: suspend () -> T) = withContext(Dispatchers.IO) {
+        database.withTransaction(block)
+    }
 
     fun launchWithTransaction(block: suspend () -> Unit)  = scope.launch {
         transaction(block)

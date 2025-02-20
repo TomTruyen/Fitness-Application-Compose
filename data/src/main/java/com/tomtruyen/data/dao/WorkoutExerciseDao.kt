@@ -5,7 +5,7 @@ import androidx.room.Upsert
 import com.tomtruyen.data.entities.WorkoutExercise
 
 @Dao
-abstract class WorkoutExerciseDao {
+fun interface WorkoutExerciseDao {
     @Upsert
-    abstract fun saveAll(workoutExercises: List<WorkoutExercise>): List<Long>
+    fun saveAll(workoutExercises: List<WorkoutExercise>): List<Long>
 }
