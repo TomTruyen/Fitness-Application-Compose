@@ -35,9 +35,10 @@ object TextFields {
         readOnly: Boolean = false,
         enabled: Boolean = true,
         singleLine: Boolean = true,
+        border: Boolean = true,
         padding: PaddingValues = PaddingValues(Dimens.Normal),
         textStyle: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.bodyMedium,
-        trailingIcon: @Composable () -> Unit = {},
+        trailingIcon: (@Composable () -> Unit)? = null,
         keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
         containerColor: Color = Color.White,
         shape: Shape = MaterialTheme.shapes.small,
@@ -78,14 +79,20 @@ object TextFields {
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(
-                        width = 1.dp,
-                        color = if(error.isNullOrBlank()) {
-                            LavenderMist
+                    .then(
+                        if (border) {
+                            Modifier.border(
+                                width = 1.dp,
+                                color = if(error.isNullOrBlank()) {
+                                    LavenderMist
+                                } else {
+                                    MaterialTheme.colorScheme.error
+                                },
+                                shape = shape
+                            )
                         } else {
-                            MaterialTheme.colorScheme.error
-                        },
-                        shape = shape
+                            Modifier
+                        }
                     )
                     .animateContentSize(),
             ) { innerTextField ->
@@ -117,12 +124,15 @@ object TextFields {
                         innerTextField.invoke()
                     }
 
-                    Box(
-                        modifier = Modifier.size(20.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        trailing.invoke()
+                    trailing?.let {
+                        Box(
+                            modifier = Modifier.size(20.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            it.invoke()
+                        }
                     }
+
                 }
             }
 

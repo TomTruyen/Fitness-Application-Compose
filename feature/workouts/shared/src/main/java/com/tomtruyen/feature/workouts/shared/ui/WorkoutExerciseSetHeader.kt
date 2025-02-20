@@ -22,14 +22,12 @@ import com.tomtruyen.feature.workouts.shared.R
 @Composable
 fun WorkoutExerciseSetHeader(
     exercise: Exercise,
-    hasMultipleSets: Boolean,
     isExecute: Boolean = false,
-    unit: String
+    unit: String,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = Dimens.Tiny),
+        modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
@@ -43,11 +41,9 @@ fun WorkoutExerciseSetHeader(
 
         if(isExecute) {
             Text(
-                text = stringResource(id = R.string.label_last).uppercase(),
+                text = stringResource(id = R.string.label_previous).uppercase(),
                 textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .weight(1f)
-                    .animateContentSize(),
+                modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.bodySmall.copy(
                     fontWeight = FontWeight.W500,
                 )
@@ -61,9 +57,7 @@ fun WorkoutExerciseSetHeader(
                 Text(
                     text = stringResource(id = R.string.label_reps).uppercase(),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .weight(1f)
-                        .animateContentSize(),
+                    modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.W500,
                     )
@@ -74,9 +68,7 @@ fun WorkoutExerciseSetHeader(
                 Text(
                     text = unit.uppercase(),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .weight(1f)
-                        .animateContentSize(),
+                    modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.W500,
                     )
@@ -87,19 +79,12 @@ fun WorkoutExerciseSetHeader(
                 Text(
                     text = stringResource(id = R.string.label_time).uppercase(),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .weight(1f)
-                        .animateContentSize(),
+                    modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.W500,
                     )
                 )
             }
-        }
-
-
-        AnimatedVisibility(visible = hasMultipleSets && !isExecute) {
-            Spacer(modifier = Modifier.width(Dimens.MinButtonHeight))
         }
     }
 }

@@ -4,13 +4,11 @@ import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
 
 sealed class CreateWorkoutUiAction {
-    data class OnExerciseNotesChanged(val index: Int, val notes: String) : CreateWorkoutUiAction()
+    data class OnExerciseNotesChanged(val id: String, val notes: String) : CreateWorkoutUiAction()
 
     data class OnDeleteExerciseClicked(val index: Int): CreateWorkoutUiAction()
 
     data class OnReorderExercises(val exercises: List<WorkoutExerciseResponse>) : CreateWorkoutUiAction()
-
-    data object OnReorderExerciseClicked : CreateWorkoutUiAction()
 
     data object OnAddExerciseClicked : CreateWorkoutUiAction()
 
@@ -21,4 +19,6 @@ sealed class CreateWorkoutUiAction {
     data class OnRestChanged(val exerciseIndex: Int, val rest: Int) : CreateWorkoutUiAction()
 
     data class Save(val workoutName: String): CreateWorkoutUiAction()
+
+    data class OnReorder(val from: Int, val to: Int): CreateWorkoutUiAction()
 }

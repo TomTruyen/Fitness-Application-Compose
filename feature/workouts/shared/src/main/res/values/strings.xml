@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="label_set">Set</string>
-    <string name="label_last">Last</string>
+    <string name="label_previous">Previous</string>
     <string name="label_reps">Reps</string>
     <string name="label_time">Time</string>
 </resources>

@@ -12,7 +12,6 @@ androidx-paging = "3.3.6"
 androidx-room = "2.6.1"
 appcompat = "1.7.0"
 coil-kt-compose = "2.7.0"
-compose-reorderable = "0.9.6"
 espresso-core = "3.6.1"
 google-crashlytics-plugin = "3.0.3"
 google-firebase-bom = "33.9.0"
@@ -26,6 +25,7 @@ kotlin = "2.1.10"
 kotlinx-coroutines = "1.10.1"
 kotlinx-serialization-json = "1.8.0"
 material = "1.12.0"
+reorderable = "2.4.3"
 secrets-gradle = "2.0.1"
 squareup-leakcanary = "2.14"
 version-catalog-update = "0.8.5"
@@ -55,7 +55,6 @@ androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.r
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx-room" }
 coil-kt-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-kt-compose" }
-compose-reorderable = { module = "org.burnoutcrew.composereorderable:reorderable", version.ref = "compose-reorderable" }
 google-firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 google-firebase-auth = { module = "com.google.firebase:firebase-auth-ktx" }
 google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "google-firebase-bom" }
@@ -72,6 +71,7 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
+reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 squareup-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "squareup-leakcanary" }
 
 [plugins]

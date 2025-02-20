@@ -21,5 +21,5 @@ dependencies {
     implementation(project(":feature:workouts:shared"))
 
     // Reorderable (Drag & Drop) Lazy Column
-    implementation(libs.compose.reorderable)
+    implementation(libs.reorderable)
 }

@@ -9,7 +9,6 @@ import com.tomtruyen.feature.profile.ProfileViewModel
 import com.tomtruyen.fitnessapplication.providers.BuildConfigFieldProviderImpl
 import com.tomtruyen.fitnessapplication.providers.KoinReloadProviderImpl
 import com.tomtruyen.feature.workouts.WorkoutsViewModel
-import com.tomtruyen.feature.workouts.create.reorder.ReorderWorkoutExercisesViewModel
 import com.tomtruyen.feature.workouts.history.WorkoutHistoryViewModel
 import com.tomtruyen.models.providers.BuildConfigFieldProvider
 import com.tomtruyen.models.providers.CredentialProvider
@@ -55,8 +54,6 @@ val appModule = module {
     viewModel { (id: String?) ->
         com.tomtruyen.feature.workouts.create.CreateWorkoutViewModel(id, get(), get(), get())
     }
-
-    viewModelOf(::ReorderWorkoutExercisesViewModel)
 
     viewModel { (isFromWorkout: Boolean) ->
         com.tomtruyen.feature.exercises.ExercisesViewModel(isFromWorkout, get(), get())

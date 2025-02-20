@@ -32,7 +32,6 @@ import com.tomtruyen.feature.profile.ProfileScreen
 import com.tomtruyen.feature.workouts.WorkoutsScreen
 import com.tomtruyen.feature.workouts.create.CreateWorkoutScreen
 import com.tomtruyen.feature.workouts.create.CreateWorkoutViewModel
-import com.tomtruyen.feature.workouts.create.reorder.ReorderWorkoutExercisesScreen
 import com.tomtruyen.feature.workouts.detail.WorkoutDetailScreen
 import com.tomtruyen.feature.workouts.execute.ExecuteWorkoutScreen
 import com.tomtruyen.feature.workouts.history.WorkoutHistoryScreen
@@ -153,18 +152,6 @@ class MainActivity : ComponentActivity() {
                             composable<Screen.Workout.HistoryOverview> {
                                 WorkoutHistoryScreen(
                                     navController
-                                )
-                            }
-
-                            composable<Screen.Workout.ReorderExercises> { backStackEntry ->
-                                val viewModel = koinViewModel<CreateWorkoutViewModel>(
-                                    viewModelStoreOwner = backStackEntry,
-                                    parameters = { parametersOf(null) }
-                                )
-
-                                ReorderWorkoutExercisesScreen(
-                                    navController = navController,
-                                    parentViewModel = viewModel
                                 )
                             }
                         }

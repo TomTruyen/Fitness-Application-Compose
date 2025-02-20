@@ -21,7 +21,7 @@ data class WorkoutResponse(
     var createdAt: Long = System.currentTimeMillis(),
     var isPerformed: Boolean = false,
 ): Parcelable {
-    fun toWorkout(): com.tomtruyen.data.entities.Workout = com.tomtruyen.data.entities.Workout(
+    fun toWorkout(): Workout = Workout(
         id = id,
         name = name,
         unit = unit,
@@ -30,11 +30,11 @@ data class WorkoutResponse(
     )
 
     fun copyWithRepsChanged(
-        exerciseIndex: Int,
+        id: String,
         setIndex: Int,
         reps: String?
-    ) = copy(exercises = exercises.mapIndexed { eIndex, exercise ->
-            if (eIndex == exerciseIndex) {
+    ) = copy(exercises = exercises.map { exercise ->
+            if (exercise.id == id) {
                 exercise.copy(
                     sets = exercise.sets.mapIndexed { sIndex, set ->
                         if (sIndex == setIndex) set.copy(
@@ -50,11 +50,11 @@ data class WorkoutResponse(
     )
 
     fun copyWithWeightChanged(
-        exerciseIndex: Int,
+        id: String,
         setIndex: Int,
         weight: String?
-    ) = copy(exercises = exercises.mapIndexed { eIndex, exercise ->
-            if (eIndex == exerciseIndex) {
+    ) = copy(exercises = exercises.map { exercise ->
+            if (exercise.id == id) {
                 exercise.copy(
                     sets = exercise.sets.mapIndexed { sIndex, set ->
                         if (sIndex == setIndex) set.copy(
@@ -70,11 +70,11 @@ data class WorkoutResponse(
     )
 
     fun copyWithTimeChanged(
-        exerciseIndex: Int,
+        id: String,
         setIndex: Int,
         time: Int?
-    ) = copy(exercises = exercises.mapIndexed { eIndex, exercise ->
-            if (eIndex == exerciseIndex) {
+    ) = copy(exercises = exercises.map { exercise ->
+            if (exercise.id == id) {
                 exercise.copy(
                     sets = exercise.sets.mapIndexed { sIndex, set ->
                         if (sIndex == setIndex) set.copy(
@@ -89,10 +89,10 @@ data class WorkoutResponse(
     )
 
     fun copyWithDeleteSet(
-        exerciseIndex: Int,
+        id: String,
         setIndex: Int
-    ) = copy(exercises = exercises.mapIndexed { eIndex, exercise ->
-            if (eIndex == exerciseIndex) {
+    ) = copy(exercises = exercises.map { exercise ->
+            if (exercise.id == id) {
                 exercise.copy(
                     sets = exercise.sets.filterIndexed { sIndex, _ -> sIndex != setIndex }
                 )
@@ -102,12 +102,10 @@ data class WorkoutResponse(
         }
     )
 
-    fun copyWithAddSet(
-        exerciseIndex: Int
-    ) = copy(exercises = exercises.mapIndexed { eIndex, exercise ->
-            if (eIndex == exerciseIndex) {
+    fun copyWithAddSet(id: String) = copy(exercises = exercises.map { exercise ->
+            if (exercise.id == id) {
                 exercise.copy(
-                    sets = exercise.sets + com.tomtruyen.data.entities.WorkoutSet(
+                    sets = exercise.sets + WorkoutSet(
                         workoutExerciseId = exercise.id,
                         order = exercise.sets.lastOrNull()?.order?.plus(1) ?: 0
                     )
@@ -126,11 +124,11 @@ data class WorkoutExerciseResponse(
     var rest: Int = 0,
     var restEnabled: Boolean = false,
     var order: Int = 0,
-    var exercise: com.tomtruyen.data.entities.Exercise = com.tomtruyen.data.entities.Exercise(),
-    var sets: List<com.tomtruyen.data.entities.WorkoutSet> = listOf()
+    var exercise: Exercise = Exercise(),
+    var sets: List<WorkoutSet> = listOf()
 ): Parcelable {
-    fun toWorkoutExercise(workoutId: String): com.tomtruyen.data.entities.WorkoutExercise =
-        com.tomtruyen.data.entities.WorkoutExercise(
+    fun toWorkoutExercise(workoutId: String): WorkoutExercise =
+        WorkoutExercise(
             id = id,
             notes = notes,
             rest = rest,

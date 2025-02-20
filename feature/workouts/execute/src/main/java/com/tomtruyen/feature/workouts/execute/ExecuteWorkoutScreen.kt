@@ -199,88 +199,87 @@ fun WorkoutExerciseTabContent(
     onAction: (ExecuteWorkoutUiAction) -> Unit,
     onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
-        HorizontalPager(
-            modifier = modifier,
-            state = pagerState
-        ) { index ->
-            val workoutExercise = state.workout.exercises.getOrNull(index)
-            val lastWorkoutExercise = lastEntryForWorkout?.exercises?.getOrNull(index)
-
-            if (workoutExercise != null) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .animateContentSize()
-                        .padding(Dimens.Normal),
-                    verticalArrangement = Arrangement.Top
-                ) {
-                    if(workoutExercise.notes.isNotEmpty()) {
-                        item {
-                            // Notes
-                            TextFields.Default(
-                                singleLine = false,
-                                placeholder = stringResource(id = R.string.placeholder_notes),
-                                value = workoutExercise.notes,
-                                onValueChange = {},
-                                readOnly = true
-                            )
-                        }
-
-                        item {
-                            Spacer(modifier = Modifier.height(Dimens.Normal))
-                        }
-                    }
-
-                    item {
-                        // Header Row
-                        WorkoutExerciseSetHeader(
-                            exercise = workoutExercise.exercise,
-                            hasMultipleSets = workoutExercise.sets.size > 1,
-                            isExecute = true,
-                            unit = state.workout.unit
-                        )
-                    }
-
-                    // Sets
-                    itemsIndexed(workoutExercise.sets) { setIndex, set ->
-                        val lastPerformedSet = lastWorkoutExercise?.sets?.getOrNull(setIndex)
-
-                        WorkoutExerciseSet(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .animateItem(),
-                            exerciseIndex = index,
-                            setIndex = setIndex,
-                            set = set,
-                            type = workoutExercise.exercise.typeEnum,
-                            hasMultipleSets = workoutExercise.sets.size > 1,
-                            isExecute = true,
-                            lastPerformedSet = lastPerformedSet,
-                            onEvent = onWorkoutEvent
-                        )
-                    }
-                }
-            }
-        }
-
-        AnimatedVisibility(
-            visible = pagerState.currentPage < pagerState.pageCount - 1,
-            enter = fadeIn() + slideInHorizontally(),
-            exit = slideOutHorizontally() + fadeOut()
-        ) {
-            Buttons.Default(
-                text = stringResource(id = R.string.button_next_exercise),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .animateContentSize()
-                    .padding(Dimens.Normal),
-            ) {
-                onAction(ExecuteWorkoutUiAction.NextExercise)
-            }
-        }
-    }
+//    Column(
+//        modifier = modifier
+//            .fillMaxSize()
+//    ) {
+//        HorizontalPager(
+//            modifier = modifier,
+//            state = pagerState
+//        ) { index ->
+//            val workoutExercise = state.workout.exercises.getOrNull(index)
+//            val lastWorkoutExercise = lastEntryForWorkout?.exercises?.getOrNull(index)
+//
+//            if (workoutExercise != null) {
+//                LazyColumn(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .animateContentSize()
+//                        .padding(Dimens.Normal),
+//                    verticalArrangement = Arrangement.Top
+//                ) {
+//                    if(workoutExercise.notes.isNotEmpty()) {
+//                        item {
+//                            // Notes
+//                            TextFields.Default(
+//                                singleLine = false,
+//                                placeholder = stringResource(id = R.string.placeholder_notes),
+//                                value = workoutExercise.notes,
+//                                onValueChange = {},
+//                                readOnly = true
+//                            )
+//                        }
+//
+//                        item {
+//                            Spacer(modifier = Modifier.height(Dimens.Normal))
+//                        }
+//                    }
+//
+//                    item {
+//                        // Header Row
+//                        WorkoutExerciseSetHeader(
+//                            exercise = workoutExercise.exercise,
+//                            isExecute = true,
+//                            unit = state.workout.unit
+//                        )
+//                    }
+//
+//                    // Sets
+//                    itemsIndexed(workoutExercise.sets) { setIndex, set ->
+//                        val lastPerformedSet = lastWorkoutExercise?.sets?.getOrNull(setIndex)
+//
+//                        WorkoutExerciseSet(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .animateItem(),
+//                            exerciseIndex = index,
+//                            setIndex = setIndex,
+//                            set = set,
+//                            type = workoutExercise.exercise.typeEnum,
+//                            hasMultipleSets = workoutExercise.sets.size > 1,
+//                            isExecute = true,
+//                            lastPerformedSet = lastPerformedSet,
+//                            onEvent = onWorkoutEvent
+//                        )
+//                    }
+//                }
+//            }
+//        }
+//
+//        AnimatedVisibility(
+//            visible = pagerState.currentPage < pagerState.pageCount - 1,
+//            enter = fadeIn() + slideInHorizontally(),
+//            exit = slideOutHorizontally() + fadeOut()
+//        ) {
+//            Buttons.Default(
+//                text = stringResource(id = R.string.button_next_exercise),
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .animateContentSize()
+//                    .padding(Dimens.Normal),
+//            ) {
+//                onAction(ExecuteWorkoutUiAction.NextExercise)
+//            }
+//        }
+//    }
 }

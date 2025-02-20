@@ -14,4 +14,7 @@ dependencies {
 
     implementation(project(":data"))
     implementation(project(":models"))
+
+    // Images
+    implementation(libs.coil.kt.compose)
 }

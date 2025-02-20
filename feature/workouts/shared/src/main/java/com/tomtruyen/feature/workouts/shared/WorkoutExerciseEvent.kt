@@ -1,32 +1,32 @@
 package com.tomtruyen.feature.workouts.shared
 
 sealed class WorkoutExerciseEvent(
-    open val exerciseIndex: Int,
+    open val id: String,
 ) {
     data class OnRepsChanged(
-        override val exerciseIndex: Int,
+        override val id: String,
         val setIndex: Int,
         val reps: String?
-    ) : WorkoutExerciseEvent(exerciseIndex)
+    ) : WorkoutExerciseEvent(id)
 
     data class OnWeightChanged(
-        override val exerciseIndex: Int,
+        override val id: String,
         val setIndex: Int,
         val weight: String?
-    ) : WorkoutExerciseEvent(exerciseIndex)
+    ) : WorkoutExerciseEvent(id)
 
     data class OnTimeChanged(
-        override val exerciseIndex: Int,
+        override val id: String,
         val setIndex: Int,
         val time: Int?
-    ) : WorkoutExerciseEvent(exerciseIndex)
+    ) : WorkoutExerciseEvent(id)
 
     data class OnDeleteSetClicked(
-        override val exerciseIndex: Int,
+        override val id: String,
         val setIndex: Int
-    ) : WorkoutExerciseEvent(exerciseIndex)
+    ) : WorkoutExerciseEvent(id)
 
     data class OnAddSetClicked(
-        override val exerciseIndex: Int
-    ) : WorkoutExerciseEvent(exerciseIndex)
+        override val id: String
+    ) : WorkoutExerciseEvent(id)
 }

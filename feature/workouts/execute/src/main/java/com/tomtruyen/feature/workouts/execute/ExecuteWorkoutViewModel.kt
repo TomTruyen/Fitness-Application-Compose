@@ -115,7 +115,7 @@ class ExecuteWorkoutViewModel(
             is WorkoutExerciseEvent.OnRepsChanged -> updateState {
                 it.copy(
                     workout = it.workout.copyWithRepsChanged(
-                        exerciseIndex = event.exerciseIndex,
+                        id = event.id,
                         setIndex = event.setIndex,
                         reps = event.reps
                     )
@@ -125,7 +125,7 @@ class ExecuteWorkoutViewModel(
             is WorkoutExerciseEvent.OnWeightChanged -> updateState {
                 it.copy(
                     workout = it.workout.copyWithWeightChanged(
-                        exerciseIndex = event.exerciseIndex,
+                        id = event.id,
                         setIndex = event.setIndex,
                         weight = event.weight
                     )
@@ -135,7 +135,7 @@ class ExecuteWorkoutViewModel(
             is WorkoutExerciseEvent.OnTimeChanged -> updateState {
                 it.copy(
                     workout = it.workout.copyWithTimeChanged(
-                        exerciseIndex = event.exerciseIndex,
+                        id = event.id,
                         setIndex = event.setIndex,
                         time = event.time
                     )
@@ -145,7 +145,7 @@ class ExecuteWorkoutViewModel(
             is WorkoutExerciseEvent.OnDeleteSetClicked -> updateState {
                 it.copy(
                     workout = it.workout.copyWithDeleteSet(
-                        exerciseIndex = event.exerciseIndex,
+                        id = event.id,
                         setIndex = event.setIndex
                     )
                 )

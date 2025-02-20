@@ -52,8 +52,5 @@ sealed interface Screen {
 
         @Serializable
         data object HistoryOverview: Workout
-
-        @Serializable
-        data object ReorderExercises: Workout
     }
 }
