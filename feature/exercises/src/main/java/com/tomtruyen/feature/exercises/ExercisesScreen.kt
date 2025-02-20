@@ -28,15 +28,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -44,11 +41,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.ui.toolbars.CollapsingToolbar
 import com.tomtruyen.core.ui.Chip
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.listitems.ListItem
 import com.tomtruyen.core.ui.toolbars.SearchToolbar
+import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.navigation.NavArguments
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
@@ -98,8 +95,6 @@ fun ExercisesScreenLayout(
     state: ExercisesUiState,
     onAction: (ExercisesUiAction) -> Unit
 ) {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-
     val filters by remember {
         derivedStateOf {
             state.filter.categories + state.filter.equipment
@@ -132,10 +127,9 @@ fun ExercisesScreenLayout(
                     }
                 }
             } else {
-                CollapsingToolbar(
+                Toolbar(
                     title = stringResource(id = R.string.title_exercises),
                     navController = navController,
-                    scrollBehavior = scrollBehavior,
                     actions = {
                         IconButton(
                             onClick = {
@@ -191,8 +185,6 @@ fun ExercisesScreenLayout(
               }
           }
         },
-        // nestedScroll modifier is required for the scroll behavior to work
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
         LoadingContainer(
             loading = state.loading,

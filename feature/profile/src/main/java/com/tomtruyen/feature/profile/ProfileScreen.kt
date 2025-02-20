@@ -14,8 +14,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -25,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -33,7 +30,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Buttons
-import com.tomtruyen.core.ui.toolbars.CollapsingToolbar
 import com.tomtruyen.core.ui.listitems.ListItem
 import com.tomtruyen.core.ui.listitems.SwitchListItem
 import com.tomtruyen.core.common.utils.EmailUtils
@@ -41,6 +37,7 @@ import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.dialogs.RestAlertDialog
 import com.tomtruyen.core.ui.dialogs.UnitAlertDialog
+import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.data.entities.Settings
 import com.tomtruyen.models.providers.BuildConfigFieldProvider
 import com.tomtruyen.navigation.Screen
@@ -96,21 +93,16 @@ fun ProfileScreenLayout(
     var unitDialogVisible by remember { mutableStateOf(false) }
     var restDialogVisible by remember { mutableStateOf(false) }
 
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-
     val emailLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
     Scaffold(
         snackbarHost = snackbarHost,
         topBar = {
-            CollapsingToolbar(
+            Toolbar(
                 title = stringResource(id = R.string.title_profile),
                 navController =  navController,
-                scrollBehavior = scrollBehavior
             )
         },
-        // nestedScroll modifier is required for the scroll behavior to work
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
         LoadingContainer(
             loading = state.loading,
