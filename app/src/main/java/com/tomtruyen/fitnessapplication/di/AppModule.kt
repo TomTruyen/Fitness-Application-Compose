@@ -14,8 +14,7 @@ import com.tomtruyen.feature.workouts.history.WorkoutHistoryViewModel
 import com.tomtruyen.models.providers.BuildConfigFieldProvider
 import com.tomtruyen.models.providers.CredentialProvider
 import com.tomtruyen.models.providers.KoinReloadProvider
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.*
 import org.koin.dsl.module
 
 val appModule = module {

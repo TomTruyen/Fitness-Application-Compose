@@ -39,7 +39,7 @@ import com.tomtruyen.feature.workouts.history.WorkoutHistoryScreen
 import com.tomtruyen.models.Global
 import com.tomtruyen.navigation.Screen
 import org.koin.android.ext.android.inject
-import org.koin.androidx.compose.navigation.koinNavViewModel
+import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 class MainActivity : ComponentActivity() {
@@ -133,7 +133,7 @@ class MainActivity : ComponentActivity() {
                                 val parentEntry =
                                     navController.getBackStackEntry<Screen.Workout.Graph>()
 
-                                val viewModel = koinNavViewModel<CreateWorkoutViewModel>(
+                                val viewModel = koinViewModel<CreateWorkoutViewModel>(
                                     viewModelStoreOwner = parentEntry,
                                     parameters = { parametersOf(args.id) }
                                 )
@@ -163,7 +163,7 @@ class MainActivity : ComponentActivity() {
                                 val parentEntry =
                                     navController.getBackStackEntry<Screen.Workout.Graph>()
 
-                                val viewModel = koinNavViewModel<CreateWorkoutViewModel>(
+                                val viewModel = koinViewModel<CreateWorkoutViewModel>(
                                     viewModelStoreOwner = parentEntry
                                 )
 
@@ -183,7 +183,7 @@ class MainActivity : ComponentActivity() {
                                 val parentEntry =
                                     navController.getBackStackEntry<Screen.Exercise.Graph>()
 
-                                val viewModel = koinNavViewModel<ExercisesViewModel>(
+                                val viewModel = koinViewModel<ExercisesViewModel>(
                                     viewModelStoreOwner = parentEntry,
                                     parameters = { parametersOf(args.isFromWorkout) }
                                 )
@@ -216,7 +216,7 @@ class MainActivity : ComponentActivity() {
                                 val parentEntry =
                                     navController.getBackStackEntry<Screen.Exercise.Graph>()
 
-                                val viewModel = koinNavViewModel<ExercisesViewModel>(
+                                val viewModel = koinViewModel<ExercisesViewModel>(
                                     viewModelStoreOwner = parentEntry,
                                 )
 

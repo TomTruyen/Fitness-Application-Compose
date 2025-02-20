@@ -50,7 +50,6 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun FitnessApplicationTheme(
         darkTheme: Boolean = isSystemInDarkTheme(),
-        // Dynamic color is available on Android 12+
         content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -62,8 +61,6 @@ fun FitnessApplicationTheme(
         val currentWindow = (view.context as Activity).window
 
         SideEffect {
-            currentWindow.statusBarColor = colorScheme.background.toArgb()
-            currentWindow.navigationBarColor = colorScheme.background.toArgb()
             WindowCompat.getInsetsController(currentWindow, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
