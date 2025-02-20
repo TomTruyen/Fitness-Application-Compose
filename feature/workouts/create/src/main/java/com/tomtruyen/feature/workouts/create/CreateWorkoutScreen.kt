@@ -35,7 +35,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -59,6 +58,7 @@ import com.tomtruyen.core.ui.dialogs.TextFieldDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.ui.TabLayout
 import com.tomtruyen.core.ui.LoadingContainer
+import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.feature.workouts.shared.WorkoutExerciseEvent
 import com.tomtruyen.feature.workouts.shared.ui.WorkoutExerciseSet
 import com.tomtruyen.feature.workouts.shared.ui.WorkoutExerciseSetHeader
@@ -93,26 +93,12 @@ fun CreateWorkoutScreen(
     }
 
     LaunchedEffect(Unit, navController) {
-        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<com.tomtruyen.data.entities.Exercise?>(
-            NavArguments.EXERCISE, null)
-            ?.collectLatest {
-                it?.let { exercise ->
-                    viewModel.onAction(CreateWorkoutUiAction.OnAddExercise(exercise))
+        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<List<Exercise>>(NavArguments.EXERCISES, emptyList())
+            ?.collectLatest { exercises ->
+                viewModel.onAction(CreateWorkoutUiAction.OnAddExercises(exercises))
 
-                    navController.currentBackStackEntry?.savedStateHandle?.remove<com.tomtruyen.data.entities.Exercise>(
-                        NavArguments.EXERCISE)
-                }
+                navController.currentBackStackEntry?.savedStateHandle?.remove<List<Exercise>>(NavArguments.EXERCISES)
             }
-    }
-
-    LaunchedEffect(state.selectedExerciseId) {
-        if(state.workout.exercises.isEmpty()) return@LaunchedEffect
-
-        val index = state.workout.exercises.indexOfFirst { it.exercise.id == state.selectedExerciseId }
-
-        if(index != -1) {
-            pagerState.animateScrollToPage(index)
-        }
     }
 
     CreateWorkoutScreenLayout(
@@ -135,12 +121,6 @@ fun CreateWorkoutScreenLayout(
     onAction: (CreateWorkoutUiAction) -> Unit,
     onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
 ) {
-    val exercises by remember {
-        derivedStateOf {
-            state.workout.exercises
-        }
-    }
-
     var workoutNameDialogVisible by remember { mutableStateOf(false) }
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
@@ -159,14 +139,14 @@ fun CreateWorkoutScreenLayout(
                 title = stringResource(id = R.string.title_create_workout),
                 navController = navController,
                 onNavigateUp = {
-                    if(exercises != state.initialWorkout.exercises) {
+                    if(state.workout.exercises != state.initialWorkout.exercises) {
                         confirmationDialogVisible = true
                     } else {
                         navController.popBackStack()
                     }
                 }
             ) {
-                if(exercises.size > 1) {
+                if(state.workout.exercises.size > 1) {
                     IconButton(onClick = { onAction(CreateWorkoutUiAction.OnReorderExerciseClicked) }) {
                         Icon(
                             imageVector = Icons.Filled.FormatListNumbered,
@@ -175,7 +155,7 @@ fun CreateWorkoutScreenLayout(
                     }
                 }
 
-                if(exercises.isNotEmpty()) {
+                if(state.workout.exercises.isNotEmpty()) {
                     IconButton(
                         onClick = {
                             if(state.workout.name.isNotEmpty()) {
@@ -203,7 +183,7 @@ fun CreateWorkoutScreenLayout(
             Column(
                 modifier = Modifier.fillMaxSize()
             ) {
-                AnimatedVisibility(visible = exercises.isNotEmpty()) {
+                AnimatedVisibility(visible = state.workout.exercises.isNotEmpty()) {
                     TabLayout(
                         items = state.workout.exercises.map { it.exercise.displayName },
                         state = pagerState

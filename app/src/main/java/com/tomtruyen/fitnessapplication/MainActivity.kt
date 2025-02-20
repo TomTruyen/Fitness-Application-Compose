@@ -130,11 +130,8 @@ class MainActivity : ComponentActivity() {
                             composable<Screen.Workout.Create> { backStackEntry ->
                                 val args = backStackEntry.toRoute<Screen.Workout.Create>()
 
-                                val parentEntry =
-                                    navController.getBackStackEntry<Screen.Workout.Graph>()
-
                                 val viewModel = koinViewModel<CreateWorkoutViewModel>(
-                                    viewModelStoreOwner = parentEntry,
+                                    viewModelStoreOwner = backStackEntry,
                                     parameters = { parametersOf(args.id) }
                                 )
 
@@ -159,12 +156,10 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
 
-                            composable<Screen.Workout.ReorderExercises> {
-                                val parentEntry =
-                                    navController.getBackStackEntry<Screen.Workout.Graph>()
-
+                            composable<Screen.Workout.ReorderExercises> { backStackEntry ->
                                 val viewModel = koinViewModel<CreateWorkoutViewModel>(
-                                    viewModelStoreOwner = parentEntry
+                                    viewModelStoreOwner = backStackEntry,
+                                    parameters = { parametersOf(null) }
                                 )
 
                                 ReorderWorkoutExercisesScreen(
@@ -180,11 +175,8 @@ class MainActivity : ComponentActivity() {
                             composable<Screen.Exercise.Overview> { backStackEntry ->
                                 val args = backStackEntry.toRoute<Screen.Exercise.Overview>()
 
-                                val parentEntry =
-                                    navController.getBackStackEntry<Screen.Exercise.Graph>()
-
                                 val viewModel = koinViewModel<ExercisesViewModel>(
-                                    viewModelStoreOwner = parentEntry,
+                                    viewModelStoreOwner = backStackEntry,
                                     parameters = { parametersOf(args.isFromWorkout) }
                                 )
 
@@ -212,12 +204,9 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
 
-                            composable<Screen.Exercise.Filter> {
-                                val parentEntry =
-                                    navController.getBackStackEntry<Screen.Exercise.Graph>()
-
+                            composable<Screen.Exercise.Filter> { backStackEntry ->
                                 val viewModel = koinViewModel<ExercisesViewModel>(
-                                    viewModelStoreOwner = parentEntry,
+                                    viewModelStoreOwner = backStackEntry,
                                 )
 
                                 ExercisesFilterScreen(

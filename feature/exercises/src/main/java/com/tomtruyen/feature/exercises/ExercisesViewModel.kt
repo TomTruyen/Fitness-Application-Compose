@@ -117,7 +117,13 @@ class ExercisesViewModel(
                 if (isFromWorkout) {
                     updateState {
                         it.copy(
-                            selectedExercise = if (it.selectedExercise == action.exercise) null else action.exercise
+                            selectedExercises = it.selectedExercises.toMutableList().apply {
+                                if (contains(action.exercise)) {
+                                    remove(action.exercise)
+                                } else {
+                                    add(action.exercise)
+                                }
+                            },
                         )
                     }
                 } else {
@@ -125,7 +131,7 @@ class ExercisesViewModel(
                 }
             }
             is ExercisesUiAction.OnAddExerciseToWorkoutClicked -> {
-                triggerEvent(ExercisesUiEvent.NavigateBackToWorkout(action.exercise))
+                triggerEvent(ExercisesUiEvent.NavigateBackToWorkout(uiState.value.selectedExercises))
             }
         }
     }

@@ -8,7 +8,7 @@ data class ExercisesUiState(
     val search: String = "",
     val searching: Boolean = false,
     val filter: ExerciseFilter = ExerciseFilter(),
-    val selectedExercise: Exercise? = null,
+    val selectedExercises: List<Exercise> = emptyList(),
 
     val exercises: List<Exercise> = emptyList(),
     val categories: List<String> = emptyList(),

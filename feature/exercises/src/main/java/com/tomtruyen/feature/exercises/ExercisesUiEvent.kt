@@ -11,5 +11,5 @@ sealed class ExercisesUiEvent {
 
     data class NavigateToDetail(val id: String): ExercisesUiEvent()
 
-    data class NavigateBackToWorkout(val exercise: Exercise): ExercisesUiEvent()
+    data class NavigateBackToWorkout(val exercises: List<Exercise>): ExercisesUiEvent()
 }

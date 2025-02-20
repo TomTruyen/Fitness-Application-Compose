@@ -21,7 +21,6 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -69,8 +68,8 @@ fun ExercisesScreen(
                 )
                 is ExercisesUiEvent.NavigateBackToWorkout -> {
                     navController.previousBackStackEntry?.savedStateHandle?.set(
-                        NavArguments.EXERCISE,
-                        event.exercise
+                        NavArguments.EXERCISES,
+                        event.exercises
                     )
                     navController.popBackStack()
                 }
@@ -87,7 +86,6 @@ fun ExercisesScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExercisesScreenLayout(
     snackbarHost: @Composable () -> Unit,
@@ -169,13 +167,13 @@ fun ExercisesScreenLayout(
         },
         floatingActionButton = {
           AnimatedVisibility(
-              visible = state.selectedExercise != null,
+              visible = state.selectedExercises.isNotEmpty(),
               enter = scaleIn(),
               exit = scaleOut()
           ) {
               FloatingActionButton(
                   onClick = {
-                      onAction(ExercisesUiAction.OnAddExerciseToWorkoutClicked(state.selectedExercise!!))
+                      onAction(ExercisesUiAction.OnAddExerciseToWorkoutClicked)
                   }
               ) {
                 Icon(
@@ -257,7 +255,7 @@ fun ExercisesScreenLayout(
                             ListItem(
                                 title = exercise.displayName,
                                 message = exercise.category.orEmpty(),
-                                selected = state.selectedExercise?.id == exercise.id,
+                                selected = state.selectedExercises.contains(exercise),
                                 showChevron = !state.isFromWorkout,
                             ) {
                                 onAction(ExercisesUiAction.OnExerciseClicked(exercise))

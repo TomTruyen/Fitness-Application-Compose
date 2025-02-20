@@ -14,7 +14,7 @@ sealed class CreateWorkoutUiAction {
 
     data object OnAddExerciseClicked : CreateWorkoutUiAction()
 
-    data class OnAddExercise(val exercise: Exercise) : CreateWorkoutUiAction()
+    data class OnAddExercises(val exercises: List<Exercise>) : CreateWorkoutUiAction()
 
     data class OnRestEnabledChanged(val exerciseIndex: Int, val enabled: Boolean) : CreateWorkoutUiAction()
 

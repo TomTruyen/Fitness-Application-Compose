@@ -1,5 +1,6 @@
 package com.tomtruyen.core.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.HorizontalDivider
@@ -20,6 +21,8 @@ fun TabLayout(
     state: PagerState
 )  {
     val scope = rememberCoroutineScope()
+
+    Log.d("@@@", "TabLayout Render: ${items.size} - ${state.currentPage}")
 
     ScrollableTabRow(
         selectedTabIndex = state.currentPage,

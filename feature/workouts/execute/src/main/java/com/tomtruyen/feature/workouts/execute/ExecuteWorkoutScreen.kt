@@ -167,7 +167,7 @@ fun ExecuteWorkoutScreenLayout(
             Column(
                 modifier = Modifier.fillMaxSize()
             ) {
-                AnimatedVisibility(visible = state.workout.exercises.isNotEmpty()) {
+                if(state.workout.exercises.isNotEmpty()) {
                     TabLayout(
                         items = state.workout.exercises.map { it.exercise.displayName },
                         state = pagerState

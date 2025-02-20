@@ -1,5 +1,5 @@
 package com.tomtruyen.navigation
 
 object NavArguments {
-    const val EXERCISE = "exercise"
+    const val EXERCISES = "exercises"
 }

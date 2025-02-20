@@ -110,25 +110,23 @@ class CreateWorkoutViewModel(
                     workout = it.workout.copy(
                         exercises = it.workout.exercises.filterIndexed { index, _ -> index != action.index }
                     ),
-                    selectedExerciseId = it.workout.exercises.getOrNull(
-                        if (action.index > 0) action.index - 1 else if (it.workout.exercises.size > 1) action.index + 1 else -1
-                    )?.id
                 )
             }
             is CreateWorkoutUiAction.OnReorderExerciseClicked -> triggerEvent(CreateWorkoutUiEvent.NavigateToReorderExercise)
             is CreateWorkoutUiAction.OnAddExerciseClicked -> triggerEvent(CreateWorkoutUiEvent.NavigateToAddExercise)
-            is CreateWorkoutUiAction.OnAddExercise -> updateState {
-                val newExercise = WorkoutExerciseResponse(
-                    exercise = action.exercise,
-                    rest = it.settings.rest,
-                    restEnabled = it.settings.restEnabled,
-                ).apply { sets = listOf(com.tomtruyen.data.entities.WorkoutSet(workoutExerciseId = this@apply.id)) }
+            is CreateWorkoutUiAction.OnAddExercises -> updateState {
+                val newExercises = action.exercises.map { exercise ->
+                    WorkoutExerciseResponse(
+                        exercise = exercise,
+                        rest = it.settings.rest,
+                        restEnabled = it.settings.restEnabled,
+                    ).apply { sets = listOf(com.tomtruyen.data.entities.WorkoutSet(workoutExerciseId = this@apply.id)) }
+                }
 
                 it.copy(
                     workout = it.workout.copy(
-                        exercises = it.workout.exercises + newExercise
+                        exercises = it.workout.exercises + newExercises
                     ),
-                    selectedExerciseId = action.exercise.id
                 )
             }
             is CreateWorkoutUiAction.OnReorderExercises -> updateState {
