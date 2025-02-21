@@ -21,12 +21,12 @@ sealed class WorkoutExerciseEvent(
         val time: Int?
     ) : WorkoutExerciseEvent(id)
 
-    data class OnDeleteSetClicked(
+    data class OnDeleteSet(
         override val id: String,
         val setIndex: Int
     ) : WorkoutExerciseEvent(id)
 
-    data class OnAddSetClicked(
+    data class OnAddSet(
         override val id: String
     ) : WorkoutExerciseEvent(id)
 }

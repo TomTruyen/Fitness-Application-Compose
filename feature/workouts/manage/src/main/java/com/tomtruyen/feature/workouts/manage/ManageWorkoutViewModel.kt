@@ -212,7 +212,7 @@ class ManageWorkoutViewModel(
                 )
             }
 
-            is WorkoutExerciseEvent.OnDeleteSetClicked -> updateState {
+            is WorkoutExerciseEvent.OnDeleteSet -> updateState {
                 it.copy(
                     workout = it.workout.copyWithDeleteSet(
                         id = event.id,
@@ -221,7 +221,7 @@ class ManageWorkoutViewModel(
                 )
             }
 
-            is WorkoutExerciseEvent.OnAddSetClicked -> updateState {
+            is WorkoutExerciseEvent.OnAddSet -> updateState {
                 it.copy(
                     workout = it.workout.copyWithAddSet(
                         id = event.id,

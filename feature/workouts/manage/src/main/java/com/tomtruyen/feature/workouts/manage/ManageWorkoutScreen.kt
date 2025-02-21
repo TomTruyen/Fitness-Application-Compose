@@ -302,7 +302,7 @@ fun ExerciseListItem(
                 contentColor = MaterialTheme.colorScheme.onSurface
             ),
             onClick = {
-                onWorkoutEvent(WorkoutExerciseEvent.OnAddSetClicked(workoutExercise.id))
+                onWorkoutEvent(WorkoutExerciseEvent.OnAddSet(workoutExercise.id))
             }
         )
     }

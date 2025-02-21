@@ -142,7 +142,7 @@ class ExecuteWorkoutViewModel(
                 )
             }
 
-            is WorkoutExerciseEvent.OnDeleteSetClicked -> updateState {
+            is WorkoutExerciseEvent.OnDeleteSet -> updateState {
                 it.copy(
                     workout = it.workout.copyWithDeleteSet(
                         id = event.id,

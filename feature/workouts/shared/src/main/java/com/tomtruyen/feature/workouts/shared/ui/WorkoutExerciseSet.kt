@@ -1,15 +1,25 @@
 package com.tomtruyen.feature.workouts.shared.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,12 +28,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.common.extensions.format
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
@@ -34,6 +43,7 @@ import com.tomtruyen.data.entities.WorkoutSet
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
 import com.tomtruyen.feature.workouts.shared.WorkoutExerciseEvent
 import com.tomtruyen.models.RestAlertType
+import com.tomtruyen.core.common.R as CommonR
 
 @Composable
 fun WorkoutExerciseSet(
@@ -45,67 +55,112 @@ fun WorkoutExerciseSet(
     isExecute: Boolean = false,
     onEvent: (WorkoutExerciseEvent) -> Unit,
 ) {
-    val type = remember(workoutExercise) { workoutExercise.exercise.typeEnum }
+    val dismissState = rememberSwipeToDismissBoxState(
+        confirmValueChange = {
+            when(it) {
+                SwipeToDismissBoxValue.EndToStart -> {
+                    onEvent(
+                        WorkoutExerciseEvent.OnDeleteSet(
+                            id = workoutExercise.id,
+                            setIndex = setIndex
+                        )
+                    )
+                }
+                else -> return@rememberSwipeToDismissBoxState false
+            }
 
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = "${setIndex + 1}",
-            style = MaterialTheme.typography.bodyMedium.copy(
-                fontWeight = FontWeight.W500,
-            ),
-            textAlign = TextAlign.Center,
-            modifier = Modifier.width(Dimens.MinButtonHeight),
-        )
-
-        if (isExecute) {
-            PreviousSet(
-                lastPerformedSet = lastPerformedSet,
-                type = type,
-                modifier = Modifier.weight(1f)
-            )
-
-            Spacer(modifier = Modifier.width(Dimens.Small))
+            return@rememberSwipeToDismissBoxState true
         }
+    )
 
+    SwipeToDismissBox(
+        state = dismissState,
+        enableDismissFromStartToEnd = false,
+        backgroundContent = {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.error)
+                    .padding(end = Dimens.Normal),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(Dimens.Tiny, Alignment.End)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = stringResource(id = CommonR.string.button_delete),
+                    tint = MaterialTheme.colorScheme.onError,
+                )
 
-        when (type) {
-            Exercise.ExerciseType.WEIGHT -> WeightSet(
-                set = set,
-                onRepsChanged = { reps ->
-                    onEvent(
-                        WorkoutExerciseEvent.OnRepsChanged(
-                            id = workoutExercise.id,
-                            setIndex = setIndex,
-                            reps = reps
-                        )
-                    )
-                },
-                onWeightChanged = { weight ->
-                    onEvent(
-                        WorkoutExerciseEvent.OnWeightChanged(
-                            id = workoutExercise.id,
-                            setIndex = setIndex,
-                            weight = weight
-                        )
-                    )
-                }
+                Text(
+                    text = stringResource(id = CommonR.string.button_delete),
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = MaterialTheme.colorScheme.onError,
+                        fontWeight = FontWeight.W500
+                    ),
+                )
+            }
+        }
+    ) {
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = "${setIndex + 1}",
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontWeight = FontWeight.W500,
+                ),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.width(Dimens.MinButtonHeight),
             )
 
-            Exercise.ExerciseType.TIME -> TimeSet(
-                set = set,
-                onTimeChanged = { time ->
-                    onEvent(
-                        WorkoutExerciseEvent.OnTimeChanged(
-                            workoutExercise.id,
-                            setIndex,
-                            time
+            if (isExecute) {
+                PreviousSet(
+                    lastPerformedSet = lastPerformedSet,
+                    type = workoutExercise.exercise.typeEnum,
+                    modifier = Modifier.weight(1f)
+                )
+
+                Spacer(modifier = Modifier.width(Dimens.Small))
+            }
+
+
+            when (workoutExercise.exercise.typeEnum) {
+                Exercise.ExerciseType.WEIGHT -> WeightSet(
+                    set = set,
+                    onRepsChanged = { reps ->
+                        onEvent(
+                            WorkoutExerciseEvent.OnRepsChanged(
+                                id = workoutExercise.id,
+                                setIndex = setIndex,
+                                reps = reps
+                            )
                         )
-                    )
-                }
-            )
+                    },
+                    onWeightChanged = { weight ->
+                        onEvent(
+                            WorkoutExerciseEvent.OnWeightChanged(
+                                id = workoutExercise.id,
+                                setIndex = setIndex,
+                                weight = weight
+                            )
+                        )
+                    }
+                )
+
+                Exercise.ExerciseType.TIME -> TimeSet(
+                    set = set,
+                    onTimeChanged = { time ->
+                        onEvent(
+                            WorkoutExerciseEvent.OnTimeChanged(
+                                workoutExercise.id,
+                                setIndex,
+                                time
+                            )
+                        )
+                    }
+                )
+            }
         }
     }
 }
