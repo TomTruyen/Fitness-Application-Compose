@@ -1,6 +1,5 @@
-package com.tomtruyen.feature.workouts.create
+package com.tomtruyen.feature.workouts.manage
 
-import android.util.Log
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.base.SnackbarMessage
 import com.tomtruyen.data.entities.WorkoutSet
@@ -15,15 +14,14 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
-class CreateWorkoutViewModel(
+class ManageWorkoutViewModel(
     private val id: String?,
     private val userRepository: UserRepository,
     private val workoutRepository: WorkoutRepository,
     private val settingsRepository: SettingsRepository
-): BaseViewModel<CreateWorkoutUiState, CreateWorkoutUiAction, CreateWorkoutUiEvent>(
-    initialState = CreateWorkoutUiState(
+): BaseViewModel<ManageWorkoutUiState, ManageWorkoutUiAction, ManageWorkoutUiEvent>(
+    initialState = ManageWorkoutUiState(
         isEditing = id != null
     )
 ) {
@@ -84,7 +82,7 @@ class CreateWorkoutViewModel(
             isUpdate = uiState.value.isEditing,
             callback = object: FirebaseCallback<Unit> {
                 override fun onSuccess(value: Unit) {
-                    triggerEvent(CreateWorkoutUiEvent.NavigateBack)
+                    triggerEvent(ManageWorkoutUiEvent.NavigateBack)
                 }
 
                 override fun onError(error: String?) {
@@ -109,16 +107,16 @@ class CreateWorkoutViewModel(
         )
     }
 
-    override fun onAction(action: CreateWorkoutUiAction) {
+    override fun onAction(action: ManageWorkoutUiAction) {
 
         when (action) {
-            is CreateWorkoutUiAction.Save -> save()
-            is CreateWorkoutUiAction.OnWorkoutNameChanged -> updateState {
+            is ManageWorkoutUiAction.Save -> save()
+            is ManageWorkoutUiAction.OnWorkoutNameChanged -> updateState {
                 it.copy(
                     workout = it.workout.copy(name = action.name)
                 )
             }
-            is CreateWorkoutUiAction.OnExerciseNotesChanged -> updateState {
+            is ManageWorkoutUiAction.OnExerciseNotesChanged -> updateState {
                 it.copy(
                     workout = it.workout.copy(
                         exercises = it.workout.exercises.map { exercise ->
@@ -129,15 +127,15 @@ class CreateWorkoutViewModel(
                     )
                 )
             }
-            is CreateWorkoutUiAction.OnDeleteExerciseClicked -> updateState {
+            is ManageWorkoutUiAction.OnDeleteExerciseClicked -> updateState {
                 it.copy(
                     workout = it.workout.copy(
                         exercises = it.workout.exercises.filterIndexed { index, _ -> index != action.index }
                     ),
                 )
             }
-            is CreateWorkoutUiAction.OnAddExerciseClicked -> triggerEvent(CreateWorkoutUiEvent.NavigateToAddExercise)
-            is CreateWorkoutUiAction.OnAddExercises -> updateState {
+            is ManageWorkoutUiAction.OnAddExerciseClicked -> triggerEvent(ManageWorkoutUiEvent.NavigateToAddExercise)
+            is ManageWorkoutUiAction.OnAddExercises -> updateState {
                 val newExercises = action.exercises.map { exercise ->
                     WorkoutExerciseResponse(
                         exercise = exercise,
@@ -152,14 +150,14 @@ class CreateWorkoutViewModel(
                     ),
                 )
             }
-            is CreateWorkoutUiAction.OnReorderExercises -> updateState {
+            is ManageWorkoutUiAction.OnReorderExercises -> updateState {
                 it.copy(
                     workout = it.workout.copy(
                         exercises = action.exercises
                     )
                 )
             }
-            is CreateWorkoutUiAction.OnRestEnabledChanged -> updateState {
+            is ManageWorkoutUiAction.OnRestEnabledChanged -> updateState {
                 it.copy(
                     workout = it.workout.copy(
                         exercises = it.workout.exercises.mapIndexed { index, exercise ->
@@ -168,7 +166,7 @@ class CreateWorkoutViewModel(
                     )
                 )
             }
-            is CreateWorkoutUiAction.OnRestChanged -> updateState {
+            is ManageWorkoutUiAction.OnRestChanged -> updateState {
                 it.copy(
                     workout = it.workout.copy(
                         exercises = it.workout.exercises.mapIndexed { index, exercise ->
@@ -178,7 +176,7 @@ class CreateWorkoutViewModel(
                 )
             }
 
-            is CreateWorkoutUiAction.OnReorder -> reorderExercises(action.from, action.to)
+            is ManageWorkoutUiAction.OnReorder -> reorderExercises(action.from, action.to)
         }
     }
 

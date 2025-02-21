@@ -57,7 +57,7 @@ class WorkoutsViewModel(
 
     override fun onAction(action: WorkoutsUiAction) {
         when(action) {
-            is WorkoutsUiAction.OnCreateWorkoutClicked -> triggerEvent(WorkoutsUiEvent.NavigateToCreateWorkout)
+            is WorkoutsUiAction.OnCreateWorkoutClicked -> triggerEvent(WorkoutsUiEvent.NavigateToManageWorkout)
             is WorkoutsUiAction.OnDetailClicked -> triggerEvent(
                 WorkoutsUiEvent.NavigateToDetail(
                     action.id

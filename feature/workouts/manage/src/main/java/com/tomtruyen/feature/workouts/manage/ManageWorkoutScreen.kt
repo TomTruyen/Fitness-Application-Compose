@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.workouts.create
+package com.tomtruyen.feature.workouts.manage
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -50,9 +50,9 @@ import sh.calvin.reorderable.rememberReorderableLazyListState
 import com.tomtruyen.core.common.R as CommonR
 
 @Composable
-fun CreateWorkoutScreen(
+fun ManageWorkoutScreen(
     navController: NavController,
-    viewModel: CreateWorkoutViewModel
+    viewModel: ManageWorkoutViewModel
 ) {
     val context = LocalContext.current
 
@@ -61,8 +61,8 @@ fun CreateWorkoutScreen(
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
-                is CreateWorkoutUiEvent.NavigateBack -> navController.popBackStack()
-                is CreateWorkoutUiEvent.NavigateToAddExercise -> navController.navigate(Screen.Exercise.Overview(isFromWorkout = true))
+                is ManageWorkoutUiEvent.NavigateBack -> navController.popBackStack()
+                is ManageWorkoutUiEvent.NavigateToAddExercise -> navController.navigate(Screen.Exercise.Overview(isFromWorkout = true))
             }
         }
     }
@@ -70,13 +70,13 @@ fun CreateWorkoutScreen(
     LaunchedEffect(navController) {
         navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<List<Exercise>>(NavArguments.EXERCISES, emptyList())
             ?.collectLatest { exercises ->
-                viewModel.onAction(CreateWorkoutUiAction.OnAddExercises(exercises))
+                viewModel.onAction(ManageWorkoutUiAction.OnAddExercises(exercises))
 
                 navController.currentBackStackEntry?.savedStateHandle?.remove<List<Exercise>>(NavArguments.EXERCISES)
             }
     }
 
-    CreateWorkoutScreenLayout(
+    ManageWorkoutScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
@@ -86,11 +86,11 @@ fun CreateWorkoutScreen(
 }
 
 @Composable
-fun CreateWorkoutScreenLayout(
+fun ManageWorkoutScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
-    state: CreateWorkoutUiState,
-    onAction: (CreateWorkoutUiAction) -> Unit,
+    state: ManageWorkoutUiState,
+    onAction: (ManageWorkoutUiAction) -> Unit,
     onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
 ) {
     var confirmationDialogVisible by remember { mutableStateOf(false) }
@@ -126,7 +126,7 @@ fun CreateWorkoutScreenLayout(
                             value = state.workout.name,
                             onValueChange = { name ->
                                 onAction(
-                                    CreateWorkoutUiAction.OnWorkoutNameChanged(
+                                    ManageWorkoutUiAction.OnWorkoutNameChanged(
                                         name = name
                                     )
                                 )
@@ -147,7 +147,7 @@ fun CreateWorkoutScreenLayout(
                         contentPadding = PaddingValues(0.dp),
                         minButtonSize = 36.dp,
                         onClick = {
-                            onAction(CreateWorkoutUiAction.Save)
+                            onAction(ManageWorkoutUiAction.Save)
                         }
                     )
                 }
@@ -189,15 +189,15 @@ fun CreateWorkoutScreenLayout(
 @Composable
 fun ExerciseList(
     modifier: Modifier = Modifier,
-    state: CreateWorkoutUiState,
-    onAction: (CreateWorkoutUiAction) -> Unit,
+    state: ManageWorkoutUiState,
+    onAction: (ManageWorkoutUiAction) -> Unit,
     onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
 ) {
     val haptic = LocalHapticFeedback.current
 
     val lazyListState = rememberLazyListState()
     val reorderableLazyListState = rememberReorderableLazyListState(lazyListState) { from, to ->
-        onAction(CreateWorkoutUiAction.OnReorder(from.index, to.index))
+        onAction(ManageWorkoutUiAction.OnReorder(from.index, to.index))
     }
 
     LazyColumn(
@@ -236,7 +236,7 @@ fun ExerciseList(
                     .fillMaxWidth()
                     .padding(Dimens.Normal)
             ) {
-                onAction(CreateWorkoutUiAction.OnAddExerciseClicked)
+                onAction(ManageWorkoutUiAction.OnAddExerciseClicked)
             }
         }
     }
@@ -246,7 +246,7 @@ fun ExerciseList(
 fun ExerciseListItem(
     workoutExercise: WorkoutExerciseResponse,
     unit: String,
-    onAction: (CreateWorkoutUiAction) -> Unit,
+    onAction: (ManageWorkoutUiAction) -> Unit,
     onWorkoutEvent: (WorkoutExerciseEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -274,7 +274,7 @@ fun ExerciseListItem(
             value = workoutExercise.notes,
             onValueChange = { notes ->
                 onAction(
-                    CreateWorkoutUiAction.OnExerciseNotesChanged(
+                    ManageWorkoutUiAction.OnExerciseNotesChanged(
                         id = workoutExercise.id,
                         notes = notes
                     )

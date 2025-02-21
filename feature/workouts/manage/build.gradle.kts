@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.tomtruyen.feature.workouts.create"
+    namespace = "com.tomtruyen.feature.workouts.manage"
 }
 
 dependencies {

@@ -52,7 +52,7 @@ val appModule = module {
     }
 
     viewModel { (id: String?) ->
-        com.tomtruyen.feature.workouts.create.CreateWorkoutViewModel(id, get(), get(), get())
+        com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel(id, get(), get(), get())
     }
 
     viewModel { (isFromWorkout: Boolean) ->

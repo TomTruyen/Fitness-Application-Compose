@@ -39,7 +39,7 @@ fun WorkoutsScreen(
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
-                is WorkoutsUiEvent.NavigateToCreateWorkout -> navController.navigate(
+                is WorkoutsUiEvent.NavigateToManageWorkout -> navController.navigate(
                     Screen.Workout.Create()
                 )
                 is WorkoutsUiEvent.NavigateToDetail -> navController.navigate(
