@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -58,6 +59,10 @@ abstract class BaseViewModel<UIState, UIAction, UIEvent>(
 
     protected fun updateState(block: (UIState) -> UIState) {
         _uiState.update(block)
+    }
+
+    protected fun updateAndGetState(block: (UIState) -> UIState): UIState {
+        return _uiState.updateAndGet(block)
     }
 
     protected fun triggerEvent(event: UIEvent) = vmScope.launch {

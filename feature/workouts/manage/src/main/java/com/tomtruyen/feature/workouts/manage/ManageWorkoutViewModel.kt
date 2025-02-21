@@ -136,18 +136,27 @@ class ManageWorkoutViewModel(
         )
     }
 
-    private fun replaceExercise(exercise: Exercise) = updateState {
-        it.copy(
-            workout = it.workout.copy(
-                exercises = it.workout.exercises.toMutableList().apply {
-                    val index = indexOfFirst { exercise -> exercise.id == it.selectedExerciseId }
-                    set(
-                        index = index,
-                        element = createWorkoutExercise(exercise)
-                    )
-                }
+    private fun replaceExercise(exercise: Exercise) {
+        var index = 0
+
+        updateState {
+            it.copy(
+                workout = it.workout.copy(
+                    exercises = it.workout.exercises.toMutableList().apply {
+                        index = indexOfFirst { exercise -> exercise.id == it.selectedExerciseId }
+
+                        if(index == -1) return@apply
+
+                        set(
+                            index = index,
+                            element = createWorkoutExercise(exercise)
+                        )
+                    }
+                )
             )
-        )
+        }
+
+        triggerEvent(ManageWorkoutUiEvent.ScrollToExercise(index))
     }
 
     private fun deleteExercise() = updateState {
@@ -161,7 +170,7 @@ class ManageWorkoutViewModel(
         )
     }
 
-    private fun addExercises(exercises: List<Exercise>) = updateState {
+    private fun addExercises(exercises: List<Exercise>) = updateAndGetState {
         val newExercises = exercises.map(::createWorkoutExercise)
 
         it.copy(
@@ -169,6 +178,8 @@ class ManageWorkoutViewModel(
                 exercises = it.workout.exercises + newExercises
             ),
         )
+    }.also { state ->
+        triggerEvent(ManageWorkoutUiEvent.ScrollToExercise(state.workout.exercises.size - 1))
     }
 
     private fun toggleExerciseMoreActionSheet(exerciseId: String? = null) = updateState {

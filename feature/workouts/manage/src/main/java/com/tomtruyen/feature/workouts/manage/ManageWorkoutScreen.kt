@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -62,8 +63,9 @@ fun ManageWorkoutScreen(
     val context = LocalContext.current
     val errorColor = MaterialTheme.colorScheme.error
 
-
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val lazyListState = rememberLazyListState()
 
     val exerciseActions = remember {
         listOf(
@@ -106,6 +108,9 @@ fun ManageWorkoutScreen(
                 is ManageWorkoutUiEvent.NavigateBack -> navController.popBackStack()
                 is ManageWorkoutUiEvent.NavigateToReplaceExercise -> navController.navigate(Screen.Exercise.Overview(Screen.Exercise.Overview.Mode.REPLACE))
                 is ManageWorkoutUiEvent.NavigateToAddExercise -> navController.navigate(Screen.Exercise.Overview(Screen.Exercise.Overview.Mode.SELECT))
+                is ManageWorkoutUiEvent.ScrollToExercise -> {
+                    lazyListState.animateScrollToItem(event.index.coerceIn(0, state.workout.exercises.size - 1))
+                }
             }
         }
     }
@@ -139,6 +144,7 @@ fun ManageWorkoutScreen(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
+        lazyListState = lazyListState,
         onAction = viewModel::onAction,
         onWorkoutEvent = viewModel::onWorkoutExerciseAction
     )
@@ -161,6 +167,7 @@ fun ManageWorkoutScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: ManageWorkoutUiState,
+    lazyListState: LazyListState,
     onAction: (ManageWorkoutUiAction) -> Unit,
     onWorkoutEvent: (WorkoutExerciseUiAction) -> Unit
 ) {
@@ -234,6 +241,7 @@ fun ManageWorkoutScreenLayout(
             ExerciseList(
                 modifier = Modifier.fillMaxSize(),
                 state = state,
+                lazyListState = lazyListState,
                 onAction = onAction,
                 onWorkoutEvent = onWorkoutEvent
             )
@@ -260,12 +268,12 @@ fun ManageWorkoutScreenLayout(
 fun ExerciseList(
     modifier: Modifier = Modifier,
     state: ManageWorkoutUiState,
+    lazyListState: LazyListState,
     onAction: (ManageWorkoutUiAction) -> Unit,
     onWorkoutEvent: (WorkoutExerciseUiAction) -> Unit
 ) {
     val haptic = LocalHapticFeedback.current
 
-    val lazyListState = rememberLazyListState()
     val reorderableLazyListState = rememberReorderableLazyListState(lazyListState) { from, to ->
         onAction(ManageWorkoutUiAction.OnReorder(from.index, to.index))
     }
