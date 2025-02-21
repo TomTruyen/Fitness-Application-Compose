@@ -158,7 +158,6 @@ private fun RowScope.WeightSet(
 ) {
     TextFields.Default(
         border = false,
-        containerColor = Color.Transparent,
         padding = PaddingValues(Dimens.Small),
         value = set.repsText.orEmpty(),
         onValueChange = { reps ->
@@ -182,7 +181,6 @@ private fun RowScope.WeightSet(
 
     TextFields.Default(
         border = false,
-        containerColor = Color.Transparent,
         padding = PaddingValues(Dimens.Small),
         value = set.weightText.orEmpty(),
         onValueChange = { weight ->

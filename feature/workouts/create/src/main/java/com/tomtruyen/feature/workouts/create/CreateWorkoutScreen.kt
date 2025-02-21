@@ -5,20 +5,16 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,15 +23,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.view.HapticFeedbackConstantsCompat
-import androidx.core.view.ViewCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.designsystem.Dimens
@@ -43,9 +35,9 @@ import com.tomtruyen.navigation.NavArguments
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
-import com.tomtruyen.core.ui.dialogs.TextFieldDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.ui.LoadingContainer
+import com.tomtruyen.core.ui.toolbars.ToolbarTitle
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
 import com.tomtruyen.feature.workouts.shared.WorkoutExerciseEvent
@@ -101,10 +93,9 @@ fun CreateWorkoutScreenLayout(
     onAction: (CreateWorkoutUiAction) -> Unit,
     onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
 ) {
-    var workoutNameDialogVisible by remember { mutableStateOf(false) }
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
-    BackHandler(enabled = !confirmationDialogVisible) {
+    val onNavigateUp: () -> Unit = {
         if(state.workout.exercises != state.initialWorkout.exercises) {
             confirmationDialogVisible = true
         } else {
@@ -112,37 +103,53 @@ fun CreateWorkoutScreenLayout(
         }
     }
 
+    BackHandler(enabled = !confirmationDialogVisible, onBack = onNavigateUp)
+
     Scaffold(
         snackbarHost = snackbarHost,
         topBar = {
             Toolbar(
-                title = stringResource(id = R.string.title_create_workout),
-                navController = navController,
-                onNavigateUp = {
-                    if(state.workout.exercises != state.initialWorkout.exercises) {
-                        confirmationDialogVisible = true
+                title = {
+                    // TODO: Add Logic to show title only when not editing
+                    if(true) {
+                        TextFields.Default(
+                            modifier = Modifier.padding(
+                                end = if(state.workout.exercises.isEmpty()) {
+                                    Dimens.Small
+                                } else {
+                                    Dimens.Normal
+                                }
+                            ),
+                            textFieldModifier = Modifier.defaultMinSize(minHeight = 36.dp),
+                            padding = PaddingValues(Dimens.Small),
+                            placeholder = stringResource(id = R.string.title_workout_name),
+                            value = state.workout.name,
+                            onValueChange = { name ->
+                                onAction(
+                                    CreateWorkoutUiAction.OnWorkoutNameChanged(
+                                        name = name
+                                    )
+                                )
+                            }
+                        )
                     } else {
-                        navController.popBackStack()
+                        ToolbarTitle(title = stringResource(id = R.string.title_create_workout))
                     }
-                }
+                },
+                navController = navController,
+                onNavigateUp = onNavigateUp
             ) {
                 AnimatedVisibility(
                     visible = state.workout.exercises.isNotEmpty(),
                 ) {
-                    IconButton(
+                    Buttons.Default(
+                        text = stringResource(id = CommonR.string.button_save),
+                        contentPadding = PaddingValues(0.dp),
+                        minButtonSize = 36.dp,
                         onClick = {
-                            if (state.workout.name.isNotEmpty()) {
-                                onAction(CreateWorkoutUiAction.Save(state.workout.name))
-                            } else {
-                                workoutNameDialogVisible = true
-                            }
+                            onAction(CreateWorkoutUiAction.Save)
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Check,
-                            contentDescription = stringResource(id = R.string.content_description_save_workout),
-                        )
-                    }
+                    )
                 }
             }
         }
@@ -160,6 +167,7 @@ fun CreateWorkoutScreenLayout(
                 onWorkoutEvent = onWorkoutEvent
             )
 
+
             if(confirmationDialogVisible) {
                 ConfirmationDialog(
                     title = CommonR.string.title_unsaved_changes,
@@ -172,22 +180,6 @@ fun CreateWorkoutScreenLayout(
                         confirmationDialogVisible = false
                     },
                     confirmText = CommonR.string.button_discard
-                )
-            }
-
-            if(workoutNameDialogVisible) {
-                TextFieldDialog(
-                    title = R.string.title_workout_name,
-                    message = R.string.message_workout_name,
-                    placeholder = R.string.title_workout_name,
-                    onConfirm = { name ->
-                        onAction(CreateWorkoutUiAction.Save(name))
-                        workoutNameDialogVisible = false
-                    },
-                    onDismiss = {
-                        workoutNameDialogVisible = false
-                    },
-                    confirmText = CommonR.string.button_save,
                 )
             }
         }
@@ -277,7 +269,6 @@ fun ExerciseListItem(
             modifier = Modifier.padding(horizontal = Dimens.Normal),
             singleLine = false,
             border = false,
-            containerColor = Color.Transparent,
             padding = PaddingValues(Dimens.Small),
             placeholder = stringResource(id = R.string.placeholder_notes),
             value = workoutExercise.notes,

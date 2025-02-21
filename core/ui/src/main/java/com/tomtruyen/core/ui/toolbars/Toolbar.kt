@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -14,7 +13,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,7 +22,6 @@ import com.tomtruyen.core.ui.R
 import com.tomtruyen.models.Global
 import com.tomtruyen.navigation.shouldShowNavigationIcon
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Toolbar(
     title: String,
@@ -32,16 +29,28 @@ fun Toolbar(
     onNavigateUp: () -> Unit = { navController.popBackStack() },
     actions: @Composable RowScope.() -> Unit = {},
 ) {
+   Toolbar(
+       title = {
+           ToolbarTitle(title = title)
+       },
+       navController = navController,
+       onNavigateUp = onNavigateUp,
+       actions = actions
+   )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Toolbar(
+    title: @Composable () -> Unit,
+    navController: NavController,
+    onNavigateUp: () -> Unit = { navController.popBackStack() },
+    actions: @Composable RowScope.() -> Unit = {},
+) {
     val isBottomBarVisible by Global.isBottomBarVisible
 
     TopAppBar(
-        title = {
-            Text(
-                text = title,
-                fontWeight = FontWeight.W500,
-                color = ChineseBlack
-            )
-        },
+        title = title,
         navigationIcon = {
             if(navController.shouldShowNavigationIcon(isBottomBarVisible)) {
                 IconButton(
@@ -65,5 +74,14 @@ fun Toolbar(
             top = 0.dp,
             bottom = 0.dp
         )
+    )
+}
+
+@Composable
+fun ToolbarTitle(title: String) {
+    Text(
+        text = title,
+        fontWeight = FontWeight.W500,
+        color = ChineseBlack
     )
 }

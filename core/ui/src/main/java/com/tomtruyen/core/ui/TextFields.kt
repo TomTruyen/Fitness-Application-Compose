@@ -27,6 +27,7 @@ object TextFields {
     @Composable
     fun Default(
         modifier: Modifier = Modifier,
+        textFieldModifier: Modifier = Modifier,
         value: String?,
         onValueChange: (String) -> Unit,
         placeholder: String = "",
@@ -40,7 +41,7 @@ object TextFields {
         textStyle: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.bodyMedium,
         trailingIcon: (@Composable () -> Unit)? = null,
         keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-        containerColor: Color = Color.White,
+        containerColor: Color = Color.Transparent,
         shape: Shape = MaterialTheme.shapes.small,
     ) {
         val focusManager = LocalFocusManager.current
@@ -77,7 +78,7 @@ object TextFields {
                         focusManager.clearFocus()
                     }
                 ),
-                modifier = Modifier
+                modifier = textFieldModifier
                     .fillMaxWidth()
                     .then(
                         if (border) {

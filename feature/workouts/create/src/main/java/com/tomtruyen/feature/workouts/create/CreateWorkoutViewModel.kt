@@ -62,7 +62,7 @@ class CreateWorkoutViewModel(
             }
     }
 
-    private fun save(workoutName: String) = vmScope.launch {
+    private fun save() = vmScope.launch {
         val userId = userRepository.getUser()?.uid ?: return@launch
 
         isLoading(true)
@@ -71,8 +71,11 @@ class CreateWorkoutViewModel(
             exercises.forEachIndexed { index, workoutExerciseResponse ->
                 workoutExerciseResponse.order = index
             }
-            name = workoutName
             unit = uiState.value.settings.unit
+
+            if(name.isBlank()) {
+                name = "Workout"
+            }
         }
 
         workoutRepository.saveWorkout(
@@ -109,7 +112,12 @@ class CreateWorkoutViewModel(
     override fun onAction(action: CreateWorkoutUiAction) {
 
         when (action) {
-            is CreateWorkoutUiAction.Save -> save(action.workoutName)
+            is CreateWorkoutUiAction.Save -> save()
+            is CreateWorkoutUiAction.OnWorkoutNameChanged -> updateState {
+                it.copy(
+                    workout = it.workout.copy(name = action.name)
+                )
+            }
             is CreateWorkoutUiAction.OnExerciseNotesChanged -> updateState {
                 it.copy(
                     workout = it.workout.copy(
