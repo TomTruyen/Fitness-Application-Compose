@@ -7,7 +7,7 @@ import com.tomtruyen.data.firebase.models.WorkoutHistoryResponse
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
-import com.tomtruyen.feature.workouts.shared.WorkoutExerciseEvent
+import com.tomtruyen.feature.workouts.shared.WorkoutExerciseUiAction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -110,9 +110,9 @@ class ExecuteWorkoutViewModel(
         }
     }
 
-    fun onWorkoutEvent(event: WorkoutExerciseEvent) {
+    fun onWorkoutEvent(event: WorkoutExerciseUiAction) {
         when (event) {
-            is WorkoutExerciseEvent.OnRepsChanged -> updateState {
+            is WorkoutExerciseUiAction.OnRepsChanged -> updateState {
                 it.copy(
                     workout = it.workout.copyWithRepsChanged(
                         id = event.id,
@@ -122,7 +122,7 @@ class ExecuteWorkoutViewModel(
                 )
             }
 
-            is WorkoutExerciseEvent.OnWeightChanged -> updateState {
+            is WorkoutExerciseUiAction.OnWeightChanged -> updateState {
                 it.copy(
                     workout = it.workout.copyWithWeightChanged(
                         id = event.id,
@@ -132,7 +132,7 @@ class ExecuteWorkoutViewModel(
                 )
             }
 
-            is WorkoutExerciseEvent.OnTimeChanged -> updateState {
+            is WorkoutExerciseUiAction.OnTimeChanged -> updateState {
                 it.copy(
                     workout = it.workout.copyWithTimeChanged(
                         id = event.id,
@@ -142,7 +142,7 @@ class ExecuteWorkoutViewModel(
                 )
             }
 
-            is WorkoutExerciseEvent.OnDeleteSet -> updateState {
+            is WorkoutExerciseUiAction.OnDeleteSet -> updateState {
                 it.copy(
                     workout = it.workout.copyWithDeleteSet(
                         id = event.id,

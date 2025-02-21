@@ -2,8 +2,8 @@ package com.tomtruyen.feature.workouts.shared.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -11,15 +11,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,7 +44,7 @@ import com.tomtruyen.core.ui.dialogs.RestAlertDialog
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.WorkoutSet
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
-import com.tomtruyen.feature.workouts.shared.WorkoutExerciseEvent
+import com.tomtruyen.feature.workouts.shared.WorkoutExerciseUiAction
 import com.tomtruyen.models.RestAlertType
 import com.tomtruyen.core.common.R as CommonR
 
@@ -53,14 +56,15 @@ fun WorkoutExerciseSet(
     set: WorkoutSet,
     lastPerformedSet: WorkoutSet? = null,
     isExecute: Boolean = false,
-    onEvent: (WorkoutExerciseEvent) -> Unit,
+    onEvent: (WorkoutExerciseUiAction) -> Unit,
+    onSetClick: (id: String, setIndex: Int) -> Unit
 ) {
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = {
             when(it) {
                 SwipeToDismissBoxValue.EndToStart -> {
                     onEvent(
-                        WorkoutExerciseEvent.OnDeleteSet(
+                        WorkoutExerciseUiAction.OnDeleteSet(
                             id = workoutExercise.id,
                             setIndex = setIndex
                         )
@@ -111,7 +115,12 @@ fun WorkoutExerciseSet(
                     fontWeight = FontWeight.W500,
                 ),
                 textAlign = TextAlign.Center,
-                modifier = Modifier.width(Dimens.MinButtonHeight),
+                modifier = Modifier
+                    .width(Dimens.MinButtonHeight)
+                    .clip(CircleShape)
+                    .clickable {
+                        onSetClick(workoutExercise.id, setIndex)
+                    }
             )
 
             if (isExecute) {
@@ -130,7 +139,7 @@ fun WorkoutExerciseSet(
                     set = set,
                     onRepsChanged = { reps ->
                         onEvent(
-                            WorkoutExerciseEvent.OnRepsChanged(
+                            WorkoutExerciseUiAction.OnRepsChanged(
                                 id = workoutExercise.id,
                                 setIndex = setIndex,
                                 reps = reps
@@ -139,7 +148,7 @@ fun WorkoutExerciseSet(
                     },
                     onWeightChanged = { weight ->
                         onEvent(
-                            WorkoutExerciseEvent.OnWeightChanged(
+                            WorkoutExerciseUiAction.OnWeightChanged(
                                 id = workoutExercise.id,
                                 setIndex = setIndex,
                                 weight = weight
@@ -152,7 +161,7 @@ fun WorkoutExerciseSet(
                     set = set,
                     onTimeChanged = { time ->
                         onEvent(
-                            WorkoutExerciseEvent.OnTimeChanged(
+                            WorkoutExerciseUiAction.OnTimeChanged(
                                 workoutExercise.id,
                                 setIndex,
                                 time

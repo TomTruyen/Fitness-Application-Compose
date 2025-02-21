@@ -1,23 +1,22 @@
 package com.tomtruyen.feature.workouts.shared.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
-import com.tomtruyen.feature.workouts.shared.WorkoutExerciseEvent
+import com.tomtruyen.feature.workouts.shared.WorkoutExerciseUiAction
 
 @Composable
 fun WorkoutExerciseSetTable(
     workoutExercise: WorkoutExerciseResponse,
     unit: String,
-    onEvent: (WorkoutExerciseEvent) -> Unit,
+    onEvent: (WorkoutExerciseUiAction) -> Unit,
+    onSetClick: (id: String, setIndex: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -48,7 +47,8 @@ fun WorkoutExerciseSetTable(
                 workoutExercise = workoutExercise,
                 setIndex = setIndex,
                 set = set,
-                onEvent = onEvent
+                onEvent = onEvent,
+                onSetClick = onSetClick
             )
         }
     }

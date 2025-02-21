@@ -11,8 +11,10 @@ data class ManageWorkoutUiState(
     val settings: Settings = Settings(),
     val loading: Boolean = false,
 
-    val isMoreActionsSheetVisible: Boolean = false,
-    // Used for when we for example click on the more actions button of an exercise
-    val selectedExerciseId: String? = null
+    // BottomSheet states
+    val showExerciseMoreActions: Boolean = false,
+    val showSetMoreActions: Boolean = false,
+    val selectedExerciseId: String? = null,
+    val selectedSetIndex: Int? = null
 )
 

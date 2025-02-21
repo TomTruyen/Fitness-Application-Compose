@@ -10,7 +10,7 @@ import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
-import com.tomtruyen.feature.workouts.shared.WorkoutExerciseEvent
+import com.tomtruyen.feature.workouts.shared.WorkoutExerciseUiAction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -171,16 +171,18 @@ class ManageWorkoutViewModel(
         )
     }
 
-    private fun toggleMoreActionSheet(exerciseId: String? = null) = updateState {
+    private fun toggleExerciseMoreActionSheet(exerciseId: String? = null) = updateState {
         it.copy(
             selectedExerciseId = exerciseId,
-            isMoreActionsSheetVisible = !it.isMoreActionsSheetVisible
+            showExerciseMoreActions = !it.showExerciseMoreActions
         )
     }
 
-    private fun closeMoreActionSheet() = updateState {
+    private fun toggleSetMoreActionSheet(id: String? = null, setIndex: Int? = null) = updateState {
         it.copy(
-            isMoreActionsSheetVisible = false
+            selectedExerciseId = id,
+            selectedSetIndex = setIndex,
+            showSetMoreActions = !it.showSetMoreActions
         )
     }
 
@@ -245,12 +247,12 @@ class ManageWorkoutViewModel(
             )
 
             is ManageWorkoutUiAction.OnDeleteExercise -> {
-                closeMoreActionSheet()
+                toggleExerciseMoreActionSheet(uiState.value.selectedExerciseId)
                 deleteExercise()
             }
 
             is ManageWorkoutUiAction.OnReplaceExerciseClicked -> {
-                closeMoreActionSheet()
+                toggleExerciseMoreActionSheet(uiState.value.selectedExerciseId)
                 triggerEvent(ManageWorkoutUiEvent.NavigateToReplaceExercise)
             }
 
@@ -269,38 +271,46 @@ class ManageWorkoutViewModel(
                 to = action.to
             )
 
-            is ManageWorkoutUiAction.ToggleMoreActionSheet -> toggleMoreActionSheet(
+            is ManageWorkoutUiAction.ToggleExerciseMoreActionSheet -> toggleExerciseMoreActionSheet(
                 exerciseId = action.id
+            )
+
+            is ManageWorkoutUiAction.ToggleSetMoreActionSheet -> toggleSetMoreActionSheet(
+                id = action.id,
+                setIndex = action.setIndex
             )
         }
     }
 
-    fun onWorkoutEvent(event: WorkoutExerciseEvent) {
+    fun onWorkoutExerciseAction(event: WorkoutExerciseUiAction) {
         when (event) {
-            is WorkoutExerciseEvent.OnRepsChanged -> updateReps(
+            is WorkoutExerciseUiAction.OnRepsChanged -> updateReps(
                 id = event.id,
                 setIndex = event.setIndex,
                 reps = event.reps
             )
 
-            is WorkoutExerciseEvent.OnWeightChanged -> updateWeight(
+            is WorkoutExerciseUiAction.OnWeightChanged -> updateWeight(
                 id = event.id,
                 setIndex = event.setIndex,
                 weight = event.weight
             )
 
-            is WorkoutExerciseEvent.OnTimeChanged -> updateTime(
+            is WorkoutExerciseUiAction.OnTimeChanged -> updateTime(
                 id = event.id,
                 setIndex = event.setIndex,
                 time = event.time
             )
 
-            is WorkoutExerciseEvent.OnDeleteSet -> deleteSet(
-                id = event.id,
-                setIndex = event.setIndex
-            )
+            is WorkoutExerciseUiAction.OnDeleteSet -> {
+                toggleSetMoreActionSheet()
+                deleteSet(
+                    id = event.id,
+                    setIndex = event.setIndex
+                )
+            }
 
-            is WorkoutExerciseEvent.OnAddSet -> addSet(
+            is WorkoutExerciseUiAction.OnAddSet -> addSet(
                 id = event.id
             )
         }

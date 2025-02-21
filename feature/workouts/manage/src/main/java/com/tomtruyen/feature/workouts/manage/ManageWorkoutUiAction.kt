@@ -19,7 +19,9 @@ sealed class ManageWorkoutUiAction {
 
     data class OnReorder(val from: Int, val to: Int): ManageWorkoutUiAction()
 
-    data class ToggleMoreActionSheet(val id: String? = null): ManageWorkoutUiAction()
+    data class ToggleExerciseMoreActionSheet(val id: String? = null): ManageWorkoutUiAction()
+
+    data class ToggleSetMoreActionSheet(val id: String? = null, val setIndex: Int? = null): ManageWorkoutUiAction()
 
     data object Save: ManageWorkoutUiAction()
 }

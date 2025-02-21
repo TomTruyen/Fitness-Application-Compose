@@ -45,7 +45,7 @@ import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.toolbars.ToolbarTitle
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
-import com.tomtruyen.feature.workouts.shared.WorkoutExerciseEvent
+import com.tomtruyen.feature.workouts.shared.WorkoutExerciseUiAction
 import com.tomtruyen.feature.workouts.shared.ui.WorkoutExerciseHeader
 import com.tomtruyen.feature.workouts.shared.ui.WorkoutExerciseSetTable
 import com.tomtruyen.navigation.Screen
@@ -65,7 +65,7 @@ fun ManageWorkoutScreen(
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val actions = remember {
+    val exerciseActions = remember {
         listOf(
             BottomSheetItem(
                 title = R.string.action_exercise_replace,
@@ -79,6 +79,21 @@ fun ManageWorkoutScreen(
                 icon = Icons.Default.Close,
                 onClick = {
                     viewModel.onAction(ManageWorkoutUiAction.OnDeleteExercise)
+                },
+                color = errorColor
+            ),
+        )
+    }
+
+    val setActions = remember {
+        listOf(
+            BottomSheetItem(
+                title = R.string.action_remove_set,
+                icon = Icons.Default.Close,
+                onClick = {
+                    if(state.selectedExerciseId != null && state.selectedSetIndex != null) {
+                        viewModel.onWorkoutExerciseAction(WorkoutExerciseUiAction.OnDeleteSet(state.selectedExerciseId!!, state.selectedSetIndex!!))
+                    }
                 },
                 color = errorColor
             ),
@@ -125,13 +140,19 @@ fun ManageWorkoutScreen(
         navController = navController,
         state = state,
         onAction = viewModel::onAction,
-        onWorkoutEvent = viewModel::onWorkoutEvent
+        onWorkoutEvent = viewModel::onWorkoutExerciseAction
     )
 
     BottomSheetList(
-        items = actions,
-        visible = state.isMoreActionsSheetVisible,
-        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.ToggleMoreActionSheet()) },
+        items = exerciseActions,
+        visible = state.showExerciseMoreActions,
+        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.ToggleExerciseMoreActionSheet()) },
+    )
+
+    BottomSheetList(
+        items = setActions,
+        visible = state.showSetMoreActions,
+        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.ToggleSetMoreActionSheet()) },
     )
 }
 
@@ -141,7 +162,7 @@ fun ManageWorkoutScreenLayout(
     navController: NavController,
     state: ManageWorkoutUiState,
     onAction: (ManageWorkoutUiAction) -> Unit,
-    onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
+    onWorkoutEvent: (WorkoutExerciseUiAction) -> Unit
 ) {
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
@@ -240,7 +261,7 @@ fun ExerciseList(
     modifier: Modifier = Modifier,
     state: ManageWorkoutUiState,
     onAction: (ManageWorkoutUiAction) -> Unit,
-    onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
+    onWorkoutEvent: (WorkoutExerciseUiAction) -> Unit
 ) {
     val haptic = LocalHapticFeedback.current
 
@@ -299,7 +320,7 @@ fun ExerciseListItem(
     workoutExercise: WorkoutExerciseResponse,
     unit: String,
     onAction: (ManageWorkoutUiAction) -> Unit,
-    onWorkoutEvent: (WorkoutExerciseEvent) -> Unit,
+    onWorkoutEvent: (WorkoutExerciseUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -313,7 +334,7 @@ fun ExerciseListItem(
             exercise = workoutExercise.exercise,
             onActionClick = {
                 onAction(
-                    ManageWorkoutUiAction.ToggleMoreActionSheet(
+                    ManageWorkoutUiAction.ToggleExerciseMoreActionSheet(
                         id = workoutExercise.id
                     )
                 )
@@ -342,6 +363,14 @@ fun ExerciseListItem(
         WorkoutExerciseSetTable(
             workoutExercise = workoutExercise,
             unit = unit,
+            onSetClick = { id, setIndex ->
+                onAction(
+                    ManageWorkoutUiAction.ToggleSetMoreActionSheet(
+                        id = id,
+                        setIndex = setIndex
+                    )
+                )
+            },
             onEvent = onWorkoutEvent
         )
 
@@ -358,7 +387,7 @@ fun ExerciseListItem(
                 contentColor = MaterialTheme.colorScheme.onSurface
             ),
             onClick = {
-                onWorkoutEvent(WorkoutExerciseEvent.OnAddSet(workoutExercise.id))
+                onWorkoutEvent(WorkoutExerciseUiAction.OnAddSet(workoutExercise.id))
             }
         )
     }

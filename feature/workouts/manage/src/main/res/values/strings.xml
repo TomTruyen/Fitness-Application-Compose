@@ -15,4 +15,5 @@
     <string name="title_reorder_exercises">Reorder exercises</string>
     <string name="action_remove_exercise">Remove Exercise</string>
     <string name="action_exercise_replace">Replace Exercise</string>
+    <string name="action_remove_set">Remove Set</string>
 </resources>

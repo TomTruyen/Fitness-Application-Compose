@@ -1,25 +1,13 @@
 package com.tomtruyen.feature.workouts.execute
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
@@ -43,14 +31,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.common.utils.StopwatchTimer
-import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.LoadingContainer
-import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.ui.TabLayout
-import com.tomtruyen.feature.workouts.shared.WorkoutExerciseEvent
-import com.tomtruyen.feature.workouts.shared.ui.WorkoutExerciseSet
-import com.tomtruyen.feature.workouts.shared.ui.WorkoutExerciseSetHeader
+import com.tomtruyen.feature.workouts.shared.WorkoutExerciseUiAction
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -112,7 +96,7 @@ fun ExecuteWorkoutScreenLayout(
     pagerState: PagerState,
     stopwatchTimer: StopwatchTimer,
     onAction: (ExecuteWorkoutUiAction) -> Unit,
-    onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
+    onWorkoutEvent: (WorkoutExerciseUiAction) -> Unit
 ) {
     Scaffold(
         snackbarHost = snackbarHost,
@@ -197,7 +181,7 @@ fun WorkoutExerciseTabContent(
     lastEntryForWorkout: com.tomtruyen.data.entities.WorkoutWithExercises?,
     pagerState: PagerState,
     onAction: (ExecuteWorkoutUiAction) -> Unit,
-    onWorkoutEvent: (WorkoutExerciseEvent) -> Unit
+    onWorkoutEvent: (WorkoutExerciseUiAction) -> Unit
 ) {
 //    Column(
 //        modifier = modifier
