@@ -182,18 +182,30 @@ class ManageWorkoutViewModel(
         triggerEvent(ManageWorkoutUiEvent.ScrollToExercise(state.workout.exercises.size - 1))
     }
 
-    private fun toggleExerciseMoreActionSheet(exerciseId: String? = null) = updateState {
+    private fun toggleExerciseMoreActionSheet(id: String? = null) = updateState {
+        val shouldToggle = it.selectedExerciseId != id
+
         it.copy(
-            selectedExerciseId = exerciseId,
-            showExerciseMoreActions = !it.showExerciseMoreActions
+            selectedExerciseId = id,
+            showExerciseMoreActions = if(shouldToggle) {
+                !it.showExerciseMoreActions
+            } else {
+                it.showExerciseMoreActions
+            }
         )
     }
 
     private fun toggleSetMoreActionSheet(id: String? = null, setIndex: Int? = null) = updateState {
+        val shouldToggle = it.selectedSetIndex != setIndex || it.selectedExerciseId != id
+
         it.copy(
             selectedExerciseId = id,
             selectedSetIndex = setIndex,
-            showSetMoreActions = !it.showSetMoreActions
+            showSetMoreActions = if(shouldToggle) {
+                !it.showSetMoreActions
+            } else {
+                it.showSetMoreActions
+            }
         )
     }
 
@@ -283,7 +295,7 @@ class ManageWorkoutViewModel(
             )
 
             is ManageWorkoutUiAction.ToggleExerciseMoreActionSheet -> toggleExerciseMoreActionSheet(
-                exerciseId = action.id
+                id = action.id
             )
 
             is ManageWorkoutUiAction.ToggleSetMoreActionSheet -> toggleSetMoreActionSheet(
