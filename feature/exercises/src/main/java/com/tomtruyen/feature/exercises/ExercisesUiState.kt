@@ -2,9 +2,10 @@ package com.tomtruyen.feature.exercises
 
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.models.ExerciseFilter
+import com.tomtruyen.navigation.Screen
 
 data class ExercisesUiState(
-    val isFromWorkout: Boolean = false, // Determines if the user is coming from the workout screen
+    val mode: Screen.Exercise.Overview.Mode = Screen.Exercise.Overview.Mode.VIEW, // Determines if the user is coming from the workout screen
     val search: String = "",
     val searching: Boolean = false,
     val filter: ExerciseFilter = ExerciseFilter(),

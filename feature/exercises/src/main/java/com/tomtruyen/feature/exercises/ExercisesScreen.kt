@@ -69,7 +69,7 @@ fun ExercisesScreen(
                 is ExercisesUiEvent.NavigateBackToWorkout -> {
                     navController.previousBackStackEntry?.savedStateHandle?.set(
                         NavArguments.EXERCISES,
-                        event.exercises
+                        state.mode to event.exercises
                     )
                     navController.popBackStack()
                 }
@@ -256,7 +256,7 @@ fun ExercisesScreenLayout(
                                 title = exercise.displayName,
                                 message = exercise.category.orEmpty(),
                                 selected = state.selectedExercises.contains(exercise),
-                                showChevron = !state.isFromWorkout,
+                                showChevron = state.mode == Screen.Exercise.Overview.Mode.VIEW,
                             ) {
                                 onAction(ExercisesUiAction.OnExerciseClicked(exercise))
                             }

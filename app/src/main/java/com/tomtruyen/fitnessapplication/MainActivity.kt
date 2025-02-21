@@ -68,16 +68,16 @@ class MainActivity : ComponentActivity() {
                 LaunchedEffect(backStackEntry) {
                     val isRootDestination = listOf(
                         Screen.Workout.Overview,
-                        Screen.Exercise.Overview(false),
+                        Screen.Exercise.Overview(),
                         Screen.Workout.HistoryOverview,
                         Screen.Profile
                     ).any { backStackEntry?.destination?.hasRoute(it::class) ?: false }
 
-                    val isExercisesFromWorkout = if(backStackEntry?.destination?.hasRoute<Screen.Exercise.Overview>() == true) {
-                        backStackEntry?.toRoute<Screen.Exercise.Overview>()?.isFromWorkout ?: false
-                    } else false
+                    val isViewMode = if(backStackEntry?.destination?.hasRoute<Screen.Exercise.Overview>() == true) {
+                        backStackEntry?.toRoute<Screen.Exercise.Overview>()?.mode == Screen.Exercise.Overview.Mode.VIEW
+                    } else true
 
-                    isBottomBarVisible = isRootDestination && !isExercisesFromWorkout
+                    isBottomBarVisible = isRootDestination && isViewMode
                 }
 
                 Scaffold(
@@ -131,7 +131,7 @@ class MainActivity : ComponentActivity() {
 
                                 val viewModel = koinViewModel<ManageWorkoutViewModel>(
                                     viewModelStoreOwner = backStackEntry,
-                                    parameters = { parametersOf(args.id) }
+                                    parameters = { parametersOf(args.id, args.execute) }
                                 )
 
                                 ManageWorkoutScreen(
@@ -157,14 +157,14 @@ class MainActivity : ComponentActivity() {
                         }
 
                         navigation<Screen.Exercise.Graph>(
-                            startDestination = Screen.Exercise.Overview(false)
+                            startDestination = Screen.Exercise.Overview()
                         ) {
                             composable<Screen.Exercise.Overview> { backStackEntry ->
                                 val args = backStackEntry.toRoute<Screen.Exercise.Overview>()
 
                                 val viewModel = koinViewModel<ExercisesViewModel>(
                                     viewModelStoreOwner = backStackEntry,
-                                    parameters = { parametersOf(args.isFromWorkout) }
+                                    parameters = { parametersOf(args.mode) }
                                 )
 
                                 ExercisesScreen(

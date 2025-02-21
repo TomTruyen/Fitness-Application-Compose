@@ -6,6 +6,7 @@ import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
+import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -14,11 +15,11 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ExercisesViewModel(
-    private val isFromWorkout: Boolean,
+    private val mode: Screen.Exercise.Overview.Mode,
     private val exerciseRepository: ExerciseRepository,
     private val userRepository: UserRepository
 ): BaseViewModel<ExercisesUiState, ExercisesUiAction, ExercisesUiEvent>(
-    initialState = ExercisesUiState(isFromWorkout = isFromWorkout)
+    initialState = ExercisesUiState(mode = mode)
 ) {
     private val callback by lazy {
         object: FirebaseCallback<List<Exercise>> {
@@ -82,6 +83,34 @@ class ExercisesViewModel(
             }
     }
 
+    private fun handleExerciseClick(exercise: Exercise) {
+        when(mode) {
+            Screen.Exercise.Overview.Mode.VIEW -> {
+                triggerEvent(ExercisesUiEvent.NavigateToDetail(exercise.id))
+            }
+            Screen.Exercise.Overview.Mode.SELECT -> {
+                updateState {
+                    it.copy(
+                        selectedExercises = it.selectedExercises.toMutableList().apply {
+                            if (contains(exercise)) {
+                                remove(exercise)
+                            } else {
+                                add(exercise)
+                            }
+                        },
+                    )
+                }
+            }
+            Screen.Exercise.Overview.Mode.REPLACE -> {
+                updateState {
+                    it.copy(
+                        selectedExercises = listOf(exercise)
+                    )
+                }
+            }
+        }
+    }
+
     override fun onAction(action: ExercisesUiAction) {
         when (action) {
             is ExercisesUiAction.OnToggleSearch -> updateState {
@@ -113,23 +142,7 @@ class ExercisesViewModel(
             }
             is ExercisesUiAction.OnFilterClicked -> triggerEvent(ExercisesUiEvent.NavigateToFilter)
             is ExercisesUiAction.OnAddClicked -> triggerEvent(ExercisesUiEvent.NavigateToAdd)
-            is ExercisesUiAction.OnExerciseClicked -> {
-                if (isFromWorkout) {
-                    updateState {
-                        it.copy(
-                            selectedExercises = it.selectedExercises.toMutableList().apply {
-                                if (contains(action.exercise)) {
-                                    remove(action.exercise)
-                                } else {
-                                    add(action.exercise)
-                                }
-                            },
-                        )
-                    }
-                } else {
-                    triggerEvent(ExercisesUiEvent.NavigateToDetail(action.exercise.id))
-                }
-            }
+            is ExercisesUiAction.OnExerciseClicked -> handleExerciseClick(action.exercise)
             is ExercisesUiAction.OnAddExerciseToWorkoutClicked -> {
                 triggerEvent(ExercisesUiEvent.NavigateBackToWorkout(uiState.value.selectedExercises))
             }

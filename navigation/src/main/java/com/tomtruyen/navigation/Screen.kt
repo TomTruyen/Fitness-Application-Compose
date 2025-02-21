@@ -22,7 +22,13 @@ sealed interface Screen {
         data object Graph: Exercise
 
         @Serializable
-        data class Overview(val isFromWorkout: Boolean = false) : Exercise
+        data class Overview(val mode: Mode = Mode.VIEW) : Exercise {
+            enum class Mode {
+                VIEW,
+                SELECT,
+                REPLACE
+            }
+        }
 
         @Serializable
         data class Detail(val id: String): Exercise
@@ -45,7 +51,7 @@ sealed interface Screen {
         data class Detail(val id: String): Workout
 
         @Serializable
-        data class Create(val id: String? = null): Workout
+        data class Create(val id: String? = null, val execute: Boolean = false): Workout
 
         @Serializable
         data class Execute(val id: String): Workout

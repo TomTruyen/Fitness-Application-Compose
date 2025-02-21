@@ -13,6 +13,7 @@ import com.tomtruyen.feature.workouts.history.WorkoutHistoryViewModel
 import com.tomtruyen.models.providers.BuildConfigFieldProvider
 import com.tomtruyen.models.providers.CredentialProvider
 import com.tomtruyen.models.providers.KoinReloadProvider
+import com.tomtruyen.navigation.Screen
 import org.koin.core.module.dsl.*
 import org.koin.dsl.module
 
@@ -51,12 +52,12 @@ val appModule = module {
         com.tomtruyen.feature.workouts.execute.ExecuteWorkoutViewModel(id, get(), get(), get())
     }
 
-    viewModel { (id: String?) ->
-        com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel(id, get(), get(), get())
+    viewModel { (id: String?, execute: Boolean) ->
+        com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel(id, execute, get(), get(), get())
     }
 
-    viewModel { (isFromWorkout: Boolean) ->
-        com.tomtruyen.feature.exercises.ExercisesViewModel(isFromWorkout, get(), get())
+    viewModel { (mode: Screen.Exercise.Overview.Mode) ->
+        com.tomtruyen.feature.exercises.ExercisesViewModel(mode, get(), get())
     }
 
     viewModel { (id: String) ->

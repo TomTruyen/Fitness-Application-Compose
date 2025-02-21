@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -31,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.designsystem.Dimens
+import com.tomtruyen.core.ui.BottomSheetItem
+import com.tomtruyen.core.ui.BottomSheetList
 import com.tomtruyen.navigation.NavArguments
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.TextFields
@@ -55,24 +60,63 @@ fun ManageWorkoutScreen(
     viewModel: ManageWorkoutViewModel
 ) {
     val context = LocalContext.current
+    val errorColor = MaterialTheme.colorScheme.error
+
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val actions = remember {
+        listOf(
+            BottomSheetItem(
+                title = R.string.action_exercise_replace,
+                icon = Icons.Default.Sync,
+                onClick = {
+                    viewModel.onAction(ManageWorkoutUiAction.OnReplaceExerciseClicked)
+                }
+            ),
+            BottomSheetItem(
+                title = R.string.action_remove_exercise,
+                icon = Icons.Default.Close,
+                onClick = {
+                    viewModel.onAction(ManageWorkoutUiAction.OnDeleteExercise)
+                },
+                color = errorColor
+            ),
+        )
+    }
 
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
                 is ManageWorkoutUiEvent.NavigateBack -> navController.popBackStack()
-                is ManageWorkoutUiEvent.NavigateToAddExercise -> navController.navigate(Screen.Exercise.Overview(isFromWorkout = true))
+                is ManageWorkoutUiEvent.NavigateToReplaceExercise -> navController.navigate(Screen.Exercise.Overview(Screen.Exercise.Overview.Mode.REPLACE))
+                is ManageWorkoutUiEvent.NavigateToAddExercise -> navController.navigate(Screen.Exercise.Overview(Screen.Exercise.Overview.Mode.SELECT))
             }
         }
     }
 
     LaunchedEffect(navController) {
-        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<List<Exercise>>(NavArguments.EXERCISES, emptyList())
-            ?.collectLatest { exercises ->
-                viewModel.onAction(ManageWorkoutUiAction.OnAddExercises(exercises))
+        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Pair<Screen.Exercise.Overview.Mode, List<Exercise>>?>(NavArguments.EXERCISES, null)
+            ?.collectLatest { result ->
+                if(result != null) {
+                    val (mode, exercises) = result
 
-                navController.currentBackStackEntry?.savedStateHandle?.remove<List<Exercise>>(NavArguments.EXERCISES)
+                    when (mode) {
+                        Screen.Exercise.Overview.Mode.REPLACE -> {
+                            exercises.firstOrNull()?.let { exercise ->
+                                viewModel.onAction(ManageWorkoutUiAction.OnReplaceExercise(exercise))
+                            }
+                        }
+
+                        Screen.Exercise.Overview.Mode.SELECT -> {
+                            viewModel.onAction(ManageWorkoutUiAction.OnAddExercises(exercises))
+                        }
+
+                        else -> Unit
+                    }
+                }
+
+                navController.currentBackStackEntry?.savedStateHandle?.remove<Pair<Screen.Exercise.Overview.Mode, List<Exercise>>?>(NavArguments.EXERCISES)
             }
     }
 
@@ -82,6 +126,12 @@ fun ManageWorkoutScreen(
         state = state,
         onAction = viewModel::onAction,
         onWorkoutEvent = viewModel::onWorkoutEvent
+    )
+
+    BottomSheetList(
+        items = actions,
+        visible = state.isMoreActionsSheetVisible,
+        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.DismissMoreActionsSheet) },
     )
 }
 
@@ -167,7 +217,6 @@ fun ManageWorkoutScreenLayout(
                 onWorkoutEvent = onWorkoutEvent
             )
 
-
             if(confirmationDialogVisible) {
                 ConfirmationDialog(
                     title = CommonR.string.title_unsaved_changes,
@@ -234,7 +283,10 @@ fun ExerciseList(
                 text = stringResource(id = R.string.button_add_exercise),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(Dimens.Normal)
+                    .padding(
+                        horizontal = Dimens.Normal,
+                        vertical = Dimens.Small
+                    ),
             ) {
                 onAction(ManageWorkoutUiAction.OnAddExerciseClicked)
             }
@@ -260,7 +312,11 @@ fun ExerciseListItem(
                 .padding(Dimens.Normal),
             exercise = workoutExercise.exercise,
             onActionClick = {
-                // TODO: Open BottomSheet with Options
+                onAction(
+                    ManageWorkoutUiAction.ShowMoreActionSheet(
+                        id = workoutExercise.id
+                    )
+                )
             },
         )
 

@@ -20,7 +20,7 @@ object BottomNavigation {
         BottomNavigationItem(
             label = R.string.exercises,
             icon = Icons.Filled.FitnessCenter,
-            screen = Screen.Exercise.Overview(false)
+            screen = Screen.Exercise.Overview()
         ),
         BottomNavigationItem(
             label = R.string.history,
