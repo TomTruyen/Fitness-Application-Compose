@@ -131,7 +131,7 @@ fun ManageWorkoutScreen(
     BottomSheetList(
         items = actions,
         visible = state.isMoreActionsSheetVisible,
-        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.DismissMoreActionsSheet) },
+        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.ToggleMoreActionSheet()) },
     )
 }
 
@@ -313,7 +313,7 @@ fun ExerciseListItem(
             exercise = workoutExercise.exercise,
             onActionClick = {
                 onAction(
-                    ManageWorkoutUiAction.ShowMoreActionSheet(
+                    ManageWorkoutUiAction.ToggleMoreActionSheet(
                         id = workoutExercise.id
                     )
                 )

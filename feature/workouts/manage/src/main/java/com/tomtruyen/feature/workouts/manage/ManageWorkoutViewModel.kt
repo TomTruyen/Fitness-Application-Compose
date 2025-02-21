@@ -113,7 +113,7 @@ class ManageWorkoutViewModel(
         )
     }
 
-    private fun updateExericseNotes(id: String, notes: String) = updateState {
+    private fun updateExerciseNotes(id: String, notes: String) = updateState {
         it.copy(
             workout = it.workout.copy(
                 exercises = it.workout.exercises.map { exercise ->
@@ -136,45 +136,39 @@ class ManageWorkoutViewModel(
         )
     }
 
-    private fun replaceExercise(exercise: Exercise) {
-        updateState {
-            it.copy(
-                workout = it.workout.copy(
-                    exercises = it.workout.exercises.toMutableList().apply {
-                        val index = indexOfFirst { exercise -> exercise.id == it.selectedExerciseId }
-                        set(
-                            index = index,
-                            element = createWorkoutExercise(exercise)
-                        )
-                    }
-                )
+    private fun replaceExercise(exercise: Exercise) = updateState {
+        it.copy(
+            workout = it.workout.copy(
+                exercises = it.workout.exercises.toMutableList().apply {
+                    val index = indexOfFirst { exercise -> exercise.id == it.selectedExerciseId }
+                    set(
+                        index = index,
+                        element = createWorkoutExercise(exercise)
+                    )
+                }
             )
-        }
+        )
     }
 
-    private fun deleteExercise() {
-        updateState {
-            it.copy(
-                workout = it.workout.copy(
-                    exercises = it.workout.exercises.toMutableList().apply {
-                        removeIf { exercise -> exercise.id == it.selectedExerciseId }
-                    }
-                ),
-                selectedExerciseId = null,
-            )
-        }
+    private fun deleteExercise() = updateState {
+        it.copy(
+            workout = it.workout.copy(
+                exercises = it.workout.exercises.toMutableList().apply {
+                    removeIf { exercise -> exercise.id == it.selectedExerciseId }
+                }
+            ),
+            selectedExerciseId = null,
+        )
     }
 
-    private fun addExercises(exercises: List<Exercise>) {
-        updateState {
-            val newExercises = exercises.map(::createWorkoutExercise)
+    private fun addExercises(exercises: List<Exercise>) = updateState {
+        val newExercises = exercises.map(::createWorkoutExercise)
 
-            it.copy(
-                workout = it.workout.copy(
-                    exercises = it.workout.exercises + newExercises
-                ),
-            )
-        }
+        it.copy(
+            workout = it.workout.copy(
+                exercises = it.workout.exercises + newExercises
+            ),
+        )
     }
 
     private fun toggleMoreActionSheet(exerciseId: String? = null) = updateState {
@@ -190,76 +184,125 @@ class ManageWorkoutViewModel(
         )
     }
 
+    private fun updateReps(id: String, setIndex: Int, reps: String?) = updateState {
+        it.copy(
+            workout = it.workout.copyWithRepsChanged(
+                id = id,
+                setIndex = setIndex,
+                reps = reps
+            )
+        )
+    }
+
+    private fun updateWeight(id: String, setIndex: Int, weight: String?) = updateState {
+        it.copy(
+            workout = it.workout.copyWithWeightChanged(
+                id = id,
+                setIndex = setIndex,
+                weight = weight
+            )
+        )
+    }
+
+    private fun updateTime(id: String, setIndex: Int, time: Int?) = updateState {
+        it.copy(
+            workout = it.workout.copyWithTimeChanged(
+                id = id,
+                setIndex = setIndex,
+                time = time
+            )
+        )
+    }
+
+    private fun deleteSet(id: String, setIndex: Int) = updateState {
+        it.copy(
+            workout = it.workout.copyWithDeleteSet(
+                id = id,
+                setIndex = setIndex
+            )
+        )
+    }
+
+    private fun addSet(id: String) = updateState {
+        it.copy(
+            workout = it.workout.copyWithAddSet(
+                id = id,
+            )
+        )
+    }
+
     override fun onAction(action: ManageWorkoutUiAction) {
         when (action) {
             is ManageWorkoutUiAction.Save -> save()
-            is ManageWorkoutUiAction.OnWorkoutNameChanged -> updateWorkoutName(action.name)
-            is ManageWorkoutUiAction.OnExerciseNotesChanged -> updateExericseNotes(action.id, action.notes)
+
+            is ManageWorkoutUiAction.OnWorkoutNameChanged -> updateWorkoutName(
+                name = action.name
+            )
+
+            is ManageWorkoutUiAction.OnExerciseNotesChanged -> updateExerciseNotes(
+                id = action.id,
+                notes = action.notes
+            )
+
             is ManageWorkoutUiAction.OnDeleteExercise -> {
                 closeMoreActionSheet()
                 deleteExercise()
             }
+
             is ManageWorkoutUiAction.OnReplaceExerciseClicked -> {
                 closeMoreActionSheet()
                 triggerEvent(ManageWorkoutUiEvent.NavigateToReplaceExercise)
             }
-            is ManageWorkoutUiAction.OnReplaceExercise -> replaceExercise(action.exercise)
+
+            is ManageWorkoutUiAction.OnReplaceExercise -> replaceExercise(
+                exercise = action.exercise
+            )
+
             is ManageWorkoutUiAction.OnAddExerciseClicked -> triggerEvent(ManageWorkoutUiEvent.NavigateToAddExercise)
-            is ManageWorkoutUiAction.OnAddExercises -> addExercises(action.exercises)
-            is ManageWorkoutUiAction.OnReorder -> reorderExercises(action.from, action.to)
-            is ManageWorkoutUiAction.ShowMoreActionSheet -> toggleMoreActionSheet(action.id)
-            is ManageWorkoutUiAction.DismissMoreActionsSheet -> toggleMoreActionSheet()
+
+            is ManageWorkoutUiAction.OnAddExercises -> addExercises(
+                exercises = action.exercises
+            )
+
+            is ManageWorkoutUiAction.OnReorder -> reorderExercises(
+                from = action.from,
+                to = action.to
+            )
+
+            is ManageWorkoutUiAction.ToggleMoreActionSheet -> toggleMoreActionSheet(
+                exerciseId = action.id
+            )
         }
     }
 
     fun onWorkoutEvent(event: WorkoutExerciseEvent) {
         when (event) {
-            is WorkoutExerciseEvent.OnRepsChanged -> updateState {
-                it.copy(
-                    workout = it.workout.copyWithRepsChanged(
-                        id = event.id,
-                        setIndex = event.setIndex,
-                        reps = event.reps
-                    )
-                )
-            }
+            is WorkoutExerciseEvent.OnRepsChanged -> updateReps(
+                id = event.id,
+                setIndex = event.setIndex,
+                reps = event.reps
+            )
 
-            is WorkoutExerciseEvent.OnWeightChanged -> updateState {
-                it.copy(
-                    workout = it.workout.copyWithWeightChanged(
-                        id = event.id,
-                        setIndex = event.setIndex,
-                        weight = event.weight
-                    )
-                )
-            }
+            is WorkoutExerciseEvent.OnWeightChanged -> updateWeight(
+                id = event.id,
+                setIndex = event.setIndex,
+                weight = event.weight
+            )
 
-            is WorkoutExerciseEvent.OnTimeChanged -> updateState {
-                it.copy(
-                    workout = it.workout.copyWithTimeChanged(
-                        id = event.id,
-                        setIndex = event.setIndex,
-                        time = event.time
-                    )
-                )
-            }
+            is WorkoutExerciseEvent.OnTimeChanged -> updateTime(
+                id = event.id,
+                setIndex = event.setIndex,
+                time = event.time
+            )
 
-            is WorkoutExerciseEvent.OnDeleteSet -> updateState {
-                it.copy(
-                    workout = it.workout.copyWithDeleteSet(
-                        id = event.id,
-                        setIndex = event.setIndex
-                    )
-                )
-            }
+            is WorkoutExerciseEvent.OnDeleteSet -> deleteSet(
+                id = event.id,
+                setIndex = event.setIndex
+            )
 
-            is WorkoutExerciseEvent.OnAddSet -> updateState {
-                it.copy(
-                    workout = it.workout.copyWithAddSet(
-                        id = event.id,
-                    )
-                )
-            }
+            is WorkoutExerciseEvent.OnAddSet -> addSet(
+                id = event.id
+            )
         }
     }
 }
