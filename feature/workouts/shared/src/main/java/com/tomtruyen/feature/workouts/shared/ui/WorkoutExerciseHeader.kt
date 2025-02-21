@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -53,7 +54,9 @@ fun WorkoutExerciseHeader(
 
         Text(
             text = exercise.name.orEmpty(),
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge.copy(
+                fontWeight = FontWeight.Bold
+            )
         )
 
         Spacer(modifier = Modifier.weight(1f))
