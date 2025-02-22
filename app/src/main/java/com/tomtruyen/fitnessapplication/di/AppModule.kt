@@ -61,7 +61,7 @@ val appModule = module {
     }
 
     viewModel { (id: String?) ->
-        com.tomtruyen.feature.exercises.create.CreateExerciseViewModel(id, get(), get())
+        com.tomtruyen.feature.exercises.manage.ManageExerciseViewModel(id, get(), get())
     }
 
     viewModelOf(::WorkoutHistoryViewModel)

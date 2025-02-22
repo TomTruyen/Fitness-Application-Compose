@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.exercises.create.model
+package com.tomtruyen.feature.exercises.manage.model
 
 enum class ManageExerciseMode {
     CREATE,

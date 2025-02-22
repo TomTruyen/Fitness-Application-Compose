@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.exercises.create
+package com.tomtruyen.feature.exercises.manage
 
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.base.SnackbarMessage
@@ -6,19 +6,18 @@ import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
-import com.tomtruyen.feature.exercises.create.model.ManageExerciseMode
+import com.tomtruyen.feature.exercises.manage.model.ManageExerciseMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class CreateExerciseViewModel(
+class ManageExerciseViewModel(
     private val id: String?,
     private val exerciseRepository: ExerciseRepository,
     private val userRepository: UserRepository
-): BaseViewModel<CreateExerciseUiState, CreateExerciseUiAction, CreateExerciseUiEvent>(
-    initialState = CreateExerciseUiState(
+): BaseViewModel<ManageExerciseUiState, ManageExerciseUiAction, ManageExerciseUiEvent>(
+    initialState = ManageExerciseUiState(
         mode = ManageExerciseMode.fromArgs(id)
     )
 ) {
@@ -90,7 +89,7 @@ class CreateExerciseViewModel(
             isUpdate = uiState.value.mode == ManageExerciseMode.EDIT,
             object: FirebaseCallback<Unit> {
                 override fun onSuccess(value: Unit) {
-                    triggerEvent(CreateExerciseUiEvent.NavigateBack)
+                    triggerEvent(ManageExerciseUiEvent.NavigateBack)
                 }
 
                 override fun onError(error: String?) {
@@ -104,9 +103,9 @@ class CreateExerciseViewModel(
         )
     }
 
-    override fun onAction(action: CreateExerciseUiAction) {
+    override fun onAction(action: ManageExerciseUiAction) {
         when(action) {
-            is CreateExerciseUiAction.OnExerciseNameChanged -> updateState {
+            is ManageExerciseUiAction.OnExerciseNameChanged -> updateState {
                 it.copy(
                     exercise = it.exercise.copy(
                         name = action.name,
@@ -114,28 +113,28 @@ class CreateExerciseViewModel(
                     nameValidationResult = it.validateName(action.name)
                 )
             }
-            is CreateExerciseUiAction.OnCategoryChanged -> updateState {
+            is ManageExerciseUiAction.OnCategoryChanged -> updateState {
                 it.copy(
                     exercise = it.exercise.copy(
                         category = action.category
                     ),
                 )
             }
-            is CreateExerciseUiAction.OnEquipmentChanged -> updateState {
+            is ManageExerciseUiAction.OnEquipmentChanged -> updateState {
                 it.copy(
                     exercise = it.exercise.copy(
                         equipment = action.equipment
                     )
                 )
             }
-            is CreateExerciseUiAction.OnTypeChanged -> updateState {
+            is ManageExerciseUiAction.OnTypeChanged -> updateState {
                 it.copy(
                     exercise = it.exercise.copy(
                         type = action.type
                     ),
                 )
             }
-            is CreateExerciseUiAction.OnSaveClicked -> save()
+            is ManageExerciseUiAction.OnSaveClicked -> save()
         }
     }
 }

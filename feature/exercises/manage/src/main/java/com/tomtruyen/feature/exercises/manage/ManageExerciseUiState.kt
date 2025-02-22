@@ -1,12 +1,12 @@
-package com.tomtruyen.feature.exercises.create
+package com.tomtruyen.feature.exercises.manage
 
 import com.tomtruyen.core.validation.TextValidator
 import com.tomtruyen.core.validation.ValidationResult
 import com.tomtruyen.core.validation.rules.RequiredRule
 import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.feature.exercises.create.model.ManageExerciseMode
+import com.tomtruyen.feature.exercises.manage.model.ManageExerciseMode
 
-data class CreateExerciseUiState(
+data class ManageExerciseUiState(
     val initialExercise: Exercise = Exercise(),
     val exercise: Exercise = Exercise(),
     val mode: ManageExerciseMode = ManageExerciseMode.CREATE,

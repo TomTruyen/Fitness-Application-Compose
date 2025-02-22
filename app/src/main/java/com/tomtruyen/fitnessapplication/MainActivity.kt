@@ -26,7 +26,7 @@ import com.tomtruyen.feature.auth.login.LoginScreen
 import com.tomtruyen.feature.auth.register.RegisterScreen
 import com.tomtruyen.feature.exercises.ExercisesScreen
 import com.tomtruyen.feature.exercises.ExercisesViewModel
-import com.tomtruyen.feature.exercises.create.CreateExerciseScreen
+import com.tomtruyen.feature.exercises.manage.ManageExerciseScreen
 import com.tomtruyen.feature.exercises.detail.ExerciseDetailScreen
 import com.tomtruyen.feature.exercises.filter.ExercisesFilterScreen
 import com.tomtruyen.feature.profile.ProfileScreen
@@ -178,10 +178,10 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
 
-                            composable<Screen.Exercise.Create> { backStackEntry ->
-                                val args = backStackEntry.toRoute<Screen.Exercise.Create>()
+                            composable<Screen.Exercise.Manage> { backStackEntry ->
+                                val args = backStackEntry.toRoute<Screen.Exercise.Manage>()
 
-                                CreateExerciseScreen(
+                                ManageExerciseScreen(
                                     id = args.id,
                                     navController = navController
                                 )

@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.exercises.create
+package com.tomtruyen.feature.exercises.manage
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateContentSize
@@ -30,20 +30,20 @@ import com.tomtruyen.core.ui.Dropdown
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.toolbars.Toolbar
-import com.tomtruyen.core.validation.errorMessage
 import com.tomtruyen.core.validation.isValid
 import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.feature.exercises.create.model.ManageExerciseMode
+import com.tomtruyen.feature.exercises.create.R
+import com.tomtruyen.feature.exercises.manage.model.ManageExerciseMode
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import com.tomtruyen.core.common.R as CommonR
 
 @Composable
-fun CreateExerciseScreen(
+fun ManageExerciseScreen(
     id: String? = null,
     navController: NavController,
-    viewModel: CreateExerciseViewModel = koinViewModel(
+    viewModel: ManageExerciseViewModel = koinViewModel(
         parameters = { parametersOf(id) }
     )
 ) {
@@ -54,12 +54,12 @@ fun CreateExerciseScreen(
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
-                is CreateExerciseUiEvent.NavigateBack -> navController.popBackStack()
+                is ManageExerciseUiEvent.NavigateBack -> navController.popBackStack()
             }
         }
     }
 
-    CreateExerciseScreenLayout(
+    ManageExerciseScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
@@ -68,11 +68,11 @@ fun CreateExerciseScreen(
 }
 
 @Composable
-fun CreateExerciseScreenLayout(
+fun ManageExerciseScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
-    state: CreateExerciseUiState,
-    onAction: (CreateExerciseUiAction) -> Unit,
+    state: ManageExerciseUiState,
+    onAction: (ManageExerciseUiAction) -> Unit,
 ) {
     val isValid by remember(state) {
         derivedStateOf {
@@ -135,7 +135,7 @@ fun CreateExerciseScreenLayout(
                     TextFields.Default(
                         value = state.exercise.name,
                         onValueChange = { name ->
-                            onAction(CreateExerciseUiAction.OnExerciseNameChanged(name))
+                            onAction(ManageExerciseUiAction.OnExerciseNameChanged(name))
                         },
                         placeholder = stringResource(id = CommonR.string.placeholder_name),
                         padding = PaddingValues(
@@ -150,7 +150,7 @@ fun CreateExerciseScreenLayout(
                         selectedOption = state.exercise.category,
                         onOptionSelected = { category ->
                             onAction(
-                                CreateExerciseUiAction.OnCategoryChanged(
+                                ManageExerciseUiAction.OnCategoryChanged(
                                     category
                                 )
                             )
@@ -163,7 +163,7 @@ fun CreateExerciseScreenLayout(
                         selectedOption = state.exercise.equipment,
                         onOptionSelected = { equipment ->
                             onAction(
-                                CreateExerciseUiAction.OnEquipmentChanged(
+                                ManageExerciseUiAction.OnEquipmentChanged(
                                     equipment
                                 )
                             )
@@ -176,7 +176,7 @@ fun CreateExerciseScreenLayout(
                         selectedOption = state.exercise.type,
                         onOptionSelected = { type ->
                             onAction(
-                                CreateExerciseUiAction.OnTypeChanged(
+                                ManageExerciseUiAction.OnTypeChanged(
                                     type
                                 )
                             )
@@ -189,7 +189,7 @@ fun CreateExerciseScreenLayout(
                     enabled = isValid,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    onAction(CreateExerciseUiAction.OnSaveClicked)
+                    onAction(ManageExerciseUiAction.OnSaveClicked)
                 }
 
                 if(confirmationDialogVisible) {

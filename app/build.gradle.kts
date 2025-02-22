@@ -97,7 +97,7 @@ dependencies {
     implementation(project(":feature:profile"))
 
     implementation(project(":feature:exercises"))
-    implementation(project(":feature:exercises:create"))
+    implementation(project(":feature:exercises:manage"))
     implementation(project(":feature:exercises:detail"))
     implementation(project(":feature:exercises:filter"))
 

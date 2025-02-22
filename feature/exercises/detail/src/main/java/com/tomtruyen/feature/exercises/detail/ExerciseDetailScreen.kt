@@ -62,7 +62,7 @@ fun ExerciseDetailScreen(
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
                 is ExerciseDetailUiEvent.NavigateBack -> navController.popBackStack()
-                is ExerciseDetailUiEvent.NavigateToEdit -> navController.navigate(Screen.Exercise.Create(id))
+                is ExerciseDetailUiEvent.NavigateToEdit -> navController.navigate(Screen.Exercise.Manage(id))
             }
         }
     }

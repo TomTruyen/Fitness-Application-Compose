@@ -66,7 +66,7 @@ fun ExercisesScreen(
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
                 is ExercisesUiEvent.NavigateToFilter -> navController.navigate(Screen.Exercise.Filter)
-                is ExercisesUiEvent.NavigateToAdd -> navController.navigate(Screen.Exercise.Create())
+                is ExercisesUiEvent.NavigateToAdd -> navController.navigate(Screen.Exercise.Manage())
                 is ExercisesUiEvent.NavigateToDetail -> navController.navigate(
                     Screen.Exercise.Detail(event.id)
                 )

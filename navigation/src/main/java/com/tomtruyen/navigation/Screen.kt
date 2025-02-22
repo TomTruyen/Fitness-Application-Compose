@@ -34,7 +34,7 @@ sealed interface Screen {
         data class Detail(val id: String): Exercise
 
         @Serializable
-        data class Create(val id: String? = null): Exercise
+        data class Manage(val id: String? = null): Exercise
 
         @Serializable
         data object Filter: Exercise
