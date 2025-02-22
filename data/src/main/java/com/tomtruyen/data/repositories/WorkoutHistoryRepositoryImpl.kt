@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
+import com.tomtruyen.data.entities.WorkoutHistoryWithWorkout
 import com.tomtruyen.data.firebase.extensions.handleCompletionResult
 import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.firebase.paging.WorkoutHistoryPagingSource
@@ -14,7 +15,6 @@ import com.tomtruyen.data.firebase.models.WorkoutHistoryResponse
 import com.tomtruyen.data.firebase.models.WorkoutResponse
 import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
-import com.tomtruyen.models.DataFetchTracker
 import kotlinx.coroutines.flow.Flow
 import org.koin.java.KoinJavaComponent.inject
 import java.time.LocalDate
@@ -32,17 +32,17 @@ class WorkoutHistoryRepositoryImpl(
     ) = workoutHistoryDao.findWorkoutHistoriesByRange(start, end)
 
     override fun findLastEntryForWorkout(workoutId: String): Flow<com.tomtruyen.data.entities.WorkoutWithExercises?> {
-        val lastWorkoutId = getIdWithPrefix(workoutId, DataFetchTracker.LAST_WORKOUT)
+        val lastWorkoutId = getIdWithPrefix(workoutId, CACHE_KEY_LAST_WORKOUT)
 
         return workoutDao.findByIdAsync(lastWorkoutId)
     }
 
-    override fun getLastEntryForWorkout(
+    override suspend fun getLastEntryForWorkout(
         userId: String,
         workoutId: String,
         callback: FirebaseCallback<Unit>
-    ) = tryRequestWhenNotFetched(
-        overrideIdentifier = getIdWithPrefix(workoutId, DataFetchTracker.LAST_WORKOUT),
+    ) = fetch(
+        overrideIdentifier = getIdWithPrefix(workoutId, CACHE_KEY_LAST_WORKOUT),
         onStopLoading = callback::onStopLoading
     ) {
         db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
@@ -56,8 +56,8 @@ class WorkoutHistoryRepositoryImpl(
             ) { document ->
                 val response = document.toObject(WorkoutResponse::class.java) ?: return@handleCompletionResult callback.onStopLoading()
 
-                val lastWorkout = addPrefixToIds(response, DataFetchTracker.LAST_WORKOUT)
-                launchWithTransaction {
+                val lastWorkout = addPrefixToIds(response, CACHE_KEY_LAST_WORKOUT)
+                launchWithCacheTransactions(getIdWithPrefix(workoutId, CACHE_KEY_LAST_WORKOUT)) {
                     workoutRepository.saveWorkoutResponses(listOf(lastWorkout))
                 }
 
@@ -65,14 +65,14 @@ class WorkoutHistoryRepositoryImpl(
             }
     }
 
-    override fun getWorkoutHistoriesPaginated(userId: String): Flow<PagingData<com.tomtruyen.data.entities.WorkoutHistoryWithWorkout>> {
+    override fun getWorkoutHistoriesPaginated(userId: String): Flow<PagingData<WorkoutHistoryWithWorkout>> {
         val source = WorkoutHistoryPagingSource(
             query = db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
                 .document(userId)
                 .collection(USER_WORKOUT_HISTORY_FIELD_NAME)
                 .orderBy(UPDATED_AT_ORDER_FIELD, Query.Direction.DESCENDING),
             onSaveResponse = { histories ->
-                launchWithTransaction {
+                launchWithCacheTransactions {
                     saveWorkoutHistoryResponses(histories)
                 }
             },
@@ -129,13 +129,13 @@ class WorkoutHistoryRepositoryImpl(
         val histories = responsesWithUniqueIds.map {
             it.toWorkoutHistory().let { history ->
                 history.copy(
-                    workoutId = getIdWithPrefix(history.workoutId.orEmpty(), DataFetchTracker.WORKOUT_HISTORY)
+                    workoutId = getIdWithPrefix(history.workoutId.orEmpty(), USER_WORKOUT_HISTORY_COLLECTION_NAME)
                 )
             }
         }
 
         val workouts = responsesWithUniqueIds.map { it.workout }.map {
-            addPrefixToIds(it, DataFetchTracker.WORKOUT_HISTORY)
+            addPrefixToIds(it, USER_WORKOUT_HISTORY_COLLECTION_NAME)
         }
 
         workoutRepository.saveWorkoutResponses(workouts)
@@ -187,5 +187,7 @@ class WorkoutHistoryRepositoryImpl(
         private const val USER_WORKOUT_HISTORY_COLLECTION_NAME = "workout_history"
         private const val USER_WORKOUT_HISTORY_WORKOUTS_COLLECTION_NAME = "workouts"
         private const val USER_WORKOUT_HISTORY_FIELD_NAME = "history"
+
+        private const val CACHE_KEY_LAST_WORKOUT = "last_workout"
     }
 }

@@ -28,9 +28,8 @@ class ProfileViewModel(
         observeLoading()
     }
 
-    private fun fetchSettings() {
-        val userId = userRepository.getUser()?.uid ?: return
-        isLoading(true)
+    private fun fetchSettings() = launchLoading {
+        val userId = userRepository.getUser()?.uid ?: return@launchLoading
 
         settingsRepository.getSettings(
             userId = userId,

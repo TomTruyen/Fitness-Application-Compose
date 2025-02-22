@@ -6,7 +6,6 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.tomtruyen.core.common.utils.TimeUtils
-import com.tomtruyen.data.entities.BaseEntity.Companion.DEFAULT_TTL
 import com.tomtruyen.data.firebase.models.WorkoutHistoryResponse
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -27,7 +26,6 @@ import java.util.concurrent.TimeUnit
 )
 data class WorkoutHistory(
     @PrimaryKey override val id: String = UUID.randomUUID().toString(),
-    override val ttl: Long = DEFAULT_TTL,
     val workoutId: String? = null,
     val duration: Long = 0L,
     val createdAt: Long = System.currentTimeMillis(),

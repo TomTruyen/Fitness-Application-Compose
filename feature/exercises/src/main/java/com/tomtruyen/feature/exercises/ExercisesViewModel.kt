@@ -42,8 +42,7 @@ class ExercisesViewModel(
         observeEquipment()
     }
 
-    private fun fetchExercises() {
-        isLoading(true)
+    private fun fetchExercises() = launchLoading {
         exerciseRepository.getExercises(callback)
 
         userRepository.getUser()?.let {

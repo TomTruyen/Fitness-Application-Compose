@@ -32,7 +32,7 @@ class SettingsRepositoryImpl(
             }
     }
 
-    override fun getSettings(userId: String, callback: FirebaseCallback<Settings>) = tryRequestWhenNotFetched(
+    override suspend fun getSettings(userId: String, callback: FirebaseCallback<Settings>) = fetch(
         onStopLoading = callback::onStopLoading
     ) {
         db.collection(COLLECTION_NAME)
@@ -40,14 +40,13 @@ class SettingsRepositoryImpl(
             .get()
             .handleCompletionResult(
                 context = context,
-                setFetchSuccessful = ::setFetchSuccessful,
                 callback = callback
             ) {
                 val settings = (it.toObject(Settings::class.java) ?: Settings()).copy(
                     id = it.id
                 )
 
-                launchWithTransaction {
+                launchWithCacheTransactions {
                     settingsDao.save(settings)
                 }
 

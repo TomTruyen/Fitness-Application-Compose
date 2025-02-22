@@ -1,67 +1,72 @@
 package com.tomtruyen.data.repositories
 
 import android.content.Context
+import android.util.Log
 import androidx.room.withTransaction
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.tomtruyen.data.AppDatabase
+import com.tomtruyen.data.dao.CacheTTLDao
+import com.tomtruyen.data.entities.CacheTTL
 import com.tomtruyen.data.firebase.extensions.handleCompletionResult
 import com.tomtruyen.data.firebase.models.FirebaseCallback
-import com.tomtruyen.models.DataFetchTracker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.java.KoinJavaComponent.inject
 
-open class BaseRepository(
-    private val identifier: String? = null
+abstract class BaseRepository(
 ): KoinComponent {
+    abstract val identifier: String
+
     val context: Context by inject(Context::class.java)
 
     private val database: AppDatabase by inject(AppDatabase::class.java)
+    private val cacheDao: CacheTTLDao by inject(CacheTTLDao::class.java)
 
     protected val db = Firebase.firestore
-    protected val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    protected val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-    protected suspend fun <T> transaction(block: suspend () -> T) {
-        withContext(Dispatchers.IO) {
-            database.withTransaction(block)
-        }
+    suspend fun transaction(block: suspend () -> Unit) = database.withTransaction {
+        block()
     }
 
     fun launchWithTransaction(block: suspend () -> Unit) = scope.launch {
         transaction(block)
     }
 
-    // This function is used to check if we have already made a request to Firebase.
-    // If we have, we don't need to make another request --> Reduces the amount of Reads on Firebase
-    protected fun tryRequestWhenNotFetched(
+    fun launchWithCacheTransactions(overrideIdentifier: String? = null, block: suspend () -> Unit) = launchWithTransaction {
+        block()
+
+        val cacheKey = overrideIdentifier ?: identifier
+        cacheDao.save(CacheTTL(cacheKey))
+    }
+
+    protected suspend fun fetch(
+        refresh: Boolean = false,
         overrideIdentifier: String? = null,
         onStopLoading: () -> Unit,
-        force: Boolean = false,
         block: () -> Unit
     ) {
-        val identifier = overrideIdentifier ?: identifier
+        val cacheKey = overrideIdentifier ?: identifier
+        Log.i(TAG, "Fetching data for $cacheKey from Firebase... (Checking Cache first)")
 
-        if(identifier == null || force || !DataFetchTracker.isFetched(identifier)) {
+        val isCacheExpired = cacheDao.findById(cacheKey)?.isExpired ?: true
+
+        if(isCacheExpired || refresh) {
+            Log.i(TAG, "Cache is expired or refresh is true, fetching $cacheKey from Firebase")
+
             block()
             return
         }
 
+        Log.i(TAG, "Cache is not expired. Skipping Firebase fetch for $cacheKey")
+        
         onStopLoading()
-    }
-
-    protected fun setFetchSuccessful(overrideIdentifier: String? = null) {
-        val identifier = overrideIdentifier ?: identifier
-
-        identifier?.let {
-            DataFetchTracker.fetched(it)
-        }
     }
 
     protected suspend fun <T> updateOrSet(
@@ -86,5 +91,9 @@ open class BaseRepository(
         ) {
             onSuccess(exists)
         }
+    }
+
+    companion object {
+        private const val TAG = "BaseRepository"
     }
 }

@@ -23,7 +23,7 @@ class WorkoutRepositoryImpl(
 
     override fun findWorkoutById(id: String) = workoutDao.findById(id)
 
-    override fun getWorkouts(userId: String, callback: FirebaseCallback<List<WorkoutResponse>>) = tryRequestWhenNotFetched(
+    override suspend fun getWorkouts(userId: String, callback: FirebaseCallback<List<WorkoutResponse>>) = fetch(
         onStopLoading = callback::onStopLoading
     ) {
         db.collection(USER_WORKOUT_COLLECTION_NAME)
@@ -32,11 +32,10 @@ class WorkoutRepositoryImpl(
             .handleCompletionResult(
                 context = context,
                 callback = callback,
-                setFetchSuccessful = ::setFetchSuccessful
             ) {
                 val workouts = it.toObject(WorkoutsResponse::class.java)?.data.orEmpty()
 
-                launchWithTransaction {
+                launchWithCacheTransactions {
                     workoutDao.deleteAll()
                     saveWorkoutResponses(workouts)
                 }

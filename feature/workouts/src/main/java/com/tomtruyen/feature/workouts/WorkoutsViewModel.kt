@@ -37,10 +37,9 @@ class WorkoutsViewModel(
             }
     }
 
-    private fun fetchWorkouts() {
-        val userId = userRepository.getUser()?.uid ?: return
+    private fun fetchWorkouts() = launchLoading {
+        val userId = userRepository.getUser()?.uid ?: return@launchLoading
 
-        isLoading(true)
         workoutRepository.getWorkouts(
             userId = userId,
             callback = object: FirebaseCallback<List<WorkoutResponse>> {

@@ -9,7 +9,6 @@ import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.firebase.models.ExercisesResponse
 import com.tomtruyen.data.firebase.models.UserExercisesResponse
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
-import com.tomtruyen.models.DataFetchTracker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -31,18 +30,19 @@ class ExerciseRepositoryImpl(
 
     override fun findEquipment() = exerciseDao.findEquipment()
 
-    override fun getExercises(callback: FirebaseCallback<List<Exercise>>) {
+    override suspend fun getExercises(callback: FirebaseCallback<List<Exercise>>) = fetch(
+        onStopLoading = callback::onStopLoading
+    ) {
         db.collection(COLLECTION_NAME)
             .document(DOCUMENT_NAME)
             .get()
             .handleCompletionResult(
                 context = context,
-                setFetchSuccessful = ::setFetchSuccessful,
                 callback = callback
             ) {
                 val exercises = it.toObject(ExercisesResponse::class.java)?.data.orEmpty()
 
-                launchWithTransaction {
+                launchWithCacheTransactions {
                     exerciseDao.deleteAllNonUserExercises()
                     exerciseDao.saveAll(exercises)
                 }
@@ -51,23 +51,20 @@ class ExerciseRepositoryImpl(
             }
     }
 
-    override fun getUserExercises(userId: String, callback: FirebaseCallback<List<Exercise>>) = tryRequestWhenNotFetched(
+    override suspend fun getUserExercises(userId: String, callback: FirebaseCallback<List<Exercise>>) = fetch(
         onStopLoading = callback::onStopLoading,
-        overrideIdentifier = DataFetchTracker.USER_EXERCISES
+        overrideIdentifier = USER_EXERCISE_COLLECTION_NAME
     ) {
         db.collection(USER_EXERCISE_COLLECTION_NAME)
             .document(userId)
             .get()
             .handleCompletionResult(
                 context = context,
-                setFetchSuccessful = {
-                    setFetchSuccessful(DataFetchTracker.USER_EXERCISES)
-                },
                 callback = callback
             ) {
                 val exercises = it.toObject(UserExercisesResponse::class.java)?.exercises.orEmpty()
 
-                launchWithTransaction {
+                launchWithCacheTransactions(USER_EXERCISE_COLLECTION_NAME) {
                     exerciseDao.deleteAllUserExercises()
                     exerciseDao.saveAll(exercises)
                 }

@@ -4,10 +4,12 @@ import androidx.paging.PagingData
 import com.tomtruyen.data.repositories.BaseRepository
 import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.firebase.models.WorkoutHistoryResponse
-import com.tomtruyen.models.DataFetchTracker
 import kotlinx.coroutines.flow.Flow
 
-abstract class WorkoutHistoryRepository: BaseRepository(DataFetchTracker.LAST_WORKOUT) {
+abstract class WorkoutHistoryRepository: BaseRepository() {
+    override val identifier: String
+        get() = "workout_histories"
+
     abstract fun findWorkoutHistoriesByRange(
         start: Long,
         end: Long,
@@ -17,7 +19,7 @@ abstract class WorkoutHistoryRepository: BaseRepository(DataFetchTracker.LAST_WO
         workoutId: String,
     ): Flow<com.tomtruyen.data.entities.WorkoutWithExercises?>
 
-    abstract fun getLastEntryForWorkout(
+    abstract suspend fun getLastEntryForWorkout(
         userId: String,
         workoutId: String,
         callback: FirebaseCallback<Unit>

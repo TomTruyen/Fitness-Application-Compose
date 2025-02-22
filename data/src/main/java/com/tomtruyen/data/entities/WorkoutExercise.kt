@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.Relation
-import com.tomtruyen.data.entities.BaseEntity.Companion.DEFAULT_TTL
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
 import java.util.UUID
 
@@ -32,7 +31,6 @@ import java.util.UUID
 )
 data class WorkoutExercise(
     @PrimaryKey override val id: String = UUID.randomUUID().toString(),
-    override val ttl: Long = DEFAULT_TTL,
     val workoutId: String? = null,
     val exerciseId: String? = null,
     val notes: String? = null,

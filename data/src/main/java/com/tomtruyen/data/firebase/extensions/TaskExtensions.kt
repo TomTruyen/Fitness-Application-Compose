@@ -6,7 +6,6 @@ import com.tomtruyen.data.firebase.models.FirebaseCallback
 
 fun <TResult, TEntity> Task<TResult>.handleCompletionResult(
     context: Context,
-    setFetchSuccessful: (() -> Unit)? = null,
     callback: FirebaseCallback<TEntity>,
     onSuccess: (TResult) -> Unit
 ) {
@@ -24,7 +23,5 @@ fun <TResult, TEntity> Task<TResult>.handleCompletionResult(
         }
 
         onSuccess(task.result)
-
-        setFetchSuccessful?.invoke()
     }
 }
