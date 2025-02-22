@@ -121,17 +121,17 @@ fun ExecuteWorkoutScreenLayout(
                         contentDescription = null,
                     )
 
-                    Text(
-                        text = stopwatchTimer.time,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(start = Dimens.Small)
-                    )
+//                    Text(
+//                        text = stopwatchTimer.time.value,
+//                        textAlign = TextAlign.Center,
+//                        modifier = Modifier.padding(start = Dimens.Small)
+//                    )
                 }
 
                 IconButton(
                     onClick = {
                         stopwatchTimer.stop()
-                        onAction(ExecuteWorkoutUiAction.FinishWorkout(stopwatchTimer.currentTime))
+//                        onAction(ExecuteWorkoutUiAction.FinishWorkout(stopwatchTimer.currentTime))
                     }
                 ) {
                     Icon(

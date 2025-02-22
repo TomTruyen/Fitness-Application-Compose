@@ -1,56 +1,43 @@
 package com.tomtruyen.core.common.utils
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 
 class StopwatchTimer(
-    private val initialTimeInSeconds: Long = 0L,
+    initialTimeInSeconds: Long = 0L,
 ) {
-    private var scope = CoroutineScope(Dispatchers.Main)
-    var currentTime = initialTimeInSeconds
-        private set
+    private var scope = CoroutineScope(Dispatchers.IO)
 
-    private var isActive = false
+    private val isActive = AtomicBoolean(false)
 
-    var time by mutableStateOf(formatTime())
+    private val _time = MutableStateFlow(initialTimeInSeconds)
+    val time = _time.asStateFlow()
 
     fun start() {
-        if(isActive) return
+        if(isActive.get()) return
 
         scope.launch {
-            this@StopwatchTimer.isActive = true
-            while(this@StopwatchTimer.isActive) {
+            this@StopwatchTimer.isActive.set(true)
+            while(this@StopwatchTimer.isActive.get()) {
                 delay(DELAY_IN_MILLIS)
-                currentTime += DELAY_IN_MILLIS / 1000
-                time = formatTime()
+
+                _time.update {
+                    it + (DELAY_IN_MILLIS / 1000)
+                }
             }
         }
     }
 
     @Synchronized
     fun stop() {
-        isActive = false
+        isActive.set(false)
     }
-
-    fun reset() {
-        scope.cancel()
-        scope = CoroutineScope(Dispatchers.Main)
-        currentTime = initialTimeInSeconds
-        time = formatTime()
-        isActive = false
-    }
-
-    private fun formatTime() = TimeUtils.formatSeconds(
-        seconds = currentTime,
-        alwaysShow = listOf(TimeUnit.HOURS , TimeUnit.MINUTES, TimeUnit.SECONDS),
-    )
 
     companion object {
         private const val DELAY_IN_MILLIS = 1000L

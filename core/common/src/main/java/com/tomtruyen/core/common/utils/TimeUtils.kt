@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit
 object TimeUtils {
     private const val LEADING_ZERO_WIDTH = 2
     private const val DEFAULT_DIVIDER = ":"
+
     fun formatSeconds(
         seconds: Long,
         alwaysShow: List<TimeUnit> = listOf(TimeUnit.MINUTES, TimeUnit.SECONDS),

@@ -9,6 +9,7 @@ data class ManageWorkoutUiState(
     val initialWorkout: WorkoutResponse = WorkoutResponse(),
     val workout: WorkoutResponse = WorkoutResponse(),
     val settings: Settings = Settings(),
+    val duration: Long = 0L,
     val loading: Boolean = false,
 
     // BottomSheet states

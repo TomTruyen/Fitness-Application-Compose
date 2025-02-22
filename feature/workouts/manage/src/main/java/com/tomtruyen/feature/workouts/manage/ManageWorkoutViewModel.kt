@@ -29,7 +29,7 @@ class ManageWorkoutViewModel(
         mode = ManageWorkoutMode.fromArgs(id, execute)
     )
 ) {
-    private val timer by lazy { StopwatchTimer() }
+    val timer by lazy { StopwatchTimer() }
 
     init {
         findWorkout()
@@ -43,16 +43,23 @@ class ManageWorkoutViewModel(
     private fun startTimer() {
         if(uiState.value.mode == ManageWorkoutMode.EXECUTE) {
             timer.start()
+
+            vmScope.launch {
+                timer.time.collectLatest { duration ->
+                    updateState {
+                        it.copy(
+                            duration = duration
+                        )
+                    }
+                }
+            }
         }
     }
 
-    private fun stopTimer(): Long {
+    private fun stopTimer() {
         if(uiState.value.mode == ManageWorkoutMode.EXECUTE) {
             timer.stop()
-            return timer.currentTime
         }
-
-        return 0L
     }
 
     private fun findWorkout() = launchLoading(Dispatchers.IO) {

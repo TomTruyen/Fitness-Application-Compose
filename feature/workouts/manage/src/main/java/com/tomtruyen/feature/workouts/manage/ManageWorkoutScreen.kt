@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -35,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.BottomSheetItem
 import com.tomtruyen.core.ui.BottomSheetList
@@ -48,6 +50,7 @@ import com.tomtruyen.core.ui.toolbars.ToolbarTitle
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
 import com.tomtruyen.feature.workouts.manage.components.WorkoutStatistics
+import com.tomtruyen.feature.workouts.manage.components.WorkoutTimer
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 import com.tomtruyen.feature.workouts.shared.WorkoutExerciseUiAction
 import com.tomtruyen.feature.workouts.shared.ui.WorkoutExerciseHeader
@@ -56,6 +59,7 @@ import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
+import java.util.concurrent.TimeUnit
 import com.tomtruyen.core.common.R as CommonR
 
 @Composable
@@ -174,6 +178,13 @@ fun ManageWorkoutScreenLayout(
     onAction: (ManageWorkoutUiAction) -> Unit,
     onWorkoutEvent: (WorkoutExerciseUiAction) -> Unit
 ) {
+    val workoutDuration = remember(state.duration) {
+        TimeUtils.formatSeconds(
+            seconds = state.duration,
+            alwaysShow = listOf(TimeUnit.HOURS, TimeUnit.MINUTES, TimeUnit.SECONDS)
+        )
+    }
+
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     val onNavigateUp: () -> Unit = {
@@ -196,7 +207,7 @@ fun ManageWorkoutScreenLayout(
                     } else {
                         TextFields.Default(
                             modifier = Modifier.padding(
-                                end = Dimens.Small,
+                                end = Dimens.Tiny,
                             ),
                             textFieldModifier = Modifier.defaultMinSize(minHeight = 36.dp),
                             padding = PaddingValues(Dimens.Small),
@@ -216,18 +227,26 @@ fun ManageWorkoutScreenLayout(
                 onNavigateUp = onNavigateUp
             ) {
                 AnimatedVisibility(
-                    visible = state.workout.exercises.isNotEmpty(),
+                    visible = state.mode == ManageWorkoutMode.EXECUTE
                 ) {
-                    Buttons.Default(
-                        modifier = Modifier.padding(end = Dimens.Small),
-                        text = stringResource(id = CommonR.string.button_save),
-                        contentPadding = PaddingValues(0.dp),
-                        minButtonSize = 36.dp,
-                        onClick = {
-                            onAction(ManageWorkoutUiAction.Save)
-                        }
+                    WorkoutTimer(
+                        time = workoutDuration,
+                        modifier = Modifier
+                            .height(36.dp)
+                            .padding(end = Dimens.Small)
                     )
                 }
+
+                Buttons.Default(
+                    enabled = state.workout.exercises.isNotEmpty(),
+                    modifier = Modifier.padding(end = Dimens.Small),
+                    text = stringResource(id = CommonR.string.button_save),
+                    contentPadding = PaddingValues(0.dp),
+                    minButtonSize = 36.dp,
+                    onClick = {
+                        onAction(ManageWorkoutUiAction.Save)
+                    }
+                )
             }
         }
     ) {
