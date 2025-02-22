@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.LighterSuccessGreen
-import com.tomtruyen.core.designsystem.theme.SuccessGreen
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode

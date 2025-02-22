@@ -313,10 +313,10 @@ fun ExerciseList(
         state = lazyListState,
         modifier = modifier.fillMaxSize()
     ) {
-        items(state.workout.exercises, key = { it }) { exercise ->
+        items(state.workout.exercises, key = { it.id }) { exercise ->
             ReorderableItem(
                 state = reorderableLazyListState,
-                key = exercise
+                key = exercise.id
             ) { isDragging ->
                 val alpha by animateFloatAsState(if (isDragging) 0.25f else 1f, label = "")
 
