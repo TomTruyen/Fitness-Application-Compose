@@ -46,6 +46,7 @@ import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.toolbars.ToolbarTitle
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
+import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 import com.tomtruyen.feature.workouts.shared.WorkoutExerciseUiAction
 import com.tomtruyen.feature.workouts.shared.ui.WorkoutExerciseHeader
 import com.tomtruyen.feature.workouts.shared.ui.WorkoutExerciseSetTable
@@ -188,15 +189,12 @@ fun ManageWorkoutScreenLayout(
         topBar = {
             Toolbar(
                 title = {
-                    // TODO: Add Logic to show title only when not editing
-                    if(true) {
+                    if(state.mode == ManageWorkoutMode.EXECUTE) {
+                        ToolbarTitle(title = stringResource(id = R.string.title_create_workout))
+                    } else {
                         TextFields.Default(
                             modifier = Modifier.padding(
-                                end = if(state.workout.exercises.isEmpty()) {
-                                    Dimens.Small
-                                } else {
-                                    Dimens.Normal
-                                }
+                                end = Dimens.Small,
                             ),
                             textFieldModifier = Modifier.defaultMinSize(minHeight = 36.dp),
                             padding = PaddingValues(Dimens.Small),
@@ -210,8 +208,6 @@ fun ManageWorkoutScreenLayout(
                                 )
                             }
                         )
-                    } else {
-                        ToolbarTitle(title = stringResource(id = R.string.title_create_workout))
                     }
                 },
                 navController = navController,
@@ -221,6 +217,7 @@ fun ManageWorkoutScreenLayout(
                     visible = state.workout.exercises.isNotEmpty(),
                 ) {
                     Buttons.Default(
+                        modifier = Modifier.padding(end = Dimens.Small),
                         text = stringResource(id = CommonR.string.button_save),
                         contentPadding = PaddingValues(0.dp),
                         minButtonSize = 36.dp,
