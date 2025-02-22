@@ -7,6 +7,7 @@ import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.WorkoutSet
 import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
+import com.tomtruyen.data.firebase.models.WorkoutHistoryResponse
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
@@ -372,3 +373,62 @@ class ManageWorkoutViewModel(
         }
     }
 }
+
+
+
+// TODO: SETUP THIS TO BE USED FOR EXECUTE MODE
+//private fun observeLastEntryForWorkout() = vmScope.launch {
+//    historyRepository.findLastEntryForWorkout(id)
+//        .filterNotNull()
+//        .distinctUntilChanged()
+//        .collectLatest { entry ->
+//            updateState { state ->
+//                state.copy(
+//                    lastEntryForWorkout = entry
+//                )
+//            }
+//        }
+//}
+//
+//private fun fetchLastEntryForWorkout() = vmScope.launch {
+//    val userId = userRepository.getUser()?.uid ?: return@launch
+//
+//    isLoading(true)
+//
+//    historyRepository.getLastEntryForWorkout(
+//        userId = userId,
+//        workoutId = id,
+//        callback = object: FirebaseCallback<Unit> {
+//            override fun onStopLoading() {
+//                isLoading(false)
+//            }
+//        }
+//    )
+//}
+//
+//private fun finishWorkout(duration: Long) = vmScope.launch {
+//    val userId = userRepository.getUser()?.uid ?: return@launch
+//
+//    isLoading(true)
+//
+//    historyRepository.finishWorkout(
+//        userId = userId,
+//        history = WorkoutHistoryResponse(
+//            duration = duration,
+//            workout = uiState.value.workout
+//        ),
+//        callback = object: FirebaseCallback<Unit> {
+//            override fun onSuccess(value: Unit) {
+//                triggerEvent(ExecuteWorkoutUiEvent.NavigateToFinish)
+//            }
+//
+//            override fun onError(error: String?) {
+//                showSnackbar(SnackbarMessage.Error(error))
+//            }
+//
+//            override fun onStopLoading() {
+//                isLoading(false)
+//            }
+//        }
+//    )
+//}

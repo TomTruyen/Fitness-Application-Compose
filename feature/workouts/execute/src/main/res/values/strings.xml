@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="placeholder_notes">Notes</string>
-
-    <string name="button_next_exercise">Next exercise</string>
-
-    <string name="content_description_finish_workout">Finish workout</string>
-</resources>

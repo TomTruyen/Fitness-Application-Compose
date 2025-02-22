@@ -50,11 +50,11 @@ fun WorkoutDetailScreen(
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
                 is WorkoutDetailUiEvent.NavigateToEdit -> {
-                    navController.navigate(Screen.Workout.Create(event.id))
+                    navController.navigate(Screen.Workout.Manage(event.id))
                 }
                 is WorkoutDetailUiEvent.NavigateBack -> navController.popBackStack()
                 is WorkoutDetailUiEvent.NavigateToStartWorkout -> {
-                    navController.navigate(Screen.Workout.Execute(event.id))
+                    navController.navigate(Screen.Workout.Manage(event.id, true))
                 }
             }
         }

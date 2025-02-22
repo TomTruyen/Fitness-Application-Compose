@@ -30,7 +30,8 @@ data class WorkoutSet(
     var time: Int? = null, // For Time Type exercises,
     var order: Int = 1,
     var repsText: String? = null,
-    var weightText: String? = null
+    var weightText: String? = null,
+    val completed: Boolean = false,
 ): Parcelable {
 
 

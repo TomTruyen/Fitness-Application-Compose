@@ -1,6 +1,5 @@
 package com.tomtruyen.feature.workouts.manage.components
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,9 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.data.firebase.extensions.repsCount
-import com.tomtruyen.data.firebase.extensions.setCount
-import com.tomtruyen.data.firebase.extensions.totalVolume
+import com.tomtruyen.data.firebase.extensions.repsCountCompleted
+import com.tomtruyen.data.firebase.extensions.setCountCompleted
+import com.tomtruyen.data.firebase.extensions.totalVolumeCompleted
 import com.tomtruyen.data.firebase.models.WorkoutResponse
 import com.tomtruyen.feature.workouts.manage.R
 
@@ -39,17 +38,17 @@ fun WorkoutStatistics(
         ) {
             WorkoutStatisticsItem(
                 name = stringResource(id = R.string.label_volume),
-                value = "${workout.totalVolume()} ${workout.unit}"
+                value = "${workout.totalVolumeCompleted()} ${workout.unit}"
             )
 
             WorkoutStatisticsItem(
                 name = stringResource(id = R.string.label_sets),
-                value = workout.setCount().toString()
+                value = workout.setCountCompleted().toString()
             )
 
             WorkoutStatisticsItem(
                 name = stringResource(id = R.string.label_reps),
-                value = workout.repsCount().toString()
+                value = workout.repsCountCompleted().toString()
             )
         }
 

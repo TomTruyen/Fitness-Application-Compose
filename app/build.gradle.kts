@@ -104,7 +104,6 @@ dependencies {
     implementation(project(":feature:workouts"))
     implementation(project(":feature:workouts:manage"))
     implementation(project(":feature:workouts:detail"))
-    implementation(project(":feature:workouts:execute"))
     implementation(project(":feature:workouts:history"))
 
     // Paging 3

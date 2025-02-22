@@ -51,10 +51,7 @@ sealed interface Screen {
         data class Detail(val id: String): Workout
 
         @Serializable
-        data class Create(val id: String? = null, val execute: Boolean = false): Workout
-
-        @Serializable
-        data class Execute(val id: String): Workout
+        data class Manage(val id: String? = null, val execute: Boolean = false): Workout
 
         @Serializable
         data object HistoryOverview: Workout

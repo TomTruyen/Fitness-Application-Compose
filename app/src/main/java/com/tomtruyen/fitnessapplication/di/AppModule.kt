@@ -48,10 +48,6 @@ val appModule = module {
         com.tomtruyen.feature.workouts.detail.WorkoutDetailViewModel(id, get(), get())
     }
 
-    viewModel { (id: String) ->
-        com.tomtruyen.feature.workouts.execute.ExecuteWorkoutViewModel(id, get(), get(), get())
-    }
-
     viewModel { (id: String?, execute: Boolean) ->
         com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel(id, execute, get(), get(), get())
     }
