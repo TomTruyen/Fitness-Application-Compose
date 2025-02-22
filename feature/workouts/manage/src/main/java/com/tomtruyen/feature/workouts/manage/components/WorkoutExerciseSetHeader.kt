@@ -14,7 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.feature.workouts.shared.R
+import com.tomtruyen.feature.workouts.manage.R
 
 @Composable
 fun WorkoutExerciseSetHeader(
