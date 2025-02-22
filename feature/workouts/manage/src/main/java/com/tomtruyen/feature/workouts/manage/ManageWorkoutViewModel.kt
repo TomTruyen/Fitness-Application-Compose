@@ -7,8 +7,10 @@ import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.WorkoutSet
 import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
+import com.tomtruyen.data.firebase.models.WorkoutHistoryResponse
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
+import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +24,7 @@ class ManageWorkoutViewModel(
     execute: Boolean,
     private val userRepository: UserRepository,
     private val workoutRepository: WorkoutRepository,
+    private val historyRepository: WorkoutHistoryRepository,
     private val settingsRepository: SettingsRepository
 ): BaseViewModel<ManageWorkoutUiState, ManageWorkoutUiAction, ManageWorkoutUiEvent>(
     initialState = ManageWorkoutUiState(
@@ -32,33 +35,35 @@ class ManageWorkoutViewModel(
 
     init {
         findWorkout()
+        fetchLastEntryForWorkout()
 
         observeLoading()
         observeSettings()
+        observeLastEntryForWorkout()
 
         startTimer()
     }
 
     private fun startTimer() {
-        if(uiState.value.mode == ManageWorkoutMode.EXECUTE) {
-            timer.start()
+        if(uiState.value.mode != ManageWorkoutMode.EXECUTE) return
 
-            vmScope.launch {
-                timer.time.collectLatest { duration ->
-                    updateState {
-                        it.copy(
-                            duration = duration
-                        )
-                    }
+        timer.start()
+
+        vmScope.launch {
+            timer.time.collectLatest { duration ->
+                updateState {
+                    it.copy(
+                        duration = duration
+                    )
                 }
             }
         }
     }
 
     private fun stopTimer() {
-        if(uiState.value.mode == ManageWorkoutMode.EXECUTE) {
-            timer.stop()
-        }
+        if(uiState.value.mode != ManageWorkoutMode.EXECUTE) return
+
+        timer.stop()
     }
 
     private fun findWorkout() = launchLoading(Dispatchers.IO) {
@@ -89,32 +94,82 @@ class ManageWorkoutViewModel(
             }
     }
 
-    private fun finish() = vmScope.launch {
-        val userId = userRepository.getUser()?.uid ?: return@launch
+    private fun observeLastEntryForWorkout() {
+        if(uiState.value.mode != ManageWorkoutMode.EXECUTE || id == null) return
 
-        val duration = timer.stop()
+        vmScope.launch {
+            historyRepository.findLastEntryForWorkout(id)
+                .filterNotNull()
+                .distinctUntilChanged()
+                .collectLatest { entry ->
+                    updateState { state ->
+                        state.copy(
+                            lastEntryForWorkout = entry
+                        )
+                    }
+                }
+        }
     }
 
-    private fun save() = vmScope.launch {
-        val userId = userRepository.getUser()?.uid ?: return@launch
+    private fun fetchLastEntryForWorkout() {
+        if(uiState.value.mode != ManageWorkoutMode.EXECUTE || id == null) return
 
-        isLoading(true)
+        vmScope.launch {
+            val userId = userRepository.getUser()?.uid ?: return@launch
 
-        val workout = uiState.value.workout.apply {
-            exercises.forEachIndexed { index, workoutExerciseResponse ->
-                workoutExerciseResponse.order = index
-            }
-            unit = uiState.value.settings.unit
+            isLoading(true)
 
-            if(name.isBlank()) {
-                name = "Workout"
-            }
+            historyRepository.getLastEntryForWorkout(
+                userId = userId,
+                workoutId = id,
+                callback = object: FirebaseCallback<Unit> {
+                    override fun onStopLoading() {
+                        isLoading(false)
+                    }
+                }
+            )
         }
+    }
 
+    private suspend fun finishWorkout(userId: String) = with(uiState.value) {
+        stopTimer()
+
+        historyRepository.finishWorkout(
+            userId = userId,
+            history = WorkoutHistoryResponse(
+                duration = duration,
+                workout = workout
+            ),
+            callback = object : FirebaseCallback<Unit> {
+                override fun onSuccess(value: Unit) {
+                    triggerEvent(ManageWorkoutUiEvent.NavigateToDetail(workout.id))
+                }
+
+                override fun onError(error: String?) {
+                    showSnackbar(SnackbarMessage.Error(error))
+                }
+
+                override fun onStopLoading() {
+                    isLoading(false)
+                }
+            }
+        )
+    }
+
+    private suspend fun saveWorkout(userId: String) = with(uiState.value) {
         workoutRepository.saveWorkout(
             userId = userId,
-            workout = workout,
-            isUpdate = uiState.value.mode == ManageWorkoutMode.EDIT,
+            workout = workout.apply {
+                exercises.forEachIndexed { index, workoutExerciseResponse ->
+                    workoutExerciseResponse.order = index
+                }
+                unit = settings.unit
+
+                if(name.isBlank()) {
+                    name = "Workout"
+                }
+            },
+            isUpdate = mode == ManageWorkoutMode.EDIT,
             callback = object: FirebaseCallback<Unit> {
                 override fun onSuccess(value: Unit) {
                     triggerEvent(ManageWorkoutUiEvent.NavigateBack)
@@ -129,6 +184,17 @@ class ManageWorkoutViewModel(
                 }
             }
         )
+    }
+
+    private fun save() = vmScope.launch {
+        val userId = userRepository.getUser()?.uid ?: return@launch
+
+        isLoading(true)
+
+        when(uiState.value.mode) {
+            ManageWorkoutMode.EXECUTE -> finishWorkout(userId)
+            else -> saveWorkout(userId)
+        }
     }
 
     private fun createWorkoutExercise(exercise: Exercise) = with(uiState.value) {
@@ -381,62 +447,3 @@ class ManageWorkoutViewModel(
         }
     }
 }
-
-
-
-// TODO: SETUP THIS TO BE USED FOR EXECUTE MODE
-//private fun observeLastEntryForWorkout() = vmScope.launch {
-//    historyRepository.findLastEntryForWorkout(id)
-//        .filterNotNull()
-//        .distinctUntilChanged()
-//        .collectLatest { entry ->
-//            updateState { state ->
-//                state.copy(
-//                    lastEntryForWorkout = entry
-//                )
-//            }
-//        }
-//}
-//
-//private fun fetchLastEntryForWorkout() = vmScope.launch {
-//    val userId = userRepository.getUser()?.uid ?: return@launch
-//
-//    isLoading(true)
-//
-//    historyRepository.getLastEntryForWorkout(
-//        userId = userId,
-//        workoutId = id,
-//        callback = object: FirebaseCallback<Unit> {
-//            override fun onStopLoading() {
-//                isLoading(false)
-//            }
-//        }
-//    )
-//}
-//
-//private fun finishWorkout(duration: Long) = vmScope.launch {
-//    val userId = userRepository.getUser()?.uid ?: return@launch
-//
-//    isLoading(true)
-//
-//    historyRepository.finishWorkout(
-//        userId = userId,
-//        history = WorkoutHistoryResponse(
-//            duration = duration,
-//            workout = uiState.value.workout
-//        ),
-//        callback = object: FirebaseCallback<Unit> {
-//            override fun onSuccess(value: Unit) {
-//                triggerEvent(ExecuteWorkoutUiEvent.NavigateToFinish)
-//            }
-//
-//            override fun onError(error: String?) {
-//                showSnackbar(SnackbarMessage.Error(error))
-//            }
-//
-//            override fun onStopLoading() {
-//                isLoading(false)
-//            }
-//        }
-//    )
-//}

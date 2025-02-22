@@ -114,6 +114,7 @@ fun ManageWorkoutScreen(
                 is ManageWorkoutUiEvent.NavigateBack -> navController.popBackStack()
                 is ManageWorkoutUiEvent.NavigateToReplaceExercise -> navController.navigate(Screen.Exercise.Overview(Screen.Exercise.Overview.Mode.REPLACE))
                 is ManageWorkoutUiEvent.NavigateToAddExercise -> navController.navigate(Screen.Exercise.Overview(Screen.Exercise.Overview.Mode.SELECT))
+                is ManageWorkoutUiEvent.NavigateToDetail -> navController.navigate(Screen.Workout.Detail(event.id))
                 is ManageWorkoutUiEvent.ScrollToExercise -> {
                     lazyListState.animateScrollToItem(event.index.coerceIn(0, state.workout.exercises.size - 1))
                 }
