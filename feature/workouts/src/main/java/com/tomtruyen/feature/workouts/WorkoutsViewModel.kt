@@ -37,11 +37,19 @@ class WorkoutsViewModel(
             }
     }
 
-    private fun fetchWorkouts() = launchLoading {
-        val userId = userRepository.getUser()?.uid ?: return@launchLoading
+    private fun fetchWorkouts(refresh: Boolean = false) = vmScope.launch {
+        val userId = userRepository.getUser()?.uid ?: return@launch
+
+        updateState {
+            it.copy(
+                refreshing = refresh,
+                loading = !refresh
+            )
+        }
 
         workoutRepository.getWorkouts(
             userId = userId,
+            refresh = refresh,
             callback = object: FirebaseCallback<List<WorkoutResponse>> {
                 override fun onError(error: String?) {
                     showSnackbar(SnackbarMessage.Error(error))
@@ -49,6 +57,7 @@ class WorkoutsViewModel(
 
                 override fun onStopLoading() {
                     isLoading(false)
+                    updateState { it.copy(refreshing = false) }
                 }
             }
         )
@@ -67,6 +76,8 @@ class WorkoutsViewModel(
                     action.id
                 )
             )
+
+            WorkoutsUiAction.OnRefresh -> fetchWorkouts(refresh = true)
         }
     }
 }

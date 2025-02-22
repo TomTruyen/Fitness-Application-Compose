@@ -16,4 +16,5 @@ data class ExercisesUiState(
     val equipment: List<String> = emptyList(),
 
     val loading: Boolean = false,
+    val refreshing: Boolean = false,
 )

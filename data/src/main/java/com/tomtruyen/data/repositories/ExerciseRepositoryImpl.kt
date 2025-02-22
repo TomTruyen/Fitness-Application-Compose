@@ -30,7 +30,8 @@ class ExerciseRepositoryImpl(
 
     override fun findEquipment() = exerciseDao.findEquipment()
 
-    override suspend fun getExercises(callback: FirebaseCallback<List<Exercise>>) = fetch(
+    override suspend fun getExercises(refresh: Boolean, callback: FirebaseCallback<List<Exercise>>) = fetch(
+        refresh = refresh,
         onStopLoading = callback::onStopLoading
     ) {
         db.collection(COLLECTION_NAME)
@@ -51,7 +52,8 @@ class ExerciseRepositoryImpl(
             }
     }
 
-    override suspend fun getUserExercises(userId: String, callback: FirebaseCallback<List<Exercise>>) = fetch(
+    override suspend fun getUserExercises(userId: String, refresh: Boolean, callback: FirebaseCallback<List<Exercise>>) = fetch(
+        refresh = refresh,
         onStopLoading = callback::onStopLoading,
         overrideIdentifier = USER_EXERCISE_COLLECTION_NAME
     ) {

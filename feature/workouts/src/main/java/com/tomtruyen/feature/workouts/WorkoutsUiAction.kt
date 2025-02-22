@@ -6,4 +6,6 @@ sealed class WorkoutsUiAction {
     data class OnDetailClicked(val id: String) : WorkoutsUiAction()
 
     data class OnStartWorkoutClicked(val id: String) : WorkoutsUiAction()
+
+    data object OnRefresh : WorkoutsUiAction()
 }

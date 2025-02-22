@@ -23,7 +23,8 @@ class WorkoutRepositoryImpl(
 
     override fun findWorkoutById(id: String) = workoutDao.findById(id)
 
-    override suspend fun getWorkouts(userId: String, callback: FirebaseCallback<List<WorkoutResponse>>) = fetch(
+    override suspend fun getWorkouts(userId: String, refresh: Boolean, callback: FirebaseCallback<List<WorkoutResponse>>) = fetch(
+        refresh = refresh,
         onStopLoading = callback::onStopLoading
     ) {
         db.collection(USER_WORKOUT_COLLECTION_NAME)

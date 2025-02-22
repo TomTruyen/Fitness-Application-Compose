@@ -19,7 +19,7 @@ abstract class WorkoutHistoryRepository: BaseRepository() {
         workoutId: String,
     ): Flow<com.tomtruyen.data.entities.WorkoutWithExercises?>
 
-    abstract suspend fun getLastEntryForWorkout(
+    abstract fun getLastEntryForWorkout(
         userId: String,
         workoutId: String,
         callback: FirebaseCallback<Unit>

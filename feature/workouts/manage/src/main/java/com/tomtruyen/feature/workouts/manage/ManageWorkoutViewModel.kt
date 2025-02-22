@@ -114,21 +114,19 @@ class ManageWorkoutViewModel(
     private fun fetchLastEntryForWorkout() {
         if(uiState.value.mode != ManageWorkoutMode.EXECUTE || id == null) return
 
-        vmScope.launch {
-            val userId = userRepository.getUser()?.uid ?: return@launch
+        val userId = userRepository.getUser()?.uid ?: return
 
-            isLoading(true)
+        isLoading(true)
 
-            historyRepository.getLastEntryForWorkout(
-                userId = userId,
-                workoutId = id,
-                callback = object: FirebaseCallback<Unit> {
-                    override fun onStopLoading() {
-                        isLoading(false)
-                    }
+        historyRepository.getLastEntryForWorkout(
+            userId = userId,
+            workoutId = id,
+            callback = object: FirebaseCallback<Unit> {
+                override fun onStopLoading() {
+                    isLoading(false)
                 }
-            )
-        }
+            }
+        )
     }
 
     private suspend fun finishWorkout(userId: String) = with(uiState.value) {

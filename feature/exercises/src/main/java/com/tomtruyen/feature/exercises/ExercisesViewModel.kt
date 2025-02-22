@@ -29,6 +29,7 @@ class ExercisesViewModel(
 
             override fun onStopLoading() {
                 isLoading(false)
+                updateState { it.copy(refreshing = false) }
             }
         }
     }
@@ -42,11 +43,18 @@ class ExercisesViewModel(
         observeEquipment()
     }
 
-    private fun fetchExercises() = launchLoading {
-        exerciseRepository.getExercises(callback)
+    private fun fetchExercises(refresh: Boolean = false) = vmScope.launch {
+        updateState {
+            it.copy(
+                refreshing = refresh,
+                loading = !refresh
+            )
+        }
+
+        exerciseRepository.getExercises(refresh, callback)
 
         userRepository.getUser()?.let {
-            exerciseRepository.getUserExercises(it.uid, callback)
+            exerciseRepository.getUserExercises(it.uid, refresh, callback)
         }
     }
 
@@ -145,6 +153,10 @@ class ExercisesViewModel(
             is ExercisesUiAction.OnAddExerciseToWorkoutClicked -> {
                 triggerEvent(ExercisesUiEvent.NavigateBackToWorkout(uiState.value.selectedExercises))
             }
+
+            is ExercisesUiAction.OnRefresh -> fetchExercises(
+                refresh = true
+            )
         }
     }
 

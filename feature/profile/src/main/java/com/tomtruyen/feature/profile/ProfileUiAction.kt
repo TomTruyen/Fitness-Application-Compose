@@ -9,5 +9,7 @@ sealed class ProfileUiAction {
 
     data class RestVibrationEnabledChanged(val value: Boolean) : ProfileUiAction()
 
+    data object OnRefresh : ProfileUiAction()
+
     data object Logout : ProfileUiAction()
 }

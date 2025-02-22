@@ -14,6 +14,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -78,6 +80,7 @@ fun ProfileScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreenLayout(
     snackbarHost: @Composable () -> Unit,
@@ -86,6 +89,8 @@ fun ProfileScreenLayout(
     onAction: (ProfileUiAction) -> Unit
 ) {
     val context = LocalContext.current
+
+    val refreshState = rememberPullToRefreshState()
 
     val buildConfigFieldProvider = koinInject<BuildConfigFieldProvider>()
 
@@ -109,113 +114,121 @@ fun ProfileScreenLayout(
                 .padding(it)
                 .fillMaxSize()
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+            PullToRefreshBox(
+                isRefreshing = state.refreshing,
+                onRefresh = {
+                    onAction(ProfileUiAction.OnRefresh)
+                },
+                state = refreshState,
             ) {
-                Text(
-                    text = stringResource(id = R.string.label_units),
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.W500
-                    ),
+                Column(
                     modifier = Modifier
-                        .padding(horizontal = Dimens.Normal)
-                        .padding(top = Dimens.Normal, bottom = Dimens.Tiny)
-                )
-
-                ListItem(
-                    title = stringResource(id = R.string.label_weight_unit),
-                    message = state.settings.unit,
-                    onClick = {
-                        unitDialogVisible = true
-                    }
-                )
-
-                HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
-
-                Text(
-                    text = stringResource(id = R.string.label_rest_timer),
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.W500
-                    ),
-                    modifier = Modifier
-                        .padding(horizontal = Dimens.Normal)
-                        .padding(top = Dimens.Normal, bottom = Dimens.Tiny)
-                )
-
-                ListItem(
-                    title = stringResource(id = R.string.label_default_rest_timer),
-                    message = TimeUtils.formatSeconds(state.settings.rest.toLong()),
-                    onClick = {
-                        restDialogVisible = true
-                    }
-                )
-
-                SwitchListItem(
-                    title = stringResource(id = R.string.label_rest_timer_enabled),
-                    checked = state.settings.restEnabled
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
                 ) {
-                    onAction(ProfileUiAction.RestEnabledChanged(it))
-                }
+                    Text(
+                        text = stringResource(id = R.string.label_units),
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.W500
+                        ),
+                        modifier = Modifier
+                            .padding(horizontal = Dimens.Normal)
+                            .padding(top = Dimens.Normal, bottom = Dimens.Tiny)
+                    )
 
-                SwitchListItem(
-                    title = stringResource(id = R.string.label_vibrate_upon_finish),
-                    checked = state.settings.restVibrationEnabled
-                ) {
-                    onAction(ProfileUiAction.RestVibrationEnabledChanged(it))
-                }
+                    ListItem(
+                        title = stringResource(id = R.string.label_weight_unit),
+                        message = state.settings.unit,
+                        onClick = {
+                            unitDialogVisible = true
+                        }
+                    )
 
-                HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
 
-                Text(
-                    text = stringResource(id = R.string.label_contact_and_support),
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.W500
-                    ),
-                    modifier = Modifier
-                        .padding(horizontal = Dimens.Normal)
-                        .padding(top = Dimens.Normal, bottom = Dimens.Tiny)
-                )
+                    Text(
+                        text = stringResource(id = R.string.label_rest_timer),
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.W500
+                        ),
+                        modifier = Modifier
+                            .padding(horizontal = Dimens.Normal)
+                            .padding(top = Dimens.Normal, bottom = Dimens.Tiny)
+                    )
 
-                ListItem(
-                    title = stringResource(id = R.string.label_report_an_issue),
-                    message = stringResource(id = R.string.label_message_report_an_issue),
-                    onClick = {
-                        emailLauncher.launch(
-                            EmailUtils.getEmailIntent(context)
-                        )
+                    ListItem(
+                        title = stringResource(id = R.string.label_default_rest_timer),
+                        message = TimeUtils.formatSeconds(state.settings.rest.toLong()),
+                        onClick = {
+                            restDialogVisible = true
+                        }
+                    )
+
+                    SwitchListItem(
+                        title = stringResource(id = R.string.label_rest_timer_enabled),
+                        checked = state.settings.restEnabled
+                    ) {
+                        onAction(ProfileUiAction.RestEnabledChanged(it))
                     }
-                )
 
-                HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
+                    SwitchListItem(
+                        title = stringResource(id = R.string.label_vibrate_upon_finish),
+                        checked = state.settings.restVibrationEnabled
+                    ) {
+                        onAction(ProfileUiAction.RestVibrationEnabledChanged(it))
+                    }
 
-                Spacer(modifier = Modifier.weight(1f))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
 
-                Buttons.Default(
-                    text = stringResource(id = R.string.button_logout),
-                    onClick = { onAction(ProfileUiAction.Logout) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(Dimens.Normal)
-                )
+                    Text(
+                        text = stringResource(id = R.string.label_contact_and_support),
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.W500
+                        ),
+                        modifier = Modifier
+                            .padding(horizontal = Dimens.Normal)
+                            .padding(top = Dimens.Normal, bottom = Dimens.Tiny)
+                    )
 
-                HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
+                    ListItem(
+                        title = stringResource(id = R.string.label_report_an_issue),
+                        message = stringResource(id = R.string.label_message_report_an_issue),
+                        onClick = {
+                            emailLauncher.launch(
+                                EmailUtils.getEmailIntent(context)
+                            )
+                        }
+                    )
 
-                Text(
-                    text = stringResource(
-                        id = R.string.label_version_and_build,
-                        buildConfigFieldProvider.versionName,
-                        buildConfigFieldProvider.versionCode
-                    ),
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-                    ),
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(bottom = Dimens.Normal, top = Dimens.Small)
-                        .padding(horizontal = Dimens.Normal)
-                )
+                    HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    Buttons.Default(
+                        text = stringResource(id = R.string.button_logout),
+                        onClick = { onAction(ProfileUiAction.Logout) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(Dimens.Normal)
+                    )
+
+                    HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
+
+                    Text(
+                        text = stringResource(
+                            id = R.string.label_version_and_build,
+                            buildConfigFieldProvider.versionName,
+                            buildConfigFieldProvider.versionCode
+                        ),
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                        ),
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(bottom = Dimens.Normal, top = Dimens.Small)
+                            .padding(horizontal = Dimens.Normal)
+                    )
+                }
             }
 
             if(unitDialogVisible) {

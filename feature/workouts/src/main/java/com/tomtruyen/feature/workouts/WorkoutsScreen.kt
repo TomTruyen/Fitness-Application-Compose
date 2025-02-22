@@ -12,6 +12,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -68,6 +70,8 @@ fun WorkoutOverviewScreenLayout(
     state: WorkoutsUiState,
     onAction: (WorkoutsUiAction) -> Unit
 ) {
+    val refreshState = rememberPullToRefreshState()
+
     Scaffold(
         snackbarHost = snackbarHost,
         topBar = {
@@ -94,17 +98,25 @@ fun WorkoutOverviewScreenLayout(
                 .fillMaxSize(),
             loading = state.loading,
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .animateContentSize(),
+            PullToRefreshBox(
+                isRefreshing = state.refreshing,
+                onRefresh = {
+                    onAction(WorkoutsUiAction.OnRefresh)
+                },
+                state = refreshState,
             ) {
-                items(state.workouts) { workout ->
-                    WorkoutListItem(
-                        workoutWithExercises = workout,
-                        onAction = onAction,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .animateContentSize(),
+                ) {
+                    items(state.workouts) { workout ->
+                        WorkoutListItem(
+                            workoutWithExercises = workout,
+                            onAction = onAction,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                 }
             }
         }

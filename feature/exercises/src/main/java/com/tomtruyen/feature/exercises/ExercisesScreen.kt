@@ -21,12 +21,15 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -87,6 +90,7 @@ fun ExercisesScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExercisesScreenLayout(
     snackbarHost: @Composable () -> Unit,
@@ -94,6 +98,8 @@ fun ExercisesScreenLayout(
     state: ExercisesUiState,
     onAction: (ExercisesUiAction) -> Unit
 ) {
+    val refreshState = rememberPullToRefreshState()
+
     val filters by remember {
         derivedStateOf {
             state.filter.categories + state.filter.equipment
@@ -223,51 +229,64 @@ fun ExercisesScreenLayout(
                     }
                 }
 
-                LazyColumn(
-                    modifier = Modifier.weight(1f)
-                        .animateContentSize()
+                PullToRefreshBox(
+                    modifier = Modifier
+                        .weight(1f)
+                        .animateContentSize(),
+                    isRefreshing = state.refreshing,
+                    onRefresh = {
+                        onAction(ExercisesUiAction.OnRefresh)
+                    },
+                    state = refreshState
                 ) {
-                    var currentLetter: Char?
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        var currentLetter: Char?
 
-                    itemsIndexed(state.exercises) { index, exercise ->
-                        Column(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            // Add Text with First Letter of Exercise Name when it changes
-                            val currentFirstLetter = exercise.displayName.first().uppercaseChar()
-                            val previousFirstLetter = state.exercises.getOrNull(index - 1)?.displayName?.first()?.uppercaseChar()
+                        itemsIndexed(state.exercises) { index, exercise ->
+                            Column(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                // Add Text with First Letter of Exercise Name when it changes
+                                val currentFirstLetter =
+                                    exercise.displayName.first().uppercaseChar()
+                                val previousFirstLetter =
+                                    state.exercises.getOrNull(index - 1)?.displayName?.first()
+                                        ?.uppercaseChar()
 
-                            if(currentFirstLetter != previousFirstLetter) {
-                                currentLetter = currentFirstLetter
+                                if (currentFirstLetter != previousFirstLetter) {
+                                    currentLetter = currentFirstLetter
 
-                                Text(
-                                    text = currentLetter.toString(),
-                                    style = MaterialTheme.typography.bodySmall.copy(
-                                        fontWeight = FontWeight.Bold
-                                    ),
-                                    modifier = Modifier.padding(
-                                        horizontal = Dimens.Normal,
-                                        vertical = Dimens.Small
-                                    )
-                                )
-                            }
-
-
-                            ListItem(
-                                title = exercise.displayName,
-                                message = exercise.category.orEmpty(),
-                                selected = state.selectedExercises.contains(exercise),
-                                showChevron = state.mode == Screen.Exercise.Overview.Mode.VIEW,
-                                onClick = {
-                                    onAction(ExercisesUiAction.OnExerciseClicked(exercise))
-                                },
-                                prefix = {
-                                    Avatar(
-                                        imageUrl = exercise.image,
-                                        contentDescription = exercise.displayName
+                                    Text(
+                                        text = currentLetter.toString(),
+                                        style = MaterialTheme.typography.bodySmall.copy(
+                                            fontWeight = FontWeight.Bold
+                                        ),
+                                        modifier = Modifier.padding(
+                                            horizontal = Dimens.Normal,
+                                            vertical = Dimens.Small
+                                        )
                                     )
                                 }
-                            )
+
+
+                                ListItem(
+                                    title = exercise.displayName,
+                                    message = exercise.category.orEmpty(),
+                                    selected = state.selectedExercises.contains(exercise),
+                                    showChevron = state.mode == Screen.Exercise.Overview.Mode.VIEW,
+                                    onClick = {
+                                        onAction(ExercisesUiAction.OnExerciseClicked(exercise))
+                                    },
+                                    prefix = {
+                                        Avatar(
+                                            imageUrl = exercise.image,
+                                            contentDescription = exercise.displayName
+                                        )
+                                    }
+                                )
+                            }
                         }
                     }
                 }

@@ -15,8 +15,8 @@ abstract class ExerciseRepository: BaseRepository() {
     abstract suspend fun findUserExerciseById(id: String): Exercise?
     abstract fun findEquipment(): Flow<List<String>>
     abstract fun findCategories(): Flow<List<String>>
-    abstract suspend fun getExercises(callback: FirebaseCallback<List<Exercise>>)
-    abstract suspend fun getUserExercises(userId: String, callback: FirebaseCallback<List<Exercise>>)
+    abstract suspend fun getExercises(refresh: Boolean, callback: FirebaseCallback<List<Exercise>>)
+    abstract suspend fun getUserExercises(userId: String, refresh: Boolean, callback: FirebaseCallback<List<Exercise>>)
     abstract suspend fun saveUserExercise(userId: String, exercise: Exercise, isUpdate: Boolean, callback: FirebaseCallback<Unit>)
     abstract suspend fun deleteUserExercise(userId: String, exerciseId: String, callback: FirebaseCallback<Unit>)
 }

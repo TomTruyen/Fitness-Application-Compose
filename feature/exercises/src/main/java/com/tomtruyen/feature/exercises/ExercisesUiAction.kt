@@ -20,4 +20,6 @@ sealed class ExercisesUiAction {
     data class OnExerciseClicked(val exercise: com.tomtruyen.data.entities.Exercise) : ExercisesUiAction()
 
     data object OnAddExerciseToWorkoutClicked : ExercisesUiAction()
+
+    data object OnRefresh: ExercisesUiAction()
 }

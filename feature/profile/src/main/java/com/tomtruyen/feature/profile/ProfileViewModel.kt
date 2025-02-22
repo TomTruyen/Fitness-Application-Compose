@@ -28,11 +28,19 @@ class ProfileViewModel(
         observeLoading()
     }
 
-    private fun fetchSettings() = launchLoading {
-        val userId = userRepository.getUser()?.uid ?: return@launchLoading
+    private fun fetchSettings(refresh: Boolean = false) = vmScope.launch {
+        val userId = userRepository.getUser()?.uid ?: return@launch
+
+        updateState {
+            it.copy(
+                refreshing = refresh,
+                loading = !refresh
+            )
+        }
 
         settingsRepository.getSettings(
             userId = userId,
+            refresh = refresh,
             callback = object: FirebaseCallback<Settings> {
                 override fun onError(error: String?) {
                     showSnackbar(SnackbarMessage.Error(error))
@@ -40,6 +48,7 @@ class ProfileViewModel(
 
                 override fun onStopLoading() {
                     isLoading(false)
+                    updateState { it.copy(refreshing = false) }
                 }
             }
         )
@@ -116,6 +125,9 @@ class ProfileViewModel(
             is ProfileUiAction.RestVibrationEnabledChanged -> updateState {
                 it.copy(settings = it.settings.copy(restVibrationEnabled = action.value))
             }
+
+            is ProfileUiAction.OnRefresh -> fetchSettings(refresh = true)
+
             is ProfileUiAction.Logout -> logout()
         }
     }

@@ -32,7 +32,8 @@ class SettingsRepositoryImpl(
             }
     }
 
-    override suspend fun getSettings(userId: String, callback: FirebaseCallback<Settings>) = fetch(
+    override suspend fun getSettings(userId: String, refresh: Boolean, callback: FirebaseCallback<Settings>) = fetch(
+        refresh = refresh,
         onStopLoading = callback::onStopLoading
     ) {
         db.collection(COLLECTION_NAME)

@@ -37,13 +37,10 @@ class WorkoutHistoryRepositoryImpl(
         return workoutDao.findByIdAsync(lastWorkoutId)
     }
 
-    override suspend fun getLastEntryForWorkout(
+    override fun getLastEntryForWorkout(
         userId: String,
         workoutId: String,
         callback: FirebaseCallback<Unit>
-    ) = fetch(
-        overrideIdentifier = getIdWithPrefix(workoutId, CACHE_KEY_LAST_WORKOUT),
-        onStopLoading = callback::onStopLoading
     ) {
         db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
             .document(userId)
@@ -57,7 +54,7 @@ class WorkoutHistoryRepositoryImpl(
                 val response = document.toObject(WorkoutResponse::class.java) ?: return@handleCompletionResult callback.onStopLoading()
 
                 val lastWorkout = addPrefixToIds(response, CACHE_KEY_LAST_WORKOUT)
-                launchWithCacheTransactions(getIdWithPrefix(workoutId, CACHE_KEY_LAST_WORKOUT)) {
+                launchWithTransaction {
                     workoutRepository.saveWorkoutResponses(listOf(lastWorkout))
                 }
 

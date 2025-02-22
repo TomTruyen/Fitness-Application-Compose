@@ -69,6 +69,7 @@ class UserRepositoryImpl(
 
         settingsRepository.getSettings(
             userId = userId,
+            refresh = true,
             callback = object: FirebaseCallback<Settings> {
                 override fun onError(error: String?) {
                     callback.onError(error)

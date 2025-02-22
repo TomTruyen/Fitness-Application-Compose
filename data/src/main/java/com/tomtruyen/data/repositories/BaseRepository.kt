@@ -65,7 +65,7 @@ abstract class BaseRepository(
         }
 
         Log.i(TAG, "Cache is not expired. Skipping Firebase fetch for $cacheKey")
-        
+
         onStopLoading()
     }
 

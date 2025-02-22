@@ -11,5 +11,5 @@ abstract class SettingsRepository: BaseRepository() {
 
     abstract fun findSettings(): Flow<Settings?>
     abstract fun saveSettings(userId: String, settings: Settings, callback: FirebaseCallback<Settings>)
-    abstract suspend fun getSettings(userId: String, callback: FirebaseCallback<Settings>)
+    abstract suspend fun getSettings(userId: String, refresh: Boolean, callback: FirebaseCallback<Settings>)
 }
