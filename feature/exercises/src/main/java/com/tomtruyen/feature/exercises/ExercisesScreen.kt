@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.designsystem.Dimens
+import com.tomtruyen.core.ui.Avatar
 import com.tomtruyen.core.ui.Chip
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.listitems.ListItem
@@ -257,9 +258,16 @@ fun ExercisesScreenLayout(
                                 message = exercise.category.orEmpty(),
                                 selected = state.selectedExercises.contains(exercise),
                                 showChevron = state.mode == Screen.Exercise.Overview.Mode.VIEW,
-                            ) {
-                                onAction(ExercisesUiAction.OnExerciseClicked(exercise))
-                            }
+                                onClick = {
+                                    onAction(ExercisesUiAction.OnExerciseClicked(exercise))
+                                },
+                                prefix = {
+                                    Avatar(
+                                        imageUrl = exercise.image,
+                                        contentDescription = exercise.displayName
+                                    )
+                                }
+                            )
                         }
                     }
                 }

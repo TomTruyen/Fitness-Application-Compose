@@ -13,4 +13,7 @@ dependencies {
     implementation(project(":core:validation"))
     implementation(project(":models"))
     implementation(project(":navigation"))
+
+    // Images
+    implementation(libs.coil.kt.compose)
 }

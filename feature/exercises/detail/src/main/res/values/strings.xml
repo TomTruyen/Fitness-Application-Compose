@@ -3,5 +3,5 @@
     <string name="label_exercise_detail_steps_title">How to perform:</string>
 
     <string name="title_delete_exercise">Delete exercise</string>
-    <string name="message_delete_exercise">Are you sure you want to delete this exercise? This action can\\\'t be undone.</string>
+    <string name="message_delete_exercise">Are you sure you want to delete this exercise? This action can\'t be undone.</string>
 </resources>

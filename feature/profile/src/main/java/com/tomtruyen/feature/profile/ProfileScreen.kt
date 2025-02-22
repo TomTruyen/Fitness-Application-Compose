@@ -78,7 +78,6 @@ fun ProfileScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreenLayout(
     snackbarHost: @Composable () -> Unit,
@@ -128,9 +127,10 @@ fun ProfileScreenLayout(
                 ListItem(
                     title = stringResource(id = R.string.label_weight_unit),
                     message = state.settings.unit,
-                ) {
-                    unitDialogVisible = true
-                }
+                    onClick = {
+                        unitDialogVisible = true
+                    }
+                )
 
                 HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
 
@@ -147,9 +147,10 @@ fun ProfileScreenLayout(
                 ListItem(
                     title = stringResource(id = R.string.label_default_rest_timer),
                     message = TimeUtils.formatSeconds(state.settings.rest.toLong()),
-                ) {
-                    restDialogVisible = true
-                }
+                    onClick = {
+                        restDialogVisible = true
+                    }
+                )
 
                 SwitchListItem(
                     title = stringResource(id = R.string.label_rest_timer_enabled),
@@ -180,11 +181,12 @@ fun ProfileScreenLayout(
                 ListItem(
                     title = stringResource(id = R.string.label_report_an_issue),
                     message = stringResource(id = R.string.label_message_report_an_issue),
-                ) {
-                    emailLauncher.launch(
-                        EmailUtils.getEmailIntent(context)
-                    )
-                }
+                    onClick = {
+                        emailLauncher.launch(
+                            EmailUtils.getEmailIntent(context)
+                        )
+                    }
+                )
 
                 HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
 

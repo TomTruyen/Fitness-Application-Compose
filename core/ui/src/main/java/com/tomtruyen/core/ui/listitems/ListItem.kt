@@ -5,6 +5,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,15 +27,19 @@ fun ListItem(
     message: String,
     selected: Boolean = false,
     showChevron: Boolean = true,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    prefix: (@Composable () -> Unit)? = null
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
             .padding(Dimens.Normal),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(Dimens.Normal)
     ) {
+        prefix?.invoke()
+
         Column(
             modifier = Modifier.weight(1f)
                 .animateContentSize()

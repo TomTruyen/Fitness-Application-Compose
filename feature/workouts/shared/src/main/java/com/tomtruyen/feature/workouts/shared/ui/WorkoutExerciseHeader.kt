@@ -1,12 +1,8 @@
 package com.tomtruyen.feature.workouts.shared.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
@@ -16,17 +12,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.tomtruyen.core.designsystem.theme.FitnessApplicationTheme
+import com.tomtruyen.core.ui.Avatar
 import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.core.common.R as CommonR
 
 @Composable
 fun WorkoutExerciseHeader(
@@ -39,16 +31,9 @@ fun WorkoutExerciseHeader(
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
         modifier = modifier
     ) {
-        AsyncImage(
-            model = exercise.image,
-            fallback = painterResource(CommonR.drawable.ic_fallback),
-            contentDescription = exercise.name,
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .size(40.dp)
-                .aspectRatio(1f)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surface)
+        Avatar(
+            imageUrl = exercise.image,
+            contentDescription = exercise.displayName,
         )
 
         Text(
