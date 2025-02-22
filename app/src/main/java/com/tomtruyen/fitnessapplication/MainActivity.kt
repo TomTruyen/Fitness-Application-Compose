@@ -8,10 +8,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModel
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -38,8 +43,10 @@ import com.tomtruyen.feature.workouts.execute.ExecuteWorkoutScreen
 import com.tomtruyen.feature.workouts.history.WorkoutHistoryScreen
 import com.tomtruyen.models.Global
 import com.tomtruyen.navigation.Screen
+import com.tomtruyen.navigation.screenScopedViewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.parameter.parametersOf
 
 class MainActivity : ComponentActivity() {
@@ -166,8 +173,9 @@ class MainActivity : ComponentActivity() {
                             composable<Screen.Exercise.Overview> { backStackEntry ->
                                 val args = backStackEntry.toRoute<Screen.Exercise.Overview>()
 
-                                val viewModel = koinViewModel<ExercisesViewModel>(
-                                    viewModelStoreOwner = backStackEntry,
+                                val viewModel = screenScopedViewModel<Screen.Exercise.Overview, ExercisesViewModel>(
+                                    navController = navController,
+                                    backStackEntry = backStackEntry,
                                     parameters = { parametersOf(args.mode) }
                                 )
 
@@ -196,8 +204,9 @@ class MainActivity : ComponentActivity() {
                             }
 
                             composable<Screen.Exercise.Filter> { backStackEntry ->
-                                val viewModel = koinViewModel<ExercisesViewModel>(
-                                    viewModelStoreOwner = backStackEntry,
+                                val viewModel = screenScopedViewModel<Screen.Exercise.Overview, ExercisesViewModel>(
+                                    navController = navController,
+                                    backStackEntry = backStackEntry,
                                 )
 
                                 ExercisesFilterScreen(
