@@ -6,7 +6,7 @@
     <string name="subtitle_workout_empty_subtitle">Click on \'Add Exercise\' to add your first exercise</string>
     <string name="content_description_reorder_exercises">Reorder exercises</string>
     <string name="content_description_save_workout">Save workout</string>
-    <string name="placeholder_notes">Notes</string>
+    <string name="placeholder_notes">Notes…</string>
     <string name="button_add_set">+ Add Set</string>
     <string name="title_delete_exercise">Delete exercise</string>
     <string name="message_delete_exercise_from_workout">Are you sure you want to remove this exercise from your workout?</string>

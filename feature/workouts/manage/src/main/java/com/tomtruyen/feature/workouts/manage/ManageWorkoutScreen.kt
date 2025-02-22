@@ -382,9 +382,13 @@ fun ExerciseListItem(
 
         // Notes
         TextFields.Default(
-            modifier = Modifier.padding(horizontal = Dimens.Normal),
+            modifier = Modifier.padding(
+                start = Dimens.Normal,
+                end = Dimens.Normal,
+                bottom = Dimens.Small
+            ),
             singleLine = false,
-            border = false,
+            border = true,
             padding = PaddingValues(Dimens.Small),
             placeholder = stringResource(id = R.string.placeholder_notes),
             value = workoutExercise.notes,

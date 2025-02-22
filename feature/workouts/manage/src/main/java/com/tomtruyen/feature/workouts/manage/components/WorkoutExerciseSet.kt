@@ -169,17 +169,19 @@ fun WorkoutExerciseSet(
                 )
             }
 
-            WorkoutCheckbox(
-                checked = set.completed,
-                onClick = {
-                    onAction(
-                        ManageWorkoutUiAction.ToggleSetCompleted(
-                            id = workoutExercise.id,
-                            setIndex = setIndex
+            if (mode == ManageWorkoutMode.EXECUTE) {
+                WorkoutCheckbox(
+                    checked = set.completed,
+                    onClick = {
+                        onAction(
+                            ManageWorkoutUiAction.ToggleSetCompleted(
+                                id = workoutExercise.id,
+                                setIndex = setIndex
+                            )
                         )
-                    )
-                },
-            )
+                    },
+                )
+            }
         }
     }
 }

@@ -111,9 +111,9 @@ object TextFields {
                         modifier = Modifier.weight(1f)
                             .animateContentSize(),
                         contentAlignment = if(textStyle.textAlign == TextAlign.Center) {
-                            Alignment.Center
+                            Alignment.TopCenter
                         } else {
-                            Alignment.CenterStart
+                            Alignment.TopStart
                         }
                     ) {
                         TextFieldPlaceholder(
