@@ -52,9 +52,8 @@ import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
 import com.tomtruyen.feature.workouts.manage.components.WorkoutStatistics
 import com.tomtruyen.feature.workouts.manage.components.WorkoutTimer
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
-import com.tomtruyen.feature.workouts.shared.WorkoutExerciseUiAction
-import com.tomtruyen.feature.workouts.shared.ui.WorkoutExerciseHeader
-import com.tomtruyen.feature.workouts.shared.ui.WorkoutExerciseSetTable
+import com.tomtruyen.feature.workouts.manage.components.WorkoutExerciseHeader
+import com.tomtruyen.feature.workouts.manage.components.WorkoutExerciseSetTable
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import sh.calvin.reorderable.ReorderableItem

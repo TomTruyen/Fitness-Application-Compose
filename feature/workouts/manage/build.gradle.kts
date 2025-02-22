@@ -18,8 +18,6 @@ dependencies {
     implementation(project(":navigation"))
     implementation(project(":models"))
 
-    implementation(project(":feature:workouts:shared"))
-
     // Reorderable (Drag & Drop) Lazy Column
     implementation(libs.reorderable)
 }

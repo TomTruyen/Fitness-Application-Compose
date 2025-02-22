@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.workouts.shared.ui
+package com.tomtruyen.feature.workouts.manage.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

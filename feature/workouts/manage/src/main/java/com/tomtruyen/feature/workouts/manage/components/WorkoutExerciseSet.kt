@@ -1,8 +1,7 @@
-package com.tomtruyen.feature.workouts.shared.ui
+package com.tomtruyen.feature.workouts.manage.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,14 +14,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,7 +41,7 @@ import com.tomtruyen.core.ui.dialogs.RestAlertDialog
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.WorkoutSet
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
-import com.tomtruyen.feature.workouts.shared.WorkoutExerciseUiAction
+import com.tomtruyen.feature.workouts.manage.WorkoutExerciseUiAction
 import com.tomtruyen.models.RestAlertType
 import com.tomtruyen.core.common.R as CommonR
 

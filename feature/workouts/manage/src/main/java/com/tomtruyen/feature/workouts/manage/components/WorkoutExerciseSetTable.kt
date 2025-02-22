@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.workouts.shared.ui
+package com.tomtruyen.feature.workouts.manage.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
-import com.tomtruyen.feature.workouts.shared.WorkoutExerciseUiAction
+import com.tomtruyen.feature.workouts.manage.WorkoutExerciseUiAction
 
 @Composable
 fun WorkoutExerciseSetTable(

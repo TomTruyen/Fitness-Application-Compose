@@ -7,12 +7,10 @@ import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.WorkoutSet
 import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
-import com.tomtruyen.data.firebase.models.WorkoutHistoryResponse
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
-import com.tomtruyen.feature.workouts.shared.WorkoutExerciseUiAction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged

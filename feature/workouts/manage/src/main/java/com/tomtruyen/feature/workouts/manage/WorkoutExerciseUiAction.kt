@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.workouts.shared
+package com.tomtruyen.feature.workouts.manage
 
 sealed class WorkoutExerciseUiAction(
     open val id: String,
