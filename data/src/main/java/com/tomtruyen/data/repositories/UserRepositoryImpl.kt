@@ -10,6 +10,7 @@ import com.tomtruyen.data.firebase.extensions.handleCompletionResult
 import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
+import com.tomtruyen.models.DataFetchTracker
 import kotlinx.coroutines.launch
 
 class UserRepositoryImpl(
@@ -54,6 +55,7 @@ class UserRepositoryImpl(
     override fun logout() {
         scope.launch {
             database.clearAllTables()
+            DataFetchTracker.clear()
             GoogleSignInHelper.signOut(context)
         }
 

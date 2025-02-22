@@ -15,4 +15,6 @@ object DataFetchTracker {
     fun fetched(identifier: String) {
         data[identifier] = true
     }
+
+    fun clear() = data.clear()
 }

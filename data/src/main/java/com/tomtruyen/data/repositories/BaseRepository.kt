@@ -5,6 +5,7 @@ import androidx.room.withTransaction
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.tomtruyen.data.AppDatabase
 import com.tomtruyen.data.firebase.extensions.handleCompletionResult
 import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.models.DataFetchTracker
@@ -22,16 +23,18 @@ open class BaseRepository(
 ): KoinComponent {
     val context: Context by inject(Context::class.java)
 
-    private val database: com.tomtruyen.data.AppDatabase by inject(com.tomtruyen.data.AppDatabase::class.java)
+    private val database: AppDatabase by inject(AppDatabase::class.java)
 
     protected val db = Firebase.firestore
     protected val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    protected suspend fun <T> transaction(block: suspend () -> T) = withContext(Dispatchers.IO) {
-        database.withTransaction(block)
+    protected suspend fun <T> transaction(block: suspend () -> T) {
+        withContext(Dispatchers.IO) {
+            database.withTransaction(block)
+        }
     }
 
-    fun launchWithTransaction(block: suspend () -> Unit)  = scope.launch {
+    fun launchWithTransaction(block: suspend () -> Unit) = scope.launch {
         transaction(block)
     }
 

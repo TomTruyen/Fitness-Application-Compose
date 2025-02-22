@@ -23,8 +23,8 @@ fun <TResult, TEntity> Task<TResult>.handleCompletionResult(
             return@addOnCompleteListener
         }
 
-        setFetchSuccessful?.invoke()
-
         onSuccess(task.result)
+
+        setFetchSuccessful?.invoke()
     }
 }
