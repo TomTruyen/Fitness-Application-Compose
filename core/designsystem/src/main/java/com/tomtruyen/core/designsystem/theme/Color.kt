@@ -11,3 +11,6 @@ val Cultured = Color(0xFFF6F6F6)
 
 // Error Colors
 val LighterRed = Color(0xFFFF5555)
+
+val SuccessGreen = Color(0xFF53BB23)
+val LighterSuccessGreen = Color(0xFFB7E1A1)

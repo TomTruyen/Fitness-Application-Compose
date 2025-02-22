@@ -28,7 +28,7 @@ class ManageWorkoutViewModel(
         mode = ManageWorkoutMode.fromArgs(id, execute)
     )
 ) {
-    val timer by lazy { StopwatchTimer() }
+    private val timer by lazy { StopwatchTimer() }
 
     init {
         findWorkout()
@@ -288,6 +288,15 @@ class ManageWorkoutViewModel(
         )
     }
 
+    private fun toggleSetCompleted(id: String, setIndex: Int) = updateState {
+        it.copy(
+            workout = it.workout.copyWithSetCompleted(
+                id = id,
+                setIndex = setIndex
+            )
+        )
+    }
+
     override fun onAction(action: ManageWorkoutUiAction) {
         when (action) {
             is ManageWorkoutUiAction.Save -> save()
@@ -334,39 +343,40 @@ class ManageWorkoutViewModel(
                 id = action.id,
                 setIndex = action.setIndex
             )
-        }
-    }
 
-    fun onWorkoutExerciseAction(event: WorkoutExerciseUiAction) {
-        when (event) {
-            is WorkoutExerciseUiAction.OnRepsChanged -> updateReps(
-                id = event.id,
-                setIndex = event.setIndex,
-                reps = event.reps
+            is ManageWorkoutUiAction.OnRepsChanged -> updateReps(
+                id = action.id,
+                setIndex = action.setIndex,
+                reps = action.reps
             )
 
-            is WorkoutExerciseUiAction.OnWeightChanged -> updateWeight(
-                id = event.id,
-                setIndex = event.setIndex,
-                weight = event.weight
+            is ManageWorkoutUiAction.OnWeightChanged -> updateWeight(
+                id = action.id,
+                setIndex = action.setIndex,
+                weight = action.weight
             )
 
-            is WorkoutExerciseUiAction.OnTimeChanged -> updateTime(
-                id = event.id,
-                setIndex = event.setIndex,
-                time = event.time
+            is ManageWorkoutUiAction.OnTimeChanged -> updateTime(
+                id = action.id,
+                setIndex = action.setIndex,
+                time = action.time
             )
 
-            is WorkoutExerciseUiAction.OnDeleteSet -> {
+            is ManageWorkoutUiAction.OnDeleteSet -> {
                 toggleSetMoreActionSheet()
                 deleteSet(
-                    id = event.id,
-                    setIndex = event.setIndex
+                    id = action.id,
+                    setIndex = action.setIndex
                 )
             }
 
-            is WorkoutExerciseUiAction.OnAddSet -> addSet(
-                id = event.id
+            is ManageWorkoutUiAction.OnAddSet -> addSet(
+                id = action.id
+            )
+
+            is ManageWorkoutUiAction.ToggleSetCompleted -> toggleSetCompleted(
+                id = action.id,
+                setIndex = action.setIndex
             )
         }
     }

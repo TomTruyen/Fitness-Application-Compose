@@ -1,9 +1,14 @@
 package com.tomtruyen.feature.workouts.manage.components
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.feature.workouts.manage.R
@@ -81,6 +87,20 @@ fun WorkoutExerciseSetHeader(
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.W500,
                     )
+                )
+            }
+        }
+
+
+        if(mode == ManageWorkoutMode.EXECUTE) {
+            Box(
+                modifier = Modifier.width(24.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    modifier = Modifier.size(16.dp),
+                    imageVector = Icons.Default.Check,
+                    contentDescription = null,
                 )
             }
         }

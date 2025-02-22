@@ -3,6 +3,7 @@ package com.tomtruyen.feature.workouts.manage.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.theme.FitnessApplicationTheme
 import com.tomtruyen.core.ui.Avatar
 import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 
 @Composable
 fun WorkoutExerciseHeader(

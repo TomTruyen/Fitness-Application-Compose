@@ -100,7 +100,7 @@ fun ManageWorkoutScreen(
                 icon = Icons.Default.Close,
                 onClick = {
                     if(state.selectedExerciseId != null && state.selectedSetIndex != null) {
-                        viewModel.onWorkoutExerciseAction(WorkoutExerciseUiAction.OnDeleteSet(state.selectedExerciseId!!, state.selectedSetIndex!!))
+                        viewModel.onAction(ManageWorkoutUiAction.OnDeleteSet(state.selectedExerciseId!!, state.selectedSetIndex!!))
                     }
                 },
                 color = errorColor
@@ -152,7 +152,6 @@ fun ManageWorkoutScreen(
         state = state,
         lazyListState = lazyListState,
         onAction = viewModel::onAction,
-        onWorkoutEvent = viewModel::onWorkoutExerciseAction
     )
 
     BottomSheetList(
@@ -175,7 +174,6 @@ fun ManageWorkoutScreenLayout(
     state: ManageWorkoutUiState,
     lazyListState: LazyListState,
     onAction: (ManageWorkoutUiAction) -> Unit,
-    onWorkoutEvent: (WorkoutExerciseUiAction) -> Unit
 ) {
     val workoutDuration = remember(state.duration) {
         TimeUtils.formatSeconds(
@@ -202,7 +200,7 @@ fun ManageWorkoutScreenLayout(
             Toolbar(
                 title = {
                     if(state.mode == ManageWorkoutMode.EXECUTE) {
-                        ToolbarTitle(title = stringResource(id = R.string.title_create_workout))
+                        ToolbarTitle(title = state.workout.name)
                     } else {
                         TextFields.Default(
                             modifier = Modifier.padding(
@@ -274,7 +272,6 @@ fun ManageWorkoutScreenLayout(
                     state = state,
                     lazyListState = lazyListState,
                     onAction = onAction,
-                    onWorkoutEvent = onWorkoutEvent
                 )
             }
 
@@ -304,7 +301,6 @@ fun ExerciseList(
     state: ManageWorkoutUiState,
     lazyListState: LazyListState,
     onAction: (ManageWorkoutUiAction) -> Unit,
-    onWorkoutEvent: (WorkoutExerciseUiAction) -> Unit
 ) {
     val haptic = LocalHapticFeedback.current
 
@@ -336,7 +332,6 @@ fun ExerciseList(
                     unit = state.settings.unit,
                     mode = state.mode,
                     onAction = onAction,
-                    onWorkoutEvent = onWorkoutEvent
                 )
             }
 
@@ -364,7 +359,6 @@ fun ExerciseListItem(
     unit: String,
     mode: ManageWorkoutMode,
     onAction: (ManageWorkoutUiAction) -> Unit,
-    onWorkoutEvent: (WorkoutExerciseUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -416,7 +410,7 @@ fun ExerciseListItem(
                     )
                 )
             },
-            onEvent = onWorkoutEvent
+            onAction = onAction
         )
 
         // Add Set Button
@@ -432,7 +426,7 @@ fun ExerciseListItem(
                 contentColor = MaterialTheme.colorScheme.onSurface
             ),
             onClick = {
-                onWorkoutEvent(WorkoutExerciseUiAction.OnAddSet(workoutExercise.id))
+                onAction(ManageWorkoutUiAction.OnAddSet(workoutExercise.id))
             }
         )
     }

@@ -41,7 +41,7 @@ import com.tomtruyen.core.ui.dialogs.RestAlertDialog
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.WorkoutSet
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
-import com.tomtruyen.feature.workouts.manage.WorkoutExerciseUiAction
+import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 import com.tomtruyen.models.RestAlertType
 import com.tomtruyen.core.common.R as CommonR
@@ -54,15 +54,15 @@ fun WorkoutExerciseSet(
     set: WorkoutSet,
     lastPerformedSet: WorkoutSet? = null,
     mode: ManageWorkoutMode,
-    onEvent: (WorkoutExerciseUiAction) -> Unit,
+    onAction: (ManageWorkoutUiAction) -> Unit,
     onSetClick: (id: String, setIndex: Int) -> Unit
 ) {
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = {
             when(it) {
                 SwipeToDismissBoxValue.EndToStart -> {
-                    onEvent(
-                        WorkoutExerciseUiAction.OnDeleteSet(
+                    onAction(
+                        ManageWorkoutUiAction.OnDeleteSet(
                             id = workoutExercise.id,
                             setIndex = setIndex
                         )
@@ -136,8 +136,8 @@ fun WorkoutExerciseSet(
                 Exercise.ExerciseType.WEIGHT -> WeightSet(
                     set = set,
                     onRepsChanged = { reps ->
-                        onEvent(
-                            WorkoutExerciseUiAction.OnRepsChanged(
+                        onAction(
+                            ManageWorkoutUiAction.OnRepsChanged(
                                 id = workoutExercise.id,
                                 setIndex = setIndex,
                                 reps = reps
@@ -145,8 +145,8 @@ fun WorkoutExerciseSet(
                         )
                     },
                     onWeightChanged = { weight ->
-                        onEvent(
-                            WorkoutExerciseUiAction.OnWeightChanged(
+                        onAction(
+                            ManageWorkoutUiAction.OnWeightChanged(
                                 id = workoutExercise.id,
                                 setIndex = setIndex,
                                 weight = weight
@@ -158,8 +158,8 @@ fun WorkoutExerciseSet(
                 Exercise.ExerciseType.TIME -> TimeSet(
                     set = set,
                     onTimeChanged = { time ->
-                        onEvent(
-                            WorkoutExerciseUiAction.OnTimeChanged(
+                        onAction(
+                            ManageWorkoutUiAction.OnTimeChanged(
                                 workoutExercise.id,
                                 setIndex,
                                 time
@@ -168,6 +168,18 @@ fun WorkoutExerciseSet(
                     }
                 )
             }
+
+            WorkoutCheckbox(
+                checked = set.completed,
+                onClick = {
+                    onAction(
+                        ManageWorkoutUiAction.ToggleSetCompleted(
+                            id = workoutExercise.id,
+                            setIndex = setIndex
+                        )
+                    )
+                },
+            )
         }
     }
 }

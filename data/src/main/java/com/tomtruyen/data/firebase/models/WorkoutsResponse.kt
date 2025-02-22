@@ -115,6 +115,19 @@ data class WorkoutResponse(
             }
         }
     )
+
+    fun copyWithSetCompleted(id: String, setIndex: Int) = copy(exercises = exercises.map { exercise ->
+            if (exercise.id == id) {
+                exercise.copy(
+                    sets = exercise.sets.toMutableList().apply {
+                        this[setIndex] = this[setIndex].copy(completed = !this[setIndex].completed)
+                    }
+                )
+            } else {
+                exercise
+            }
+        }
+    )
 }
 
 @Parcelize

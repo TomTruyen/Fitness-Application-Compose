@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_create_workout">Create workout</string>
     <string name="title_workout_name">Workout name</string>
     <string name="message_workout_name">Please enter a name for your workout</string>
     <string name="title_workout_empty_title">No exercises added</string>

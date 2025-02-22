@@ -8,8 +8,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.tomtruyen.core.designsystem.Dimens
+import com.tomtruyen.core.designsystem.theme.LighterSuccessGreen
+import com.tomtruyen.core.designsystem.theme.SuccessGreen
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
-import com.tomtruyen.feature.workouts.manage.WorkoutExerciseUiAction
+import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 
 @Composable
@@ -17,7 +19,7 @@ fun WorkoutExerciseSetTable(
     workoutExercise: WorkoutExerciseResponse,
     unit: String,
     mode: ManageWorkoutMode,
-    onEvent: (WorkoutExerciseUiAction) -> Unit,
+    onAction: (ManageWorkoutUiAction) -> Unit,
     onSetClick: (id: String, setIndex: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -30,17 +32,17 @@ fun WorkoutExerciseSetTable(
             mode = mode,
             modifier = Modifier.padding(
                 horizontal = Dimens.Normal,
-            )
+            ).padding(bottom = Dimens.Tiny)
         )
 
         workoutExercise.sets.forEachIndexed { setIndex, set ->
             WorkoutExerciseSet(
                 modifier = Modifier.fillMaxWidth()
                     .background(
-                        color = if(setIndex % 2 == 0) {
-                            MaterialTheme.colorScheme.background
-                        } else {
-                            MaterialTheme.colorScheme.surface
+                        color = when {
+                            set.completed -> LighterSuccessGreen
+                            setIndex % 2 == 0 -> MaterialTheme.colorScheme.background
+                            else -> MaterialTheme.colorScheme.surface
                         }
                     )
                     .padding(
@@ -51,7 +53,7 @@ fun WorkoutExerciseSetTable(
                 setIndex = setIndex,
                 set = set,
                 mode = mode,
-                onEvent = onEvent,
+                onAction = onAction,
                 onSetClick = onSetClick
             )
         }
