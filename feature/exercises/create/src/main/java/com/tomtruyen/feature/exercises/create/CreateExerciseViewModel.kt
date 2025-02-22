@@ -6,6 +6,7 @@ import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
+import com.tomtruyen.feature.exercises.create.model.ManageExerciseMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -18,7 +19,7 @@ class CreateExerciseViewModel(
     private val userRepository: UserRepository
 ): BaseViewModel<CreateExerciseUiState, CreateExerciseUiAction, CreateExerciseUiEvent>(
     initialState = CreateExerciseUiState(
-        isEditing = id != null
+        mode = ManageExerciseMode.fromArgs(id)
     )
 ) {
     init {
@@ -30,7 +31,7 @@ class CreateExerciseViewModel(
     }
 
     private fun findExercise() = launchLoading(Dispatchers.IO) {
-        if(!uiState.value.isEditing || id == null) return@launchLoading
+        if(uiState.value.mode == ManageExerciseMode.CREATE || id == null) return@launchLoading
 
         exerciseRepository.findUserExerciseById(id)?.let {
             updateAndGetState { state ->
@@ -86,7 +87,7 @@ class CreateExerciseViewModel(
         exerciseRepository.saveUserExercise(
             userId = userId,
             exercise = exercise,
-            isUpdate = uiState.value.isEditing,
+            isUpdate = uiState.value.mode == ManageExerciseMode.EDIT,
             object: FirebaseCallback<Unit> {
                 override fun onSuccess(value: Unit) {
                     triggerEvent(CreateExerciseUiEvent.NavigateBack)
@@ -118,7 +119,6 @@ class CreateExerciseViewModel(
                     exercise = it.exercise.copy(
                         category = action.category
                     ),
-                    categoryValidationResult = it.validateCategory(action.category)
                 )
             }
             is CreateExerciseUiAction.OnEquipmentChanged -> updateState {
@@ -133,7 +133,6 @@ class CreateExerciseViewModel(
                     exercise = it.exercise.copy(
                         type = action.type
                     ),
-                    typeValidationResult = it.validateType(action.type)
                 )
             }
             is CreateExerciseUiAction.OnSaveClicked -> save()

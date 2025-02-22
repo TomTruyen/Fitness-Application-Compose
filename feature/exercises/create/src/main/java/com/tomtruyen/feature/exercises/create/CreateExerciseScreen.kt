@@ -33,6 +33,7 @@ import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.validation.errorMessage
 import com.tomtruyen.core.validation.isValid
 import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.feature.exercises.create.model.ManageExerciseMode
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -97,7 +98,13 @@ fun CreateExerciseScreenLayout(
         snackbarHost = snackbarHost,
         topBar = {
             Toolbar(
-                title = stringResource(id = if(state.isEditing) R.string.title_edit_exercise else R.string.title_create_exercise),
+                title = stringResource(
+                    id = if(state.mode == ManageExerciseMode.EDIT) {
+                        R.string.title_edit_exercise
+                    } else {
+                        R.string.title_create_exercise
+                    }
+                ),
                 navController = navController,
                 onNavigateUp = {
                     if(state.exercise != state.initialExercise) {
@@ -141,7 +148,6 @@ fun CreateExerciseScreenLayout(
                         placeholder = stringResource(id = CommonR.string.placeholder_category),
                         options = state.categories,
                         selectedOption = state.exercise.category,
-                        error = state.categoryValidationResult.errorMessage(),
                         onOptionSelected = { category ->
                             onAction(
                                 CreateExerciseUiAction.OnCategoryChanged(
@@ -168,7 +174,6 @@ fun CreateExerciseScreenLayout(
                         placeholder = stringResource(id = CommonR.string.placeholder_type),
                         options = types,
                         selectedOption = state.exercise.type,
-                        error = state.typeValidationResult.errorMessage(),
                         onOptionSelected = { type ->
                             onAction(
                                 CreateExerciseUiAction.OnTypeChanged(

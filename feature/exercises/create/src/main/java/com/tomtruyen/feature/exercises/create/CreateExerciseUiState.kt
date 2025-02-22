@@ -4,31 +4,26 @@ import com.tomtruyen.core.validation.TextValidator
 import com.tomtruyen.core.validation.ValidationResult
 import com.tomtruyen.core.validation.rules.RequiredRule
 import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.feature.exercises.create.model.ManageExerciseMode
 
 data class CreateExerciseUiState(
     val initialExercise: Exercise = Exercise(),
     val exercise: Exercise = Exercise(),
-    val isEditing: Boolean = false,
+    val mode: ManageExerciseMode = ManageExerciseMode.CREATE,
 
     val categories: List<String> = emptyList(),
     val equipment: List<String> = emptyList(),
 
     var nameValidationResult: ValidationResult? = null,
-    var categoryValidationResult: ValidationResult? = null,
-    var typeValidationResult: ValidationResult? = null,
 
     val loading: Boolean = false,
 ) {
     private val requiredValidator = TextValidator.withRules(RequiredRule())
 
     fun validateName(name: String) = requiredValidator.validate(name)
-    fun validateCategory(category: String) = requiredValidator.validate(category)
-    fun validateType(type: String) = requiredValidator.validate(type)
 
     fun validateAll() {
         nameValidationResult = validateName(exercise.name.orEmpty())
-        categoryValidationResult = validateCategory(exercise.category.orEmpty())
-        typeValidationResult = validateType(exercise.type)
     }
 }
 
