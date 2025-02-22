@@ -39,6 +39,7 @@ data class WorkoutResponse(
                     sets = exercise.sets.mapIndexed { sIndex, set ->
                         if (sIndex == setIndex) set.copy(
                             reps = reps?.toIntOrNull() ?: 0,
+                            inputReps = reps
                         ) else set
                     }
                 )
@@ -58,6 +59,7 @@ data class WorkoutResponse(
                     sets = exercise.sets.mapIndexed { sIndex, set ->
                         if (sIndex == setIndex) set.copy(
                             weight = weight?.toDoubleOrNull() ?: 0.0,
+                            inputWeight = weight
                         ) else set
                     }
                 )

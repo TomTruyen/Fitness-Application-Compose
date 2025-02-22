@@ -227,7 +227,7 @@ private fun RowScope.WeightSet(
     TextFields.Default(
         border = false,
         padding = PaddingValues(Dimens.Small),
-        value = set.reps.toString(),
+        value = set.inputReps,
         onValueChange = { reps ->
             // Check if value can be cast to int, if not don't update the value
             if (reps.isNotEmpty() && reps.toIntOrNull() == null) return@Default
@@ -250,7 +250,7 @@ private fun RowScope.WeightSet(
     TextFields.Default(
         border = false,
         padding = PaddingValues(Dimens.Small),
-        value = set.weight.toString(),
+        value = set.inputWeight,
         onValueChange = { weight ->
             val filteredWeight = weight.replace(",", ".")
 
@@ -278,7 +278,7 @@ private fun RowScope.TimeSet(
     var timeDialogVisible by remember { mutableStateOf(false) }
 
     Text(
-        text = TimeUtils.formatSeconds(set.time?.toLong() ?: 0L),
+        text = TimeUtils.formatSeconds(set.time.toLong()),
         textAlign = TextAlign.Center,
         modifier = Modifier
             .weight(1f)
