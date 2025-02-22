@@ -15,11 +15,12 @@ import androidx.compose.ui.text.style.TextAlign
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.feature.workouts.manage.R
+import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 
 @Composable
 fun WorkoutExerciseSetHeader(
     exercise: Exercise,
-    isExecute: Boolean = false,
+    mode: ManageWorkoutMode,
     unit: String,
     modifier: Modifier = Modifier
 ) {
@@ -36,7 +37,7 @@ fun WorkoutExerciseSetHeader(
             )
         )
 
-        if(isExecute) {
+        if(mode == ManageWorkoutMode.EXECUTE) {
             Text(
                 text = stringResource(id = R.string.label_previous).uppercase(),
                 textAlign = TextAlign.Center,

@@ -10,11 +10,13 @@ import androidx.compose.ui.Modifier
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
 import com.tomtruyen.feature.workouts.manage.WorkoutExerciseUiAction
+import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 
 @Composable
 fun WorkoutExerciseSetTable(
     workoutExercise: WorkoutExerciseResponse,
     unit: String,
+    mode: ManageWorkoutMode,
     onEvent: (WorkoutExerciseUiAction) -> Unit,
     onSetClick: (id: String, setIndex: Int) -> Unit,
     modifier: Modifier = Modifier
@@ -25,6 +27,7 @@ fun WorkoutExerciseSetTable(
         WorkoutExerciseSetHeader(
             exercise = workoutExercise.exercise,
             unit = unit,
+            mode = mode,
             modifier = Modifier.padding(
                 horizontal = Dimens.Normal,
             )
@@ -47,6 +50,7 @@ fun WorkoutExerciseSetTable(
                 workoutExercise = workoutExercise,
                 setIndex = setIndex,
                 set = set,
+                mode = mode,
                 onEvent = onEvent,
                 onSetClick = onSetClick
             )

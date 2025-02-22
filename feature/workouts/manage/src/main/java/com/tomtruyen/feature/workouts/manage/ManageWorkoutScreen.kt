@@ -334,6 +334,7 @@ fun ExerciseList(
                         .alpha(alpha),
                     workoutExercise = exercise,
                     unit = state.settings.unit,
+                    mode = state.mode,
                     onAction = onAction,
                     onWorkoutEvent = onWorkoutEvent
                 )
@@ -361,6 +362,7 @@ fun ExerciseList(
 fun ExerciseListItem(
     workoutExercise: WorkoutExerciseResponse,
     unit: String,
+    mode: ManageWorkoutMode,
     onAction: (ManageWorkoutUiAction) -> Unit,
     onWorkoutEvent: (WorkoutExerciseUiAction) -> Unit,
     modifier: Modifier = Modifier,
@@ -405,6 +407,7 @@ fun ExerciseListItem(
         WorkoutExerciseSetTable(
             workoutExercise = workoutExercise,
             unit = unit,
+            mode = mode,
             onSetClick = { id, setIndex ->
                 onAction(
                     ManageWorkoutUiAction.ToggleSetMoreActionSheet(

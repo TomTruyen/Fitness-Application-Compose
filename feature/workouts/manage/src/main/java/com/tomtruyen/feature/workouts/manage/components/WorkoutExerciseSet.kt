@@ -42,6 +42,7 @@ import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.WorkoutSet
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
 import com.tomtruyen.feature.workouts.manage.WorkoutExerciseUiAction
+import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 import com.tomtruyen.models.RestAlertType
 import com.tomtruyen.core.common.R as CommonR
 
@@ -52,7 +53,7 @@ fun WorkoutExerciseSet(
     setIndex: Int,
     set: WorkoutSet,
     lastPerformedSet: WorkoutSet? = null,
-    isExecute: Boolean = false,
+    mode: ManageWorkoutMode,
     onEvent: (WorkoutExerciseUiAction) -> Unit,
     onSetClick: (id: String, setIndex: Int) -> Unit
 ) {
@@ -120,7 +121,7 @@ fun WorkoutExerciseSet(
                     }
             )
 
-            if (isExecute) {
+            if (mode == ManageWorkoutMode.EXECUTE) {
                 PreviousSet(
                     lastPerformedSet = lastPerformedSet,
                     type = workoutExercise.exercise.typeEnum,
