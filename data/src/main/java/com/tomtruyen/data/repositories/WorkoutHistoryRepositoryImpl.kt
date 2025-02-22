@@ -127,8 +127,10 @@ class WorkoutHistoryRepositoryImpl(
         }
 
         val histories = responsesWithUniqueIds.map {
-            it.toWorkoutHistory().apply {
-                workoutId = getIdWithPrefix(workoutId, DataFetchTracker.WORKOUT_HISTORY)
+            it.toWorkoutHistory().let { history ->
+                history.copy(
+                    workoutId = getIdWithPrefix(history.workoutId.orEmpty(), DataFetchTracker.WORKOUT_HISTORY)
+                )
             }
         }
 
@@ -162,10 +164,10 @@ class WorkoutHistoryRepositoryImpl(
                     id = workoutExerciseId
                     isPerformed = true // Set performed to true this way we don't fetch it when we fetch normal workouts
                     sets = sets.map { set ->
-                        set.apply {
-                            id = getIdWithPrefix(id, prefix)
-                            this.workoutExerciseId = workoutExerciseId
-                        }
+                        set.copy(
+                            id = getIdWithPrefix(set.id, prefix),
+                            workoutExerciseId = workoutExerciseId
+                        )
                     }
                 }
             }

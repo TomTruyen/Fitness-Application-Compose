@@ -5,26 +5,26 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.firebase.encoders.annotations.Encodable.Ignore
 import com.google.firebase.firestore.PropertyName
+import com.tomtruyen.data.entities.BaseEntity.Companion.DEFAULT_TTL
 import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
 @Parcelize
 @Entity(tableName = Exercise.TABLE_NAME)
 data class Exercise(
-    @PrimaryKey var id: String = UUID.randomUUID().toString(),
-    var name: String? = null,
-    var category: String? = null,
-    var equipment: String? = null,
-    var image: String? = null,
-    @get:PropertyName("image_detail")
-    @set:PropertyName("image_detail")
-    var imageDetail: String? = null,
-    var type: String = ExerciseType.WEIGHT.value,
-    @get:PropertyName("description")
-    @set:PropertyName("description")
-    var steps: List<String> = emptyList(),
-    var isUserCreated: Boolean = false
-): Parcelable {
+    @PrimaryKey override val id: String = UUID.randomUUID().toString(),
+    override val ttl: Long = DEFAULT_TTL,
+    val name: String? = null,
+    val category: String? = null,
+    val equipment: String? = null,
+    val image: String? = null,
+    @PropertyName("image_detail")
+    val imageDetail: String? = null,
+    val type: String = ExerciseType.WEIGHT.value,
+    @PropertyName("description")
+    val steps: List<String> = emptyList(),
+    val isUserCreated: Boolean = false,
+): BaseEntity, Parcelable {
     @get:Ignore
     val displayName get() = buildString {
         append(name)

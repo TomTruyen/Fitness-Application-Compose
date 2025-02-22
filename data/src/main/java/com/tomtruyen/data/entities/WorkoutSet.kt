@@ -6,6 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 import java.util.UUID
+import com.tomtruyen.data.entities.BaseEntity.Companion.DEFAULT_TTL
 
 @Entity(
     tableName = WorkoutSet.TABLE_NAME,
@@ -23,18 +24,15 @@ import java.util.UUID
 )
 @Parcelize
 data class WorkoutSet(
-    @PrimaryKey var id: String = UUID.randomUUID().toString(),
-    var workoutExerciseId: String? = null,
-    var reps: Int? = null, // For Weight Type exercises
-    var weight: Double? = null, // For Weight Type exercises
-    var time: Int? = null, // For Time Type exercises,
-    var order: Int = 1,
-    var repsText: String? = null,
-    var weightText: String? = null,
+    @PrimaryKey override val id: String = UUID.randomUUID().toString(),
+    override val ttl: Long = DEFAULT_TTL,
+    val workoutExerciseId: String? = null,
+    val reps: Int = 0, // For Weight Type exercises
+    val weight: Double = 0.0, // For Weight Type exercises
+    val time: Int = 0, // For Time Type exercises,
+    val order: Int = 1,
     val completed: Boolean = false,
-): Parcelable {
-
-
+): BaseEntity, Parcelable {
     companion object {
         const val TABLE_NAME = "workout_sets"
     }

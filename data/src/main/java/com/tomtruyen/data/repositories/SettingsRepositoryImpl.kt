@@ -22,13 +22,13 @@ class SettingsRepositoryImpl(
                 context = context,
                 callback = callback
             ) {
-                settings.id = userId
+                val userSettings = settings.copy(id = userId)
 
                 launchWithTransaction {
-                    settingsDao.save(settings)
+                    settingsDao.save(userSettings)
                 }
 
-                callback.onSuccess(settings)
+                callback.onSuccess(userSettings)
             }
     }
 
@@ -43,9 +43,9 @@ class SettingsRepositoryImpl(
                 setFetchSuccessful = ::setFetchSuccessful,
                 callback = callback
             ) {
-                val settings = (it.toObject(Settings::class.java) ?: Settings()).apply {
+                val settings = (it.toObject(Settings::class.java) ?: Settings()).copy(
                     id = it.id
-                }
+                )
 
                 launchWithTransaction {
                     settingsDao.save(settings)

@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.Relation
+import com.tomtruyen.data.entities.BaseEntity.Companion.DEFAULT_TTL
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
 import java.util.UUID
 
@@ -30,14 +31,15 @@ import java.util.UUID
     ]
 )
 data class WorkoutExercise(
-    @PrimaryKey var id: String = UUID.randomUUID().toString(),
-    var workoutId: String = "",
-    var exerciseId: String = "",
-    var notes: String? = null,
-    var rest: Int = 30,
-    var restEnabled: Boolean = true,
-    var order: Int = 0
-) {
+    @PrimaryKey override val id: String = UUID.randomUUID().toString(),
+    override val ttl: Long = DEFAULT_TTL,
+    val workoutId: String? = null,
+    val exerciseId: String? = null,
+    val notes: String? = null,
+    val rest: Int = 30,
+    val restEnabled: Boolean = true,
+    val order: Int = 0
+): BaseEntity {
     companion object {
         const val TABLE_NAME = "workout_exercises"
     }

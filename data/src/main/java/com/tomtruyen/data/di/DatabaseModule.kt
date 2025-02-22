@@ -12,7 +12,7 @@ val databaseModule = module {
             androidContext(),
             AppDatabase::class.java,
             name = "fitoryx.db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     // Dao

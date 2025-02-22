@@ -71,8 +71,11 @@ class CreateExerciseViewModel(
 
         isLoading(true)
 
-        val exercise = uiState.value.exercise.apply {
-            if(equipment == Exercise.DEFAULT_DROPDOWN_VALUE) equipment = null
+        val exercise = with(uiState.value) {
+            exercise.copy(
+                equipment = if(exercise.equipment == Exercise.DEFAULT_DROPDOWN_VALUE) null else exercise.equipment,
+                isUserCreated = true
+            )
         }
 
         exerciseRepository.saveUserExercise(

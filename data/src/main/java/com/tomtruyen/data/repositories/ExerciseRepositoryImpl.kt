@@ -31,9 +31,7 @@ class ExerciseRepositoryImpl(
 
     override fun findEquipment() = exerciseDao.findEquipment()
 
-    override fun getExercises(callback: FirebaseCallback<List<Exercise>>) = tryRequestWhenNotFetched(
-        onStopLoading = callback::onStopLoading
-    ) {
+    override fun getExercises(callback: FirebaseCallback<List<Exercise>>) {
         db.collection(COLLECTION_NAME)
             .document(DOCUMENT_NAME)
             .get()
@@ -84,8 +82,6 @@ class ExerciseRepositoryImpl(
         isUpdate: Boolean,
         callback: FirebaseCallback<Unit>
     ) = withContext(Dispatchers.IO) {
-        exercise.isUserCreated = true
-
         val exercises = exerciseDao.findAllUserExercises().toMutableList().apply {
             if(isUpdate) {
                 removeIf { it.id == exercise.id }

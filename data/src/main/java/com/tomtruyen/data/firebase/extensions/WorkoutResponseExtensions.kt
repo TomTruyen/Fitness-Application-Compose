@@ -9,13 +9,13 @@ fun WorkoutResponse.weightExercises() = exercises.filter {
 
 fun WorkoutResponse.totalWeightCompleted() = weightExercises().sumOf { exercise ->
     exercise.sets.filter { it.completed }.sumOf { set ->
-        set.weight ?: 0.0
+        set.weight
     }
 }
 
 fun WorkoutResponse.repsCountCompleted() = weightExercises().sumOf { exercise ->
     exercise.sets.filter { it.completed }.sumOf { set ->
-        set.reps ?: 0
+        set.reps
     }
 }
 

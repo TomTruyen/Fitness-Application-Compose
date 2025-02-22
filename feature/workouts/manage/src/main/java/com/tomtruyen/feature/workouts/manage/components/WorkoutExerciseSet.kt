@@ -201,21 +201,13 @@ private fun PreviousSet(
         text = lastPerformedSet?.let { set ->
             when (type) {
                 Exercise.ExerciseType.WEIGHT -> {
-                    if (set.reps == null || set.weight == null) {
-                        return@let null
-                    }
-
-                    val weight = set.weight?.format()
+                    val weight = set.weight.format()
 
                     "${set.reps}x${weight}"
                 }
 
                 Exercise.ExerciseType.TIME -> {
-                    if (set.time == null) {
-                        return@let null
-                    }
-
-                    TimeUtils.formatSeconds(set.time?.toLong() ?: 0L)
+                    TimeUtils.formatSeconds(set.time.toLong())
                 }
             }
         } ?: "-",
@@ -235,7 +227,7 @@ private fun RowScope.WeightSet(
     TextFields.Default(
         border = false,
         padding = PaddingValues(Dimens.Small),
-        value = set.repsText.orEmpty(),
+        value = set.reps.toString(),
         onValueChange = { reps ->
             // Check if value can be cast to int, if not don't update the value
             if (reps.isNotEmpty() && reps.toIntOrNull() == null) return@Default
@@ -258,7 +250,7 @@ private fun RowScope.WeightSet(
     TextFields.Default(
         border = false,
         padding = PaddingValues(Dimens.Small),
-        value = set.weightText.orEmpty(),
+        value = set.weight.toString(),
         onValueChange = { weight ->
             val filteredWeight = weight.replace(",", ".")
 

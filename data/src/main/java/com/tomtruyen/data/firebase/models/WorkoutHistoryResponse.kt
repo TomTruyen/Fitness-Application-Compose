@@ -18,7 +18,7 @@ data class WorkoutHistoryResponse(
     var createdAt: Long = System.currentTimeMillis(),
     var workout: WorkoutResponse = WorkoutResponse(),
 ) {
-    fun toWorkoutHistory() = com.tomtruyen.data.entities.WorkoutHistory(
+    fun toWorkoutHistory() = WorkoutHistory(
         id = id,
         duration = duration,
         createdAt = createdAt,

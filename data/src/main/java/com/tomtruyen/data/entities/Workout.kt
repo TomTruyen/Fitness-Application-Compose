@@ -4,17 +4,19 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
+import com.tomtruyen.data.entities.BaseEntity.Companion.DEFAULT_TTL
 import com.tomtruyen.data.firebase.models.WorkoutResponse
 import java.util.UUID
 
 @Entity(tableName = Workout.TABLE_NAME)
 data class Workout(
-    @PrimaryKey var id: String = UUID.randomUUID().toString(),
-    var name: String = "",
-    var unit: String = Settings.UnitType.KG.value, // KG or LBS
-    var createdAt: Long = System.currentTimeMillis(),
-    var isPerformed: Boolean = false,
-) {
+    @PrimaryKey override val id: String = UUID.randomUUID().toString(),
+    override val ttl: Long = DEFAULT_TTL,
+    val name: String = "",
+    val unit: String = Settings.UnitType.KG.value, // KG or LBS
+    val createdAt: Long = System.currentTimeMillis(),
+    val isPerformed: Boolean = false,
+): BaseEntity {
     companion object {
         const val TABLE_NAME = "workouts"
     }
