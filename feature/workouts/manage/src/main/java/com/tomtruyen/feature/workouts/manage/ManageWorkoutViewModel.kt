@@ -2,6 +2,7 @@ package com.tomtruyen.feature.workouts.manage
 
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.base.SnackbarMessage
+import com.tomtruyen.core.common.utils.StopwatchTimer
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.WorkoutSet
 import com.tomtruyen.data.firebase.models.FirebaseCallback
@@ -28,11 +29,30 @@ class ManageWorkoutViewModel(
         mode = ManageWorkoutMode.fromArgs(id, execute)
     )
 ) {
+    private val timer by lazy { StopwatchTimer() }
+
     init {
         findWorkout()
 
         observeLoading()
         observeSettings()
+
+        startTimer()
+    }
+
+    private fun startTimer() {
+        if(uiState.value.mode == ManageWorkoutMode.EXECUTE) {
+            timer.start()
+        }
+    }
+
+    private fun stopTimer(): Long {
+        if(uiState.value.mode == ManageWorkoutMode.EXECUTE) {
+            timer.stop()
+            return timer.currentTime
+        }
+
+        return 0L
     }
 
     private fun findWorkout() = launchLoading(Dispatchers.IO) {
@@ -61,6 +81,12 @@ class ManageWorkoutViewModel(
             .collectLatest { settings ->
                 updateState { it.copy(settings = settings) }
             }
+    }
+
+    private fun finish() = vmScope.launch {
+        val userId = userRepository.getUser()?.uid ?: return@launch
+
+        val duration = timer.stop()
     }
 
     private fun save() = vmScope.launch {

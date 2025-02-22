@@ -3,6 +3,7 @@ package com.tomtruyen.feature.workouts.manage
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
@@ -46,6 +47,7 @@ import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.toolbars.ToolbarTitle
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
+import com.tomtruyen.feature.workouts.manage.components.WorkoutStatistics
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 import com.tomtruyen.feature.workouts.shared.WorkoutExerciseUiAction
 import com.tomtruyen.feature.workouts.shared.ui.WorkoutExerciseHeader
@@ -235,13 +237,30 @@ fun ManageWorkoutScreenLayout(
                 .fillMaxSize(),
             loading = state.loading,
         ) {
-            ExerciseList(
+            Column(
                 modifier = Modifier.fillMaxSize(),
-                state = state,
-                lazyListState = lazyListState,
-                onAction = onAction,
-                onWorkoutEvent = onWorkoutEvent
-            )
+                verticalArrangement = Arrangement.Top
+            ) {
+                AnimatedVisibility(
+                    visible = state.mode == ManageWorkoutMode.EXECUTE,
+                ) {
+                    WorkoutStatistics(
+                        modifier = Modifier.fillMaxWidth(),
+                        workout = state.workout
+                    )
+                }
+
+
+                ExerciseList(
+                    modifier = Modifier.weight(1f),
+                    state = state,
+                    lazyListState = lazyListState,
+                    onAction = onAction,
+                    onWorkoutEvent = onWorkoutEvent
+                )
+            }
+
+
 
             if(confirmationDialogVisible) {
                 ConfirmationDialog(

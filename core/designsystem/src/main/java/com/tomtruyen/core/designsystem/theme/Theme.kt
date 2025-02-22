@@ -22,6 +22,7 @@ private val DarkColorScheme = lightColorScheme(
     surface = LavenderMist,
     onSurface = ChineseBlack,
     error = LighterRed,
+    outlineVariant = LavenderMist, // Divider
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -40,6 +41,7 @@ private val LightColorScheme = lightColorScheme(
     surface = LavenderMist,
     onSurface = ChineseBlack,
     error = LighterRed,
+    outlineVariant = LavenderMist, // Divider
 )
 
 @Composable

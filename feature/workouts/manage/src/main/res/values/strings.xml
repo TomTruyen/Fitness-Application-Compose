@@ -16,4 +16,7 @@
     <string name="action_remove_exercise">Remove Exercise</string>
     <string name="action_exercise_replace">Replace Exercise</string>
     <string name="action_remove_set">Remove Set</string>
+    <string name="label_volume">Volume</string>
+    <string name="label_sets">Sets</string>
+    <string name="label_reps">Reps</string>
 </resources>
