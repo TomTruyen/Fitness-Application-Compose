@@ -75,9 +75,7 @@ fun CreateExerciseScreenLayout(
 ) {
     val isValid by remember(state) {
         derivedStateOf {
-            state.nameValidationResult.isValid() &&
-                    state.categoryValidationResult.isValid() &&
-                    state.typeValidationResult.isValid()
+            state.nameValidationResult.isValid()
         }
     }
 
@@ -142,7 +140,7 @@ fun CreateExerciseScreenLayout(
                     Dropdown(
                         placeholder = stringResource(id = CommonR.string.placeholder_category),
                         options = state.categories,
-                        selectedOption = state.exercise.category.orEmpty(),
+                        selectedOption = state.exercise.category,
                         error = state.categoryValidationResult.errorMessage(),
                         onOptionSelected = { category ->
                             onAction(
@@ -156,7 +154,7 @@ fun CreateExerciseScreenLayout(
                     Dropdown(
                         placeholder = stringResource(id = CommonR.string.placeholder_equipment),
                         options = state.equipment,
-                        selectedOption = state.exercise.equipment ?: state.equipment.firstOrNull().orEmpty(),
+                        selectedOption = state.exercise.equipment,
                         onOptionSelected = { equipment ->
                             onAction(
                                 CreateExerciseUiAction.OnEquipmentChanged(

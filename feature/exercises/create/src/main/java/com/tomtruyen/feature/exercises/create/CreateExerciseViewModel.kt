@@ -54,16 +54,22 @@ class CreateExerciseViewModel(
         exerciseRepository.findCategories()
             .distinctUntilChanged()
             .collectLatest { categories ->
-                updateState { it.copy(categories = categories) }
+                updateState {
+                    it.copy(categories = listOf(Exercise.DEFAULT_DROPDOWN_VALUE) + categories)
+                }
             }
     }
 
     private fun observeEquipment() = vmScope.launch {
-        exerciseRepository.findEquipment().map {
-            listOf(Exercise.DEFAULT_DROPDOWN_VALUE) + it
-        }.distinctUntilChanged().collectLatest { equipment ->
-            updateState { it.copy(equipment = equipment) }
-        }
+        exerciseRepository.findEquipment()
+            .distinctUntilChanged()
+            .collectLatest { equipment ->
+                updateState {
+                    it.copy(
+                        equipment = listOf(Exercise.DEFAULT_DROPDOWN_VALUE) + equipment
+                    )
+                }
+            }
     }
 
     private fun save() = vmScope.launch {
@@ -73,7 +79,6 @@ class CreateExerciseViewModel(
 
         val exercise = with(uiState.value) {
             exercise.copy(
-                equipment = if(exercise.equipment == Exercise.DEFAULT_DROPDOWN_VALUE) null else exercise.equipment,
                 isUserCreated = true
             )
         }

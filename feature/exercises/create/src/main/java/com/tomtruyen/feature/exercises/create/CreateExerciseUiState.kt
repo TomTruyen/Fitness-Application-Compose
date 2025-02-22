@@ -3,10 +3,11 @@ package com.tomtruyen.feature.exercises.create
 import com.tomtruyen.core.validation.TextValidator
 import com.tomtruyen.core.validation.ValidationResult
 import com.tomtruyen.core.validation.rules.RequiredRule
+import com.tomtruyen.data.entities.Exercise
 
 data class CreateExerciseUiState(
-    val initialExercise: com.tomtruyen.data.entities.Exercise = com.tomtruyen.data.entities.Exercise(),
-    val exercise: com.tomtruyen.data.entities.Exercise = com.tomtruyen.data.entities.Exercise(),
+    val initialExercise: Exercise = Exercise(),
+    val exercise: Exercise = Exercise(),
     val isEditing: Boolean = false,
 
     val categories: List<String> = emptyList(),

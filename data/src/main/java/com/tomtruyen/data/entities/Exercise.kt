@@ -13,8 +13,8 @@ import java.util.UUID
 data class Exercise(
     @PrimaryKey override val id: String = UUID.randomUUID().toString(),
     val name: String? = null,
-    val category: String? = null,
-    val equipment: String? = null,
+    val category: String = DEFAULT_DROPDOWN_VALUE,
+    val equipment: String = DEFAULT_DROPDOWN_VALUE,
     val image: String? = null,
     @PropertyName("image_detail")
     val imageDetail: String? = null,
@@ -26,7 +26,7 @@ data class Exercise(
     @get:Ignore
     val displayName get() = buildString {
         append(name)
-        if(!equipment.isNullOrBlank()) {
+        if(equipment.isNotBlank()) {
             append(" ($equipment)")
         }
     }
