@@ -6,6 +6,7 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -87,5 +88,9 @@ fun SearchToolbar(
             }
         },
         actions = actions,
+        windowInsets = WindowInsets(
+            top = 0.dp,
+            bottom = 0.dp
+        )
     )
 }
