@@ -77,8 +77,7 @@ fun CreateExerciseScreenLayout(
         derivedStateOf {
             state.nameValidationResult.isValid() &&
                     state.categoryValidationResult.isValid() &&
-                    state.typeValidationResult.isValid() &&
-                    state.exercise != state.initialExercise
+                    state.typeValidationResult.isValid()
         }
     }
 

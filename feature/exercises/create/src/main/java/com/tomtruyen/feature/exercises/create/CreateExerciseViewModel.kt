@@ -33,11 +33,13 @@ class CreateExerciseViewModel(
         if(!uiState.value.isEditing || id == null) return@launchLoading
 
         exerciseRepository.findUserExerciseById(id)?.let {
-            updateState { state ->
+            updateAndGetState { state ->
                 state.copy(
                     initialExercise = it,
                     exercise = it
                 )
+            }.also { state ->
+                state.validateAll()
             }
         }
     }

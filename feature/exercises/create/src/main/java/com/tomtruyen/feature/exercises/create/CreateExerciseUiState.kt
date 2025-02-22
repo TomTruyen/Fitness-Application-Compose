@@ -23,5 +23,11 @@ data class CreateExerciseUiState(
     fun validateName(name: String) = requiredValidator.validate(name)
     fun validateCategory(category: String) = requiredValidator.validate(category)
     fun validateType(type: String) = requiredValidator.validate(type)
+
+    fun validateAll() {
+        nameValidationResult = validateName(exercise.name.orEmpty())
+        categoryValidationResult = validateCategory(exercise.category.orEmpty())
+        typeValidationResult = validateType(exercise.type)
+    }
 }
 
