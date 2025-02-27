@@ -78,21 +78,9 @@ class ManageExerciseViewModel(
         exerciseRepository.saveUserExercise(
             userId = userId,
             exercise = uiState.value.exercise,
-            isUpdate = uiState.value.mode == ManageExerciseMode.EDIT,
-            object: FirebaseCallback<Unit> {
-                override fun onSuccess(value: Unit) {
-                    triggerEvent(ManageExerciseUiEvent.NavigateBack)
-                }
-
-                override fun onError(error: String?) {
-                    showSnackbar(SnackbarMessage.Error(error))
-                }
-
-                override fun onStopLoading() {
-                    isLoading(false)
-                }
-            }
         )
+
+        triggerEvent(ManageExerciseUiEvent.NavigateBack)
     }
 
     override fun onAction(action: ManageExerciseUiAction) {

@@ -16,7 +16,7 @@ interface WorkoutDao {
 
     @Transaction
     @Query("SELECT * FROM ${Workout.TABLE_NAME} ORDER BY createdAt DESC")
-    fun findWorkouts(): List<WorkoutWithExercises>
+    suspend fun findWorkouts(): List<WorkoutWithExercises>
 
     @Transaction
     @Query("SELECT * FROM ${Workout.TABLE_NAME} WHERE id = :id")
@@ -24,17 +24,17 @@ interface WorkoutDao {
 
     @Transaction
     @Query("SELECT * FROM ${Workout.TABLE_NAME} WHERE id = :id")
-    fun findById(id: String): WorkoutWithExercises?
+    suspend fun findById(id: String): WorkoutWithExercises?
 
     @Query("DELETE FROM ${Workout.TABLE_NAME}")
-    fun deleteAll(): Int
+    suspend fun deleteAll(): Int
 
     @Query("DELETE FROM ${Workout.TABLE_NAME} WHERE id NOT IN (:ids)")
-    fun deleteAllWorkoutsExcept(ids: List<String>): Int
+    suspend fun deleteAllWorkoutsExcept(ids: List<String>): Int
 
     @Upsert
-    fun saveAll(workouts: List<Workout>): List<Long>
+    suspend fun saveAll(workouts: List<Workout>): List<Long>
 
     @Query("DELETE FROM ${Workout.TABLE_NAME} WHERE id = :workoutId")
-    fun deleteById(workoutId: String): Int
+    suspend fun deleteById(workoutId: String): Int
 }

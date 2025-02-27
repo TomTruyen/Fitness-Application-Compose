@@ -175,7 +175,7 @@ fun ExerciseDetailScreenLayout(
                         )
                     }
 
-                    itemsIndexed(state.exercise.steps) { index, step ->
+                    itemsIndexed(state.exercise.steps.orEmpty()) { index, step ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()

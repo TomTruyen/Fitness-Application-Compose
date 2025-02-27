@@ -1,9 +1,7 @@
 package com.tomtruyen.feature.exercises
 
 import com.tomtruyen.core.common.base.BaseViewModel
-import com.tomtruyen.core.common.base.SnackbarMessage
 import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.navigation.Screen

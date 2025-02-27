@@ -8,7 +8,7 @@ import com.tomtruyen.data.entities.CacheTTL
 @Dao
 interface CacheTTLDao {
     @Upsert
-    fun save(cache: CacheTTL): Long
+    suspend fun save(cache: CacheTTL): Long
 
     @Query("SELECT * FROM ${CacheTTL.TABLE_NAME} WHERE id = :id")
     suspend fun findById(id: String?): CacheTTL?

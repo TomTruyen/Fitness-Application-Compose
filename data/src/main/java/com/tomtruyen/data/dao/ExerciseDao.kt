@@ -19,10 +19,16 @@ abstract class ExerciseDao {
     abstract fun findEquipment(): Flow<List<String>>
 
     @Upsert
-    abstract fun save(exercise: Exercise): Long
+    abstract suspend fun save(exercise: Exercise): Long
 
     @Upsert
-    abstract fun saveAll(exercises: List<Exercise>): List<Long>
+    abstract suspend fun saveAll(exercises: List<Exercise>): List<Long>
+
+    @Query("DELETE FROM ${Exercise.TABLE_NAME}")
+    abstract suspend fun deleteAll(): Int
+
+    @Query("DELETE FROM ${Exercise.TABLE_NAME} WHERE id = :id")
+    abstract suspend fun deleteById(id: String): Int
 
     @Query("SELECT * FROM ${Exercise.TABLE_NAME} WHERE id = :id")
     abstract fun findByIdAsync(id: String): Flow<Exercise?>

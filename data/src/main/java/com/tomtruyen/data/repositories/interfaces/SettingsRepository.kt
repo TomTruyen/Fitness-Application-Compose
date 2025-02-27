@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 abstract class SettingsRepository: BaseRepository() {
     override val identifier: String
-        get() = "settings"
+        get() = Settings.TABLE_NAME
 
     abstract fun findSettings(): Flow<Settings?>
     abstract suspend fun saveSettings(userId: String, settings: Settings)

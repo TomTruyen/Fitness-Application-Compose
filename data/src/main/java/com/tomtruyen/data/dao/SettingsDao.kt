@@ -11,5 +11,5 @@ interface SettingsDao {
     @Query("SELECT * FROM ${Settings.TABLE_NAME} LIMIT 1")
     fun findSettings(): Flow<Settings?>
     @Upsert
-    fun save(settings: Settings)
+    suspend fun save(settings: Settings)
 }

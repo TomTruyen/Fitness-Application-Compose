@@ -26,7 +26,7 @@ data class Exercise(
     @SerialName("image_thumbnail_url")
     val type: String = ExerciseType.WEIGHT.value,
     @SerialName("steps")
-    val steps: List<String> = emptyList(),
+    val steps: List<String>? = emptyList(),
     @SerialName("user_id")
     val userId: String? = null
 ): BaseEntity, Parcelable {

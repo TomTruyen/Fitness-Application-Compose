@@ -23,7 +23,7 @@ class WorkoutHistoryRepositoryImpl(
 ): WorkoutHistoryRepository() {
     private val workoutRepository by inject<WorkoutRepository>(WorkoutRepository::class.java)
 
-    override fun findWorkoutHistoriesByRange(
+    override suspend fun findWorkoutHistoriesByRange(
         start: Long,
         end: Long
     ) = workoutHistoryDao.findWorkoutHistoriesByRange(start, end)

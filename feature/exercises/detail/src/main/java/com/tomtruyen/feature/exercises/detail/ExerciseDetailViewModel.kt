@@ -37,28 +37,15 @@ class ExerciseDetailViewModel(
             }
     }
 
-    private fun delete() = vmScope.launch {
-        val userId = userRepository.getUser()?.id ?: return@launch
-
-        isLoading(true)
+    private fun delete() = launchLoading {
+        val userId = userRepository.getUser()?.id ?: return@launchLoading
 
         exerciseRepository.deleteUserExercise(
             userId = userId,
             exerciseId = id,
-            object: FirebaseCallback<Unit> {
-                override fun onSuccess(value: Unit) {
-                    triggerEvent(ExerciseDetailUiEvent.NavigateBack)
-                }
-
-                override fun onError(error: String?) {
-                    showSnackbar(SnackbarMessage.Error(error))
-                }
-
-                override fun onStopLoading() {
-                    isLoading(false)
-                }
-            }
         )
+
+        triggerEvent(ExerciseDetailUiEvent.NavigateBack)
     }
 
     override fun onAction(action: ExerciseDetailUiAction) {
