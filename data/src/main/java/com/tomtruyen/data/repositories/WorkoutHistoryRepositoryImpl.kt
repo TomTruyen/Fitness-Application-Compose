@@ -31,37 +31,6 @@ class WorkoutHistoryRepositoryImpl(
         end: Long
     ) = workoutHistoryDao.findWorkoutHistoriesByRange(start, end)
 
-    override fun findLastEntryForWorkout(workoutId: String): Flow<com.tomtruyen.data.entities.WorkoutWithExercises?> {
-        val lastWorkoutId = getIdWithPrefix(workoutId, CACHE_KEY_LAST_WORKOUT)
-
-        return workoutDao.findByIdAsync(lastWorkoutId)
-    }
-
-    override fun getLastEntryForWorkout(
-        userId: String,
-        workoutId: String,
-        callback: FirebaseCallback<Unit>
-    ) {
-        db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
-            .document(userId)
-            .collection(USER_WORKOUT_HISTORY_WORKOUTS_COLLECTION_NAME)
-            .document(workoutId)
-            .get()
-            .handleCompletionResult(
-                context = context,
-                callback = callback
-            ) { document ->
-                val response = document.toObject(WorkoutResponse::class.java) ?: return@handleCompletionResult callback.onStopLoading()
-
-                val lastWorkout = addPrefixToIds(response, CACHE_KEY_LAST_WORKOUT)
-                launchWithTransaction {
-                    workoutRepository.saveWorkoutResponses(listOf(lastWorkout))
-                }
-
-                callback.onSuccess(Unit)
-            }
-    }
-
     override fun getWorkoutHistoriesPaginated(userId: String): Flow<PagingData<WorkoutHistoryWithWorkout>> {
         val source = WorkoutHistoryPagingSource(
             query = db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)

@@ -9,7 +9,6 @@ data class ManageWorkoutUiState(
     val mode: ManageWorkoutMode = ManageWorkoutMode.CREATE,
     val initialWorkout: WorkoutResponse = WorkoutResponse(),
     val workout: WorkoutResponse = WorkoutResponse(),
-    val lastEntryForWorkout: WorkoutWithExercises? = null,
     val settings: Settings = Settings(),
     val duration: Long = 0L,
     val loading: Boolean = false,

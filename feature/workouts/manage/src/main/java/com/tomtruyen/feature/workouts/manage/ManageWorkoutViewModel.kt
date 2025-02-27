@@ -35,11 +35,9 @@ class ManageWorkoutViewModel(
 
     init {
         findWorkout()
-        fetchLastEntryForWorkout()
 
         observeLoading()
         observeSettings()
-        observeLastEntryForWorkout()
 
         startTimer()
     }
@@ -92,41 +90,6 @@ class ManageWorkoutViewModel(
             .collectLatest { settings ->
                 updateState { it.copy(settings = settings) }
             }
-    }
-
-    private fun observeLastEntryForWorkout() {
-        if(uiState.value.mode != ManageWorkoutMode.EXECUTE || id == null) return
-
-        vmScope.launch {
-            historyRepository.findLastEntryForWorkout(id)
-                .filterNotNull()
-                .distinctUntilChanged()
-                .collectLatest { entry ->
-                    updateState { state ->
-                        state.copy(
-                            lastEntryForWorkout = entry
-                        )
-                    }
-                }
-        }
-    }
-
-    private fun fetchLastEntryForWorkout() {
-        if(uiState.value.mode != ManageWorkoutMode.EXECUTE || id == null) return
-
-        val userId = userRepository.getUser()?.uid ?: return
-
-        isLoading(true)
-
-        historyRepository.getLastEntryForWorkout(
-            userId = userId,
-            workoutId = id,
-            callback = object: FirebaseCallback<Unit> {
-                override fun onStopLoading() {
-                    isLoading(false)
-                }
-            }
-        )
     }
 
     private suspend fun finishWorkout(userId: String) = with(uiState.value) {

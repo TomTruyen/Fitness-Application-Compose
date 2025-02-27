@@ -15,16 +15,6 @@ abstract class WorkoutHistoryRepository: BaseRepository() {
         end: Long,
     ): List<com.tomtruyen.data.entities.WorkoutHistoryWithWorkout>
 
-    abstract fun findLastEntryForWorkout(
-        workoutId: String,
-    ): Flow<com.tomtruyen.data.entities.WorkoutWithExercises?>
-
-    abstract fun getLastEntryForWorkout(
-        userId: String,
-        workoutId: String,
-        callback: FirebaseCallback<Unit>
-    )
-
     abstract fun getWorkoutHistoriesPaginated(
         userId: String
     ): Flow<PagingData<com.tomtruyen.data.entities.WorkoutHistoryWithWorkout>>
