@@ -32,6 +32,7 @@ import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.validation.isValid
 import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.data.entities.Exercise.Companion.DEFAULT_DROPDOWN_VALUE
 import com.tomtruyen.feature.exercises.create.R
 import com.tomtruyen.feature.exercises.manage.model.ManageExerciseMode
 import kotlinx.coroutines.flow.collectLatest
@@ -147,7 +148,7 @@ fun ManageExerciseScreenLayout(
                     Dropdown(
                         placeholder = stringResource(id = CommonR.string.placeholder_category),
                         options = state.categories,
-                        selectedOption = state.exercise.category,
+                        selectedOption = state.exercise.category ?: DEFAULT_DROPDOWN_VALUE,
                         onOptionSelected = { category ->
                             onAction(
                                 ManageExerciseUiAction.OnCategoryChanged(
@@ -160,7 +161,7 @@ fun ManageExerciseScreenLayout(
                     Dropdown(
                         placeholder = stringResource(id = CommonR.string.placeholder_equipment),
                         options = state.equipment,
-                        selectedOption = state.exercise.equipment,
+                        selectedOption = state.exercise.equipment ?: DEFAULT_DROPDOWN_VALUE,
                         onOptionSelected = { equipment ->
                             onAction(
                                 ManageExerciseUiAction.OnEquipmentChanged(

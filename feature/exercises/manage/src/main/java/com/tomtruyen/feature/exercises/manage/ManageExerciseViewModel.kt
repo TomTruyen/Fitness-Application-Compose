@@ -78,7 +78,9 @@ class ManageExerciseViewModel(
 
         val exercise = with(uiState.value) {
             exercise.copy(
-                isUserCreated = true
+                isUserCreated = true,
+                category = if(exercise.category == Exercise.DEFAULT_DROPDOWN_VALUE) null else exercise.category,
+                equipment = if(exercise.equipment == Exercise.DEFAULT_DROPDOWN_VALUE) null else exercise.equipment
             )
         }
 

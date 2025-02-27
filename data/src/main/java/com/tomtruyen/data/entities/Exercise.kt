@@ -11,8 +11,8 @@ import java.util.UUID
 data class Exercise(
     @PrimaryKey override val id: String = UUID.randomUUID().toString(),
     val name: String? = null,
-    val category: String = DEFAULT_DROPDOWN_VALUE,
-    val equipment: String = DEFAULT_DROPDOWN_VALUE,
+    val category: String? = DEFAULT_DROPDOWN_VALUE,
+    val equipment: String? = DEFAULT_DROPDOWN_VALUE,
     val image: String? = null,
     val imageDetail: String? = null,
     val type: String = ExerciseType.WEIGHT.value,
@@ -21,7 +21,7 @@ data class Exercise(
 ): BaseEntity, Parcelable {
     val displayName get() = buildString {
         append(name)
-        if(equipment.isNotBlank()) {
+        if(!equipment.isNullOrBlank()) {
             append(" ($equipment)")
         }
     }
