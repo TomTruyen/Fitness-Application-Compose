@@ -127,7 +127,6 @@ class WorkoutHistoryRepositoryImpl(
                     val workoutExerciseId = getIdWithPrefix(id, prefix)
 
                     id = workoutExerciseId
-                    isPerformed = true // Set performed to true this way we don't fetch it when we fetch normal workouts
                     sets = sets.map { set ->
                         set.copy(
                             id = getIdWithPrefix(set.id, prefix),

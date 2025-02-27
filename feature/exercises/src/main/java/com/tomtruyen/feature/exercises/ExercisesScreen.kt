@@ -281,7 +281,7 @@ fun ExercisesScreenLayout(
                                     },
                                     prefix = {
                                         Avatar(
-                                            imageUrl = exercise.image,
+                                            imageUrl = exercise.imageUrl,
                                             contentDescription = exercise.displayName
                                         )
                                     }

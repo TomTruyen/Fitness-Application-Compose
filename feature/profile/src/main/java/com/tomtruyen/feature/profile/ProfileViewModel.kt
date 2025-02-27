@@ -1,10 +1,6 @@
 package com.tomtruyen.feature.profile
 
-import android.content.Context
 import com.tomtruyen.core.common.base.BaseViewModel
-import com.tomtruyen.core.common.base.SnackbarMessage
-import com.tomtruyen.data.entities.Settings
-import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.models.providers.KoinReloadProvider
@@ -40,16 +36,6 @@ class ProfileViewModel(
         settingsRepository.getSettings(
             userId = userId,
             refresh = refresh,
-            callback = object: FirebaseCallback<Settings> {
-                override fun onError(error: String?) {
-                    showSnackbar(SnackbarMessage.Error(error))
-                }
-
-                override fun onStopLoading() {
-                    isLoading(false)
-                    updateState { it.copy(refreshing = false) }
-                }
-            }
         )
     }
 
@@ -73,32 +59,15 @@ class ProfileViewModel(
         }
     }
 
-    fun saveSettings(context: Context) {
-        if(uiState.value.settings == uiState.value.initialSettings) return
+    fun saveSettings() = launchLoading {
+        if(uiState.value.settings == uiState.value.initialSettings) return@launchLoading
+        val userId = userRepository.getUser()?.id ?: return@launchLoading
 
-        val userId = userRepository.getUser()?.id ?: return
         val settings = uiState.value.settings
-
-        isLoading(true)
 
         settingsRepository.saveSettings(
             userId = userId,
             settings = settings,
-            callback = object: FirebaseCallback<Settings> {
-                override fun onSuccess(value: Settings) {
-                    showSnackbar(
-                        SnackbarMessage.Success(context.getString(R.string.alert_settings_saved))
-                    )
-                }
-
-                override fun onError(error: String?) {
-                    showSnackbar(SnackbarMessage.Error(error))
-                }
-
-                override fun onStopLoading() {
-                    isLoading(false)
-                }
-            }
         )
     }
 

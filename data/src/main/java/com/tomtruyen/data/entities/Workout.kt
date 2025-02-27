@@ -13,7 +13,6 @@ data class Workout(
     val name: String = "",
     val unit: String = Settings.UnitType.KG.value, // KG or LBS
     val createdAt: Long = System.currentTimeMillis(),
-    val isPerformed: Boolean = false,
 ): BaseEntity {
     companion object {
         const val TABLE_NAME = "workouts"

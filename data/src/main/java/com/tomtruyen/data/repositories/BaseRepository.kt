@@ -45,8 +45,7 @@ abstract class BaseRepository(
     protected suspend fun fetch(
         refresh: Boolean = false,
         overrideIdentifier: String? = null,
-        onStopLoading: () -> Unit,
-        block: () -> Unit
+        block: suspend () -> Unit
     ) {
         val cacheKey = overrideIdentifier ?: identifier
         Log.i(TAG, "Fetching data for $cacheKey from Firebase... (Checking Cache first)")
@@ -61,8 +60,6 @@ abstract class BaseRepository(
         }
 
         Log.i(TAG, "Cache is not expired. Skipping Firebase fetch for $cacheKey")
-
-        onStopLoading()
     }
 
     companion object {

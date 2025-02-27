@@ -29,7 +29,6 @@ class ExerciseRepositoryImpl(
 
     override suspend fun getExercises(refresh: Boolean, callback: FirebaseCallback<List<Exercise>>) = fetch(
         refresh = refresh,
-        onStopLoading = callback::onStopLoading
     ) {
 //        db.collection(COLLECTION_NAME)
 //            .document(DOCUMENT_NAME)
@@ -51,7 +50,6 @@ class ExerciseRepositoryImpl(
 
     override suspend fun getUserExercises(userId: String, refresh: Boolean, callback: FirebaseCallback<List<Exercise>>) = fetch(
         refresh = refresh,
-        onStopLoading = callback::onStopLoading,
         overrideIdentifier = USER_EXERCISE_COLLECTION_NAME
     ) {
 //        db.collection(USER_EXERCISE_COLLECTION_NAME)

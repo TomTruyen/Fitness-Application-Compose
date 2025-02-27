@@ -27,18 +27,11 @@ class LoginViewModel(
             password = uiState.value.password.orEmpty(),
         )
 
-        onAuth()
+        triggerEvent(LoginUiEvent.NavigateToHome)
     }
 
     private fun loginWithGoogle(idToken: String) = launchLoading {
         userRepository.loginWithGoogle(idToken)
-
-        onAuth()
-    }
-
-    private fun onAuth() {
-        // TODO: Handle logic to call the SettingsRepository.getSettings post auth
-
         triggerEvent(LoginUiEvent.NavigateToHome)
     }
 

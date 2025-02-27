@@ -3,7 +3,6 @@ package com.tomtruyen.feature.workouts.manage.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
@@ -20,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.theme.FitnessApplicationTheme
 import com.tomtruyen.core.ui.Avatar
 import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 
 @Composable
 fun WorkoutExerciseHeader(
@@ -34,7 +32,7 @@ fun WorkoutExerciseHeader(
         modifier = modifier
     ) {
         Avatar(
-            imageUrl = exercise.image,
+            imageUrl = exercise.imageUrl,
             contentDescription = exercise.displayName,
         )
 
@@ -70,7 +68,7 @@ fun WorkoutExerciseHeaderPreview() {
                 name = "Bench Press",
                 category = "Chest",
                 equipment = "Barbell",
-                image = "https://storage.googleapis.com/fitness-application-f6cf1.appspot.com/Exercises%2Fabwheel.png"
+                imageUrl = "https://storage.googleapis.com/fitness-application-f6cf1.appspot.com/Exercises%2Fabwheel.png"
             ),
             onActionClick = {}
         )

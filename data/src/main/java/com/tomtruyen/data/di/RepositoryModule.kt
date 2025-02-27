@@ -10,12 +10,16 @@ import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
-import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val repositoryModule = module {
     // Repositories
-    singleOf<UserRepository>(::UserRepositoryImpl)
+    single<UserRepository> {
+        UserRepositoryImpl(
+            settingsRepository = get<SettingsRepository>()
+        )
+    }
+
     single<ExerciseRepository> { ExerciseRepositoryImpl(get()) }
     single<SettingsRepository> { SettingsRepositoryImpl(get()) }
     single<WorkoutRepository> { WorkoutRepositoryImpl(get(), get(), get(), get()) }

@@ -32,7 +32,7 @@ val appModule = module {
         ) {
             install(Auth)
             install(Postgrest) {
-                propertyConversionMethod = PropertyConversionMethod.CAMEL_CASE_TO_SNAKE_CASE
+                propertyConversionMethod = PropertyConversionMethod.SERIAL_NAME
             }
             install(Storage) {
                 transferTimeout = 60.seconds

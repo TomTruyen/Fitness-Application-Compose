@@ -1,60 +1,39 @@
 package com.tomtruyen.data.repositories
 
 import com.tomtruyen.data.entities.Settings
-import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
+import io.github.jan.supabase.postgrest.from
 
 class SettingsRepositoryImpl(
     private val settingsDao: com.tomtruyen.data.dao.SettingsDao
 ): SettingsRepository() {
     override fun findSettings() = settingsDao.findSettings()
 
-    override fun saveSettings(
+    override suspend fun saveSettings(
         userId: String,
         settings: Settings,
-        callback: FirebaseCallback<Settings>
     ) {
-//        db.collection(COLLECTION_NAME)
-//            .document(userId)
-//            .set(settings)
-//            .handleCompletionResult(
-//                context = context,
-//                callback = callback
-//            ) {
-//                val userSettings = settings.copy(id = userId)
-//
-//                launchWithTransaction {
-//                    settingsDao.save(userSettings)
-//                }
-//
-//                callback.onSuccess(userSettings)
-//            }
+        val newSettings = settings.copy(userId = userId)
+
+        supabase.from(Settings.TABLE_NAME).upsert(newSettings)
+
+        launchWithTransaction {
+            settingsDao.save(newSettings)
+        }
     }
 
-    override suspend fun getSettings(userId: String, refresh: Boolean, callback: FirebaseCallback<Settings>) = fetch(
-        refresh = refresh,
-        onStopLoading = callback::onStopLoading
-    ) {
-//        db.collection(COLLECTION_NAME)
-//            .document(userId)
-//            .get()
-//            .handleCompletionResult(
-//                context = context,
-//                callback = callback
-//            ) {
-//                val settings = (it.toObject(Settings::class.java) ?: Settings()).copy(
-//                    id = it.id
-//                )
-//
-//                launchWithCacheTransactions {
-//                    settingsDao.save(settings)
-//                }
-//
-//                callback.onSuccess(settings)
-//            }
-    }
-
-    companion object {
-        private const val COLLECTION_NAME = "settings"
+    override suspend fun getSettings(userId: String, refresh: Boolean) = fetch(refresh) {
+        supabase.from(Settings.TABLE_NAME)
+            .select {
+                filter {
+                    Settings::userId eq userId
+                }
+            }
+            .decodeSingleOrNull<Settings>()
+            ?.let { settings ->
+                launchWithCacheTransactions {
+                    settingsDao.save(settings)
+                }
+            }
     }
 }

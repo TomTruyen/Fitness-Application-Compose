@@ -126,10 +126,10 @@ fun ExerciseDetailScreenLayout(
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
             ) {
-                if (state.exercise?.imageDetail != null || state.exercise?.image != null) {
+                if (state.exercise?.imageDetailUrl != null || state.exercise?.imageUrl != null) {
                     item {
                         AsyncImage(
-                            model = state.exercise.imageDetail ?: state.exercise.image,
+                            model = state.exercise.imageDetailUrl ?: state.exercise.imageUrl,
                             contentDescription = state.exercise.name,
                             contentScale = ContentScale.Fit,
                             modifier = Modifier

@@ -58,7 +58,7 @@ fun ProfileScreen(
 
     DisposableEffect(Unit) {
         onDispose {
-            viewModel.saveSettings(context)
+            viewModel.saveSettings()
         }
     }
 
