@@ -24,26 +24,8 @@ abstract class ExerciseDao {
     @Upsert
     abstract fun saveAll(exercises: List<Exercise>): List<Long>
 
-    @Query("DELETE FROM ${Exercise.TABLE_NAME} WHERE isUserCreated = 0")
-    abstract fun deleteAllNonUserExercises(): Int
-
-    @Query("DELETE FROM ${Exercise.TABLE_NAME} WHERE isUserCreated = 1")
-    abstract fun deleteAllUserExercises(): Int
-
-    @Query("DELETE FROM ${Exercise.TABLE_NAME} WHERE NOT id IN (:ids) AND isUserCreated = 1")
-    abstract fun deleteAllUserExercisesExcept(ids: List<String>): Int
-
     @Query("SELECT * FROM ${Exercise.TABLE_NAME} WHERE id = :id")
     abstract fun findByIdAsync(id: String): Flow<Exercise?>
-
-    @Query("SELECT * FROM ${Exercise.TABLE_NAME} WHERE id = :id AND isUserCreated = 1")
-    abstract fun findUserExerciseById(id: String): Exercise?
-
-    @Query("DELETE FROM ${Exercise.TABLE_NAME} WHERE id = :id AND isUserCreated = 1")
-    abstract fun deleteUserExerciseById(id: String): Int
-
-    @Query("SELECT * FROM ${Exercise.TABLE_NAME} WHERE isUserCreated = 1")
-    abstract fun findAllUserExercises(): List<Exercise>
 
     fun findAllAsync(query: String, filter: ExerciseFilter): Flow<List<Exercise>> {
         return findAllAsync(findAllQuery(query, filter))

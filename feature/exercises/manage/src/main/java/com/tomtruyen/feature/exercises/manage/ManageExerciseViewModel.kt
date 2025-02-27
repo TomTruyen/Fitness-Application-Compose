@@ -31,16 +31,17 @@ class ManageExerciseViewModel(
     private fun findExercise() = launchLoading {
         if(uiState.value.mode == ManageExerciseMode.CREATE || id == null) return@launchLoading
 
-        exerciseRepository.findUserExerciseById(id)?.let {
-            updateAndGetState { state ->
-                state.copy(
-                    initialExercise = it,
-                    exercise = it
-                )
-            }.also { state ->
-                state.validateAll()
-            }
-        }
+        // TODO: Replace with findExerciseById
+//        exerciseRepository.findUserExerciseById(id)?.let {
+//            updateAndGetState { state ->
+//                state.copy(
+//                    initialExercise = it,
+//                    exercise = it
+//                )
+//            }.also { state ->
+//                state.validateAll()
+//            }
+//        }
     }
 
     private fun observeLoading() = vmScope.launch {
@@ -71,22 +72,12 @@ class ManageExerciseViewModel(
             }
     }
 
-    private fun save() = vmScope.launch {
-        val userId = userRepository.getUser()?.id ?: return@launch
-
-        isLoading(true)
-
-        val exercise = with(uiState.value) {
-            exercise.copy(
-                isUserCreated = true,
-                category = if(exercise.category == Exercise.DEFAULT_DROPDOWN_VALUE) null else exercise.category,
-                equipment = if(exercise.equipment == Exercise.DEFAULT_DROPDOWN_VALUE) null else exercise.equipment
-            )
-        }
+    private fun save() = launchLoading {
+        val userId = userRepository.getUser()?.id ?: return@launchLoading
 
         exerciseRepository.saveUserExercise(
             userId = userId,
-            exercise = exercise,
+            exercise = uiState.value.exercise,
             isUpdate = uiState.value.mode == ManageExerciseMode.EDIT,
             object: FirebaseCallback<Unit> {
                 override fun onSuccess(value: Unit) {

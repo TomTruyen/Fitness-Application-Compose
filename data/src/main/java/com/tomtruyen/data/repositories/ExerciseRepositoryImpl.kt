@@ -1,11 +1,11 @@
 package com.tomtruyen.data.repositories
 
+import android.util.Log
 import com.tomtruyen.data.dao.ExerciseDao
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.firebase.models.FirebaseCallback
-import com.tomtruyen.data.firebase.models.ExercisesResponse
-import com.tomtruyen.data.firebase.models.UserExercisesResponse
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
+import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -17,19 +17,26 @@ class ExerciseRepositoryImpl(
         filter = filter,
     )
 
-    override suspend fun findUserExercises() = exerciseDao.findAllUserExercises()
-
     override fun findExerciseById(id: String) = exerciseDao.findByIdAsync(id)
-
-    override suspend fun findUserExerciseById(id: String) = exerciseDao.findUserExerciseById(id)
 
     override fun findCategories() = exerciseDao.findCategories()
 
     override fun findEquipment() = exerciseDao.findEquipment()
 
-    override suspend fun getExercises(refresh: Boolean, callback: FirebaseCallback<List<Exercise>>) = fetch(
-        refresh = refresh,
-    ) {
+    override suspend fun getExercises(userId: String?, refresh: Boolean) = fetch(refresh = refresh) {
+        val exercises = supabase.from(Exercise.TABLE_NAME)
+            .select {
+                filter {
+                    Exercise::userId eq userId
+                }
+
+                filter {
+                    Exercise::userId eq null
+                }
+            }.data
+
+        Log.d("@@@", "Exercises: ${exercises}")
+
 //        db.collection(COLLECTION_NAME)
 //            .document(DOCUMENT_NAME)
 //            .get()
@@ -76,6 +83,12 @@ class ExerciseRepositoryImpl(
         isUpdate: Boolean,
         callback: FirebaseCallback<Unit>
     ) = withContext(Dispatchers.IO) {
+        val newExercise = exercise.copy(
+            userId = userId,
+            category = if(exercise.category == Exercise.DEFAULT_DROPDOWN_VALUE) null else exercise.category,
+            equipment = if(exercise.equipment == Exercise.DEFAULT_DROPDOWN_VALUE) null else exercise.equipment
+        )
+
 //        val exercises = exerciseDao.findAllUserExercises().toMutableList().apply {
 //            if(isUpdate) {
 //                removeIf { it.id == exercise.id }

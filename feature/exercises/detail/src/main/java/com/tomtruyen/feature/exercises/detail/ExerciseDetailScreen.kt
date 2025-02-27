@@ -91,7 +91,7 @@ fun ExerciseDetailScreenLayout(
                 title = state.exercise?.name.orEmpty(),
                 navController = navController
             ) {
-                if(state.exercise?.isUserCreated == true) {
+                if(state.exercise?.userId != null) {
                     IconButton(
                         onClick = {
                             onAction(ExerciseDetailUiAction.Edit)

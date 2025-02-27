@@ -1,0 +1,15 @@
+{
+  "name": "firebase-uploader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "supabase.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
+    "fs": "^0.0.1-security"
+  }
+}

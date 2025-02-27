@@ -4,20 +4,31 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
+@Serializable
 @Parcelize
 @Entity(tableName = Exercise.TABLE_NAME)
 data class Exercise(
-    @PrimaryKey override val id: String = UUID.randomUUID().toString(),
+    @PrimaryKey
+    @SerialName("id")
+    override val id: String = UUID.randomUUID().toString(),
+    @SerialName("name")
     val name: String? = null,
     val category: String? = DEFAULT_DROPDOWN_VALUE,
     val equipment: String? = DEFAULT_DROPDOWN_VALUE,
+    @SerialName("image_url")
     val imageUrl: String? = null,
+    @SerialName("image_detail_url")
     val imageDetailUrl: String? = null,
+    @SerialName("image_thumbnail_url")
     val type: String = ExerciseType.WEIGHT.value,
+    @SerialName("steps")
     val steps: List<String> = emptyList(),
-    val isUserCreated: Boolean = false,
+    @SerialName("user_id")
+    val userId: String? = null
 ): BaseEntity, Parcelable {
     val displayName get() = buildString {
         append(name)
@@ -34,7 +45,7 @@ data class Exercise(
     }
 
     companion object {
-        const val TABLE_NAME = "exercises"
+        const val TABLE_NAME = "Exercise"
         const val DEFAULT_DROPDOWN_VALUE = "None"
     }
 }

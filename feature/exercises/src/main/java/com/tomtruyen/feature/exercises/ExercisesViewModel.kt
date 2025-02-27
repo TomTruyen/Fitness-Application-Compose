@@ -21,19 +21,6 @@ class ExercisesViewModel(
 ): BaseViewModel<ExercisesUiState, ExercisesUiAction, ExercisesUiEvent>(
     initialState = ExercisesUiState(mode = mode)
 ) {
-    private val callback by lazy {
-        object: FirebaseCallback<List<Exercise>> {
-            override fun onError(error: String?) {
-                showSnackbar(SnackbarMessage.Error(error))
-            }
-
-            override fun onStopLoading() {
-                isLoading(false)
-                updateState { it.copy(refreshing = false) }
-            }
-        }
-    }
-
     init {
         fetchExercises()
 
@@ -51,11 +38,7 @@ class ExercisesViewModel(
             )
         }
 
-        exerciseRepository.getExercises(refresh, callback)
-
-        userRepository.getUser()?.let {
-            exerciseRepository.getUserExercises(it.id, refresh, callback)
-        }
+        exerciseRepository.getExercises(userRepository.getUser()?.id, refresh)
     }
 
     private fun observeLoading() = vmScope.launch {
