@@ -56,6 +56,10 @@ abstract class BaseViewModel<UIState, UIAction, UIEvent>(
         _loading.update { loading }
     }
 
+    protected fun launch(block: suspend () -> Unit) = vmScope.launch(exceptionHandler) {
+        block()
+    }
+
     protected fun launchLoading(block: suspend () -> Unit) = vmScope.launch(exceptionHandler) {
         isLoading(true)
         block()

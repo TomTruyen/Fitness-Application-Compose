@@ -103,7 +103,7 @@ class ProfileViewModel(
         )
     }
 
-    private fun logout() = launchLoading {
+    private fun logout() = launch {
         userRepository.logout()
 
         koinReloadProvider.reload()
