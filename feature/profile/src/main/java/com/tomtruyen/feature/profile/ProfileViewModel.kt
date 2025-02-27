@@ -1,7 +1,6 @@
 package com.tomtruyen.feature.profile
 
 import android.content.Context
-import androidx.lifecycle.viewModelScope
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.base.SnackbarMessage
 import com.tomtruyen.data.entities.Settings

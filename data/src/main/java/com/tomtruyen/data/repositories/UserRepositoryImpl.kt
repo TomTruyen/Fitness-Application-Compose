@@ -23,8 +23,6 @@ class UserRepositoryImpl: UserRepository() {
             this.email = email
             this.password = password
         }
-
-        login(email, password)
     }
 
     override suspend fun loginWithGoogle(idToken: String) {

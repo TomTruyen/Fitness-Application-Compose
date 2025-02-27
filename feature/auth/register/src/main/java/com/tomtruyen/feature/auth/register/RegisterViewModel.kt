@@ -25,6 +25,8 @@ class RegisterViewModel(
             email = uiState.value.email.orEmpty(),
             password = uiState.value.password.orEmpty()
         )
+
+        triggerEvent(RegisterUiEvent.NavigateToHome)
     }
 
     override fun onAction(action: RegisterUiAction) {

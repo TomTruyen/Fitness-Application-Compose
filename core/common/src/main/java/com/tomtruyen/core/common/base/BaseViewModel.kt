@@ -21,6 +21,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.github.jan.supabase.auth.exception.AuthRestException
+import io.github.jan.supabase.exceptions.RestException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +40,15 @@ abstract class BaseViewModel<UIState, UIAction, UIEvent>(
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
 
-        showSnackbar(SnackbarMessage.Error(throwable.message))
+        val message = when(throwable) {
+            is AuthRestException -> throwable.errorDescription
+            is RestException -> throwable.error
+            else -> throwable.localizedMessage ?: throwable.message
+        }
+
+        showSnackbar(SnackbarMessage.Error(message))
+
+        isLoading(false)
     }
 
     private var snackbarMessage by mutableStateOf<SnackbarMessage>(SnackbarMessage.Empty)
