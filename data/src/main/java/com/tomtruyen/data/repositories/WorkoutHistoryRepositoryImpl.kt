@@ -3,12 +3,8 @@ package com.tomtruyen.data.repositories
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.Query
 import com.tomtruyen.data.entities.WorkoutHistoryWithWorkout
-import com.tomtruyen.data.firebase.extensions.handleCompletionResult
 import com.tomtruyen.data.firebase.models.FirebaseCallback
-import com.tomtruyen.data.firebase.paging.WorkoutHistoryPagingSource
 import com.tomtruyen.data.firebase.models.WorkoutHistoriesResponse
 import com.tomtruyen.data.firebase.models.WorkoutHistoriesResponse.Companion.UPDATED_AT_ORDER_FIELD
 import com.tomtruyen.data.firebase.models.WorkoutHistoryResponse
@@ -16,6 +12,7 @@ import com.tomtruyen.data.firebase.models.WorkoutResponse
 import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import org.koin.java.KoinJavaComponent.inject
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -32,23 +29,25 @@ class WorkoutHistoryRepositoryImpl(
     ) = workoutHistoryDao.findWorkoutHistoriesByRange(start, end)
 
     override fun getWorkoutHistoriesPaginated(userId: String): Flow<PagingData<WorkoutHistoryWithWorkout>> {
-        val source = WorkoutHistoryPagingSource(
-            query = db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
-                .document(userId)
-                .collection(USER_WORKOUT_HISTORY_FIELD_NAME)
-                .orderBy(UPDATED_AT_ORDER_FIELD, Query.Direction.DESCENDING),
-            onSaveResponse = { histories ->
-                launchWithCacheTransactions {
-                    saveWorkoutHistoryResponses(histories)
-                }
-            },
-        )
+//        val source = WorkoutHistoryPagingSource(
+//            query = db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
+//                .document(userId)
+//                .collection(USER_WORKOUT_HISTORY_FIELD_NAME)
+//                .orderBy(UPDATED_AT_ORDER_FIELD, Query.Direction.DESCENDING),
+//            onSaveResponse = { histories ->
+//                launchWithCacheTransactions {
+//                    saveWorkoutHistoryResponses(histories)
+//                }
+//            },
+//        )
+//
+//        // PageSize is set to 1 because we only want to load the most recent MonthYear, in a lot of cases most users won't scroll to other months
+//        // Especially not to months that are years ago
+//        return Pager(config = PagingConfig(pageSize = 1)) {
+//            source
+//        }.flow
 
-        // PageSize is set to 1 because we only want to load the most recent MonthYear, in a lot of cases most users won't scroll to other months
-        // Especially not to months that are years ago
-        return Pager(config = PagingConfig(pageSize = 1)) {
-            source
-        }.flow
+        return flow {  }
     }
 
     override suspend fun finishWorkout(
@@ -56,33 +55,33 @@ class WorkoutHistoryRepositoryImpl(
         history: WorkoutHistoryResponse,
         callback: FirebaseCallback<Unit>
     ) {
-        val monthYear = LocalDate.now().format(DateTimeFormatter.ofPattern("MMMM-yyyy"))
-
-        val historyDocumentRef = db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
-            .document(userId)
-            .collection(USER_WORKOUT_HISTORY_FIELD_NAME)
-            .document(monthYear)
-
-        updateOrSet(
-            ref = historyDocumentRef,
-            setData = WorkoutHistoriesResponse(listOf(history)),
-            updateData = FieldValue.arrayUnion(history),
-            callback = callback
-        ) {
-            launchWithTransaction {
-                saveWorkoutHistoryResponses(listOf(history))
-            }
-
-            // Store the workout separately to be able to know what the "last workout" was for when performing next
-            // We don't check this for failure because it isn't breaking the flow of the app if it fails
-            db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
-                .document(userId)
-                .collection(USER_WORKOUT_HISTORY_WORKOUTS_COLLECTION_NAME)
-                .document(history.id)
-                .set(history)
-
-            callback.onSuccess(Unit)
-        }
+//        val monthYear = LocalDate.now().format(DateTimeFormatter.ofPattern("MMMM-yyyy"))
+//
+//        val historyDocumentRef = db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
+//            .document(userId)
+//            .collection(USER_WORKOUT_HISTORY_FIELD_NAME)
+//            .document(monthYear)
+//
+//        updateOrSet(
+//            ref = historyDocumentRef,
+//            setData = WorkoutHistoriesResponse(listOf(history)),
+//            updateData = FieldValue.arrayUnion(history),
+//            callback = callback
+//        ) {
+//            launchWithTransaction {
+//                saveWorkoutHistoryResponses(listOf(history))
+//            }
+//
+//            // Store the workout separately to be able to know what the "last workout" was for when performing next
+//            // We don't check this for failure because it isn't breaking the flow of the app if it fails
+//            db.collection(USER_WORKOUT_HISTORY_COLLECTION_NAME)
+//                .document(userId)
+//                .collection(USER_WORKOUT_HISTORY_WORKOUTS_COLLECTION_NAME)
+//                .document(history.id)
+//                .set(history)
+//
+//            callback.onSuccess(Unit)
+//        }
     }
 
     private suspend fun saveWorkoutHistoryResponses(responses: List<WorkoutHistoryResponse>) = transaction {

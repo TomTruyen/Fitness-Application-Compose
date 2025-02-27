@@ -3,8 +3,6 @@ package com.tomtruyen.data.entities
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.firebase.encoders.annotations.Encodable.Ignore
-import com.google.firebase.firestore.PropertyName
 import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
@@ -16,14 +14,11 @@ data class Exercise(
     val category: String = DEFAULT_DROPDOWN_VALUE,
     val equipment: String = DEFAULT_DROPDOWN_VALUE,
     val image: String? = null,
-    @PropertyName("image_detail")
     val imageDetail: String? = null,
     val type: String = ExerciseType.WEIGHT.value,
-    @PropertyName("description")
     val steps: List<String> = emptyList(),
     val isUserCreated: Boolean = false,
 ): BaseEntity, Parcelable {
-    @get:Ignore
     val displayName get() = buildString {
         append(name)
         if(equipment.isNotBlank()) {
@@ -31,7 +26,6 @@ data class Exercise(
         }
     }
 
-    @get:Ignore
     val typeEnum get() = ExerciseType.entries.firstOrNull { it.value.lowercase() == type } ?: ExerciseType.WEIGHT
 
     enum class ExerciseType(val value: String) {

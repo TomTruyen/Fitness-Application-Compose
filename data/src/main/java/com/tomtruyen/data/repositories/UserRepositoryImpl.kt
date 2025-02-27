@@ -1,57 +1,38 @@
 package com.tomtruyen.data.repositories
 
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import com.tomtruyen.data.entities.Settings
 import com.tomtruyen.data.firebase.auth.GoogleSignInHelper
-import com.tomtruyen.data.firebase.extensions.handleCompletionResult
-import com.tomtruyen.data.firebase.models.FirebaseCallback
-import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.Google
+import io.github.jan.supabase.auth.providers.builtin.Email
+import io.github.jan.supabase.auth.providers.builtin.IDToken
 import kotlinx.coroutines.launch
 
-class UserRepositoryImpl(
-    private val database: com.tomtruyen.data.AppDatabase,
-    private val settingsRepository: SettingsRepository
-): UserRepository() {
-    private val auth = Firebase.auth
-    override fun login(email: String, password: String, callback: FirebaseCallback<FirebaseUser?>) {
-        auth.signInWithEmailAndPassword(email, password)
-            .handleCompletionResult(
-                context = context,
-                callback = callback
-            ) { result ->
-                getUserData(callback)
-                callback.onSuccess(result.user)
-            }
+class UserRepositoryImpl: UserRepository() {
+    private val auth = supabase.auth
+
+    override suspend fun login(email: String, password: String) {
+        auth.signInWith(Email) {
+            this.email = email
+            this.password = password
+        }
     }
 
-    override fun register(email: String, password: String, callback: FirebaseCallback<FirebaseUser?>) {
-        auth.createUserWithEmailAndPassword(email, password)
-            .handleCompletionResult(
-                context = context,
-                callback = callback
-            ) { result ->
-                getUserData(callback)
-                callback.onSuccess(result.user)
-            }
+    override suspend fun register(email: String, password: String) {
+        auth.signUpWith(Email) {
+            this.email = email
+            this.password = password
+        }
     }
 
-    override fun loginWithGoogle(idToken: String, callback: FirebaseCallback<FirebaseUser?>) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .handleCompletionResult(
-                context = context,
-                callback = callback
-            ) { result ->
-                getUserData(callback)
-                callback.onSuccess(result.user)
-            }
+    override suspend fun loginWithGoogle(idToken: String) {
+        auth.signInWith(IDToken) {
+            this.idToken = idToken
+            provider = Google
+        }
     }
 
-    override fun logout() {
+    override suspend fun logout() {
         scope.launch {
             database.clearAllTables()
             GoogleSignInHelper.signOut(context)
@@ -60,21 +41,7 @@ class UserRepositoryImpl(
         auth.signOut()
     }
 
-    override fun isLoggedIn() = auth.currentUser != null
+    override fun isLoggedIn() = auth.currentUserOrNull() != null
 
-    override fun getUser() = auth.currentUser
-
-    private fun getUserData(callback: FirebaseCallback<FirebaseUser?>) = scope.launch {
-        val userId = getUser()?.uid ?: return@launch callback.onStopLoading()
-
-        settingsRepository.getSettings(
-            userId = userId,
-            refresh = true,
-            callback = object: FirebaseCallback<Settings> {
-                override fun onError(error: String?) {
-                    callback.onError(error)
-                }
-            }
-        )
-    }
+    override fun getUser() = auth.currentUserOrNull()
 }

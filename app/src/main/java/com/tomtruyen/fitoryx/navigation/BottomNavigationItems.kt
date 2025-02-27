@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.navigation
+package com.tomtruyen.fitoryx.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
@@ -7,7 +7,7 @@ import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.tomtruyen.fitnessapplication.R
+import com.tomtruyen.fitoryx.R
 import com.tomtruyen.navigation.Screen
 
 object BottomNavigation {

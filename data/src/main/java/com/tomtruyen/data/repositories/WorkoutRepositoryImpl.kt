@@ -1,7 +1,5 @@
 package com.tomtruyen.data.repositories
 
-import com.google.firebase.firestore.FieldValue
-import com.tomtruyen.data.firebase.extensions.handleCompletionResult
 import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.firebase.models.WorkoutResponse
 import com.tomtruyen.data.firebase.models.WorkoutsResponse
@@ -27,22 +25,22 @@ class WorkoutRepositoryImpl(
         refresh = refresh,
         onStopLoading = callback::onStopLoading
     ) {
-        db.collection(USER_WORKOUT_COLLECTION_NAME)
-            .document(userId)
-            .get()
-            .handleCompletionResult(
-                context = context,
-                callback = callback,
-            ) {
-                val workouts = it.toObject(WorkoutsResponse::class.java)?.data.orEmpty()
-
-                launchWithCacheTransactions {
-                    workoutDao.deleteAll()
-                    saveWorkoutResponses(workouts)
-                }
-
-                callback.onSuccess(workouts)
-            }
+//        db.collection(USER_WORKOUT_COLLECTION_NAME)
+//            .document(userId)
+//            .get()
+//            .handleCompletionResult(
+//                context = context,
+//                callback = callback,
+//            ) {
+//                val workouts = it.toObject(WorkoutsResponse::class.java)?.data.orEmpty()
+//
+//                launchWithCacheTransactions {
+//                    workoutDao.deleteAll()
+//                    saveWorkoutResponses(workouts)
+//                }
+//
+//                callback.onSuccess(workouts)
+//            }
     }
 
     override suspend fun saveWorkout(
@@ -51,29 +49,29 @@ class WorkoutRepositoryImpl(
         isUpdate: Boolean,
         callback: FirebaseCallback<Unit>
     ) = withContext(Dispatchers.IO) {
-        val workouts = workoutDao.findWorkouts().map {
-            it.toWorkoutResponse()
-        }.toMutableList().apply {
-            if(isUpdate) {
-                removeIf { it.id == workout.id }
-            }
-
-            add(workout)
-        }
-
-        db.collection(USER_WORKOUT_COLLECTION_NAME)
-            .document(userId)
-            .set(WorkoutsResponse(workouts))
-            .handleCompletionResult(
-                context = context,
-                callback = callback
-            ) {
-                launchWithTransaction {
-                    saveWorkoutResponses(workouts)
-                }
-
-                callback.onSuccess(Unit)
-            }
+//        val workouts = workoutDao.findWorkouts().map {
+//            it.toWorkoutResponse()
+//        }.toMutableList().apply {
+//            if(isUpdate) {
+//                removeIf { it.id == workout.id }
+//            }
+//
+//            add(workout)
+//        }
+//
+//        db.collection(USER_WORKOUT_COLLECTION_NAME)
+//            .document(userId)
+//            .set(WorkoutsResponse(workouts))
+//            .handleCompletionResult(
+//                context = context,
+//                callback = callback
+//            ) {
+//                launchWithTransaction {
+//                    saveWorkoutResponses(workouts)
+//                }
+//
+//                callback.onSuccess(Unit)
+//            }
     }
 
     override suspend fun deleteWorkout(
@@ -81,21 +79,21 @@ class WorkoutRepositoryImpl(
         workoutId: String,
         callback: FirebaseCallback<Unit>
     ) = withContext(Dispatchers.IO) {
-        val workout = workoutDao.findById(workoutId)?.toWorkoutResponse() ?: return@withContext callback.onStopLoading()
-
-        db.collection(USER_WORKOUT_COLLECTION_NAME)
-            .document(userId)
-            .update("data", FieldValue.arrayRemove(workout))
-            .handleCompletionResult(
-                context = context,
-                callback = callback
-            ) {
-                launchWithTransaction {
-                    workoutDao.deleteById(workoutId)
-                }
-
-                callback.onSuccess(Unit)
-            }
+//        val workout = workoutDao.findById(workoutId)?.toWorkoutResponse() ?: return@withContext callback.onStopLoading()
+//
+//        db.collection(USER_WORKOUT_COLLECTION_NAME)
+//            .document(userId)
+//            .update("data", FieldValue.arrayRemove(workout))
+//            .handleCompletionResult(
+//                context = context,
+//                callback = callback
+//            ) {
+//                launchWithTransaction {
+//                    workoutDao.deleteById(workoutId)
+//                }
+//
+//                callback.onSuccess(Unit)
+//            }
     }
 
     override suspend fun saveWorkoutResponses(responses: List<WorkoutResponse>) {

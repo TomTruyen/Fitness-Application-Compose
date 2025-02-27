@@ -54,7 +54,7 @@ class ExercisesViewModel(
         exerciseRepository.getExercises(refresh, callback)
 
         userRepository.getUser()?.let {
-            exerciseRepository.getUserExercises(it.uid, refresh, callback)
+            exerciseRepository.getUserExercises(it.id, refresh, callback)
         }
     }
 

@@ -1,6 +1,6 @@
 plugins {
     id("com.tomtruyen.android.library")
-    id("com.tomtruyen.firebase.library")
+    id("com.tomtruyen.supabase.library")
 }
 
 android {

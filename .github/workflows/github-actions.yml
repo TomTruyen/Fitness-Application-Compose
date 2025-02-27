@@ -21,11 +21,6 @@ jobs:
           distribution: 'adopt'
           server-id: 'github'
 
-      - name: Google Services JSON
-        env:
-          ENCODED_STRING: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: echo $ENCODED_STRING | base64 -di > app/google-services.json
-
       - name: Decode Keystore
         env:
           ENCODED_STRING: ${{ secrets.KEY_JKS }}

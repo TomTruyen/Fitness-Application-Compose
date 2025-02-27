@@ -7,7 +7,6 @@ import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.feature.exercises.manage.model.ManageExerciseMode
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -29,7 +28,7 @@ class ManageExerciseViewModel(
         observeEquipment()
     }
 
-    private fun findExercise() = launchLoading(Dispatchers.IO) {
+    private fun findExercise() = launchLoading {
         if(uiState.value.mode == ManageExerciseMode.CREATE || id == null) return@launchLoading
 
         exerciseRepository.findUserExerciseById(id)?.let {
@@ -73,7 +72,7 @@ class ManageExerciseViewModel(
     }
 
     private fun save() = vmScope.launch {
-        val userId = userRepository.getUser()?.uid ?: return@launch
+        val userId = userRepository.getUser()?.id ?: return@launch
 
         isLoading(true)
 

@@ -5,11 +5,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("com.tomtruyen.android.application")
     id("com.tomtruyen.android.application.compose")
-    id("com.tomtruyen.firebase.application")
+    id("com.tomtruyen.supabase.application")
 
     alias(libs.plugins.android.git.version)
-    alias(libs.plugins.google.crashlytics)
-    alias(libs.plugins.google.services)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.secrets.gradle)
 }
@@ -27,11 +25,11 @@ if(file(rootProject.projectDir.absolutePath + "/signing.gradle").exists()) {
 }
 
 android {
-    namespace = "com.tomtruyen.fitnessapplication"
+    namespace = "com.tomtruyen.fitoryx"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.tomtruyen.fitnessapplication"
+        applicationId = "com.tomtruyen.fitoryx"
         minSdk = 26
         targetSdk = 35
         versionName = androidGitVersion.name()

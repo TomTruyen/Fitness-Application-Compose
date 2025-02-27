@@ -13,7 +13,6 @@ import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -64,7 +63,7 @@ class ManageWorkoutViewModel(
         timer.stop()
     }
 
-    private fun findWorkout() = launchLoading(Dispatchers.IO) {
+    private fun findWorkout() = launchLoading {
         if(uiState.value.mode == ManageWorkoutMode.CREATE || id == null) return@launchLoading
 
         workoutRepository.findWorkoutById(id)?.let {
@@ -148,7 +147,7 @@ class ManageWorkoutViewModel(
     }
 
     private fun save() = vmScope.launch {
-        val userId = userRepository.getUser()?.uid ?: return@launch
+        val userId = userRepository.getUser()?.id ?: return@launch
 
         isLoading(true)
 

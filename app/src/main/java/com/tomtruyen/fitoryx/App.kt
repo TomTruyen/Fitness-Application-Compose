@@ -1,9 +1,9 @@
-package com.tomtruyen.fitnessapplication
+package com.tomtruyen.fitoryx
 
 import android.app.Application
 import com.tomtruyen.data.di.databaseModule
 import com.tomtruyen.data.di.repositoryModule
-import com.tomtruyen.fitnessapplication.di.appModule
+import com.tomtruyen.fitoryx.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.loadKoinModules

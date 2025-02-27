@@ -1,11 +1,11 @@
 import com.android.build.api.dsl.ApplicationExtension
-import com.tomtruyen.buildlogic.configureFirebase
+import com.tomtruyen.buildlogic.configureSupabase
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
 
-class FirebaseApplicationConventionPlugin: Plugin<Project> {
+class SupabaseApplicationConventionPlugin: Plugin<Project> {
     override fun apply(target: Project) = with(target) {
-        configureFirebase(extensions.getByType<ApplicationExtension>())
+        configureSupabase(extensions.getByType<ApplicationExtension>())
     }
 }

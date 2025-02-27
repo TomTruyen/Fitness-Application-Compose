@@ -38,7 +38,7 @@ class WorkoutDetailViewModel(
     }
 
     private fun delete() = vmScope.launch {
-        val userId = userRepository.getUser()?.uid ?: return@launch
+        val userId = userRepository.getUser()?.id ?: return@launch
 
         isLoading(true)
 

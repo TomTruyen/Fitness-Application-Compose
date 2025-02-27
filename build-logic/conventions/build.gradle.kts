@@ -27,7 +27,7 @@ gradlePlugin {
     plugins {
         registerApplicationConventionPlugins()
         registerLibraryConventionPlugins()
-        registerFirebaseConventionPlugin()
+        registerSupabaseConventionPlugin()
     }
 }
 
@@ -55,14 +55,14 @@ fun NamedDomainObjectContainer<PluginDeclaration>.registerLibraryConventionPlugi
     }
 }
 
-fun NamedDomainObjectContainer<PluginDeclaration>.registerFirebaseConventionPlugin() {
-    register("firebaseLibrary") {
-        id = "com.tomtruyen.firebase.library"
-        implementationClass = "FirebaseLibraryConventionPlugin"
+fun NamedDomainObjectContainer<PluginDeclaration>.registerSupabaseConventionPlugin() {
+    register("supabaseLibrary") {
+        id = "com.tomtruyen.supabase.library"
+        implementationClass = "SupabaseLibraryConventionPlugin"
     }
 
-    register("firebaseLibraryCompose") {
-        id = "com.tomtruyen.firebase.application"
-        implementationClass = "FirebaseApplicationConventionPlugin"
+    register("supabaseLibraryCompose") {
+        id = "com.tomtruyen.supabase.application"
+        implementationClass = "SupabaseApplicationConventionPlugin"
     }
 }

@@ -1,7 +1,5 @@
 plugins {
     alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.google.crashlytics) apply false
-    alias(libs.plugins.google.services) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose.compiler) apply false
     alias(libs.plugins.secrets.gradle) apply false

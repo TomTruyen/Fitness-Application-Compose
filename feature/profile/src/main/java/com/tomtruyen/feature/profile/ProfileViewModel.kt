@@ -29,7 +29,7 @@ class ProfileViewModel(
     }
 
     private fun fetchSettings(refresh: Boolean = false) = vmScope.launch {
-        val userId = userRepository.getUser()?.uid ?: return@launch
+        val userId = userRepository.getUser()?.id ?: return@launch
 
         updateState {
             it.copy(
@@ -77,7 +77,7 @@ class ProfileViewModel(
     fun saveSettings(context: Context) {
         if(uiState.value.settings == uiState.value.initialSettings) return
 
-        val userId = userRepository.getUser()?.uid ?: return
+        val userId = userRepository.getUser()?.id ?: return
         val settings = uiState.value.settings
 
         isLoading(true)
@@ -103,7 +103,7 @@ class ProfileViewModel(
         )
     }
 
-    private fun logout() {
+    private fun logout() = launchLoading {
         userRepository.logout()
 
         koinReloadProvider.reload()

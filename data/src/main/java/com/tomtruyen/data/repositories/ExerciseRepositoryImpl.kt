@@ -1,10 +1,7 @@
 package com.tomtruyen.data.repositories
 
-import android.util.Log
-import com.google.firebase.firestore.FieldValue
 import com.tomtruyen.data.dao.ExerciseDao
 import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.data.firebase.extensions.handleCompletionResult
 import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.firebase.models.ExercisesResponse
 import com.tomtruyen.data.firebase.models.UserExercisesResponse
@@ -34,22 +31,22 @@ class ExerciseRepositoryImpl(
         refresh = refresh,
         onStopLoading = callback::onStopLoading
     ) {
-        db.collection(COLLECTION_NAME)
-            .document(DOCUMENT_NAME)
-            .get()
-            .handleCompletionResult(
-                context = context,
-                callback = callback
-            ) {
-                val exercises = it.toObject(ExercisesResponse::class.java)?.data.orEmpty()
-
-                launchWithCacheTransactions {
-                    exerciseDao.deleteAllNonUserExercises()
-                    exerciseDao.saveAll(exercises)
-                }
-
-                callback.onSuccess(exercises)
-            }
+//        db.collection(COLLECTION_NAME)
+//            .document(DOCUMENT_NAME)
+//            .get()
+//            .handleCompletionResult(
+//                context = context,
+//                callback = callback
+//            ) {
+//                val exercises = it.toObject(ExercisesResponse::class.java)?.data.orEmpty()
+//
+//                launchWithCacheTransactions {
+//                    exerciseDao.deleteAllNonUserExercises()
+//                    exerciseDao.saveAll(exercises)
+//                }
+//
+//                callback.onSuccess(exercises)
+//            }
     }
 
     override suspend fun getUserExercises(userId: String, refresh: Boolean, callback: FirebaseCallback<List<Exercise>>) = fetch(
@@ -57,22 +54,22 @@ class ExerciseRepositoryImpl(
         onStopLoading = callback::onStopLoading,
         overrideIdentifier = USER_EXERCISE_COLLECTION_NAME
     ) {
-        db.collection(USER_EXERCISE_COLLECTION_NAME)
-            .document(userId)
-            .get()
-            .handleCompletionResult(
-                context = context,
-                callback = callback
-            ) {
-                val exercises = it.toObject(UserExercisesResponse::class.java)?.exercises.orEmpty()
-
-                launchWithCacheTransactions(USER_EXERCISE_COLLECTION_NAME) {
-                    exerciseDao.deleteAllUserExercises()
-                    exerciseDao.saveAll(exercises)
-                }
-
-                callback.onSuccess(exercises)
-            }
+//        db.collection(USER_EXERCISE_COLLECTION_NAME)
+//            .document(userId)
+//            .get()
+//            .handleCompletionResult(
+//                context = context,
+//                callback = callback
+//            ) {
+//                val exercises = it.toObject(UserExercisesResponse::class.java)?.exercises.orEmpty()
+//
+//                launchWithCacheTransactions(USER_EXERCISE_COLLECTION_NAME) {
+//                    exerciseDao.deleteAllUserExercises()
+//                    exerciseDao.saveAll(exercises)
+//                }
+//
+//                callback.onSuccess(exercises)
+//            }
     }
 
     override suspend fun saveUserExercise(
@@ -81,27 +78,27 @@ class ExerciseRepositoryImpl(
         isUpdate: Boolean,
         callback: FirebaseCallback<Unit>
     ) = withContext(Dispatchers.IO) {
-        val exercises = exerciseDao.findAllUserExercises().toMutableList().apply {
-            if(isUpdate) {
-                removeIf { it.id == exercise.id }
-            }
-
-            add(exercise)
-        }
-
-        db.collection(USER_EXERCISE_COLLECTION_NAME)
-            .document(userId)
-            .set(UserExercisesResponse(exercises))
-            .handleCompletionResult(
-                context = context,
-                callback = callback
-            ) {
-                launchWithTransaction {
-                    exerciseDao.save(exercise)
-                }
-
-                callback.onSuccess(Unit)
-            }
+//        val exercises = exerciseDao.findAllUserExercises().toMutableList().apply {
+//            if(isUpdate) {
+//                removeIf { it.id == exercise.id }
+//            }
+//
+//            add(exercise)
+//        }
+//
+//        db.collection(USER_EXERCISE_COLLECTION_NAME)
+//            .document(userId)
+//            .set(UserExercisesResponse(exercises))
+//            .handleCompletionResult(
+//                context = context,
+//                callback = callback
+//            ) {
+//                launchWithTransaction {
+//                    exerciseDao.save(exercise)
+//                }
+//
+//                callback.onSuccess(Unit)
+//            }
     }
 
     override suspend fun deleteUserExercise(
@@ -109,22 +106,22 @@ class ExerciseRepositoryImpl(
         exerciseId: String,
         callback: FirebaseCallback<Unit>
     ) = withContext(Dispatchers.IO) {
-        val exercise = exerciseDao.findUserExerciseById(exerciseId) ?: return@withContext callback.onStopLoading()
-
-        // No need to check if document exists, because if it doesn't then this exercise shouldn't exist either
-        db.collection(USER_EXERCISE_COLLECTION_NAME)
-            .document(userId)
-            .update("exercises", FieldValue.arrayRemove(exercise))
-            .handleCompletionResult(
-                context = context,
-                callback = callback
-            ) {
-                launchWithTransaction {
-                    exerciseDao.deleteUserExerciseById(exerciseId)
-                }
-
-                callback.onSuccess(Unit)
-            }
+//        val exercise = exerciseDao.findUserExerciseById(exerciseId) ?: return@withContext callback.onStopLoading()
+//
+//        // No need to check if document exists, because if it doesn't then this exercise shouldn't exist either
+//        db.collection(USER_EXERCISE_COLLECTION_NAME)
+//            .document(userId)
+//            .update("exercises", FieldValue.arrayRemove(exercise))
+//            .handleCompletionResult(
+//                context = context,
+//                callback = callback
+//            ) {
+//                launchWithTransaction {
+//                    exerciseDao.deleteUserExerciseById(exerciseId)
+//                }
+//
+//                callback.onSuccess(Unit)
+//            }
     }
 
     companion object {

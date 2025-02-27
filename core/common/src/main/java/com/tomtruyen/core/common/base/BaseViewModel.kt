@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,13 +29,17 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class BaseViewModel<UIState, UIAction, UIEvent>(
     initialState: UIState
 ): ViewModel() {
     protected val vmScope = viewModelScope
+
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        throwable.printStackTrace()
+
+        showSnackbar(SnackbarMessage.Error(throwable.message))
+    }
 
     private var snackbarMessage by mutableStateOf<SnackbarMessage>(SnackbarMessage.Empty)
 
@@ -51,7 +56,7 @@ abstract class BaseViewModel<UIState, UIAction, UIEvent>(
         _loading.update { loading }
     }
 
-    protected fun launchLoading(context: CoroutineContext = EmptyCoroutineContext, block: suspend () -> Unit) = vmScope.launch(context) {
+    protected fun launchLoading(block: suspend () -> Unit) = vmScope.launch(exceptionHandler) {
         isLoading(true)
         block()
         isLoading(false)

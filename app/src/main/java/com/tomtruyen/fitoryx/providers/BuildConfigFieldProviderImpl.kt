@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.providers
+package com.tomtruyen.fitoryx.providers
 
 import com.tomtruyen.models.providers.BuildConfigFieldProvider
 

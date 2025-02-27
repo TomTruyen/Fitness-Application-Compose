@@ -1,9 +1,7 @@
 package com.tomtruyen.feature.auth.login
 
-import com.google.firebase.auth.FirebaseUser
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.base.SnackbarMessage
-import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -13,22 +11,6 @@ class LoginViewModel(
 ): BaseViewModel<LoginUiState, LoginUiAction, LoginUiEvent>(
     initialState = LoginUiState()
 ) {
-    private val callback by lazy {
-        object: FirebaseCallback<FirebaseUser?> {
-            override fun onSuccess(value: FirebaseUser?) {
-                triggerEvent(LoginUiEvent.NavigateToHome)
-            }
-
-            override fun onError(error: String?) {
-                showSnackbar(SnackbarMessage.Error(error))
-            }
-
-            override fun onStopLoading() {
-                isLoading(false)
-            }
-        }
-    }
-
     init {
         observeLoading()
     }
@@ -39,18 +21,25 @@ class LoginViewModel(
         }
     }
 
-    private fun login() {
-        isLoading(true)
+    private fun login() = launchLoading {
         userRepository.login(
             email = uiState.value.email.orEmpty(),
             password = uiState.value.password.orEmpty(),
-            callback = callback
         )
+
+        onAuth()
     }
 
-    private fun loginWithGoogle(idToken: String) {
-        isLoading(true)
-        userRepository.loginWithGoogle(idToken, callback)
+    private fun loginWithGoogle(idToken: String) = launchLoading {
+        userRepository.loginWithGoogle(idToken)
+
+        onAuth()
+    }
+
+    private fun onAuth() {
+        // TODO: Handle logic to call the SettingsRepository.getSettings post auth
+
+        triggerEvent(LoginUiEvent.NavigateToHome)
     }
 
     override fun onAction(action: LoginUiAction) {

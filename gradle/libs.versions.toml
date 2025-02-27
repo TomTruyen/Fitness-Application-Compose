@@ -14,20 +14,20 @@ appcompat = "1.7.0"
 coil-kt-compose = "2.7.0"
 espresso-core = "3.6.1"
 google-crashlytics-plugin = "3.0.3"
-google-firebase-bom = "33.9.0"
 google-identity-googleid = "1.1.1"
 google-ksp = "2.1.10-1.0.30"
-google-services = "4.4.2"
 insert-koin-compose = "4.0.2"
 junit = "4.13.2"
 junit-version = "1.2.1"
 kotlin = "2.1.10"
 kotlinx-coroutines = "1.10.1"
 kotlinx-serialization-json = "1.8.0"
+ktor = "3.1.1"
 material = "1.12.0"
 reorderable = "2.4.3"
 secrets-gradle = "2.0.1"
 squareup-leakcanary = "2.14"
+supabase-kt = "3.1.1"
 version-catalog-update = "0.8.5"
 
 [libraries]
@@ -55,12 +55,7 @@ androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.r
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx-room" }
 coil-kt-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-kt-compose" }
-google-firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
-google-firebase-auth = { module = "com.google.firebase:firebase-auth-ktx" }
-google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "google-firebase-bom" }
-google-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
-google-firebase-encoders = { module = "com.google.firebase:firebase-encoders" }
-google-firebase-firestore = { module = "com.google.firebase:firebase-firestore-ktx" }
+
 google-identity-googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "google-identity-googleid" }
 google-ksp-plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "google-ksp" }
 insert-koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "insert-koin-compose" }
@@ -74,13 +69,18 @@ material = { module = "com.google.android.material:material", version.ref = "mat
 reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 squareup-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "squareup-leakcanary" }
 
+# Supabase
+ktor = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+supabase-bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "supabase-kt" }
+supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
+supabase-auth = { module = "io.github.jan-tennert.supabase:auth-kt" }
+supabase-storage = { module = "io.github.jan-tennert.supabase:storage-kt" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-git-version = { id = "com.gladed.androidgitversion", version.ref = "android-git-version" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-google-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "google-crashlytics-plugin" }
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "google-ksp" }
-google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

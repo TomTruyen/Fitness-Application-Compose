@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.navigation
+package com.tomtruyen.fitoryx.navigation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState

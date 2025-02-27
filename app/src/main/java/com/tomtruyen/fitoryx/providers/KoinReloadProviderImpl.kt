@@ -1,6 +1,6 @@
-package com.tomtruyen.fitnessapplication.providers
+package com.tomtruyen.fitoryx.providers
 
-import com.tomtruyen.fitnessapplication.App
+import com.tomtruyen.fitoryx.App
 import com.tomtruyen.models.providers.KoinReloadProvider
 
 class KoinReloadProviderImpl: KoinReloadProvider {

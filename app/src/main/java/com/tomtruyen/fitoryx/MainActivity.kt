@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication
+package com.tomtruyen.fitoryx
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -20,7 +20,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.tomtruyen.data.repositories.interfaces.UserRepository
-import com.tomtruyen.fitnessapplication.navigation.MainBottomNavigation
+import com.tomtruyen.fitoryx.navigation.MainBottomNavigation
 import com.tomtruyen.core.designsystem.theme.FitnessApplicationTheme
 import com.tomtruyen.feature.auth.login.LoginScreen
 import com.tomtruyen.feature.auth.register.RegisterScreen
