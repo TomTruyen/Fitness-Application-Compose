@@ -10,7 +10,7 @@ sealed class ExercisesUiAction {
 
     data object OnFilterClicked : ExercisesUiAction()
 
-    data object OnAddClicked: ExercisesUiAction()
+    data object OnAddClicked : ExercisesUiAction()
 
     data class OnSearchQueryChanged(val query: String) : ExercisesUiAction()
 
@@ -22,9 +22,10 @@ sealed class ExercisesUiAction {
 
     data class OnRemoveFilterClicked(val filter: FilterOption) : ExercisesUiAction()
 
-    data class OnExerciseClicked(val exercise: ExerciseWithCategoryAndEquipment) : ExercisesUiAction()
+    data class OnExerciseClicked(val exercise: ExerciseWithCategoryAndEquipment) :
+        ExercisesUiAction()
 
     data object OnAddExerciseToWorkoutClicked : ExercisesUiAction()
 
-    data object OnRefresh: ExercisesUiAction()
+    data object OnRefresh : ExercisesUiAction()
 }

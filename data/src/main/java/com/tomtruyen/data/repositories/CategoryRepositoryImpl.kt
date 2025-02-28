@@ -7,7 +7,7 @@ import io.github.jan.supabase.postgrest.from
 
 class CategoryRepositoryImpl(
     private val categoryDao: CategoryDao
-): CategoryRepository() {
+) : CategoryRepository() {
     override fun findCategories() = categoryDao.findCategories()
 
     override suspend fun getCategories() {

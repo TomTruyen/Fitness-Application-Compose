@@ -30,18 +30,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.ui.Buttons
-import com.tomtruyen.core.ui.listitems.ListItem
-import com.tomtruyen.core.ui.listitems.SwitchListItem
+import com.tomtruyen.core.common.providers.BuildConfigFieldProvider
 import com.tomtruyen.core.common.utils.EmailUtils
 import com.tomtruyen.core.common.utils.TimeUtils
+import com.tomtruyen.core.designsystem.Dimens
+import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.dialogs.RestAlertDialog
 import com.tomtruyen.core.ui.dialogs.UnitAlertDialog
+import com.tomtruyen.core.ui.listitems.ListItem
+import com.tomtruyen.core.ui.listitems.SwitchListItem
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.data.entities.Settings
-import com.tomtruyen.core.common.providers.BuildConfigFieldProvider
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -64,7 +64,7 @@ fun ProfileScreen(
 
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { navigationType ->
-            when(navigationType) {
+            when (navigationType) {
                 is ProfileUiEvent.Logout -> {
                     navController.navigate(Screen.Auth.Login)
                 }
@@ -97,14 +97,15 @@ fun ProfileScreenLayout(
     var unitDialogVisible by remember { mutableStateOf(false) }
     var restDialogVisible by remember { mutableStateOf(false) }
 
-    val emailLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
+    val emailLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
     Scaffold(
         snackbarHost = snackbarHost,
         topBar = {
             Toolbar(
                 title = stringResource(id = R.string.title_profile),
-                navController =  navController,
+                navController = navController,
             )
         },
     ) {
@@ -231,7 +232,7 @@ fun ProfileScreenLayout(
                 }
             }
 
-            if(unitDialogVisible) {
+            if (unitDialogVisible) {
                 UnitAlertDialog(
                     units = Settings.UnitType.entries.map { it.value },
                     onDismiss = {
@@ -245,7 +246,7 @@ fun ProfileScreenLayout(
                 )
             }
 
-            if(restDialogVisible) {
+            if (restDialogVisible) {
                 RestAlertDialog(
                     onDismiss = {
                         restDialogVisible = false

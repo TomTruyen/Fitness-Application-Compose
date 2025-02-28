@@ -29,14 +29,14 @@ fun Toolbar(
     onNavigateUp: () -> Unit = { navController.popBackStack() },
     actions: @Composable RowScope.() -> Unit = {},
 ) {
-   Toolbar(
-       title = {
-           ToolbarTitle(title = title)
-       },
-       navController = navController,
-       onNavigateUp = onNavigateUp,
-       actions = actions
-   )
+    Toolbar(
+        title = {
+            ToolbarTitle(title = title)
+        },
+        navController = navController,
+        onNavigateUp = onNavigateUp,
+        actions = actions
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +52,7 @@ fun Toolbar(
     TopAppBar(
         title = title,
         navigationIcon = {
-            if(navController.shouldShowNavigationIcon(isBottomBarVisible)) {
+            if (navController.shouldShowNavigationIcon(isBottomBarVisible)) {
                 IconButton(
                     onClick = {
                         onNavigateUp()

@@ -3,7 +3,7 @@ package com.tomtruyen.data.repositories.interfaces
 import com.tomtruyen.data.repositories.BaseRepository
 import io.github.jan.supabase.auth.user.UserInfo
 
-abstract class UserRepository: BaseRepository() {
+abstract class UserRepository : BaseRepository() {
     override val identifier: String
         get() = "users"
 

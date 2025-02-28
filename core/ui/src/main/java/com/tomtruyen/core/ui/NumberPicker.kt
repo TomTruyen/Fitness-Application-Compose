@@ -86,44 +86,58 @@ fun <T> NumberPicker(
 
     val coercedAnimatedOffset = animatedOffset.value % halfNumbersColumnHeightPx
 
-    val indexOfElement = getItemIndexForOffset(list, value, animatedOffset.value, halfNumbersColumnHeightPx)
+    val indexOfElement =
+        getItemIndexForOffset(list, value, animatedOffset.value, halfNumbersColumnHeightPx)
 
     var dividersWidth by remember { mutableStateOf(0.dp) }
 
     Layout(
         modifier = modifier
             .then(
-                if(enabled) {
-                    Modifier.draggable(
-                        orientation = Orientation.Vertical,
-                        state = rememberDraggableState { deltaY ->
-                            coroutineScope.launch {
-                                animatedOffset.snapTo(animatedOffset.value + deltaY)
-                            }
-                        },
-                        onDragStopped = { velocity ->
-                            coroutineScope.launch {
-                                val endValue = animatedOffset.fling(
-                                    initialVelocity = velocity,
-                                    animationSpec = exponentialDecay(frictionMultiplier = 1f),
-                                    adjustTarget = { target ->
-                                        val coercedTarget = target % halfNumbersColumnHeightPx
-                                        val coercedAnchors =
-                                            listOf(-halfNumbersColumnHeightPx, 0f, halfNumbersColumnHeightPx)
-                                        val coercedPoint = coercedAnchors.minByOrNull { abs(it - coercedTarget) }!!
-                                        val base = halfNumbersColumnHeightPx * (target / halfNumbersColumnHeightPx).toInt()
-                                        coercedPoint + base
-                                    }
-                                ).endState.value
+                if (enabled) {
+                    Modifier
+                        .draggable(
+                            orientation = Orientation.Vertical,
+                            state = rememberDraggableState { deltaY ->
+                                coroutineScope.launch {
+                                    animatedOffset.snapTo(animatedOffset.value + deltaY)
+                                }
+                            },
+                            onDragStopped = { velocity ->
+                                coroutineScope.launch {
+                                    val endValue = animatedOffset.fling(
+                                        initialVelocity = velocity,
+                                        animationSpec = exponentialDecay(frictionMultiplier = 1f),
+                                        adjustTarget = { target ->
+                                            val coercedTarget = target % halfNumbersColumnHeightPx
+                                            val coercedAnchors =
+                                                listOf(
+                                                    -halfNumbersColumnHeightPx,
+                                                    0f,
+                                                    halfNumbersColumnHeightPx
+                                                )
+                                            val coercedPoint =
+                                                coercedAnchors.minByOrNull { abs(it - coercedTarget) }!!
+                                            val base =
+                                                halfNumbersColumnHeightPx * (target / halfNumbersColumnHeightPx).toInt()
+                                            coercedPoint + base
+                                        }
+                                    ).endState.value
 
-                                val result = list.elementAt(
-                                    getItemIndexForOffset(list, value, endValue, halfNumbersColumnHeightPx)
-                                )
-                                onValueChange(result)
-                                animatedOffset.snapTo(0f)
+                                    val result = list.elementAt(
+                                        getItemIndexForOffset(
+                                            list,
+                                            value,
+                                            endValue,
+                                            halfNumbersColumnHeightPx
+                                        )
+                                    )
+                                    onValueChange(result)
+                                    animatedOffset.snapTo(0f)
+                                }
                             }
-                        }
-                    ).alpha(1f)
+                        )
+                        .alpha(1f)
                 } else {
                     Modifier.alpha(0.5f)
                 }
@@ -142,7 +156,9 @@ fun <T> NumberPicker(
                     .padding(vertical = verticalMargin, horizontal = 20.dp)
                     .offset { IntOffset(x = 0, y = coercedAnimatedOffset.roundToInt()) }
             ) {
-                val baseLabelModifier = Modifier.height(numbersColumnHeight.div(totalVisibleItems)).align(Alignment.Center)
+                val baseLabelModifier = Modifier
+                    .height(numbersColumnHeight.div(totalVisibleItems))
+                    .align(Alignment.Center)
                 val scalingRange = maxScale - minScale
                 val scrollProgress = abs(coercedAnimatedOffset) / halfNumbersColumnHeightPx
                 val middleLabelScale = maxScale - scalingRange * scrollProgress
@@ -159,7 +175,12 @@ fun <T> NumberPicker(
                         style = textStyle,
                         modifier = baseLabelModifier
                             .offset(y = -halfNumbersColumnHeight)
-                            .alpha(maxOf(minimumAlpha, coercedAnimatedOffset / halfNumbersColumnHeightPx)),
+                            .alpha(
+                                maxOf(
+                                    minimumAlpha,
+                                    coercedAnimatedOffset / halfNumbersColumnHeightPx
+                                )
+                            ),
                         labelScale = topLabelScale
                     )
                 }
@@ -183,7 +204,12 @@ fun <T> NumberPicker(
                         style = textStyle,
                         modifier = baseLabelModifier
                             .offset(y = halfNumbersColumnHeight)
-                            .alpha(maxOf(minimumAlpha, -coercedAnimatedOffset / halfNumbersColumnHeightPx)),
+                            .alpha(
+                                maxOf(
+                                    minimumAlpha,
+                                    -coercedAnimatedOffset / halfNumbersColumnHeightPx
+                                )
+                            ),
                         labelScale = bottomLabelScale
                     )
                 }
@@ -210,10 +236,11 @@ fun <T> NumberPicker(
             .toDp()
 
         // Set the size of the layout as big as it can
-        layout(dividersWidth.toPx().toInt(), placeables
-            .sumOf {
-                it.height
-            }
+        layout(
+            dividersWidth.toPx().toInt(), placeables
+                .sumOf {
+                    it.height
+                }
         ) {
             // Track the y co-ord we have placed children up to
             var yPosition = 0
@@ -234,7 +261,8 @@ fun <T> NumberPicker(
 @Composable
 private fun springBackEasing(x: Float): Float {
     // You can adjust the damping ratio and stiffness as needed for your desired easing effect
-    return animateFloatAsState(targetValue = x, animationSpec = spring(dampingRatio = 0.8f, stiffness = 100f),
+    return animateFloatAsState(
+        targetValue = x, animationSpec = spring(dampingRatio = 0.8f, stiffness = 100f),
         label = ""
     ).value
 }
@@ -242,7 +270,8 @@ private fun springBackEasing(x: Float): Float {
 @Composable
 private fun springForwardEasing(x: Float): Float {
     // You can adjust the damping ratio and stiffness as needed for your desired easing effect
-    return animateFloatAsState(targetValue = x, animationSpec = spring(dampingRatio = 0.8f, stiffness = 100f),
+    return animateFloatAsState(
+        targetValue = x, animationSpec = spring(dampingRatio = 0.8f, stiffness = 100f),
         label = ""
     ).value
 }

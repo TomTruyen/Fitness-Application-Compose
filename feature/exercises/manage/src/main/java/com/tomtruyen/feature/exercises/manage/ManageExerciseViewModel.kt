@@ -18,7 +18,7 @@ class ManageExerciseViewModel(
     private val categoryRepository: CategoryRepository,
     private val equipmentRepository: EquipmentRepository,
     private val userRepository: UserRepository
-): BaseViewModel<ManageExerciseUiState, ManageExerciseUiAction, ManageExerciseUiEvent>(
+) : BaseViewModel<ManageExerciseUiState, ManageExerciseUiAction, ManageExerciseUiEvent>(
     initialState = ManageExerciseUiState(
         mode = ManageExerciseMode.fromArgs(id)
     )
@@ -32,7 +32,7 @@ class ManageExerciseViewModel(
     }
 
     private fun findExercise() = launchLoading {
-        if(uiState.value.mode == ManageExerciseMode.CREATE || id == null) return@launchLoading
+        if (uiState.value.mode == ManageExerciseMode.CREATE || id == null) return@launchLoading
 
         exerciseRepository.findExerciseById(id)?.let {
             updateAndGetState { state ->
@@ -86,7 +86,7 @@ class ManageExerciseViewModel(
     }
 
     override fun onAction(action: ManageExerciseUiAction) {
-        when(action) {
+        when (action) {
             is ManageExerciseUiAction.OnExerciseNameChanged -> updateState {
                 it.copy(
                     fullExercise = it.fullExercise.copy(
@@ -97,6 +97,7 @@ class ManageExerciseViewModel(
                     nameValidationResult = it.validateName(action.name)
                 )
             }
+
             is ManageExerciseUiAction.OnCategoryChanged -> updateState {
                 it.copy(
                     fullExercise = it.fullExercise.copy(
@@ -104,6 +105,7 @@ class ManageExerciseViewModel(
                     ),
                 )
             }
+
             is ManageExerciseUiAction.OnEquipmentChanged -> updateState {
                 it.copy(
                     fullExercise = it.fullExercise.copy(
@@ -111,6 +113,7 @@ class ManageExerciseViewModel(
                     ),
                 )
             }
+
             is ManageExerciseUiAction.OnTypeChanged -> updateState {
                 it.copy(
                     fullExercise = it.fullExercise.copy(
@@ -120,6 +123,7 @@ class ManageExerciseViewModel(
                     ),
                 )
             }
+
             is ManageExerciseUiAction.OnSaveClicked -> save()
         }
     }

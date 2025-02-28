@@ -23,11 +23,11 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.credentials.CustomCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.common.R as CommonR
 import com.tomtruyen.core.common.utils.GoogleSignInHelper
+import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.LavenderMist
 import kotlinx.coroutines.launch
+import com.tomtruyen.core.common.R as CommonR
 
 object SocialButtons {
     @Composable
@@ -62,13 +62,14 @@ object SocialButtons {
                             context = context
                         )
 
-                        when(val credential = result.credential) {
+                        when (val credential = result.credential) {
                             is CustomCredential -> {
-                                if(credential.type != GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                                if (credential.type != GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                                     throw Exception("Invalid credential type for CustomCredential: ${credential.type}")
                                 }
 
-                                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                                val googleIdTokenCredential =
+                                    GoogleIdTokenCredential.createFrom(credential.data)
 
                                 onSuccess(googleIdTokenCredential.idToken)
                             }

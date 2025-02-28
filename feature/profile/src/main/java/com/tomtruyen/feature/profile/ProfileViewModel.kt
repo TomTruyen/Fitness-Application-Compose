@@ -1,9 +1,9 @@
 package com.tomtruyen.feature.profile
 
 import com.tomtruyen.core.common.base.BaseViewModel
+import com.tomtruyen.core.common.providers.KoinReloadProvider
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
-import com.tomtruyen.core.common.providers.KoinReloadProvider
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -13,7 +13,7 @@ class ProfileViewModel(
     private val userRepository: UserRepository,
     private val settingsRepository: SettingsRepository,
     private val koinReloadProvider: KoinReloadProvider,
-): BaseViewModel<ProfileUiState, ProfileUiAction, ProfileUiEvent>(
+) : BaseViewModel<ProfileUiState, ProfileUiAction, ProfileUiEvent>(
     initialState = ProfileUiState()
 ) {
     init {
@@ -60,7 +60,7 @@ class ProfileViewModel(
     }
 
     fun saveSettings() = launchLoading {
-        if(uiState.value.settings == uiState.value.initialSettings) return@launchLoading
+        if (uiState.value.settings == uiState.value.initialSettings) return@launchLoading
         val userId = userRepository.getUser()?.id ?: return@launchLoading
 
         val settings = uiState.value.settings
@@ -84,12 +84,15 @@ class ProfileViewModel(
             is ProfileUiAction.UnitChanged -> updateState {
                 it.copy(settings = it.settings.copy(unit = action.value))
             }
+
             is ProfileUiAction.RestChanged -> updateState {
                 it.copy(settings = it.settings.copy(rest = action.value))
             }
+
             is ProfileUiAction.RestEnabledChanged -> updateState {
                 it.copy(settings = it.settings.copy(restEnabled = action.value))
             }
+
             is ProfileUiAction.RestVibrationEnabledChanged -> updateState {
                 it.copy(settings = it.settings.copy(restVibrationEnabled = action.value))
             }

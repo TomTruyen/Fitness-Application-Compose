@@ -5,7 +5,6 @@ import com.tomtruyen.core.validation.ValidationResult
 import com.tomtruyen.core.validation.rules.RequiredRule
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
-import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.feature.exercises.manage.model.ManageExerciseMode
 

@@ -21,7 +21,7 @@ import org.koin.compose.koinInject
 @Composable
 fun Avatar(
     imageUrl: String?,
-    modifier: Modifier  = Modifier,
+    modifier: Modifier = Modifier,
     contentDescription: String? = null,
     size: Dp = 40.dp,
     backgroundColor: Color = MaterialTheme.colorScheme.surface

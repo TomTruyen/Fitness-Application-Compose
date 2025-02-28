@@ -56,14 +56,17 @@ fun MainBottomNavigation(
             containerColor = Color.Transparent,
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(top = Dimens.Small),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 BottomNavigation.items.forEach { item ->
                     val selected by remember(backstackEntry) {
-                        mutableStateOf(backstackEntry?.destination?.hasRoute(item.screen::class) ?: false)
+                        mutableStateOf(
+                            backstackEntry?.destination?.hasRoute(item.screen::class) ?: false
+                        )
                     }
 
                     BottomBarItem(

@@ -28,10 +28,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.ui.Buttons
-import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.designsystem.theme.BlueGrey
+import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.LoadingContainer
+import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.validation.errorMessage
 import com.tomtruyen.core.validation.isValid
 import com.tomtruyen.navigation.Screen
@@ -50,7 +50,7 @@ fun RegisterScreen(
 
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
-            when(event) {
+            when (event) {
                 RegisterUiEvent.NavigateToHome -> {
                     navController.navigate(Screen.Workout.Graph) {
                         popUpTo(Screen.Auth.Graph) {
@@ -58,6 +58,7 @@ fun RegisterScreen(
                         }
                     }
                 }
+
                 RegisterUiEvent.NavigateToLogin -> {
                     navController.navigate(Screen.Auth.Login)
                 }
@@ -99,7 +100,10 @@ fun RegisterScreenLayout(
                     .padding(Dimens.Normal)
             ) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(Dimens.Small, Alignment.CenterVertically),
+                    verticalArrangement = Arrangement.spacedBy(
+                        Dimens.Small,
+                        Alignment.CenterVertically
+                    ),
                     modifier = Modifier
                         .weight(1f)
                         .verticalScroll(rememberScrollState())

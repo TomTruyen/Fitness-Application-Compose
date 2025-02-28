@@ -63,12 +63,13 @@ fun ExercisesScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
-            when(event) {
+            when (event) {
                 is ExercisesUiEvent.NavigateToFilter -> navController.navigate(Screen.Exercise.Filter)
                 is ExercisesUiEvent.NavigateToAdd -> navController.navigate(Screen.Exercise.Manage())
                 is ExercisesUiEvent.NavigateToDetail -> navController.navigate(
                     Screen.Exercise.Detail(event.id)
                 )
+
                 is ExercisesUiEvent.NavigateBackToWorkout -> {
                     navController.previousBackStackEntry?.savedStateHandle?.set(
                         NavArguments.EXERCISES,
@@ -76,6 +77,7 @@ fun ExercisesScreen(
                     )
                     navController.popBackStack()
                 }
+
                 else -> Unit
             }
         }
@@ -106,7 +108,7 @@ fun ExercisesScreenLayout(
     Scaffold(
         snackbarHost = snackbarHost,
         topBar = {
-            if(state.searching) {
+            if (state.searching) {
                 SearchToolbar(
                     value = state.search,
                     onValueChange = { query ->
@@ -170,22 +172,22 @@ fun ExercisesScreenLayout(
             }
         },
         floatingActionButton = {
-          AnimatedVisibility(
-              visible = state.selectedExercises.isNotEmpty(),
-              enter = scaleIn(),
-              exit = scaleOut()
-          ) {
-              FloatingActionButton(
-                  onClick = {
-                      onAction(ExercisesUiAction.OnAddExerciseToWorkoutClicked)
-                  }
-              ) {
-                Icon(
-                    imageVector = Icons.Filled.Check,
-                    contentDescription = stringResource(id = R.string.content_description_add_exercise_to_workout)
-                )
-              }
-          }
+            AnimatedVisibility(
+                visible = state.selectedExercises.isNotEmpty(),
+                enter = scaleIn(),
+                exit = scaleOut()
+            ) {
+                FloatingActionButton(
+                    onClick = {
+                        onAction(ExercisesUiAction.OnAddExerciseToWorkoutClicked)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Check,
+                        contentDescription = stringResource(id = R.string.content_description_add_exercise_to_workout)
+                    )
+                }
+            }
         },
     ) {
         LoadingContainer(
@@ -208,7 +210,7 @@ fun ExercisesScreenLayout(
                     ) {
                         itemsIndexed(filters) { index, filter ->
                             Chip(
-                                modifier = Modifier.padding(start = if(index == 0) Dimens.Normal else 0.dp),
+                                modifier = Modifier.padding(start = if (index == 0) Dimens.Normal else 0.dp),
                                 text = filter.name,
                                 selected = true,
                                 trailingIcon = {

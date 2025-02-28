@@ -1,9 +1,9 @@
 package com.tomtruyen.core.ui
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -42,7 +42,8 @@ fun RestTimePicker(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         NumberPicker(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
                 .animateContentSize(),
             label = {
                 "${if (leadingZero && abs(it) < 10) "0" else ""}$it"
@@ -68,7 +69,8 @@ fun RestTimePicker(
         )
 
         NumberPicker(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
                 .animateContentSize(),
             label = {
                 "${if (leadingZero && abs(it) < 10) "0" else ""}$it"

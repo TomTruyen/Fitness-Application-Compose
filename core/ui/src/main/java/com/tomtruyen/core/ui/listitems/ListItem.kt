@@ -41,19 +41,20 @@ fun ListItem(
         prefix?.invoke()
 
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
                 .animateContentSize()
         ) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    fontWeight = if(selected) FontWeight.Bold else FontWeight.Normal
+                    fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
                 )
             )
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodySmall.copy(
-                    fontWeight = if(selected) FontWeight.Bold else FontWeight.Normal
+                    fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
                 )
             )
         }

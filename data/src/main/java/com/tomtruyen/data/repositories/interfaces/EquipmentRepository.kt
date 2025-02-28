@@ -4,7 +4,7 @@ import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.repositories.BaseRepository
 import kotlinx.coroutines.flow.Flow
 
-abstract class EquipmentRepository: BaseRepository() {
+abstract class EquipmentRepository : BaseRepository() {
     override val identifier: String
         get() = Equipment.TABLE_NAME
 

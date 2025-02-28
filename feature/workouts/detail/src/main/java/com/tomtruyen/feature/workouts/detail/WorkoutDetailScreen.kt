@@ -48,10 +48,11 @@ fun WorkoutDetailScreen(
 
     LaunchedEffect(context, viewModel) {
         viewModel.eventFlow.collectLatest { event ->
-            when(event) {
+            when (event) {
                 is WorkoutDetailUiEvent.NavigateToEdit -> {
                     navController.navigate(Screen.Workout.Manage(event.id))
                 }
+
                 is WorkoutDetailUiEvent.NavigateBack -> navController.popBackStack()
                 is WorkoutDetailUiEvent.NavigateToStartWorkout -> {
                     navController.navigate(Screen.Workout.Manage(event.id, true))
@@ -70,7 +71,7 @@ fun WorkoutDetailScreen(
 
 @Composable
 fun WorkoutDetailScreenLayout(
-    snackbarHost : @Composable () -> Unit,
+    snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: WorkoutDetailUiState,
     onAction: (WorkoutDetailUiAction) -> Unit
@@ -119,7 +120,8 @@ fun WorkoutDetailScreenLayout(
                 .fillMaxSize()
         ) {
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
                     .padding(Dimens.Normal)
             ) {
                 Column(

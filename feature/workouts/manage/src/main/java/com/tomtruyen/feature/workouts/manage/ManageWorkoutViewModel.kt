@@ -1,9 +1,7 @@
 package com.tomtruyen.feature.workouts.manage
 
 import com.tomtruyen.core.common.base.BaseViewModel
-import com.tomtruyen.core.common.base.SnackbarMessage
 import com.tomtruyen.core.common.utils.StopwatchTimer
-import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.entities.WorkoutExercise
 import com.tomtruyen.data.entities.WorkoutExerciseSet
@@ -26,7 +24,7 @@ class ManageWorkoutViewModel(
     private val workoutRepository: WorkoutRepository,
     private val historyRepository: WorkoutHistoryRepository,
     private val settingsRepository: SettingsRepository
-): BaseViewModel<ManageWorkoutUiState, ManageWorkoutUiAction, ManageWorkoutUiEvent>(
+) : BaseViewModel<ManageWorkoutUiState, ManageWorkoutUiAction, ManageWorkoutUiEvent>(
     initialState = ManageWorkoutUiState(
         mode = ManageWorkoutMode.fromArgs(id, execute)
     )
@@ -114,7 +112,7 @@ class ManageWorkoutViewModel(
                     },
                     workout = fullWorkout.workout.copy(
                         unit = settings.unit,
-                        name = if(fullWorkout.workout.name.isBlank()) "Workout" else fullWorkout.workout.name
+                        name = if (fullWorkout.workout.name.isBlank()) "Workout" else fullWorkout.workout.name
                     )
                 ),
             )
@@ -127,23 +125,24 @@ class ManageWorkoutViewModel(
     private fun save() {
         val userId = userRepository.getUser()?.id ?: return
 
-        when(uiState.value.mode) {
+        when (uiState.value.mode) {
             ManageWorkoutMode.EXECUTE -> finishWorkout(userId)
             else -> saveWorkout(userId)
         }
     }
 
-    private fun createWorkoutExercise(exercise: ExerciseWithCategoryAndEquipment): WorkoutExerciseWithSets = with(uiState.value) {
-        val uuid = UUID.randomUUID().toString()
+    private fun createWorkoutExercise(exercise: ExerciseWithCategoryAndEquipment): WorkoutExerciseWithSets =
+        with(uiState.value) {
+            val uuid = UUID.randomUUID().toString()
 
-        WorkoutExerciseWithSets(
-            workoutExercise = WorkoutExercise(
-                id = uuid
-            ),
-            exercise = exercise,
-            sets = listOf(WorkoutExerciseSet(workoutExerciseId = uuid))
-        )
-    }
+            WorkoutExerciseWithSets(
+                workoutExercise = WorkoutExercise(
+                    id = uuid
+                ),
+                exercise = exercise,
+                sets = listOf(WorkoutExerciseSet(workoutExerciseId = uuid))
+            )
+        }
 
     private fun updateWorkoutName(name: String) = updateState {
         it.copy(
@@ -159,7 +158,7 @@ class ManageWorkoutViewModel(
         it.copy(
             fullWorkout = it.fullWorkout.copy(
                 exercises = it.fullWorkout.exercises.map { exercise ->
-                    if(exercise.workoutExercise.id == id) {
+                    if (exercise.workoutExercise.id == id) {
                         return@map exercise.copy(
                             workoutExercise = exercise.workoutExercise.copy(
                                 notes = notes
@@ -191,9 +190,10 @@ class ManageWorkoutViewModel(
             it.copy(
                 fullWorkout = it.fullWorkout.copy(
                     exercises = it.fullWorkout.exercises.toMutableList().apply {
-                        index = indexOfFirst { exercise -> exercise.workoutExercise.exerciseId == it.selectedExerciseId }
+                        index =
+                            indexOfFirst { exercise -> exercise.workoutExercise.exerciseId == it.selectedExerciseId }
 
-                        if(index == -1) return@apply
+                        if (index == -1) return@apply
 
                         set(
                             index = index,
@@ -218,24 +218,25 @@ class ManageWorkoutViewModel(
         )
     }
 
-    private fun addExercises(exercises: List<ExerciseWithCategoryAndEquipment>) = updateAndGetState {
-        val newExercises = exercises.map(::createWorkoutExercise)
+    private fun addExercises(exercises: List<ExerciseWithCategoryAndEquipment>) =
+        updateAndGetState {
+            val newExercises = exercises.map(::createWorkoutExercise)
 
-        it.copy(
-            fullWorkout = it.fullWorkout.copy(
-                exercises = it.fullWorkout.exercises + newExercises
+            it.copy(
+                fullWorkout = it.fullWorkout.copy(
+                    exercises = it.fullWorkout.exercises + newExercises
+                )
             )
-        )
-    }.also { state ->
-        triggerEvent(ManageWorkoutUiEvent.ScrollToExercise(state.fullWorkout.exercises.size - 1))
-    }
+        }.also { state ->
+            triggerEvent(ManageWorkoutUiEvent.ScrollToExercise(state.fullWorkout.exercises.size - 1))
+        }
 
     private fun toggleExerciseMoreActionSheet(id: String? = null) = updateState {
         val shouldToggle = it.selectedExerciseId != id
 
         it.copy(
             selectedExerciseId = id,
-            showExerciseMoreActions = if(shouldToggle) {
+            showExerciseMoreActions = if (shouldToggle) {
                 !it.showExerciseMoreActions
             } else {
                 it.showExerciseMoreActions
@@ -249,7 +250,7 @@ class ManageWorkoutViewModel(
         it.copy(
             selectedExerciseId = id,
             selectedSetIndex = setIndex,
-            showSetMoreActions = if(shouldToggle) {
+            showSetMoreActions = if (shouldToggle) {
                 !it.showSetMoreActions
             } else {
                 it.showSetMoreActions

@@ -6,8 +6,8 @@ import com.tomtruyen.data.dao.ExerciseDao
 import com.tomtruyen.data.dao.SettingsDao
 import com.tomtruyen.data.dao.WorkoutDao
 import com.tomtruyen.data.dao.WorkoutExerciseDao
-import com.tomtruyen.data.dao.WorkoutHistoryDao
 import com.tomtruyen.data.dao.WorkoutExerciseSetDao
+import com.tomtruyen.data.dao.WorkoutHistoryDao
 import com.tomtruyen.data.repositories.CategoryRepositoryImpl
 import com.tomtruyen.data.repositories.EquipmentRepositoryImpl
 import com.tomtruyen.data.repositories.ExerciseRepositoryImpl

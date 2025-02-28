@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 fun TabLayout(
     items: List<String>,
     state: PagerState
-)  {
+) {
     val scope = rememberCoroutineScope()
 
     Log.d("@@@", "TabLayout Render: ${items.size} - ${state.currentPage}")

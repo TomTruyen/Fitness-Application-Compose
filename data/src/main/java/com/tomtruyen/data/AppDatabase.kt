@@ -10,8 +10,8 @@ import com.tomtruyen.data.dao.ExerciseDao
 import com.tomtruyen.data.dao.SettingsDao
 import com.tomtruyen.data.dao.WorkoutDao
 import com.tomtruyen.data.dao.WorkoutExerciseDao
-import com.tomtruyen.data.dao.WorkoutHistoryDao
 import com.tomtruyen.data.dao.WorkoutExerciseSetDao
+import com.tomtruyen.data.dao.WorkoutHistoryDao
 import com.tomtruyen.data.entities.CacheTTL
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
@@ -38,7 +38,7 @@ import com.tomtruyen.data.entities.WorkoutHistory
     exportSchema = false
 )
 @TypeConverters(Converters::class)
-abstract class AppDatabase: RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
     abstract fun exerciseDao(): ExerciseDao
     abstract fun settingsDao(): SettingsDao
     abstract fun workoutDao(): WorkoutDao

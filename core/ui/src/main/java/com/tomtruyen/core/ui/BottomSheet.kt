@@ -55,7 +55,7 @@ fun BottomSheetList(
                     .clip(MaterialTheme.shapes.medium)
                     .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)),
 
-            ) {
+                ) {
                 items.forEach { item ->
                     BottomSheetListItem(
                         item = item,

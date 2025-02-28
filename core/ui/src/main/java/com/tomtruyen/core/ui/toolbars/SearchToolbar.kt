@@ -59,7 +59,8 @@ fun SearchToolbar(
                         Icon(
                             imageVector = Icons.Filled.Clear,
                             contentDescription = stringResource(id = R.string.content_description_clear),
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier
+                                .size(20.dp)
                                 .clip(CircleShape)
                                 .clickable {
                                     onValueChange("")

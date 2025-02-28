@@ -15,7 +15,9 @@ fun LoadingContainer(
     content: @Composable () -> Unit
 ) {
     Column(modifier = modifier) {
-        Box(modifier = Modifier.weight(1f).animateContentSize()) {
+        Box(modifier = Modifier
+            .weight(1f)
+            .animateContentSize()) {
             content()
         }
 

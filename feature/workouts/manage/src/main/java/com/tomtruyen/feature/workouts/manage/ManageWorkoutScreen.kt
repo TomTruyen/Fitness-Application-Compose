@@ -40,21 +40,20 @@ import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.BottomSheetItem
 import com.tomtruyen.core.ui.BottomSheetList
-import com.tomtruyen.navigation.NavArguments
 import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
-import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.toolbars.ToolbarTitle
-import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.entities.WorkoutExerciseWithSets
 import com.tomtruyen.feature.workouts.manage.components.WorkoutExerciseHeader
+import com.tomtruyen.feature.workouts.manage.components.WorkoutExerciseSetTable
 import com.tomtruyen.feature.workouts.manage.components.WorkoutStatistics
 import com.tomtruyen.feature.workouts.manage.components.WorkoutTimer
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
-import com.tomtruyen.feature.workouts.manage.components.WorkoutExerciseSetTable
+import com.tomtruyen.navigation.NavArguments
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import sh.calvin.reorderable.ReorderableItem
@@ -100,8 +99,13 @@ fun ManageWorkoutScreen(
                 title = R.string.action_remove_set,
                 icon = Icons.Default.Close,
                 onClick = {
-                    if(state.selectedExerciseId != null && state.selectedSetIndex != null) {
-                        viewModel.onAction(ManageWorkoutUiAction.OnDeleteSet(state.selectedExerciseId!!, state.selectedSetIndex!!))
+                    if (state.selectedExerciseId != null && state.selectedSetIndex != null) {
+                        viewModel.onAction(
+                            ManageWorkoutUiAction.OnDeleteSet(
+                                state.selectedExerciseId!!,
+                                state.selectedSetIndex!!
+                            )
+                        )
                     }
                 },
                 color = errorColor
@@ -111,22 +115,45 @@ fun ManageWorkoutScreen(
 
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
-            when(event) {
+            when (event) {
                 is ManageWorkoutUiEvent.NavigateBack -> navController.popBackStack()
-                is ManageWorkoutUiEvent.NavigateToReplaceExercise -> navController.navigate(Screen.Exercise.Overview(Screen.Exercise.Overview.Mode.REPLACE))
-                is ManageWorkoutUiEvent.NavigateToAddExercise -> navController.navigate(Screen.Exercise.Overview(Screen.Exercise.Overview.Mode.SELECT))
-                is ManageWorkoutUiEvent.NavigateToDetail -> navController.navigate(Screen.Workout.Detail(event.id))
+                is ManageWorkoutUiEvent.NavigateToReplaceExercise -> navController.navigate(
+                    Screen.Exercise.Overview(
+                        Screen.Exercise.Overview.Mode.REPLACE
+                    )
+                )
+
+                is ManageWorkoutUiEvent.NavigateToAddExercise -> navController.navigate(
+                    Screen.Exercise.Overview(
+                        Screen.Exercise.Overview.Mode.SELECT
+                    )
+                )
+
+                is ManageWorkoutUiEvent.NavigateToDetail -> navController.navigate(
+                    Screen.Workout.Detail(
+                        event.id
+                    )
+                )
+
                 is ManageWorkoutUiEvent.ScrollToExercise -> {
-                    lazyListState.animateScrollToItem(event.index.coerceIn(0, state.fullWorkout.exercises.size - 1))
+                    lazyListState.animateScrollToItem(
+                        event.index.coerceIn(
+                            0,
+                            state.fullWorkout.exercises.size - 1
+                        )
+                    )
                 }
             }
         }
     }
 
     LaunchedEffect(navController) {
-        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Pair<Screen.Exercise.Overview.Mode, List<ExerciseWithCategoryAndEquipment>>?>(NavArguments.EXERCISES, null)
+        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Pair<Screen.Exercise.Overview.Mode, List<ExerciseWithCategoryAndEquipment>>?>(
+            NavArguments.EXERCISES,
+            null
+        )
             ?.collectLatest { result ->
-                if(result != null) {
+                if (result != null) {
                     val (mode, exercises) = result
 
                     when (mode) {
@@ -144,7 +171,9 @@ fun ManageWorkoutScreen(
                     }
                 }
 
-                navController.currentBackStackEntry?.savedStateHandle?.remove<Pair<Screen.Exercise.Overview.Mode, List<ExerciseWithCategoryAndEquipment>>?>(NavArguments.EXERCISES)
+                navController.currentBackStackEntry?.savedStateHandle?.remove<Pair<Screen.Exercise.Overview.Mode, List<ExerciseWithCategoryAndEquipment>>?>(
+                    NavArguments.EXERCISES
+                )
             }
     }
 
@@ -187,7 +216,7 @@ fun ManageWorkoutScreenLayout(
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     val onNavigateUp: () -> Unit = {
-        if(state.fullWorkout.exercises != state.initialWorkout.exercises) {
+        if (state.fullWorkout.exercises != state.initialWorkout.exercises) {
             confirmationDialogVisible = true
         } else {
             navController.popBackStack()
@@ -201,7 +230,7 @@ fun ManageWorkoutScreenLayout(
         topBar = {
             Toolbar(
                 title = {
-                    if(state.mode == ManageWorkoutMode.EXECUTE) {
+                    if (state.mode == ManageWorkoutMode.EXECUTE) {
                         ToolbarTitle(title = state.workout.name)
                     } else {
                         TextFields.Default(
@@ -279,7 +308,7 @@ fun ManageWorkoutScreenLayout(
 
 
 
-            if(confirmationDialogVisible) {
+            if (confirmationDialogVisible) {
                 ConfirmationDialog(
                     title = CommonR.string.title_unsaved_changes,
                     message = CommonR.string.message_unsaved_changes,
@@ -314,7 +343,9 @@ fun ExerciseList(
         state = lazyListState,
         modifier = modifier.fillMaxSize()
     ) {
-        items(state.fullWorkout.exercises, key = { it.exercise?.exercise?.id.orEmpty()}) { fullExercise ->
+        items(
+            state.fullWorkout.exercises,
+            key = { it.exercise?.exercise?.id.orEmpty() }) { fullExercise ->
             ReorderableItem(
                 state = reorderableLazyListState,
                 key = fullExercise.exercise?.exercise?.id.orEmpty()

@@ -32,7 +32,8 @@ fun RadioListItem(title: String, selected: Boolean, onCheckedChange: (Boolean) -
         Text(
             text = title,
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
                 .animateContentSize()
         )
     }

@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val userRepository: UserRepository
-): BaseViewModel<LoginUiState, LoginUiAction, LoginUiEvent>(
+) : BaseViewModel<LoginUiState, LoginUiAction, LoginUiEvent>(
     initialState = LoginUiState()
 ) {
     init {
@@ -36,19 +36,21 @@ class LoginViewModel(
     }
 
     override fun onAction(action: LoginUiAction) {
-        when(action) {
+        when (action) {
             is LoginUiAction.EmailChanged -> updateState {
                 it.copy(
                     email = action.email,
                     emailValidationResult = it.validateEmail(action.email)
                 )
             }
+
             is LoginUiAction.PasswordChanged -> updateState {
                 it.copy(
                     password = action.password,
                     passwordValidationResult = it.validatePassword(action.password)
                 )
             }
+
             is LoginUiAction.OnGoogleSignInFailed -> showSnackbar(SnackbarMessage.Error(action.error))
             is LoginUiAction.OnGoogleSignInSuccess -> loginWithGoogle(action.idToken)
             LoginUiAction.OnLoginClicked -> login()

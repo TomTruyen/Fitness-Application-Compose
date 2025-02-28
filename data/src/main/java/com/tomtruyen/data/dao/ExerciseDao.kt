@@ -34,7 +34,10 @@ abstract class ExerciseDao {
     @Query("SELECT * FROM ${Exercise.TABLE_NAME} WHERE id = :id")
     abstract fun findByIdAsync(id: String): Flow<ExerciseWithCategoryAndEquipment?>
 
-    fun findAllAsync(query: String, filter: ExerciseFilter): Flow<List<ExerciseWithCategoryAndEquipment>> {
+    fun findAllAsync(
+        query: String,
+        filter: ExerciseFilter
+    ): Flow<List<ExerciseWithCategoryAndEquipment>> {
         return findAllAsync(findAllQuery(query, filter))
     }
 

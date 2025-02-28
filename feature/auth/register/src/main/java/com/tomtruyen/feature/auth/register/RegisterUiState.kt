@@ -26,5 +26,6 @@ data class RegisterUiState(
 
     fun validateEmail(email: String) = emailValidator.validate(email)
     fun validatePassword(password: String) = passwordValidator.validate(password)
-    fun validateConfirmPassword(confirmPassword: String) = confirmPasswordValidator.validate(confirmPassword)
+    fun validateConfirmPassword(confirmPassword: String) =
+        confirmPasswordValidator.validate(confirmPassword)
 }

@@ -26,13 +26,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.feature.exercises.ExercisesUiEvent
-import com.tomtruyen.feature.exercises.ExercisesUiAction
-import com.tomtruyen.feature.exercises.ExercisesUiState
-import com.tomtruyen.feature.exercises.ExercisesViewModel
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.Chip
 import com.tomtruyen.core.ui.toolbars.Toolbar
+import com.tomtruyen.feature.exercises.ExercisesUiAction
+import com.tomtruyen.feature.exercises.ExercisesUiEvent
+import com.tomtruyen.feature.exercises.ExercisesUiState
+import com.tomtruyen.feature.exercises.ExercisesViewModel
 import kotlinx.coroutines.flow.collectLatest
 import com.tomtruyen.core.common.R as CommonR
 

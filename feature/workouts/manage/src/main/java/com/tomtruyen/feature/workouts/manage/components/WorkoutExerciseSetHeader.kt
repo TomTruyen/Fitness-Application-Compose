@@ -44,7 +44,7 @@ fun WorkoutExerciseSetHeader(
             )
         )
 
-        if(mode == ManageWorkoutMode.EXECUTE) {
+        if (mode == ManageWorkoutMode.EXECUTE) {
             Text(
                 text = stringResource(id = R.string.label_previous).uppercase(),
                 textAlign = TextAlign.Center,
@@ -57,7 +57,7 @@ fun WorkoutExerciseSetHeader(
             Spacer(modifier = Modifier.width(Dimens.Small))
         }
 
-        when(exercise.typeEnum) {
+        when (exercise.typeEnum) {
             ExerciseType.WEIGHT -> {
                 Text(
                     text = stringResource(id = R.string.label_reps).uppercase(),
@@ -93,7 +93,7 @@ fun WorkoutExerciseSetHeader(
         }
 
 
-        if(mode == ManageWorkoutMode.EXECUTE) {
+        if (mode == ManageWorkoutMode.EXECUTE) {
             Box(
                 modifier = Modifier.width(24.dp),
                 contentAlignment = Alignment.Center

@@ -28,11 +28,12 @@ data class WorkoutHistory(
     val workoutId: String? = null,
     val duration: Long = 0L,
     val createdAt: Long = System.currentTimeMillis(),
-): BaseEntity {
-    val formattedDuration get() = TimeUtils.formatSeconds(
-        seconds = duration,
-        alwaysShow = listOf(TimeUnit.HOURS , TimeUnit.MINUTES, TimeUnit.SECONDS),
-    )
+) : BaseEntity {
+    val formattedDuration
+        get() = TimeUtils.formatSeconds(
+            seconds = duration,
+            alwaysShow = listOf(TimeUnit.HOURS, TimeUnit.MINUTES, TimeUnit.SECONDS),
+        )
 
     companion object {
         const val TABLE_NAME = "workout_history"
@@ -49,21 +50,23 @@ data class WorkoutHistoryWithWorkout(
     )
     val workoutWithExercises: WorkoutWithExercises
 ) {
-    val totalWeight get(): Double {
-        val weight = workoutWithExercises.exercises.sumOf {
-            it.sets.sumOf setSumOf@ { set ->
-                val reps = set.reps ?: 0
-                val weight = set.weight ?: 0.0
-                reps * weight
+    val totalWeight
+        get(): Double {
+            val weight = workoutWithExercises.exercises.sumOf {
+                it.sets.sumOf setSumOf@{ set ->
+                    val reps = set.reps ?: 0
+                    val weight = set.weight ?: 0.0
+                    reps * weight
+                }
             }
-        }
 
-        return weight
-    }
+            return weight
+        }
 
     val weightUnit get() = workoutWithExercises.workout.unit
 
-    val totalTime get() = workoutWithExercises.exercises.sumOf {
-        it.sets.sumOf { set -> set.time ?: 0 }
-    }
+    val totalTime
+        get() = workoutWithExercises.exercises.sumOf {
+            it.sets.sumOf { set -> set.time ?: 0 }
+        }
 }

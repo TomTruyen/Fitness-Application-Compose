@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 
 class RegisterViewModel(
     private val userRepository: UserRepository
-): BaseViewModel<RegisterUiState, RegisterUiAction, RegisterUiEvent>(
+) : BaseViewModel<RegisterUiState, RegisterUiAction, RegisterUiEvent>(
     initialState = RegisterUiState()
 ) {
     init {
@@ -30,25 +30,28 @@ class RegisterViewModel(
     }
 
     override fun onAction(action: RegisterUiAction) {
-        when(action) {
+        when (action) {
             is RegisterUiAction.EmailChanged -> updateState {
                 it.copy(
                     email = action.email,
                     emailValidationResult = it.validateEmail(action.email)
                 )
             }
+
             is RegisterUiAction.PasswordChanged -> updateState {
                 it.copy(
                     password = action.password,
                     passwordValidationResult = it.validatePassword(action.password)
                 )
             }
+
             is RegisterUiAction.ConfirmPasswordChanged -> updateState {
                 it.copy(
                     confirmPassword = action.confirmPassword,
                     confirmPasswordValidationResult = it.validateConfirmPassword(action.confirmPassword)
                 )
             }
+
             is RegisterUiAction.OnRegisterClicked -> register()
             is RegisterUiAction.OnLoginClicked -> triggerEvent(RegisterUiEvent.NavigateToLogin)
         }

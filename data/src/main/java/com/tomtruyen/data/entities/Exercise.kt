@@ -55,9 +55,11 @@ data class Exercise(
     val steps: List<String>? = emptyList(),
     @SerialName("user_id")
     val userId: String? = null
-): BaseEntity, Parcelable {
+) : BaseEntity, Parcelable {
     // TODO: See if we can get rid of this by using the enum directly
-    val typeEnum get() = ExerciseType.entries.firstOrNull { it.value.lowercase() == type } ?: ExerciseType.WEIGHT
+    val typeEnum
+        get() = ExerciseType.entries.firstOrNull { it.value.lowercase() == type }
+            ?: ExerciseType.WEIGHT
 
     companion object {
         const val TABLE_NAME = "Exercise"
@@ -80,12 +82,13 @@ data class ExerciseWithCategoryAndEquipment(
     )
     val equipment: Equipment? = null
 ) {
-    val displayName get() = buildString {
-        append(exercise.name)
+    val displayName
+        get() = buildString {
+            append(exercise.name)
 
-        val equipmentName = equipment?.name.orEmpty()
-        if(equipmentName.isNotBlank()) {
-            append(" ($equipmentName)")
+            val equipmentName = equipment?.name.orEmpty()
+            if (equipmentName.isNotBlank()) {
+                append(" ($equipmentName)")
+            }
         }
-    }
 }

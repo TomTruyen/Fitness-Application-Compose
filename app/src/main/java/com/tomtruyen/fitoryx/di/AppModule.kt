@@ -1,13 +1,13 @@
 package com.tomtruyen.fitoryx.di
 
-import com.tomtruyen.core.common.utils.ImageLoader
-import com.tomtruyen.fitoryx.BuildConfig
-import com.tomtruyen.fitoryx.providers.BuildConfigFieldProviderImpl
-import com.tomtruyen.fitoryx.providers.KoinReloadProviderImpl
-import com.tomtruyen.fitnessapplication.providers.CredentialProviderImpl
 import com.tomtruyen.core.common.providers.BuildConfigFieldProvider
 import com.tomtruyen.core.common.providers.CredentialProvider
 import com.tomtruyen.core.common.providers.KoinReloadProvider
+import com.tomtruyen.core.common.utils.ImageLoader
+import com.tomtruyen.fitnessapplication.providers.CredentialProviderImpl
+import com.tomtruyen.fitoryx.BuildConfig
+import com.tomtruyen.fitoryx.providers.BuildConfigFieldProviderImpl
+import com.tomtruyen.fitoryx.providers.KoinReloadProviderImpl
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient

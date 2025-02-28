@@ -36,13 +36,13 @@ import kotlinx.coroutines.plus
 
 abstract class BaseViewModel<UIState, UIAction, UIEvent>(
     initialState: UIState
-): ViewModel() {
+) : ViewModel() {
     protected val vmScope = viewModelScope + Dispatchers.IO
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
 
-        val message = when(throwable) {
+        val message = when (throwable) {
             is AuthRestException -> throwable.errorDescription
             is RestException -> throwable.error
             else -> throwable.localizedMessage ?: throwable.message
@@ -80,11 +80,12 @@ abstract class BaseViewModel<UIState, UIAction, UIEvent>(
         block()
     }
 
-    protected fun launchLoading(refresh: Boolean = false, block: suspend () -> Unit) = vmScope.launch(exceptionHandler) {
-        if(refresh) isRefreshing(true) else isLoading(true)
-        block()
-        if(refresh) isRefreshing(false) else isLoading(false)
-    }
+    protected fun launchLoading(refresh: Boolean = false, block: suspend () -> Unit) =
+        vmScope.launch(exceptionHandler) {
+            if (refresh) isRefreshing(true) else isLoading(true)
+            block()
+            if (refresh) isRefreshing(false) else isLoading(false)
+        }
 
     protected fun updateState(block: (UIState) -> UIState) {
         _uiState.update(block)
@@ -107,7 +108,7 @@ abstract class BaseViewModel<UIState, UIAction, UIEvent>(
         }
 
         LaunchedEffect(snackbarMessage) {
-            if(snackbarMessage !is SnackbarMessage.Empty && !snackbarMessage.message.isNullOrBlank()) {
+            if (snackbarMessage !is SnackbarMessage.Empty && !snackbarMessage.message.isNullOrBlank()) {
                 snackbarHostState.showSnackbar(snackbarMessage.message!!)
                 snackbarMessage = SnackbarMessage.Empty
             }
@@ -124,7 +125,7 @@ abstract class BaseViewModel<UIState, UIAction, UIEvent>(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    if(snackbarMessage.icon != null) {
+                    if (snackbarMessage.icon != null) {
                         Icon(
                             imageVector = snackbarMessage.icon!!,
                             contentDescription = null,

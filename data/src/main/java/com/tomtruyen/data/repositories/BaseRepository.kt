@@ -15,7 +15,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.java.KoinJavaComponent.inject
 
 abstract class BaseRepository(
-): KoinComponent {
+) : KoinComponent {
     // TODO: Rename to CacheKey (also rename the overrideIdentifier to overrideCacheKey)
     abstract val identifier: String
 
@@ -36,12 +36,13 @@ abstract class BaseRepository(
         transaction(block)
     }
 
-    fun launchWithCacheTransactions(overrideIdentifier: String? = null, block: suspend () -> Unit) = launchWithTransaction {
-        block()
+    fun launchWithCacheTransactions(overrideIdentifier: String? = null, block: suspend () -> Unit) =
+        launchWithTransaction {
+            block()
 
-        val cacheKey = overrideIdentifier ?: identifier
-        cacheDao.save(CacheTTL(cacheKey))
-    }
+            val cacheKey = overrideIdentifier ?: identifier
+            cacheDao.save(CacheTTL(cacheKey))
+        }
 
     protected suspend fun fetch(
         refresh: Boolean = false,
@@ -53,7 +54,7 @@ abstract class BaseRepository(
 
         val isCacheExpired = cacheDao.findById(cacheKey)?.isExpired ?: true
 
-        if(isCacheExpired || refresh) {
+        if (isCacheExpired || refresh) {
             Log.i(TAG, "Cache is expired or refresh is true, fetching $cacheKey from Firebase")
 
             block()

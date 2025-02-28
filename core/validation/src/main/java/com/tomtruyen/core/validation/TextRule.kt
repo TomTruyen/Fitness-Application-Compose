@@ -3,7 +3,7 @@ package com.tomtruyen.core.validation
 import android.content.Context
 import org.koin.core.component.KoinComponent
 
-abstract class TextRule: KoinComponent {
+abstract class TextRule : KoinComponent {
     abstract val context: Context
 
     abstract val message: Int

@@ -66,11 +66,11 @@ fun RestAlertDialog(
                     }
                 }
 
-                when(type) {
+                when (type) {
                     RestAlertType.REST_TIME -> RestTimeLayout(
                         value = selectedRestValue,
                         onValueChange = { rest ->
-                            if(selectedRestEnabled == false) return@RestTimeLayout
+                            if (selectedRestEnabled == false) return@RestTimeLayout
                             selectedRestValue = rest
                         },
                         enabled = selectedRestEnabled ?: true
@@ -79,7 +79,7 @@ fun RestAlertDialog(
                     RestAlertType.SET_TIME -> SetTimeLayout(
                         value = selectedRestValue,
                         onValueChange = { rest ->
-                            if(selectedRestEnabled == false) return@SetTimeLayout
+                            if (selectedRestEnabled == false) return@SetTimeLayout
                             selectedRestValue = rest
                         },
                     )

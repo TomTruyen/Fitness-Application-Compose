@@ -5,7 +5,7 @@ import com.tomtruyen.data.entities.WorkoutWithExercises
 import com.tomtruyen.data.repositories.BaseRepository
 import kotlinx.coroutines.flow.Flow
 
-abstract class WorkoutRepository: BaseRepository() {
+abstract class WorkoutRepository : BaseRepository() {
     override val identifier: String
         get() = Workout.TABLE_NAME
 
@@ -17,6 +17,7 @@ abstract class WorkoutRepository: BaseRepository() {
         userId: String,
         refresh: Boolean,
     )
+
     abstract suspend fun saveWorkout(
         userId: String,
         workout: WorkoutWithExercises,

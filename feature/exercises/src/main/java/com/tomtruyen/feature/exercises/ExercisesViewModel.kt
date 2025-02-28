@@ -1,13 +1,12 @@
 package com.tomtruyen.feature.exercises
 
 import com.tomtruyen.core.common.base.BaseViewModel
-import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
+import com.tomtruyen.data.models.ExerciseFilter
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
-import com.tomtruyen.data.models.ExerciseFilter
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
@@ -22,7 +21,7 @@ class ExercisesViewModel(
     private val categoryRepository: CategoryRepository,
     private val equipmentRepository: EquipmentRepository,
     private val userRepository: UserRepository
-): BaseViewModel<ExercisesUiState, ExercisesUiAction, ExercisesUiEvent>(
+) : BaseViewModel<ExercisesUiState, ExercisesUiAction, ExercisesUiEvent>(
     initialState = ExercisesUiState(mode = mode)
 ) {
     init {
@@ -78,10 +77,11 @@ class ExercisesViewModel(
     }
 
     private fun handleExerciseClick(exercise: ExerciseWithCategoryAndEquipment) {
-        when(mode) {
+        when (mode) {
             Screen.Exercise.Overview.Mode.VIEW -> {
                 triggerEvent(ExercisesUiEvent.NavigateToDetail(exercise.exercise.id))
             }
+
             Screen.Exercise.Overview.Mode.SELECT -> {
                 updateState {
                     it.copy(
@@ -95,6 +95,7 @@ class ExercisesViewModel(
                     )
                 }
             }
+
             Screen.Exercise.Overview.Mode.REPLACE -> {
                 updateState {
                     it.copy(
@@ -110,30 +111,38 @@ class ExercisesViewModel(
             is ExercisesUiAction.OnToggleSearch -> updateState {
                 it.copy(searching = !it.searching)
             }
+
             is ExercisesUiAction.OnSearchQueryChanged -> updateState {
                 it.copy(search = action.query)
             }
+
             is ExercisesUiAction.OnCategoryFilterChanged -> updateState {
                 it.copy(filter = it.filter.copy().apply {
                     tryAddCategory(action.category)
                 })
             }
+
             is ExercisesUiAction.OnEquipmentFilterChanged -> updateState {
                 it.copy(filter = it.filter.copy().apply {
                     tryAddEquipment(action.equipment)
                 })
             }
+
             is ExercisesUiAction.OnClearFilterClicked -> updateState {
                 it.copy(filter = ExerciseFilter())
             }
+
             is ExercisesUiAction.OnRemoveFilterClicked -> updateState {
                 it.copy(
                     filter = it.filter.copy(
-                        categories = it.filter.categories.toMutableList().apply { remove(action.filter) },
-                        equipment = it.filter.equipment.toMutableList().apply { remove(action.filter) }
+                        categories = it.filter.categories.toMutableList()
+                            .apply { remove(action.filter) },
+                        equipment = it.filter.equipment.toMutableList()
+                            .apply { remove(action.filter) }
                     )
                 )
             }
+
             is ExercisesUiAction.OnFilterClicked -> triggerEvent(ExercisesUiEvent.NavigateToFilter)
             is ExercisesUiAction.OnAddClicked -> triggerEvent(ExercisesUiEvent.NavigateToAdd)
             is ExercisesUiAction.OnExerciseClicked -> handleExerciseClick(action.exercise)

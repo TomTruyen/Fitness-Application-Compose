@@ -17,7 +17,9 @@ object TimeUtils {
 
         val hours = TimeUnit.SECONDS.toHours(seconds)
         val minute = TimeUnit.SECONDS.toMinutes(seconds - TimeUnit.HOURS.toSeconds(hours))
-        val second = TimeUnit.SECONDS.toSeconds(seconds - TimeUnit.HOURS.toSeconds(hours) - TimeUnit.MINUTES.toSeconds(minute))
+        val second = TimeUnit.SECONDS.toSeconds(
+            seconds - TimeUnit.HOURS.toSeconds(hours) - TimeUnit.MINUTES.toSeconds(minute)
+        )
 
         if (hours > 0 || alwaysShow.contains(TimeUnit.HOURS)) {
             builder.append(padWithLeadingZeros(hours, leadingZero))
@@ -39,7 +41,7 @@ object TimeUtils {
     private fun padWithLeadingZeros(number: Long, leadingZero: Boolean): String {
         val str = number.toString()
 
-        if(!leadingZero || str.length >= LEADING_ZERO_WIDTH) return str
+        if (!leadingZero || str.length >= LEADING_ZERO_WIDTH) return str
 
         return "0".repeat(LEADING_ZERO_WIDTH - str.length) + str
     }

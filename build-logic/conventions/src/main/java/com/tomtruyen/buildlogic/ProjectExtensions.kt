@@ -14,7 +14,7 @@ fun Project.getSecret(key: String): String? {
     val secretsFile = rootProject.file("secrets.properties")
     val secretsProperties = Properties()
 
-    if(!secretsFile.exists()) {
+    if (!secretsFile.exists()) {
         throw GradleException("secrets.properties file is missing. Please create one in the root of the project.")
     }
 

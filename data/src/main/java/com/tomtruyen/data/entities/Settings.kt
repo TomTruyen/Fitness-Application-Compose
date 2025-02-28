@@ -23,7 +23,7 @@ data class Settings(
     @SerialName("user_id")
     val userId: String? = null,
 
-): BaseEntity {
+    ) : BaseEntity {
     enum class UnitType(val value: String) {
         KG("kg"),
         LBS("lbs")

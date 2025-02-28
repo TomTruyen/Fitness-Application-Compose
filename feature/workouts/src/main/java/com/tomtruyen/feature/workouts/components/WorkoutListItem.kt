@@ -82,7 +82,7 @@ fun WorkoutListItem(
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.rotate(
-                            if(expanded) 180f else 0f
+                            if (expanded) 180f else 0f
                         )
                     )
                 }

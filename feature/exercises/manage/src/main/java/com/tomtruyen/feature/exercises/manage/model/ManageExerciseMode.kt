@@ -5,7 +5,7 @@ enum class ManageExerciseMode {
     EDIT;
 
     companion object {
-        fun fromArgs(id: String?) = when(id != null) {
+        fun fromArgs(id: String?) = when (id != null) {
             true -> EDIT
             false -> CREATE
         }

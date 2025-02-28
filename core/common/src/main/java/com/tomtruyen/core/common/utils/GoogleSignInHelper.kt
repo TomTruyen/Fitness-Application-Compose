@@ -9,7 +9,7 @@ import com.tomtruyen.core.common.providers.CredentialProvider
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object GoogleSignInHelper: KoinComponent {
+object GoogleSignInHelper : KoinComponent {
     private val credentialProvider: CredentialProvider by inject()
 
     fun getCredentialManager(context: Context) = CredentialManager.create(context)

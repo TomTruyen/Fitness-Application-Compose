@@ -15,7 +15,7 @@ data class Category(
     override val id: String = UUID.randomUUID().toString(),
     @SerialName("name")
     override val name: String,
-): BaseEntity, FilterOption {
+) : BaseEntity, FilterOption {
     val isDefault: Boolean
         get() = this == DEFAULT
 

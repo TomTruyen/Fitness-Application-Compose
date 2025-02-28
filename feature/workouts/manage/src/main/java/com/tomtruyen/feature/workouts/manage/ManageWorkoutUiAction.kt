@@ -7,53 +7,56 @@ sealed class ManageWorkoutUiAction {
 
     data class OnExerciseNotesChanged(val id: String, val notes: String) : ManageWorkoutUiAction()
 
-    data object OnReplaceExerciseClicked: ManageWorkoutUiAction()
+    data object OnReplaceExerciseClicked : ManageWorkoutUiAction()
 
-    data class OnReplaceExercise(val exercise: ExerciseWithCategoryAndEquipment): ManageWorkoutUiAction()
+    data class OnReplaceExercise(val exercise: ExerciseWithCategoryAndEquipment) :
+        ManageWorkoutUiAction()
 
     data object OnAddExerciseClicked : ManageWorkoutUiAction()
 
-    data class OnAddExercises(val exercises: List<ExerciseWithCategoryAndEquipment>) : ManageWorkoutUiAction()
+    data class OnAddExercises(val exercises: List<ExerciseWithCategoryAndEquipment>) :
+        ManageWorkoutUiAction()
 
-    data object OnDeleteExercise: ManageWorkoutUiAction()
+    data object OnDeleteExercise : ManageWorkoutUiAction()
 
-    data class OnReorder(val from: Int, val to: Int): ManageWorkoutUiAction()
+    data class OnReorder(val from: Int, val to: Int) : ManageWorkoutUiAction()
 
-    data class ToggleExerciseMoreActionSheet(val id: String? = null): ManageWorkoutUiAction()
+    data class ToggleExerciseMoreActionSheet(val id: String? = null) : ManageWorkoutUiAction()
 
-    data class ToggleSetMoreActionSheet(val id: String? = null, val setIndex: Int? = null): ManageWorkoutUiAction()
+    data class ToggleSetMoreActionSheet(val id: String? = null, val setIndex: Int? = null) :
+        ManageWorkoutUiAction()
 
-    data object Save: ManageWorkoutUiAction()
+    data object Save : ManageWorkoutUiAction()
 
     data class OnRepsChanged(
         val id: String,
         val setIndex: Int,
         val reps: String?
-    ): ManageWorkoutUiAction()
+    ) : ManageWorkoutUiAction()
 
     data class OnWeightChanged(
         val id: String,
         val setIndex: Int,
         val weight: String?
-    ): ManageWorkoutUiAction()
+    ) : ManageWorkoutUiAction()
 
     data class OnTimeChanged(
         val id: String,
         val setIndex: Int,
         val time: Int?
-    ): ManageWorkoutUiAction()
+    ) : ManageWorkoutUiAction()
 
     data class OnDeleteSet(
         val id: String,
         val setIndex: Int
-    ): ManageWorkoutUiAction()
+    ) : ManageWorkoutUiAction()
 
     data class OnAddSet(
         val id: String
-    ): ManageWorkoutUiAction()
+    ) : ManageWorkoutUiAction()
 
     data class ToggleSetCompleted(
         val id: String,
         val setIndex: Int
-    ): ManageWorkoutUiAction()
+    ) : ManageWorkoutUiAction()
 }

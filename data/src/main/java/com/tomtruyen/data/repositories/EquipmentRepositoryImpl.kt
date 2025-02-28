@@ -7,7 +7,7 @@ import io.github.jan.supabase.postgrest.from
 
 class EquipmentRepositoryImpl(
     private val equipmentDao: EquipmentDao
-): EquipmentRepository() {
+) : EquipmentRepository() {
     override fun findEquipment() = equipmentDao.findEquipment()
 
     override suspend fun getEquipment() {

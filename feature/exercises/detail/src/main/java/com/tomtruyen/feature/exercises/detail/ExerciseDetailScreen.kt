@@ -37,9 +37,9 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.tomtruyen.core.common.utils.ImageLoader
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.Chip
 import com.tomtruyen.core.ui.LoadingContainer
+import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
@@ -63,9 +63,13 @@ fun ExerciseDetailScreen(
 
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
-            when(event) {
+            when (event) {
                 is ExerciseDetailUiEvent.NavigateBack -> navController.popBackStack()
-                is ExerciseDetailUiEvent.NavigateToEdit -> navController.navigate(Screen.Exercise.Manage(id))
+                is ExerciseDetailUiEvent.NavigateToEdit -> navController.navigate(
+                    Screen.Exercise.Manage(
+                        id
+                    )
+                )
             }
         }
     }
@@ -96,7 +100,7 @@ fun ExerciseDetailScreenLayout(
                 title = state.exercise?.name.orEmpty(),
                 navController = navController
             ) {
-                if(state.exercise?.userId != null) {
+                if (state.exercise?.userId != null) {
                     IconButton(
                         onClick = {
                             onAction(ExerciseDetailUiAction.Edit)
@@ -134,7 +138,9 @@ fun ExerciseDetailScreenLayout(
                 if (state.exercise?.imageDetailUrl != null || state.exercise?.imageUrl != null) {
                     item {
                         AsyncImage(
-                            model = imageLoader.load(state.exercise?.imageDetailUrl ?: state.exercise?.imageUrl),
+                            model = imageLoader.load(
+                                state.exercise?.imageDetailUrl ?: state.exercise?.imageUrl
+                            ),
                             contentDescription = state.exercise?.name,
                             contentScale = ContentScale.Fit,
                             modifier = Modifier
@@ -159,7 +165,8 @@ fun ExerciseDetailScreenLayout(
                         ) { index, filter ->
                             Chip(
                                 modifier = Modifier.padding(start = if (index == 0) Dimens.Normal else 0.dp),
-                                text = filter?.lowercase()?.replaceFirstChar { it.uppercase() }.orEmpty(),
+                                text = filter?.lowercase()?.replaceFirstChar { it.uppercase() }
+                                    .orEmpty(),
                                 selected = true,
                             )
                         }
@@ -206,7 +213,7 @@ fun ExerciseDetailScreenLayout(
                 }
             }
 
-            if(confirmationDialogVisible) {
+            if (confirmationDialogVisible) {
                 ConfirmationDialog(
                     title = R.string.title_delete_exercise,
                     message = R.string.message_delete_exercise,

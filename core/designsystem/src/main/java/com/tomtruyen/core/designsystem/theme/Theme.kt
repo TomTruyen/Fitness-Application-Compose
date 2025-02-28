@@ -46,8 +46,8 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun FitnessApplicationTheme(
-        darkTheme: Boolean = isSystemInDarkTheme(),
-        content: @Composable () -> Unit
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
 ) {
     val colorScheme = when {
         darkTheme -> DarkColorScheme

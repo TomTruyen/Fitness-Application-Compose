@@ -23,7 +23,7 @@ data class Workout(
     val createdAt: Long = System.currentTimeMillis(),
     @SerialName("user_id")
     val userId: String? = null,
-): BaseEntity {
+) : BaseEntity {
     companion object {
         const val TABLE_NAME = "Workout"
     }

@@ -5,11 +5,12 @@ import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 sealed class ExercisesUiEvent {
     data object NavigateToFilter : ExercisesUiEvent()
 
-    data object NavigateToAdd: ExercisesUiEvent()
+    data object NavigateToAdd : ExercisesUiEvent()
 
-    data object NavigateBack: ExercisesUiEvent()
+    data object NavigateBack : ExercisesUiEvent()
 
-    data class NavigateToDetail(val id: String): ExercisesUiEvent()
+    data class NavigateToDetail(val id: String) : ExercisesUiEvent()
 
-    data class NavigateBackToWorkout(val exercises: List<ExerciseWithCategoryAndEquipment>): ExercisesUiEvent()
+    data class NavigateBackToWorkout(val exercises: List<ExerciseWithCategoryAndEquipment>) :
+        ExercisesUiEvent()
 }

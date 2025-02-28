@@ -26,20 +26,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.navigation.NavController
-import org.koin.androidx.compose.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.tomtruyen.core.designsystem.Dimens
+import com.tomtruyen.core.designsystem.theme.BlueGrey
 import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.TextDivider
 import com.tomtruyen.core.ui.TextFields
-import com.tomtruyen.core.designsystem.theme.BlueGrey
-import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.validation.errorMessage
 import com.tomtruyen.core.validation.isValid
 import com.tomtruyen.feature.auth.SocialButtons
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
+import org.koin.androidx.compose.koinViewModel
 import com.tomtruyen.core.common.R as CommonR
 
 @Composable
@@ -53,7 +53,7 @@ fun LoginScreen(
 
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
-            when(event) {
+            when (event) {
                 LoginUiEvent.NavigateToHome -> {
                     navController.navigate(Screen.Workout.Graph) {
                         popUpTo(Screen.Auth.Graph) {
@@ -61,6 +61,7 @@ fun LoginScreen(
                         }
                     }
                 }
+
                 LoginUiEvent.NavigateToRegister -> {
                     navController.navigate(Screen.Auth.Register)
                 }
@@ -102,7 +103,10 @@ fun LoginScreenLayout(
                     .padding(Dimens.Normal)
             ) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(Dimens.Small, Alignment.CenterVertically),
+                    verticalArrangement = Arrangement.spacedBy(
+                        Dimens.Small,
+                        Alignment.CenterVertically
+                    ),
                     modifier = Modifier
                         .weight(1f)
                         .verticalScroll(rememberScrollState())

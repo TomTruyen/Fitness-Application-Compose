@@ -39,7 +39,7 @@ data class WorkoutExerciseSet(
 
     // Extra fields, not in DB
     val completed: Boolean = false
-): BaseEntity {
+) : BaseEntity {
     companion object {
         const val TABLE_NAME = "WorkoutExerciseSet"
     }

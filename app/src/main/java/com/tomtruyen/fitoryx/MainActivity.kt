@@ -19,23 +19,23 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.tomtruyen.data.repositories.interfaces.UserRepository
-import com.tomtruyen.fitoryx.navigation.MainBottomNavigation
+import com.tomtruyen.core.common.models.Global
 import com.tomtruyen.core.designsystem.theme.FitnessApplicationTheme
+import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.feature.auth.login.LoginScreen
 import com.tomtruyen.feature.auth.register.RegisterScreen
 import com.tomtruyen.feature.exercises.ExercisesScreen
 import com.tomtruyen.feature.exercises.ExercisesViewModel
-import com.tomtruyen.feature.exercises.manage.ManageExerciseScreen
 import com.tomtruyen.feature.exercises.detail.ExerciseDetailScreen
 import com.tomtruyen.feature.exercises.filter.ExercisesFilterScreen
+import com.tomtruyen.feature.exercises.manage.ManageExerciseScreen
 import com.tomtruyen.feature.profile.ProfileScreen
 import com.tomtruyen.feature.workouts.WorkoutsScreen
-import com.tomtruyen.feature.workouts.manage.ManageWorkoutScreen
-import com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel
 import com.tomtruyen.feature.workouts.detail.WorkoutDetailScreen
 import com.tomtruyen.feature.workouts.history.WorkoutHistoryScreen
-import com.tomtruyen.core.common.models.Global
+import com.tomtruyen.feature.workouts.manage.ManageWorkoutScreen
+import com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel
+import com.tomtruyen.fitoryx.navigation.MainBottomNavigation
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.screenScopedViewModel
 import org.koin.android.ext.android.inject
@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
                 val backStackEntry by navController.currentBackStackEntryAsState()
 
                 LaunchedEffect(Unit) {
-                    if(userRepository.isLoggedIn()) {
+                    if (userRepository.isLoggedIn()) {
                         navController.navigate(Screen.Workout.Graph) {
                             popUpTo(Screen.Auth.Graph) {
                                 inclusive = true
@@ -77,9 +77,10 @@ class MainActivity : ComponentActivity() {
                         Screen.Profile
                     ).any { backStackEntry?.destination?.hasRoute(it::class) ?: false }
 
-                    val isViewMode = if(backStackEntry?.destination?.hasRoute<Screen.Exercise.Overview>() == true) {
-                        backStackEntry?.toRoute<Screen.Exercise.Overview>()?.mode == Screen.Exercise.Overview.Mode.VIEW
-                    } else true
+                    val isViewMode =
+                        if (backStackEntry?.destination?.hasRoute<Screen.Exercise.Overview>() == true) {
+                            backStackEntry?.toRoute<Screen.Exercise.Overview>()?.mode == Screen.Exercise.Overview.Mode.VIEW
+                        } else true
 
                     isBottomBarVisible = isRootDestination && isViewMode
                 }
@@ -157,11 +158,12 @@ class MainActivity : ComponentActivity() {
                             composable<Screen.Exercise.Overview> { backStackEntry ->
                                 val args = backStackEntry.toRoute<Screen.Exercise.Overview>()
 
-                                val viewModel = screenScopedViewModel<Screen.Exercise.Overview, ExercisesViewModel>(
-                                    navController = navController,
-                                    backStackEntry = backStackEntry,
-                                    parameters = { parametersOf(args.mode) }
-                                )
+                                val viewModel =
+                                    screenScopedViewModel<Screen.Exercise.Overview, ExercisesViewModel>(
+                                        navController = navController,
+                                        backStackEntry = backStackEntry,
+                                        parameters = { parametersOf(args.mode) }
+                                    )
 
                                 ExercisesScreen(
                                     navController = navController,
@@ -188,10 +190,11 @@ class MainActivity : ComponentActivity() {
                             }
 
                             composable<Screen.Exercise.Filter> { backStackEntry ->
-                                val viewModel = screenScopedViewModel<Screen.Exercise.Overview, ExercisesViewModel>(
-                                    navController = navController,
-                                    backStackEntry = backStackEntry,
-                                )
+                                val viewModel =
+                                    screenScopedViewModel<Screen.Exercise.Overview, ExercisesViewModel>(
+                                        navController = navController,
+                                        backStackEntry = backStackEntry,
+                                    )
 
                                 ExercisesFilterScreen(
                                     navController = navController,

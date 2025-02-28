@@ -29,7 +29,8 @@ fun SwitchListItem(title: String, checked: Boolean, onCheckedChange: (Boolean) -
         Text(
             text = title,
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
                 .animateContentSize()
         )
 

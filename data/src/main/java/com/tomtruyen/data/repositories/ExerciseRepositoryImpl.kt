@@ -3,14 +3,14 @@ package com.tomtruyen.data.repositories
 import com.tomtruyen.data.dao.ExerciseDao
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
-import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.models.ExerciseFilter
+import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Order
 
 class ExerciseRepositoryImpl(
     private val exerciseDao: ExerciseDao
-): ExerciseRepository() {
+) : ExerciseRepository() {
     override fun findExercises(query: String, filter: ExerciseFilter) = exerciseDao.findAllAsync(
         query = query,
         filter = filter,
@@ -20,29 +20,30 @@ class ExerciseRepositoryImpl(
 
     override fun findExerciseByIdAsync(id: String) = exerciseDao.findByIdAsync(id)
 
-    override suspend fun getExercises(userId: String?, refresh: Boolean) = fetch(refresh = refresh) {
-        supabase.from(Exercise.TABLE_NAME)
-            .select {
-                filter {
-                    or {
-                        Exercise::userId eq userId
-                        Exercise::userId isExact null
+    override suspend fun getExercises(userId: String?, refresh: Boolean) =
+        fetch(refresh = refresh) {
+            supabase.from(Exercise.TABLE_NAME)
+                .select {
+                    filter {
+                        or {
+                            Exercise::userId eq userId
+                            Exercise::userId isExact null
+                        }
+                    }
+
+                    order(
+                        column = "name",
+                        order = Order.ASCENDING
+                    )
+                }
+                .decodeList<Exercise>()
+                .let { exercises ->
+                    launchWithCacheTransactions {
+                        exerciseDao.deleteAll()
+                        exerciseDao.saveAll(exercises)
                     }
                 }
-
-                order(
-                    column = "name",
-                    order = Order.ASCENDING
-                )
-            }
-            .decodeList<Exercise>()
-            .let { exercises ->
-                launchWithCacheTransactions {
-                    exerciseDao.deleteAll()
-                    exerciseDao.saveAll(exercises)
-                }
-            }
-    }
+        }
 
     override suspend fun saveExercise(
         userId: String,
@@ -52,12 +53,12 @@ class ExerciseRepositoryImpl(
 
         val newExercise = exercise.copy(
             userId = userId,
-            categoryId = if(category?.isDefault == true) {
+            categoryId = if (category?.isDefault == true) {
                 null
             } else {
                 category?.id
             },
-            equipmentId = if(equipment?.isDefault == true) {
+            equipmentId = if (equipment?.isDefault == true) {
                 null
             } else {
                 equipment?.id
@@ -75,12 +76,12 @@ class ExerciseRepositoryImpl(
         userId: String,
         exerciseId: String,
     ) {
-      supabase.from(Exercise.TABLE_NAME)
-          .delete {
-              filter {
-                  Exercise::id eq exerciseId
-              }
-          }
+        supabase.from(Exercise.TABLE_NAME)
+            .delete {
+                filter {
+                    Exercise::id eq exerciseId
+                }
+            }
 
         launchWithTransaction {
             exerciseDao.deleteById(exerciseId)

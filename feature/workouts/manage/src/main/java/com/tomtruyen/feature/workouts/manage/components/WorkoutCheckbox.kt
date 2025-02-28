@@ -3,7 +3,6 @@ package com.tomtruyen.feature.workouts.manage.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -34,7 +33,7 @@ fun WorkoutCheckbox(
             .size(size)
             .clip(RoundedCornerShape(Dimens.Small))
             .background(
-                color = if(checked) {
+                color = if (checked) {
                     SuccessGreen
                 } else {
                     Color.LightGray

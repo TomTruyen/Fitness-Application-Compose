@@ -29,14 +29,17 @@ fun WorkoutExerciseSetTable(
             exercise = workoutExercise.exercise.exercise,
             unit = unit,
             mode = mode,
-            modifier = Modifier.padding(
-                horizontal = Dimens.Normal,
-            ).padding(bottom = Dimens.Tiny)
+            modifier = Modifier
+                .padding(
+                    horizontal = Dimens.Normal,
+                )
+                .padding(bottom = Dimens.Tiny)
         )
 
         workoutExercise.sets.forEachIndexed { setIndex, set ->
             WorkoutExerciseSet(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .background(
                         color = when {
                             set.completed -> LighterSuccessGreen

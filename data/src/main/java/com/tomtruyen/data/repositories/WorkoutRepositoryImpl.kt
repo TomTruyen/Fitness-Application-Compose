@@ -8,7 +8,7 @@ class WorkoutRepositoryImpl(
     private val workoutExerciseDao: com.tomtruyen.data.dao.WorkoutExerciseDao,
     private val workoutExerciseSetDao: com.tomtruyen.data.dao.WorkoutExerciseSetDao,
     private val exerciseDao: com.tomtruyen.data.dao.ExerciseDao
-): WorkoutRepository() {
+) : WorkoutRepository() {
     override fun findWorkoutsAsync() = workoutDao.findWorkoutsAsync()
 
     override suspend fun findWorkouts() = workoutDao.findWorkouts()

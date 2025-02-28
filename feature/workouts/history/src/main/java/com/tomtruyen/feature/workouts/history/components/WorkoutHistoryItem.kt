@@ -50,7 +50,8 @@ fun WorkoutHistoryItem(
     ) {
         // Just basic information like total weight, time
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(Dimens.Small)
         ) {
             Row(
@@ -94,7 +95,7 @@ fun WorkoutHistoryItem(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            if(entry.totalWeight > 0) {
+            if (entry.totalWeight > 0) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -113,7 +114,8 @@ fun WorkoutHistoryItem(
                         style = MaterialTheme.typography.bodyMedium.copy(
                             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                         ),
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .weight(1f)
                             .padding(start = Dimens.Tiny)
                     )
                 }

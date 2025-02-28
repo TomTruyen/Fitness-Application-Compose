@@ -26,11 +26,11 @@ import androidx.navigation.NavController
 import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Buttons
-import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.Dropdown
 import com.tomtruyen.core.ui.FilterDropdown
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.TextFields
+import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.validation.isValid
 import com.tomtruyen.data.entities.Category
@@ -56,7 +56,7 @@ fun ManageExerciseScreen(
 
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
-            when(event) {
+            when (event) {
                 is ManageExerciseUiEvent.NavigateBack -> navController.popBackStack()
             }
         }
@@ -90,7 +90,7 @@ fun ManageExerciseScreenLayout(
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     val onNavigateUp: () -> Unit = {
-        if(state.fullExercise != state.initialExercise) {
+        if (state.fullExercise != state.initialExercise) {
             confirmationDialogVisible = true
         } else {
             navController.popBackStack()
@@ -104,7 +104,7 @@ fun ManageExerciseScreenLayout(
         topBar = {
             Toolbar(
                 title = stringResource(
-                    id = if(state.mode == ManageExerciseMode.EDIT) {
+                    id = if (state.mode == ManageExerciseMode.EDIT) {
                         R.string.title_edit_exercise
                     } else {
                         R.string.title_create_exercise
@@ -191,7 +191,7 @@ fun ManageExerciseScreenLayout(
                     onAction(ManageExerciseUiAction.OnSaveClicked)
                 }
 
-                if(confirmationDialogVisible) {
+                if (confirmationDialogVisible) {
                     ConfirmationDialog(
                         title = CommonR.string.title_unsaved_changes,
                         message = CommonR.string.message_unsaved_changes,

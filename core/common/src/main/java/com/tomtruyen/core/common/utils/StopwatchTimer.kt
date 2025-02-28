@@ -20,11 +20,11 @@ class StopwatchTimer(
     val time = _time.asStateFlow()
 
     fun start() {
-        if(isActive.get()) return
+        if (isActive.get()) return
 
         scope.launch {
             this@StopwatchTimer.isActive.set(true)
-            while(this@StopwatchTimer.isActive.get()) {
+            while (this@StopwatchTimer.isActive.get()) {
                 delay(DELAY_IN_MILLIS)
 
                 _time.update {

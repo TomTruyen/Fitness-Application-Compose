@@ -32,15 +32,16 @@ open class TextValidator private constructor(
      */
     private fun validate(): ValidationResult {
         val localText = text ?: return ValidationResult.Invalid(setOf())
-        val validationResult = rules.foldRight(ValidationResult.Valid as ValidationResult) { rule, acc ->
-            val isValid = rule.validationRule(localText)
-            val result = if (isValid) ValidationResult.Valid else ValidationResult.Invalid(
-                setOf(
-                    rule.errorMessage
+        val validationResult =
+            rules.foldRight(ValidationResult.Valid as ValidationResult) { rule, acc ->
+                val isValid = rule.validationRule(localText)
+                val result = if (isValid) ValidationResult.Valid else ValidationResult.Invalid(
+                    setOf(
+                        rule.errorMessage
+                    )
                 )
-            )
-            return@foldRight acc combine result
-        }
+                return@foldRight acc combine result
+            }
         return validationResult
     }
 

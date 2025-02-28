@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 interface SettingsDao {
     @Query("SELECT * FROM ${Settings.TABLE_NAME} LIMIT 1")
     fun findSettings(): Flow<Settings?>
+
     @Upsert
     suspend fun save(settings: Settings)
 }

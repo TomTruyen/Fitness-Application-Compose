@@ -26,6 +26,10 @@ import java.util.UUID
             onDelete = ForeignKey.CASCADE
         )
     ],
+    indices = [
+        androidx.room.Index("workoutId"),
+        androidx.room.Index("exerciseId")
+    ]
 )
 data class WorkoutExercise(
     @PrimaryKey
@@ -39,7 +43,7 @@ data class WorkoutExercise(
     val notes: String? = null,
     @SerialName("sort_order")
     val sortOrder: Int = 0,
-): BaseEntity {
+) : BaseEntity {
     companion object {
         const val TABLE_NAME = "WorkoutExercise"
     }

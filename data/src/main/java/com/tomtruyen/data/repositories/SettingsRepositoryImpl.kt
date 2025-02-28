@@ -6,7 +6,7 @@ import io.github.jan.supabase.postgrest.from
 
 class SettingsRepositoryImpl(
     private val settingsDao: com.tomtruyen.data.dao.SettingsDao
-): SettingsRepository() {
+) : SettingsRepository() {
     override fun findSettings() = settingsDao.findSettings()
 
     override suspend fun saveSettings(

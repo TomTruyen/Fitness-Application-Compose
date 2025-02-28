@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class CacheTTL(
     @PrimaryKey override val id: String, // The key = the Firebase collection name
     val ttl: Long = DEFAULT_TTL
-): BaseEntity {
+) : BaseEntity {
     val isExpired: Boolean
         get() = System.currentTimeMillis() > ttl
 

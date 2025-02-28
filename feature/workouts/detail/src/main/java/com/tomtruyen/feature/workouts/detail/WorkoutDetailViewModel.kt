@@ -1,7 +1,6 @@
 package com.tomtruyen.feature.workouts.detail
 
 import com.tomtruyen.core.common.base.BaseViewModel
-import com.tomtruyen.core.common.base.SnackbarMessage
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import kotlinx.coroutines.flow.collectLatest
@@ -13,7 +12,7 @@ class WorkoutDetailViewModel(
     private val id: String,
     private val workoutRepository: WorkoutRepository,
     private val userRepository: UserRepository
-): BaseViewModel<WorkoutDetailUiState, WorkoutDetailUiAction, WorkoutDetailUiEvent>(
+) : BaseViewModel<WorkoutDetailUiState, WorkoutDetailUiAction, WorkoutDetailUiEvent>(
     initialState = WorkoutDetailUiState()
 ) {
     init {
@@ -50,10 +49,11 @@ class WorkoutDetailViewModel(
     }
 
     override fun onAction(action: WorkoutDetailUiAction) {
-        when(action) {
+        when (action) {
             is WorkoutDetailUiAction.Edit -> {
                 triggerEvent(WorkoutDetailUiEvent.NavigateToEdit(id))
             }
+
             is WorkoutDetailUiAction.Delete -> delete()
             is WorkoutDetailUiAction.StartWorkout -> triggerEvent(
                 WorkoutDetailUiEvent.NavigateToStartWorkout(

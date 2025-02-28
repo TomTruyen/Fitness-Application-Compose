@@ -12,7 +12,7 @@ class ExerciseDetailViewModel(
     private val id: String,
     private val exerciseRepository: ExerciseRepository,
     private val userRepository: UserRepository
-): BaseViewModel<ExerciseDetailUiState, ExerciseDetailUiAction, ExerciseDetailUiEvent>(
+) : BaseViewModel<ExerciseDetailUiState, ExerciseDetailUiAction, ExerciseDetailUiEvent>(
     initialState = ExerciseDetailUiState()
 ) {
     init {
@@ -47,7 +47,7 @@ class ExerciseDetailViewModel(
     }
 
     override fun onAction(action: ExerciseDetailUiAction) {
-        when(action) {
+        when (action) {
             is ExerciseDetailUiAction.Edit -> triggerEvent(ExerciseDetailUiEvent.NavigateToEdit(id))
             is ExerciseDetailUiAction.Delete -> delete()
         }

@@ -11,11 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.toolbars.Toolbar
-import com.tomtruyen.feature.workouts.history.components.WorkoutHistoryItem
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
@@ -30,7 +27,7 @@ fun WorkoutHistoryScreen(
 
     LaunchedEffect(context, viewModel) {
         viewModel.eventFlow.collectLatest { event ->
-            when(event) {
+            when (event) {
                 is WorkoutHistoryUiEvent.NavigateToDetail -> {
                     // TODO: Implement -- This is for a future update
                 }
@@ -64,7 +61,8 @@ fun WorkoutHistoryScreenLayout(
         },
     ) {
         LazyColumn(
-            modifier = Modifier.padding(it)
+            modifier = Modifier
+                .padding(it)
                 .fillMaxSize()
                 .padding(vertical = Dimens.Normal),
         ) {

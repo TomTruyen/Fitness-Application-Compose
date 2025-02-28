@@ -18,7 +18,7 @@ androidGitVersion {
 }
 
 // Signing Configuration for Keystore
-if(file(rootProject.projectDir.absolutePath + "/signing.gradle").exists()) {
+if (file(rootProject.projectDir.absolutePath + "/signing.gradle").exists()) {
     apply(
         from = rootProject.projectDir.absolutePath + "/signing.gradle"
     )
@@ -51,7 +51,10 @@ android {
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             isDebuggable = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
