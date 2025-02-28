@@ -57,19 +57,21 @@ class ExercisesViewModel(
     }
 
     private fun observeCategories() = vmScope.launch {
-        exerciseRepository.findCategories()
-            .distinctUntilChanged()
-            .collectLatest { categories ->
-                updateState { it.copy(categories = categories) }
-            }
+        // TODO: Implement
+//        exerciseRepository.findCategories()
+//            .distinctUntilChanged()
+//            .collectLatest { categories ->
+//                updateState { it.copy(categories = categories) }
+//            }
     }
 
     private fun observeEquipment() = vmScope.launch {
-        exerciseRepository.findEquipment()
-            .distinctUntilChanged()
-            .collectLatest { equipment ->
-                updateState { it.copy(equipment = equipment) }
-            }
+        // TODO: Implement
+//        exerciseRepository.findEquipment()
+//            .distinctUntilChanged()
+//            .collectLatest { equipment ->
+//                updateState { it.copy(equipment = equipment) }
+//            }
     }
 
     private fun handleExerciseClick(exercise: Exercise) {

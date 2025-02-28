@@ -1,16 +1,23 @@
 package com.tomtruyen.data.repositories
 
 import com.tomtruyen.data.firebase.auth.GoogleSignInHelper
+import com.tomtruyen.data.repositories.interfaces.CategoryRepository
+import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.auth.providers.builtin.IDToken
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 class UserRepositoryImpl(
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val equipmentRepository: EquipmentRepository,
+    private val categoryRepository: CategoryRepository
 ): UserRepository() {
     private val auth = supabase.auth
 
@@ -20,7 +27,7 @@ class UserRepositoryImpl(
             this.password = password
         }
 
-        fetchSettings()
+        onAuthenticated()
     }
 
     override suspend fun register(email: String, password: String) {
@@ -29,7 +36,7 @@ class UserRepositoryImpl(
             this.password = password
         }
 
-        fetchSettings()
+        onAuthenticated()
     }
 
     override suspend fun loginWithGoogle(idToken: String) {
@@ -38,7 +45,7 @@ class UserRepositoryImpl(
             provider = Google
         }
 
-        fetchSettings()
+        onAuthenticated()
     }
 
     override suspend fun logout() {
@@ -50,11 +57,27 @@ class UserRepositoryImpl(
         auth.signOut()
     }
 
+    override fun isLoggedIn() = auth.currentUserOrNull() != null
+
+    override fun getUser() = auth.currentUserOrNull()
+
+    override suspend fun onAuthenticated() {
+        coroutineScope {
+            val calls = listOf(
+                async { fetchSettings() },
+                async { fetchEquipment() },
+                async { fetchCategories() }
+            )
+
+            calls.awaitAll()
+        }
+    }
+
     private suspend fun fetchSettings() = getUser()?.let { user ->
         settingsRepository.getSettings(user.id, true)
     }
 
-    override fun isLoggedIn() = auth.currentUserOrNull() != null
+    private suspend fun fetchEquipment() = equipmentRepository.getEquipment()
 
-    override fun getUser() = auth.currentUserOrNull()
+    private suspend fun fetchCategories() = categoryRepository.getCategories()
 }

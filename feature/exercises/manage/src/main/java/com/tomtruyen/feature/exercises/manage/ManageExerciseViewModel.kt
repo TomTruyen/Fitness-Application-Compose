@@ -51,25 +51,27 @@ class ManageExerciseViewModel(
     }
 
     private fun observeCategories() = vmScope.launch {
-        exerciseRepository.findCategories()
-            .distinctUntilChanged()
-            .collectLatest { categories ->
-                updateState {
-                    it.copy(categories = listOf(Exercise.DEFAULT_DROPDOWN_VALUE) + categories)
-                }
-            }
+        // TODO: Implement
+//        exerciseRepository.findCategories()
+//            .distinctUntilChanged()
+//            .collectLatest { categories ->
+//                updateState {
+//                    it.copy(categories = listOf(Exercise.DEFAULT_DROPDOWN_VALUE) + categories)
+//                }
+//            }
     }
 
     private fun observeEquipment() = vmScope.launch {
-        exerciseRepository.findEquipment()
-            .distinctUntilChanged()
-            .collectLatest { equipment ->
-                updateState {
-                    it.copy(
-                        equipment = listOf(Exercise.DEFAULT_DROPDOWN_VALUE) + equipment
-                    )
-                }
-            }
+        // TODO: Implement
+//        exerciseRepository.findEquipment()
+//            .distinctUntilChanged()
+//            .collectLatest { equipment ->
+//                updateState {
+//                    it.copy(
+//                        equipment = listOf(Exercise.DEFAULT_DROPDOWN_VALUE) + equipment
+//                    )
+//                }
+//            }
     }
 
     private fun save() = launchLoading {

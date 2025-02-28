@@ -28,7 +28,9 @@ val repositoryModule = module {
     // Repositories
     single<UserRepository> {
         UserRepositoryImpl(
-            settingsRepository = get<SettingsRepository>()
+            settingsRepository = get<SettingsRepository>(),
+            categoryRepository = get<CategoryRepository>(),
+            equipmentRepository = get<EquipmentRepository>()
         )
     }
 
