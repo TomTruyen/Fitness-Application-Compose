@@ -189,8 +189,9 @@ class ManageWorkoutViewModel(
             it.copy(
                 fullWorkout = it.fullWorkout.copy(
                     exercises = it.fullWorkout.exercises.toMutableList().apply {
-                        index =
-                            indexOfFirst { exercise -> exercise.workoutExercise.exerciseId == it.selectedExerciseId }
+                        index = indexOfFirst { exercise ->
+                            exercise.workoutExercise.id == it.selectedExerciseId
+                        }
 
                         if (index == -1) return@apply
 
