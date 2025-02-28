@@ -215,7 +215,7 @@ class ManageWorkoutViewModel(
             ),
             selectedExerciseId = null,
         )
-    }
+    }.also { toggleExerciseMoreActionSheet() }
 
     private fun addExercises(exercises: List<ExerciseWithCategoryAndEquipment>) =
         updateAndGetState {
@@ -231,15 +231,9 @@ class ManageWorkoutViewModel(
         }
 
     private fun toggleExerciseMoreActionSheet(id: String? = null) = updateState {
-        val shouldToggle = it.selectedExerciseId != id
-
         it.copy(
             selectedExerciseId = id,
-            showExerciseMoreActions = if (shouldToggle) {
-                !it.showExerciseMoreActions
-            } else {
-                it.showExerciseMoreActions
-            }
+            showExerciseMoreActions = !it.showExerciseMoreActions
         )
     }
 
@@ -326,10 +320,7 @@ class ManageWorkoutViewModel(
                 notes = action.notes
             )
 
-            is ManageWorkoutUiAction.OnDeleteExercise -> {
-                toggleExerciseMoreActionSheet(uiState.value.selectedExerciseId)
-                deleteExercise()
-            }
+            is ManageWorkoutUiAction.OnDeleteExercise -> deleteExercise()
 
             is ManageWorkoutUiAction.OnReplaceExerciseClicked -> {
                 toggleExerciseMoreActionSheet(uiState.value.selectedExerciseId)
