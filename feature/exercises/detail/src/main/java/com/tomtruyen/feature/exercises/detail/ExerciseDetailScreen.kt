@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.tomtruyen.core.common.utils.ImageLoader
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.Chip
@@ -43,6 +44,7 @@ import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
 import com.tomtruyen.core.common.R as CommonR
 
@@ -52,7 +54,8 @@ fun ExerciseDetailScreen(
     navController: NavController,
     viewModel: ExerciseDetailViewModel = koinViewModel(
         parameters = { parametersOf(id) }
-    )
+    ),
+    imageLoader: ImageLoader = koinInject()
 ) {
     val context = LocalContext.current
 
@@ -71,6 +74,7 @@ fun ExerciseDetailScreen(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
+        imageLoader = imageLoader,
         onAction = viewModel::onAction
     )
 }
@@ -80,6 +84,7 @@ fun ExerciseDetailScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: ExerciseDetailUiState,
+    imageLoader: ImageLoader,
     onAction: (ExerciseDetailUiAction) -> Unit
 ) {
     var confirmationDialogVisible by remember { mutableStateOf(false) }
@@ -129,7 +134,7 @@ fun ExerciseDetailScreenLayout(
                 if (state.exercise?.imageDetailUrl != null || state.exercise?.imageUrl != null) {
                     item {
                         AsyncImage(
-                            model = state.exercise.imageDetailUrl ?: state.exercise.imageUrl,
+                            model = imageLoader.load(state.exercise.imageDetailUrl ?: state.exercise.imageUrl),
                             contentDescription = state.exercise.name,
                             contentScale = ContentScale.Fit,
                             modifier = Modifier

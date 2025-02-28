@@ -42,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.utils.ImageLoader
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Avatar
 import com.tomtruyen.core.ui.Chip
@@ -52,6 +53,7 @@ import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.navigation.NavArguments
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
+import org.koin.compose.koinInject
 
 @Composable
 fun ExercisesScreen(
@@ -61,7 +63,6 @@ fun ExercisesScreen(
     val context = LocalContext.current
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
             when(event) {

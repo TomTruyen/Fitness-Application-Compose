@@ -1,5 +1,6 @@
 package com.tomtruyen.fitoryx.di
 
+import com.tomtruyen.core.common.utils.ImageLoader
 import com.tomtruyen.feature.auth.login.LoginViewModel
 import com.tomtruyen.feature.auth.register.RegisterViewModel
 import com.tomtruyen.feature.exercises.detail.ExerciseDetailViewModel
@@ -20,6 +21,7 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.PropertyConversionMethod
 import io.github.jan.supabase.storage.Storage
+import io.github.jan.supabase.storage.storage
 import org.koin.core.module.dsl.*
 import org.koin.dsl.module
 import kotlin.time.Duration.Companion.seconds
@@ -38,6 +40,12 @@ val appModule = module {
                 transferTimeout = 60.seconds
             }
         }
+    }
+
+    single<ImageLoader> {
+        ImageLoader(
+            storage = get<SupabaseClient>().storage
+        )
     }
 
     single<CredentialProvider> {

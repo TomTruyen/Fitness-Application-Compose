@@ -15,6 +15,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.tomtruyen.core.common.R
+import com.tomtruyen.core.common.utils.ImageLoader
+import org.koin.compose.koinInject
 
 @Composable
 fun Avatar(
@@ -24,8 +26,10 @@ fun Avatar(
     size: Dp = 40.dp,
     backgroundColor: Color = MaterialTheme.colorScheme.surface
 ) {
+    val imageLoader: ImageLoader = koinInject()
+
     AsyncImage(
-        model = imageUrl,
+        model = imageLoader.load(imageUrl),
         fallback = painterResource(R.drawable.ic_fallback),
         contentDescription = contentDescription,
         contentScale = ContentScale.Fit,
