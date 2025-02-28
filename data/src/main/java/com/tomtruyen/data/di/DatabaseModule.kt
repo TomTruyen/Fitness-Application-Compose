@@ -23,4 +23,6 @@ val databaseModule = module {
     single { get<AppDatabase>().workoutSetDao() }
     single { get<AppDatabase>().workoutHistoryDao() }
     single { get<AppDatabase>().cacheTTLDao() }
+    single { get<AppDatabase>().equipmentDao() }
+    single { get<AppDatabase>().categoryDao() }
 }

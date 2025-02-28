@@ -1,12 +1,9 @@
 package com.tomtruyen.data.repositories
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.tomtruyen.data.dao.WorkoutHistoryDao
 import com.tomtruyen.data.entities.WorkoutHistoryWithWorkout
 import com.tomtruyen.data.firebase.models.FirebaseCallback
-import com.tomtruyen.data.firebase.models.WorkoutHistoriesResponse
-import com.tomtruyen.data.firebase.models.WorkoutHistoriesResponse.Companion.UPDATED_AT_ORDER_FIELD
 import com.tomtruyen.data.firebase.models.WorkoutHistoryResponse
 import com.tomtruyen.data.firebase.models.WorkoutResponse
 import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
@@ -14,13 +11,11 @@ import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.koin.java.KoinJavaComponent.inject
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class WorkoutHistoryRepositoryImpl(
-    private val workoutHistoryDao: com.tomtruyen.data.dao.WorkoutHistoryDao,
-    private val workoutDao: com.tomtruyen.data.dao.WorkoutDao
+    private val workoutHistoryDao: WorkoutHistoryDao,
 ): WorkoutHistoryRepository() {
+    // TODO: Can we decouple this from the repository?
     private val workoutRepository by inject<WorkoutRepository>(WorkoutRepository::class.java)
 
     override suspend fun findWorkoutHistoriesByRange(
