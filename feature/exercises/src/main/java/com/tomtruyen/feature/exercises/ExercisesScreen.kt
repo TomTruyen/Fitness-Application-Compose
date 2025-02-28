@@ -42,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.models.FilterOption
 import com.tomtruyen.core.common.utils.ImageLoader
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Avatar
@@ -101,10 +102,8 @@ fun ExercisesScreenLayout(
 ) {
     val refreshState = rememberPullToRefreshState()
 
-    val filters by remember {
-        derivedStateOf {
-            state.filter.categories + state.filter.equipment
-        }
+    val filters: List<FilterOption> = remember(state.filter, state.categories) {
+        state.filter.categories + state.filter.equipment
     }
 
     Scaffold(
@@ -213,7 +212,7 @@ fun ExercisesScreenLayout(
                         itemsIndexed(filters) { index, filter ->
                             Chip(
                                 modifier = Modifier.padding(start = if(index == 0) Dimens.Normal else 0.dp),
-                                text = filter,
+                                text = filter.name,
                                 selected = true,
                                 trailingIcon = {
                                     Icon(

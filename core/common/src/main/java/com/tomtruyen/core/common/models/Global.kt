@@ -1,4 +1,4 @@
-package com.tomtruyen.models
+package com.tomtruyen.core.common.models
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf

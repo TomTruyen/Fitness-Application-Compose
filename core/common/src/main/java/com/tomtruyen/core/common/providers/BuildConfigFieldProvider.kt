@@ -1,4 +1,4 @@
-package com.tomtruyen.models.providers
+package com.tomtruyen.core.common.providers
 
 interface BuildConfigFieldProvider {
     val versionName: String

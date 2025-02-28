@@ -17,9 +17,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.models.Global
 import com.tomtruyen.core.designsystem.theme.ChineseBlack
 import com.tomtruyen.core.ui.R
-import com.tomtruyen.models.Global
 import com.tomtruyen.navigation.shouldShowNavigationIcon
 
 @Composable

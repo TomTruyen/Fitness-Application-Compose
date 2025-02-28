@@ -1,11 +1,14 @@
-package com.tomtruyen.models
+package com.tomtruyen.data.models
+
+import com.tomtruyen.data.entities.Category
+import com.tomtruyen.data.entities.Equipment
 
 data class ExerciseFilter(
-    var categories: List<String> = emptyList(),
-    var equipment: List<String> = emptyList(),
+    var categories: List<Category> = emptyList(),
+    var equipment: List<Equipment> = emptyList(),
 ) {
-    fun tryAddCategory(category: String) {
-        categories = categories.toMutableList().apply {
+    fun tryAddCategory(category: Category) {
+        this.categories = this.categories.toMutableList().apply {
             if (contains(category)) {
                 remove(category)
             } else {
@@ -14,7 +17,7 @@ data class ExerciseFilter(
         }
     }
 
-    fun tryAddEquipment(equipment: String) {
+    fun tryAddEquipment(equipment: Equipment) {
         this.equipment = this.equipment.toMutableList().apply {
             if (contains(equipment)) {
                 remove(equipment)

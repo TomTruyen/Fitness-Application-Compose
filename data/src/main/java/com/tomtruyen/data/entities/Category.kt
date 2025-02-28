@@ -2,6 +2,7 @@ package com.tomtruyen.data.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.tomtruyen.core.common.models.FilterOption
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -13,9 +14,13 @@ data class Category(
     @SerialName("id")
     val id: String = UUID.randomUUID().toString(),
     @SerialName("name")
-    val name: String,
-) {
+    override val name: String,
+): FilterOption {
     companion object {
         const val TABLE_NAME = "Category"
+
+        val DEFAULT = Category(
+            name = "None"
+        )
     }
 }

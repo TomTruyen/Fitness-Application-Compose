@@ -16,5 +16,4 @@ dependencies {
 
     implementation(project(":data"))
     implementation(project(":navigation"))
-    implementation(project(":models"))
 }

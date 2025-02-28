@@ -27,6 +27,7 @@ import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.Dropdown
+import com.tomtruyen.core.ui.FilterDropdown
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.toolbars.Toolbar
@@ -145,7 +146,7 @@ fun ManageExerciseScreenLayout(
                         )
                     )
 
-                    Dropdown(
+                    FilterDropdown(
                         placeholder = stringResource(id = CommonR.string.placeholder_category),
                         options = state.categories,
                         selectedOption = state.exercise.category ?: DEFAULT_DROPDOWN_VALUE,
@@ -158,7 +159,7 @@ fun ManageExerciseScreenLayout(
                         },
                     )
 
-                    Dropdown(
+                    FilterDropdown(
                         placeholder = stringResource(id = CommonR.string.placeholder_equipment),
                         options = state.equipment,
                         selectedOption = state.exercise.equipment ?: DEFAULT_DROPDOWN_VALUE,

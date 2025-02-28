@@ -15,7 +15,6 @@ dependencies {
 
     implementation(project(":data"))
     implementation(project(":navigation"))
-    implementation(project(":models"))
 
     // Paging 3
     implementation(libs.androidx.paging.runtime)

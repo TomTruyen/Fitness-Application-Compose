@@ -4,7 +4,7 @@ import android.util.Log
 import com.tomtruyen.data.dao.ExerciseDao
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
-import com.tomtruyen.models.ExerciseFilter
+import com.tomtruyen.data.models.ExerciseFilter
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Order
 

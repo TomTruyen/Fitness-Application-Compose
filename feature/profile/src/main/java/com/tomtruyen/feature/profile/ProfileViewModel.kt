@@ -3,7 +3,7 @@ package com.tomtruyen.feature.profile
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
-import com.tomtruyen.models.providers.KoinReloadProvider
+import com.tomtruyen.core.common.providers.KoinReloadProvider
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull

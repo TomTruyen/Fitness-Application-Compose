@@ -86,7 +86,6 @@ dependencies {
     implementation(project(":core:validation"))
 
     implementation(project(":data"))
-    implementation(project(":models"))
     implementation(project(":navigation"))
 
     implementation(project(":feature:auth:login"))

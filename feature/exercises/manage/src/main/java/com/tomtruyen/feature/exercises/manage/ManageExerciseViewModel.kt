@@ -2,8 +2,12 @@ package com.tomtruyen.feature.exercises.manage
 
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.base.SnackbarMessage
+import com.tomtruyen.data.entities.Category
+import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.firebase.models.FirebaseCallback
+import com.tomtruyen.data.repositories.interfaces.CategoryRepository
+import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.feature.exercises.manage.model.ManageExerciseMode
@@ -14,6 +18,8 @@ import kotlinx.coroutines.launch
 class ManageExerciseViewModel(
     private val id: String?,
     private val exerciseRepository: ExerciseRepository,
+    private val categoryRepository: CategoryRepository,
+    private val equipmentRepository: EquipmentRepository,
     private val userRepository: UserRepository
 ): BaseViewModel<ManageExerciseUiState, ManageExerciseUiAction, ManageExerciseUiEvent>(
     initialState = ManageExerciseUiState(
@@ -51,27 +57,25 @@ class ManageExerciseViewModel(
     }
 
     private fun observeCategories() = vmScope.launch {
-        // TODO: Implement
-//        exerciseRepository.findCategories()
-//            .distinctUntilChanged()
-//            .collectLatest { categories ->
-//                updateState {
-//                    it.copy(categories = listOf(Exercise.DEFAULT_DROPDOWN_VALUE) + categories)
-//                }
-//            }
+        categoryRepository.findCategories()
+            .distinctUntilChanged()
+            .collectLatest { categories ->
+                updateState {
+                    it.copy(categories = listOf(Category.DEFAULT) + categories)
+                }
+            }
     }
 
     private fun observeEquipment() = vmScope.launch {
-        // TODO: Implement
-//        exerciseRepository.findEquipment()
-//            .distinctUntilChanged()
-//            .collectLatest { equipment ->
-//                updateState {
-//                    it.copy(
-//                        equipment = listOf(Exercise.DEFAULT_DROPDOWN_VALUE) + equipment
-//                    )
-//                }
-//            }
+        equipmentRepository.findEquipment()
+            .distinctUntilChanged()
+            .collectLatest { equipment ->
+                updateState {
+                    it.copy(
+                        equipment = listOf(Equipment.DEFAULT) + equipment
+                    )
+                }
+            }
     }
 
     private fun save() = launchLoading {

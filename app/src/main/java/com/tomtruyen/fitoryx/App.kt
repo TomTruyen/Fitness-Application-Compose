@@ -4,6 +4,7 @@ import android.app.Application
 import com.tomtruyen.data.di.databaseModule
 import com.tomtruyen.data.di.repositoryModule
 import com.tomtruyen.fitoryx.di.appModule
+import com.tomtruyen.fitoryx.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.loadKoinModules
@@ -28,6 +29,7 @@ class App: Application() {
     companion object {
         private val koinModules = listOf(
             appModule,
+            viewModelModule,
             databaseModule,
             repositoryModule
         )

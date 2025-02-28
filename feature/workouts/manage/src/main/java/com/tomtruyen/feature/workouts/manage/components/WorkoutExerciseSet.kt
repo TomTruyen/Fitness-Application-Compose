@@ -43,7 +43,7 @@ import com.tomtruyen.data.entities.WorkoutSet
 import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
-import com.tomtruyen.models.RestAlertType
+import com.tomtruyen.core.common.models.RestAlertType
 import com.tomtruyen.core.common.R as CommonR
 
 @Composable

@@ -2,9 +2,11 @@ package com.tomtruyen.feature.exercises
 
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.data.repositories.interfaces.CategoryRepository
+import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
-import com.tomtruyen.models.ExerciseFilter
+import com.tomtruyen.data.models.ExerciseFilter
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
@@ -16,6 +18,8 @@ import kotlinx.coroutines.launch
 class ExercisesViewModel(
     private val mode: Screen.Exercise.Overview.Mode,
     private val exerciseRepository: ExerciseRepository,
+    private val categoryRepository: CategoryRepository,
+    private val equipmentRepository: EquipmentRepository,
     private val userRepository: UserRepository
 ): BaseViewModel<ExercisesUiState, ExercisesUiAction, ExercisesUiEvent>(
     initialState = ExercisesUiState(mode = mode)
@@ -57,21 +61,19 @@ class ExercisesViewModel(
     }
 
     private fun observeCategories() = vmScope.launch {
-        // TODO: Implement
-//        exerciseRepository.findCategories()
-//            .distinctUntilChanged()
-//            .collectLatest { categories ->
-//                updateState { it.copy(categories = categories) }
-//            }
+        categoryRepository.findCategories()
+            .distinctUntilChanged()
+            .collectLatest { categories ->
+                updateState { it.copy(categories = categories) }
+            }
     }
 
     private fun observeEquipment() = vmScope.launch {
-        // TODO: Implement
-//        exerciseRepository.findEquipment()
-//            .distinctUntilChanged()
-//            .collectLatest { equipment ->
-//                updateState { it.copy(equipment = equipment) }
-//            }
+        equipmentRepository.findEquipment()
+            .distinctUntilChanged()
+            .collectLatest { equipment ->
+                updateState { it.copy(equipment = equipment) }
+            }
     }
 
     private fun handleExerciseClick(exercise: Exercise) {

@@ -108,7 +108,7 @@ fun ExercisesFilterScreenLayout(
                 horizontalArrangement = Arrangement.spacedBy(Dimens.Small)
             ) {
                 state.categories.forEach { category ->
-                    Chip(category, state.filter.categories.contains(category)) {
+                    Chip(category.name, state.filter.categories.contains(category)) {
                         onAction(ExercisesUiAction.OnCategoryFilterChanged(category))
                     }
                 }
@@ -128,7 +128,7 @@ fun ExercisesFilterScreenLayout(
                 horizontalArrangement = Arrangement.spacedBy(Dimens.Small)
             ) {
                 state.equipment.forEach { equipment ->
-                    Chip(equipment, state.filter.equipment.contains(equipment)) {
+                    Chip(equipment.name, state.filter.equipment.contains(equipment)) {
                         onAction(ExercisesUiAction.OnEquipmentFilterChanged(equipment))
                     }
                 }

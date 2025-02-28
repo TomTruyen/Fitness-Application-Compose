@@ -7,7 +7,7 @@ import androidx.room.Upsert
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.models.ExerciseFilter
+import com.tomtruyen.data.models.ExerciseFilter
 import kotlinx.coroutines.flow.Flow
 
 @Dao

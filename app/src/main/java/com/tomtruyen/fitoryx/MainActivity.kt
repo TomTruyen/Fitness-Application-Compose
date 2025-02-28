@@ -35,7 +35,7 @@ import com.tomtruyen.feature.workouts.manage.ManageWorkoutScreen
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel
 import com.tomtruyen.feature.workouts.detail.WorkoutDetailScreen
 import com.tomtruyen.feature.workouts.history.WorkoutHistoryScreen
-import com.tomtruyen.models.Global
+import com.tomtruyen.core.common.models.Global
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.screenScopedViewModel
 import org.koin.android.ext.android.inject

@@ -14,7 +14,29 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.tomtruyen.core.common.extensions.capitalize
+import com.tomtruyen.core.common.models.FilterOption
 import com.tomtruyen.core.designsystem.Dimens
+
+@Composable
+fun FilterDropdown(
+    placeholder: String,
+    options: List<FilterOption>,
+    selectedOption: String,
+    error: String? = null,
+    onOptionSelected: (String) -> Unit
+) {
+    val rememberedOptions: List<String> = remember(options) {
+        options.map { it.name }
+    }
+
+    Dropdown(
+        placeholder = placeholder,
+        options = rememberedOptions,
+        selectedOption = selectedOption,
+        error = error,
+        onOptionSelected = onOptionSelected
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

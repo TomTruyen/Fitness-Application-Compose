@@ -7,7 +7,3 @@ plugins {
 android {
     namespace = "com.tomtruyen.core.common"
 }
-
-dependencies {
-    implementation(project(":models"))
-}

@@ -41,7 +41,7 @@ import com.tomtruyen.core.ui.dialogs.RestAlertDialog
 import com.tomtruyen.core.ui.dialogs.UnitAlertDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.data.entities.Settings
-import com.tomtruyen.models.providers.BuildConfigFieldProvider
+import com.tomtruyen.core.common.providers.BuildConfigFieldProvider
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel

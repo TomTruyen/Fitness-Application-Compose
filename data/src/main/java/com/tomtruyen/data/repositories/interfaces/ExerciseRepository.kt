@@ -2,13 +2,14 @@ package com.tomtruyen.data.repositories.interfaces
 
 import com.tomtruyen.data.repositories.BaseRepository
 import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.data.models.ExerciseFilter
 import kotlinx.coroutines.flow.Flow
 
 abstract class ExerciseRepository: BaseRepository() {
     override val identifier: String
         get() = Exercise.TABLE_NAME
 
-    abstract fun findExercises(query: String, filter: com.tomtruyen.models.ExerciseFilter): Flow<List<Exercise>>
+    abstract fun findExercises(query: String, filter: ExerciseFilter): Flow<List<Exercise>>
     abstract fun findExerciseById(id: String): Flow<Exercise?>
     abstract suspend fun getExercises(userId: String?, refresh: Boolean)
     abstract suspend fun saveUserExercise(userId: String, exercise: Exercise)

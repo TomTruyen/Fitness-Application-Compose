@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.tomtruyen.core.common.R
-import com.tomtruyen.models.providers.BuildConfigFieldProvider
+import com.tomtruyen.core.common.providers.BuildConfigFieldProvider
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

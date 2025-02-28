@@ -5,7 +5,7 @@ import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
-import com.tomtruyen.models.providers.CredentialProvider
+import com.tomtruyen.core.common.providers.CredentialProvider
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

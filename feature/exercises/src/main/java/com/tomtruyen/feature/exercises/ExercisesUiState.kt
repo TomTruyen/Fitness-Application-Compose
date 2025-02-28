@@ -1,7 +1,9 @@
 package com.tomtruyen.feature.exercises
 
+import com.tomtruyen.data.entities.Category
+import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.models.ExerciseFilter
+import com.tomtruyen.data.models.ExerciseFilter
 import com.tomtruyen.navigation.Screen
 
 data class ExercisesUiState(
@@ -12,8 +14,8 @@ data class ExercisesUiState(
     val selectedExercises: List<Exercise> = emptyList(),
 
     val exercises: List<Exercise> = emptyList(),
-    val categories: List<String> = emptyList(),
-    val equipment: List<String> = emptyList(),
+    val categories: List<Category> = emptyList(),
+    val equipment: List<Equipment> = emptyList(),
 
     val loading: Boolean = false,
     val refreshing: Boolean = false,
