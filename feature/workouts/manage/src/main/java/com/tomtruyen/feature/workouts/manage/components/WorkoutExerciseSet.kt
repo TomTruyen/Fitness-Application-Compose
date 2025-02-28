@@ -34,6 +34,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import com.tomtruyen.core.common.extensions.format
+import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.TextFields
@@ -133,7 +134,7 @@ fun WorkoutExerciseSet(
 
 
             when (workoutExercise.exercise.typeEnum) {
-                Exercise.ExerciseType.WEIGHT -> WeightSet(
+                ExerciseType.WEIGHT -> WeightSet(
                     set = set,
                     onRepsChanged = { reps ->
                         onAction(
@@ -155,7 +156,7 @@ fun WorkoutExerciseSet(
                     }
                 )
 
-                Exercise.ExerciseType.TIME -> TimeSet(
+                ExerciseType.TIME -> TimeSet(
                     set = set,
                     onTimeChanged = { time ->
                         onAction(
@@ -189,7 +190,7 @@ fun WorkoutExerciseSet(
 @Composable
 private fun PreviousSet(
     lastPerformedSet: WorkoutSet?,
-    type: Exercise.ExerciseType,
+    type: ExerciseType,
     modifier: Modifier = Modifier
 ) {
     /**
@@ -200,13 +201,13 @@ private fun PreviousSet(
     Text(
         text = lastPerformedSet?.let { set ->
             when (type) {
-                Exercise.ExerciseType.WEIGHT -> {
+                ExerciseType.WEIGHT -> {
                     val weight = set.weight.format()
 
                     "${set.reps}x${weight}"
                 }
 
-                Exercise.ExerciseType.TIME -> {
+                ExerciseType.TIME -> {
                     TimeUtils.formatSeconds(set.time.toLong())
                 }
             }

@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
@@ -83,7 +84,7 @@ fun ManageExerciseScreenLayout(
     }
 
     val types = remember {
-        Exercise.ExerciseType.entries.map { it.value }
+        ExerciseType.entries.map { it.value }
     }
 
     var confirmationDialogVisible by remember { mutableStateOf(false) }

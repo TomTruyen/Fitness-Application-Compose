@@ -3,6 +3,7 @@ package com.tomtruyen.data.entities
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.tomtruyen.core.common.models.ExerciseType
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -38,11 +39,6 @@ data class Exercise(
     }
 
     val typeEnum get() = ExerciseType.entries.firstOrNull { it.value.lowercase() == type } ?: ExerciseType.WEIGHT
-
-    enum class ExerciseType(val value: String) {
-        WEIGHT("Weight"),
-        TIME("Time")
-    }
 
     companion object {
         const val TABLE_NAME = "Exercise"

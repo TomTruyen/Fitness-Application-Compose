@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.feature.workouts.manage.R
@@ -57,7 +58,7 @@ fun WorkoutExerciseSetHeader(
         }
 
         when(exercise.typeEnum) {
-            Exercise.ExerciseType.WEIGHT -> {
+            ExerciseType.WEIGHT -> {
                 Text(
                     text = stringResource(id = R.string.label_reps).uppercase(),
                     textAlign = TextAlign.Center,
@@ -79,7 +80,7 @@ fun WorkoutExerciseSetHeader(
                 )
             }
 
-            Exercise.ExerciseType.TIME -> {
+            ExerciseType.TIME -> {
                 Text(
                     text = stringResource(id = R.string.label_time).uppercase(),
                     textAlign = TextAlign.Center,
