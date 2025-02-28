@@ -3,7 +3,7 @@ package com.tomtruyen.feature.exercises
 import com.tomtruyen.core.common.models.FilterOption
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
-import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 
 sealed class ExercisesUiAction {
     data object OnToggleSearch : ExercisesUiAction()
@@ -22,7 +22,7 @@ sealed class ExercisesUiAction {
 
     data class OnRemoveFilterClicked(val filter: FilterOption) : ExercisesUiAction()
 
-    data class OnExerciseClicked(val exercise: Exercise) : ExercisesUiAction()
+    data class OnExerciseClicked(val exercise: ExerciseWithCategoryAndEquipment) : ExercisesUiAction()
 
     data object OnAddExerciseToWorkoutClicked : ExercisesUiAction()
 

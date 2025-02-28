@@ -32,7 +32,6 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -43,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.common.models.FilterOption
-import com.tomtruyen.core.common.utils.ImageLoader
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Avatar
 import com.tomtruyen.core.ui.Chip
@@ -54,7 +52,6 @@ import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.navigation.NavArguments
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
-import org.koin.compose.koinInject
 
 @Composable
 fun ExercisesScreen(
@@ -273,7 +270,7 @@ fun ExercisesScreenLayout(
 
                                 ListItem(
                                     title = exercise.displayName,
-                                    message = exercise.category.orEmpty(),
+                                    message = exercise.category?.name.orEmpty(),
                                     selected = state.selectedExercises.contains(exercise),
                                     showChevron = state.mode == Screen.Exercise.Overview.Mode.VIEW,
                                     onClick = {
@@ -281,7 +278,7 @@ fun ExercisesScreenLayout(
                                     },
                                     prefix = {
                                         Avatar(
-                                            imageUrl = exercise.imageUrl,
+                                            imageUrl = exercise.exercise.imageUrl,
                                             contentDescription = exercise.displayName
                                         )
                                     }

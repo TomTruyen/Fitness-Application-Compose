@@ -14,15 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.tomtruyen.core.designsystem.theme.FitnessApplicationTheme
 import com.tomtruyen.core.ui.Avatar
-import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 
 @Composable
 fun WorkoutExerciseHeader(
-    exercise: Exercise,
+    exercise: ExerciseWithCategoryAndEquipment,
     onActionClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -32,7 +30,7 @@ fun WorkoutExerciseHeader(
         modifier = modifier
     ) {
         Avatar(
-            imageUrl = exercise.imageUrl,
+            imageUrl = exercise.exercise.imageUrl,
             contentDescription = exercise.displayName,
         )
 
@@ -55,22 +53,5 @@ fun WorkoutExerciseHeader(
                 contentDescription = null,
             )
         }
-    }
-}
-
-@Preview(widthDp = 300, backgroundColor = 0xFFFFFFFF)
-@Composable
-fun WorkoutExerciseHeaderPreview() {
-    FitnessApplicationTheme {
-        WorkoutExerciseHeader(
-            exercise = Exercise(
-                id = "123",
-                name = "Bench Press",
-                category = "Chest",
-                equipment = "Barbell",
-                imageUrl = "https://storage.googleapis.com/fitness-application-f6cf1.appspot.com/Exercises%2Fabwheel.png"
-            ),
-            onActionClick = {}
-        )
     }
 }

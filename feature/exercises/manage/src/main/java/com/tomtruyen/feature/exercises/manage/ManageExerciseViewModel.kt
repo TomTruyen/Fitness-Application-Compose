@@ -1,11 +1,8 @@
 package com.tomtruyen.feature.exercises.manage
 
 import com.tomtruyen.core.common.base.BaseViewModel
-import com.tomtruyen.core.common.base.SnackbarMessage
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
-import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
@@ -37,17 +34,16 @@ class ManageExerciseViewModel(
     private fun findExercise() = launchLoading {
         if(uiState.value.mode == ManageExerciseMode.CREATE || id == null) return@launchLoading
 
-        // TODO: Replace with findExerciseById
-//        exerciseRepository.findUserExerciseById(id)?.let {
-//            updateAndGetState { state ->
-//                state.copy(
-//                    initialExercise = it,
-//                    exercise = it
-//                )
-//            }.also { state ->
-//                state.validateAll()
-//            }
-//        }
+        exerciseRepository.findExerciseById(id)?.let {
+            updateAndGetState { state ->
+                state.copy(
+                    initialExercise = it,
+                    fullExercise = it
+                )
+            }.also { state ->
+                state.validateAll()
+            }
+        }
     }
 
     private fun observeLoading() = vmScope.launch {
@@ -81,9 +77,9 @@ class ManageExerciseViewModel(
     private fun save() = launchLoading {
         val userId = userRepository.getUser()?.id ?: return@launchLoading
 
-        exerciseRepository.saveUserExercise(
+        exerciseRepository.saveExercise(
             userId = userId,
-            exercise = uiState.value.exercise,
+            userExercise = uiState.value.fullExercise,
         )
 
         triggerEvent(ManageExerciseUiEvent.NavigateBack)
@@ -93,30 +89,34 @@ class ManageExerciseViewModel(
         when(action) {
             is ManageExerciseUiAction.OnExerciseNameChanged -> updateState {
                 it.copy(
-                    exercise = it.exercise.copy(
-                        name = action.name,
+                    fullExercise = it.fullExercise.copy(
+                        exercise = it.fullExercise.exercise.copy(
+                            name = action.name
+                        )
                     ),
                     nameValidationResult = it.validateName(action.name)
                 )
             }
             is ManageExerciseUiAction.OnCategoryChanged -> updateState {
                 it.copy(
-                    exercise = it.exercise.copy(
-                        category = action.category
+                    fullExercise = it.fullExercise.copy(
+                        category = action.category as Category
                     ),
                 )
             }
             is ManageExerciseUiAction.OnEquipmentChanged -> updateState {
                 it.copy(
-                    exercise = it.exercise.copy(
-                        equipment = action.equipment
-                    )
+                    fullExercise = it.fullExercise.copy(
+                        equipment = action.equipment as Equipment
+                    ),
                 )
             }
             is ManageExerciseUiAction.OnTypeChanged -> updateState {
                 it.copy(
-                    exercise = it.exercise.copy(
-                        type = action.type
+                    fullExercise = it.fullExercise.copy(
+                        exercise = it.fullExercise.exercise.copy(
+                            type = action.type
+                        ),
                     ),
                 )
             }

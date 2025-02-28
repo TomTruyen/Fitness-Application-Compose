@@ -366,19 +366,20 @@ fun ExerciseListItem(
         modifier = modifier,
     ) {
         // Header
-        WorkoutExerciseHeader(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(Dimens.Normal),
-            exercise = workoutExercise.exercise,
-            onActionClick = {
-                onAction(
-                    ManageWorkoutUiAction.ToggleExerciseMoreActionSheet(
-                        id = workoutExercise.id
-                    )
-                )
-            },
-        )
+        // TODO: Implement with new logic
+//        WorkoutExerciseHeader(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(Dimens.Normal),
+//            exercise = workoutExercise.exercise,
+//            onActionClick = {
+//                onAction(
+//                    ManageWorkoutUiAction.ToggleExerciseMoreActionSheet(
+//                        id = workoutExercise.id
+//                    )
+//                )
+//            },
+//        )
 
         // Notes
         TextFields.Default(

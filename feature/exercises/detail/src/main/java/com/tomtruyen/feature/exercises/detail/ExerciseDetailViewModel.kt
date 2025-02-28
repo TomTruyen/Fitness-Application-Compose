@@ -1,8 +1,6 @@
 package com.tomtruyen.feature.exercises.detail
 
 import com.tomtruyen.core.common.base.BaseViewModel
-import com.tomtruyen.core.common.base.SnackbarMessage
-import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import kotlinx.coroutines.flow.collectLatest
@@ -29,18 +27,18 @@ class ExerciseDetailViewModel(
     }
 
     private fun observeExercise() = vmScope.launch {
-        exerciseRepository.findExerciseById(id)
+        exerciseRepository.findExerciseByIdAsync(id)
             .filterNotNull()
             .distinctUntilChanged()
             .collectLatest { exercise ->
-                updateState { it.copy(exercise = exercise) }
+                updateState { it.copy(fullExercise = exercise) }
             }
     }
 
     private fun delete() = launchLoading {
         val userId = userRepository.getUser()?.id ?: return@launchLoading
 
-        exerciseRepository.deleteUserExercise(
+        exerciseRepository.deleteExercise(
             userId = userId,
             exerciseId = id,
         )

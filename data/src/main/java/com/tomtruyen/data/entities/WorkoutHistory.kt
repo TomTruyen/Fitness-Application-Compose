@@ -67,11 +67,4 @@ data class WorkoutHistoryWithWorkout(
     val totalTime get() = workoutWithExercises.exercises.sumOf {
         it.sets.sumOf { set -> set.time }
     }
-
-    fun toWorkoutHistoryResponse() = WorkoutHistoryResponse(
-        id = history.id,
-        duration = history.duration,
-        createdAt = history.createdAt,
-        workout = workoutWithExercises.toWorkoutResponse()
-    )
 }

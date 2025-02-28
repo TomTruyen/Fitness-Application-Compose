@@ -134,8 +134,8 @@ fun ExerciseDetailScreenLayout(
                 if (state.exercise?.imageDetailUrl != null || state.exercise?.imageUrl != null) {
                     item {
                         AsyncImage(
-                            model = imageLoader.load(state.exercise.imageDetailUrl ?: state.exercise.imageUrl),
-                            contentDescription = state.exercise.name,
+                            model = imageLoader.load(state.exercise?.imageDetailUrl ?: state.exercise?.imageUrl),
+                            contentDescription = state.exercise?.name,
                             contentScale = ContentScale.Fit,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -152,10 +152,10 @@ fun ExerciseDetailScreenLayout(
                     ) {
                         itemsIndexed(
                             arrayOf(
-                                state.exercise?.category,
-                                state.exercise?.equipment,
+                                state.category?.name,
+                                state.equipment?.name,
                                 state.exercise?.type
-                            ).filter { !it.isNullOrBlank() }
+                            ).filter { value -> !value.isNullOrBlank() }
                         ) { index, filter ->
                             Chip(
                                 modifier = Modifier.padding(start = if (index == 0) Dimens.Normal else 0.dp),
@@ -180,7 +180,7 @@ fun ExerciseDetailScreenLayout(
                         )
                     }
 
-                    itemsIndexed(state.exercise.steps.orEmpty()) { index, step ->
+                    itemsIndexed(state.exercise?.steps.orEmpty()) { index, step ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()

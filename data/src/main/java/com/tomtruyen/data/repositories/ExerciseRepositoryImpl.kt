@@ -1,8 +1,8 @@
 package com.tomtruyen.data.repositories
 
-import android.util.Log
 import com.tomtruyen.data.dao.ExerciseDao
 import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.models.ExerciseFilter
 import io.github.jan.supabase.postgrest.from
@@ -16,7 +16,9 @@ class ExerciseRepositoryImpl(
         filter = filter,
     )
 
-    override fun findExerciseById(id: String) = exerciseDao.findByIdAsync(id)
+    override suspend fun findExerciseById(id: String) = exerciseDao.findById(id)
+
+    override fun findExerciseByIdAsync(id: String) = exerciseDao.findByIdAsync(id)
 
     override suspend fun getExercises(userId: String?, refresh: Boolean) = fetch(refresh = refresh) {
         supabase.from(Exercise.TABLE_NAME)
@@ -42,14 +44,24 @@ class ExerciseRepositoryImpl(
             }
     }
 
-    override suspend fun saveUserExercise(
+    override suspend fun saveExercise(
         userId: String,
-        exercise: Exercise,
+        userExercise: ExerciseWithCategoryAndEquipment,
     ) {
+        val (exercise, category, equipment) = userExercise
+
         val newExercise = exercise.copy(
             userId = userId,
-            category = if(exercise.category == Exercise.DEFAULT_DROPDOWN_VALUE) null else exercise.category,
-            equipment = if(exercise.equipment == Exercise.DEFAULT_DROPDOWN_VALUE) null else exercise.equipment
+            categoryId = if(category?.isDefault == true) {
+                null
+            } else {
+                category?.id
+            },
+            equipmentId = if(equipment?.isDefault == true) {
+                null
+            } else {
+                equipment?.id
+            }
         )
 
         supabase.from(Exercise.TABLE_NAME).upsert(newExercise)
@@ -59,7 +71,7 @@ class ExerciseRepositoryImpl(
         }
     }
 
-    override suspend fun deleteUserExercise(
+    override suspend fun deleteExercise(
         userId: String,
         exerciseId: String,
     ) {

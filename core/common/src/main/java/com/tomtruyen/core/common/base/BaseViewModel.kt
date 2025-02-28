@@ -24,6 +24,7 @@ import androidx.lifecycle.viewModelScope
 import io.github.jan.supabase.auth.exception.AuthRestException
 import io.github.jan.supabase.exceptions.RestException
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,11 +32,12 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 
 abstract class BaseViewModel<UIState, UIAction, UIEvent>(
     initialState: UIState
 ): ViewModel() {
-    protected val vmScope = viewModelScope
+    protected val vmScope = viewModelScope + Dispatchers.IO
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()

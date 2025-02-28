@@ -2,6 +2,7 @@ package com.tomtruyen.feature.exercises
 
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
@@ -76,10 +77,10 @@ class ExercisesViewModel(
             }
     }
 
-    private fun handleExerciseClick(exercise: Exercise) {
+    private fun handleExerciseClick(exercise: ExerciseWithCategoryAndEquipment) {
         when(mode) {
             Screen.Exercise.Overview.Mode.VIEW -> {
-                triggerEvent(ExercisesUiEvent.NavigateToDetail(exercise.id))
+                triggerEvent(ExercisesUiEvent.NavigateToDetail(exercise.exercise.id))
             }
             Screen.Exercise.Overview.Mode.SELECT -> {
                 updateState {

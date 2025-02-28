@@ -12,10 +12,13 @@ import java.util.UUID
 data class Equipment(
     @PrimaryKey
     @SerialName("id")
-    val id: String = UUID.randomUUID().toString(),
+    override val id: String = UUID.randomUUID().toString(),
     @SerialName("name")
     override val name: String,
-): FilterOption {
+): BaseEntity, FilterOption {
+    val isDefault: Boolean
+        get() = this == DEFAULT
+
     companion object {
         const val TABLE_NAME = "Equipment"
 

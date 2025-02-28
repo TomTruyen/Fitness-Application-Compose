@@ -28,12 +28,4 @@ data class WorkoutWithExercises(
         entity = WorkoutExercise::class
     )
     val exercises: List<WorkoutExerciseWithExercisesAndSets> = emptyList()
-) {
-    fun toWorkoutResponse() = WorkoutResponse(
-        id = workout.id,
-        name = workout.name,
-        unit = workout.unit,
-        exercises = exercises.map { it.toWorkoutExerciseResponse() }.sortedBy { it.order },
-        createdAt = workout.createdAt
-    )
-}
+)

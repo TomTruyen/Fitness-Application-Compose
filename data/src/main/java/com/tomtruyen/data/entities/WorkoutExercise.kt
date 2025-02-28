@@ -51,21 +51,11 @@ data class WorkoutExerciseWithExercisesAndSets(
         entityColumn = "id",
         entity = Exercise::class,
     )
-    val exercise: Exercise,
+    val exercise: ExerciseWithCategoryAndEquipment,
     @Relation(
         parentColumn = "id",
         entityColumn = "workoutExerciseId",
         entity = WorkoutSet::class
     )
     val sets: List<WorkoutSet> = emptyList()
-) {
-    fun toWorkoutExerciseResponse() = WorkoutExerciseResponse(
-        id = workoutExercise.id,
-        notes = workoutExercise.notes.orEmpty(),
-        rest = workoutExercise.rest,
-        restEnabled = workoutExercise.restEnabled,
-        order = workoutExercise.order,
-        exercise = exercise,
-        sets = sets
-    )
-}
+)

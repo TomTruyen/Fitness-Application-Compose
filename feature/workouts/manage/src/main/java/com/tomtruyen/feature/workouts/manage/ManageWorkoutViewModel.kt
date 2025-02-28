@@ -67,12 +67,13 @@ class ManageWorkoutViewModel(
         if(uiState.value.mode == ManageWorkoutMode.CREATE || id == null) return@launchLoading
 
         workoutRepository.findWorkoutById(id)?.let {
-            updateState { state ->
-                state.copy(
-                    initialWorkout = it.toWorkoutResponse(),
-                    workout = it.toWorkoutResponse()
-                )
-            }
+//            updateState { state ->
+                // TODO: Fix without toWorkoutResponse
+//                state.copy(
+//                    initialWorkout = it.toWorkoutResponse(),
+//                    workout = it.toWorkoutResponse()
+//                )
+//            }
         }
     }
 

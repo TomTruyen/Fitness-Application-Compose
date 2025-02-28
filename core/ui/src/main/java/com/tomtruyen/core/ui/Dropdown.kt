@@ -21,9 +21,9 @@ import com.tomtruyen.core.designsystem.Dimens
 fun FilterDropdown(
     placeholder: String,
     options: List<FilterOption>,
-    selectedOption: String,
+    selectedOption: FilterOption,
     error: String? = null,
-    onOptionSelected: (String) -> Unit
+    onOptionSelected: (FilterOption) -> Unit
 ) {
     val rememberedOptions: List<String> = remember(options) {
         options.map { it.name }
@@ -32,9 +32,11 @@ fun FilterDropdown(
     Dropdown(
         placeholder = placeholder,
         options = rememberedOptions,
-        selectedOption = selectedOption,
+        selectedOption = selectedOption.name,
         error = error,
-        onOptionSelected = onOptionSelected
+        onOptionSelected = { option ->
+            onOptionSelected(options.first { it.name == option })
+        }
     )
 }
 

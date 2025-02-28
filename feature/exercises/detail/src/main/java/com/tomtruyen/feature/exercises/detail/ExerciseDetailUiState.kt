@@ -1,9 +1,13 @@
 package com.tomtruyen.feature.exercises.detail
 
-import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 
 data class ExerciseDetailUiState(
-    val exercise: Exercise? = null,
+    val fullExercise: ExerciseWithCategoryAndEquipment? = null,
 
     val loading: Boolean = false,
-)
+) {
+    val exercise get() = fullExercise?.exercise
+    val category get() = fullExercise?.category
+    val equipment get() = fullExercise?.equipment
+}

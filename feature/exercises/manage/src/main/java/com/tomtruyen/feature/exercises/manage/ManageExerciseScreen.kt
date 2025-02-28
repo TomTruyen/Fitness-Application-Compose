@@ -33,8 +33,8 @@ import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.validation.isValid
-import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.data.entities.Exercise.Companion.DEFAULT_DROPDOWN_VALUE
+import com.tomtruyen.data.entities.Category
+import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.feature.exercises.create.R
 import com.tomtruyen.feature.exercises.manage.model.ManageExerciseMode
 import kotlinx.coroutines.flow.collectLatest
@@ -89,13 +89,15 @@ fun ManageExerciseScreenLayout(
 
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
-    BackHandler(enabled = !confirmationDialogVisible) {
-        if(state.exercise != state.initialExercise) {
+    val onNavigateUp: () -> Unit = {
+        if(state.fullExercise != state.initialExercise) {
             confirmationDialogVisible = true
         } else {
             navController.popBackStack()
         }
     }
+
+    BackHandler(enabled = !confirmationDialogVisible, onBack = onNavigateUp)
 
     Scaffold(
         snackbarHost = snackbarHost,
@@ -109,13 +111,7 @@ fun ManageExerciseScreenLayout(
                     }
                 ),
                 navController = navController,
-                onNavigateUp = {
-                    if(state.exercise != state.initialExercise) {
-                        confirmationDialogVisible = true
-                    } else {
-                        navController.popBackStack()
-                    }
-                }
+                onNavigateUp = onNavigateUp
             )
         }
     ) {
@@ -150,7 +146,7 @@ fun ManageExerciseScreenLayout(
                     FilterDropdown(
                         placeholder = stringResource(id = CommonR.string.placeholder_category),
                         options = state.categories,
-                        selectedOption = state.exercise.category ?: DEFAULT_DROPDOWN_VALUE,
+                        selectedOption = state.fullExercise.category ?: Category.DEFAULT,
                         onOptionSelected = { category ->
                             onAction(
                                 ManageExerciseUiAction.OnCategoryChanged(
@@ -163,7 +159,7 @@ fun ManageExerciseScreenLayout(
                     FilterDropdown(
                         placeholder = stringResource(id = CommonR.string.placeholder_equipment),
                         options = state.equipment,
-                        selectedOption = state.exercise.equipment ?: DEFAULT_DROPDOWN_VALUE,
+                        selectedOption = state.fullExercise.equipment ?: Equipment.DEFAULT,
                         onOptionSelected = { equipment ->
                             onAction(
                                 ManageExerciseUiAction.OnEquipmentChanged(
@@ -176,7 +172,7 @@ fun ManageExerciseScreenLayout(
                     Dropdown(
                         placeholder = stringResource(id = CommonR.string.placeholder_type),
                         options = types,
-                        selectedOption = state.exercise.type,
+                        selectedOption = state.fullExercise.exercise.type,
                         onOptionSelected = { type ->
                             onAction(
                                 ManageExerciseUiAction.OnTypeChanged(

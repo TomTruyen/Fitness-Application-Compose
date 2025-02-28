@@ -3,10 +3,12 @@ package com.tomtruyen.data.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.RawQuery
+import androidx.room.Transaction
 import androidx.room.Upsert
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.models.ExerciseFilter
 import kotlinx.coroutines.flow.Flow
 
@@ -24,15 +26,21 @@ abstract class ExerciseDao {
     @Query("DELETE FROM ${Exercise.TABLE_NAME} WHERE id = :id")
     abstract suspend fun deleteById(id: String): Int
 
+    @Transaction
     @Query("SELECT * FROM ${Exercise.TABLE_NAME} WHERE id = :id")
-    abstract fun findByIdAsync(id: String): Flow<Exercise?>
+    abstract fun findById(id: String): ExerciseWithCategoryAndEquipment?
 
-    fun findAllAsync(query: String, filter: ExerciseFilter): Flow<List<Exercise>> {
+    @Transaction
+    @Query("SELECT * FROM ${Exercise.TABLE_NAME} WHERE id = :id")
+    abstract fun findByIdAsync(id: String): Flow<ExerciseWithCategoryAndEquipment?>
+
+    fun findAllAsync(query: String, filter: ExerciseFilter): Flow<List<ExerciseWithCategoryAndEquipment>> {
         return findAllAsync(findAllQuery(query, filter))
     }
 
+    @Transaction
     @RawQuery(observedEntities = [Exercise::class])
-    abstract fun findAllAsync(query: SupportSQLiteQuery): Flow<List<Exercise>>
+    abstract fun findAllAsync(query: SupportSQLiteQuery): Flow<List<ExerciseWithCategoryAndEquipment>>
 
     private fun findAllQuery(query: String, filter: ExerciseFilter): SupportSQLiteQuery {
         val sql = buildString {
@@ -45,13 +53,13 @@ abstract class ExerciseDao {
             }
 
             if (filter.categories.isNotEmpty()) {
-                val categoriesString = filter.categories.joinToString(",") { "'$it'" }
-                filters.add("category IN ($categoriesString)")
+                val categoriesString = filter.categories.joinToString(",") { "'${it.id}'" }
+                filters.add("categoryId IN ($categoriesString)")
             }
 
             if (filter.equipment.isNotEmpty()) {
-                val equipmentString = filter.equipment.joinToString(",") { "'$it'" }
-                filters.add("equipment IN ($equipmentString)")
+                val equipmentString = filter.equipment.joinToString(",") { "'${it.id}'" }
+                filters.add("equipmentId IN ($equipmentString)")
             }
 
             if (filters.isNotEmpty()) {
