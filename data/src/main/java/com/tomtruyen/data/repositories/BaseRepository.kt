@@ -16,6 +16,7 @@ import org.koin.java.KoinJavaComponent.inject
 
 abstract class BaseRepository(
 ): KoinComponent {
+    // TODO: Rename to CacheKey (also rename the overrideIdentifier to overrideCacheKey)
     abstract val identifier: String
 
     internal val supabase: SupabaseClient by inject(SupabaseClient::class.java)

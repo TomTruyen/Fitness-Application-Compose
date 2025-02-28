@@ -18,10 +18,6 @@ class ExerciseRepositoryImpl(
 
     override fun findExerciseById(id: String) = exerciseDao.findByIdAsync(id)
 
-    override fun findCategories() = exerciseDao.findCategories()
-
-    override fun findEquipment() = exerciseDao.findEquipment()
-
     override suspend fun getExercises(userId: String?, refresh: Boolean) = fetch(refresh = refresh) {
         supabase.from(Exercise.TABLE_NAME)
             .select {
@@ -36,8 +32,6 @@ class ExerciseRepositoryImpl(
                     column = "name",
                     order = Order.ASCENDING
                 )
-            }.also {
-                Log.d("@@@", it.data)
             }
             .decodeList<Exercise>()
             .let { exercises ->
