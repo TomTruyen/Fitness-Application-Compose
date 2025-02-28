@@ -47,7 +47,7 @@ data class Exercise(
     val imageUrl: String? = null,
     @SerialName("image_detail_url")
     val imageDetailUrl: String? = null,
-    @SerialName("image_thumbnail_url")
+    @SerialName("type")
     val type: String = ExerciseType.WEIGHT.value,
     @SerialName("steps")
     val steps: List<String>? = emptyList(),
@@ -56,7 +56,7 @@ data class Exercise(
 ) : BaseEntity {
     // TODO: See if we can get rid of this by using the enum directly
     val typeEnum
-        get() = ExerciseType.entries.firstOrNull { it.value.lowercase() == type }
+        get() = ExerciseType.entries.firstOrNull { it.value.lowercase() == type.lowercase() }
             ?: ExerciseType.WEIGHT
 
     companion object {
