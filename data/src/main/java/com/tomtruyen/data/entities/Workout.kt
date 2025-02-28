@@ -4,14 +4,21 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
-import com.tomtruyen.data.firebase.models.WorkoutResponse
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
+@Serializable
 @Entity(tableName = Workout.TABLE_NAME)
 data class Workout(
-    @PrimaryKey override val id: String = UUID.randomUUID().toString(),
+    @PrimaryKey
+    @SerialName("id")
+    override val id: String = UUID.randomUUID().toString(),
+    @SerialName("name")
     val name: String = "",
+    @SerialName("unit")
     val unit: String = Settings.UnitType.KG.value, // KG or LBS
+    @SerialName("created_at")
     val createdAt: Long = System.currentTimeMillis(),
 ): BaseEntity {
     companion object {
