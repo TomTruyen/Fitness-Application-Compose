@@ -21,11 +21,18 @@ class WorkoutsViewModel(
 
         observeWorkouts()
         observeLoading()
+        observeRefreshing()
     }
 
     private fun observeLoading() = vmScope.launch {
         loading.collectLatest { loading ->
             updateState { it.copy(loading = loading) }
+        }
+    }
+
+    private fun observeRefreshing() = vmScope.launch {
+        refreshing.collectLatest { refreshing ->
+            updateState { it.copy(refreshing = refreshing) }
         }
     }
 
@@ -37,15 +44,8 @@ class WorkoutsViewModel(
             }
     }
 
-    private fun fetchWorkouts(refresh: Boolean = false) = vmScope.launch {
-        val userId = userRepository.getUser()?.id ?: return@launch
-
-        updateState {
-            it.copy(
-                refreshing = refresh,
-                loading = !refresh
-            )
-        }
+    private fun fetchWorkouts(refresh: Boolean = false) = launchLoading(refresh) {
+        val userId = userRepository.getUser()?.id ?: return@launchLoading
 
         workoutRepository.getWorkouts(
             userId = userId,

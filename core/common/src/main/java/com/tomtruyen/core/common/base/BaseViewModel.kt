@@ -49,12 +49,16 @@ abstract class BaseViewModel<UIState, UIAction, UIEvent>(
         showSnackbar(SnackbarMessage.Error(message))
 
         isLoading(false)
+        isRefreshing(false)
     }
 
     private var snackbarMessage by mutableStateOf<SnackbarMessage>(SnackbarMessage.Empty)
 
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
+
+    private val _refreshing = MutableStateFlow(false)
+    val refreshing = _refreshing.asStateFlow()
 
     private val _uiState = MutableStateFlow(initialState)
     val uiState = _uiState.asStateFlow()
@@ -66,14 +70,18 @@ abstract class BaseViewModel<UIState, UIAction, UIEvent>(
         _loading.update { loading }
     }
 
+    protected fun isRefreshing(refreshing: Boolean) {
+        _refreshing.update { refreshing }
+    }
+
     protected fun launch(block: suspend () -> Unit) = vmScope.launch(exceptionHandler) {
         block()
     }
 
-    protected fun launchLoading(block: suspend () -> Unit) = vmScope.launch(exceptionHandler) {
-        isLoading(true)
+    protected fun launchLoading(refresh: Boolean = false, block: suspend () -> Unit) = vmScope.launch(exceptionHandler) {
+        if(refresh) isRefreshing(true) else isLoading(true)
         block()
-        isLoading(false)
+        if(refresh) isRefreshing(false) else isLoading(false)
     }
 
     protected fun updateState(block: (UIState) -> UIState) {

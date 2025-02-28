@@ -21,17 +21,11 @@ class ProfileViewModel(
 
         observeSettings()
         observeLoading()
+        observeRefreshing()
     }
 
-    private fun fetchSettings(refresh: Boolean = false) = vmScope.launch {
-        val userId = userRepository.getUser()?.id ?: return@launch
-
-        updateState {
-            it.copy(
-                refreshing = refresh,
-                loading = !refresh
-            )
-        }
+    private fun fetchSettings(refresh: Boolean = false) = launchLoading(refresh) {
+        val userId = userRepository.getUser()?.id ?: return@launchLoading
 
         settingsRepository.getSettings(
             userId = userId,
@@ -56,6 +50,12 @@ class ProfileViewModel(
     private fun observeLoading() = vmScope.launch {
         loading.collectLatest { loading ->
             updateState { it.copy(loading = loading) }
+        }
+    }
+
+    private fun observeRefreshing() = vmScope.launch {
+        refreshing.collectLatest { refreshing ->
+            updateState { it.copy(refreshing = refreshing) }
         }
     }
 

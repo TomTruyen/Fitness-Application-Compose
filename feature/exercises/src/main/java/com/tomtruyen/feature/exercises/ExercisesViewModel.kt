@@ -4,6 +4,7 @@ import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
+import com.tomtruyen.models.ExerciseFilter
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
@@ -23,25 +24,25 @@ class ExercisesViewModel(
         fetchExercises()
 
         observeLoading()
+        observeRefreshing()
         observeExercises()
         observeCategories()
         observeEquipment()
     }
 
-    private fun fetchExercises(refresh: Boolean = false) = vmScope.launch {
-        updateState {
-            it.copy(
-                refreshing = refresh,
-                loading = !refresh
-            )
-        }
-
+    private fun fetchExercises(refresh: Boolean = false) = launchLoading(refresh) {
         exerciseRepository.getExercises(userRepository.getUser()?.id, refresh)
     }
 
     private fun observeLoading() = vmScope.launch {
         loading.collectLatest { loading ->
             updateState { it.copy(loading = loading) }
+        }
+    }
+
+    private fun observeRefreshing() = vmScope.launch {
+        refreshing.collectLatest { refreshing ->
+            updateState { it.copy(refreshing = refreshing) }
         }
     }
 
@@ -118,7 +119,7 @@ class ExercisesViewModel(
                 })
             }
             is ExercisesUiAction.OnClearFilterClicked -> updateState {
-                it.copy(filter = com.tomtruyen.models.ExerciseFilter())
+                it.copy(filter = ExerciseFilter())
             }
             is ExercisesUiAction.OnRemoveFilterClicked -> updateState {
                 it.copy(
