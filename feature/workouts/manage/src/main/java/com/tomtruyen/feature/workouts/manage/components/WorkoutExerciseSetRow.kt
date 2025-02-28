@@ -47,7 +47,7 @@ import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 import com.tomtruyen.core.common.R as CommonR
 
 @Composable
-fun WorkoutExerciseSet(
+fun WorkoutExerciseSetRow(
     modifier: Modifier = Modifier,
     exercise: WorkoutExerciseWithSets,
     setIndex: Int,
@@ -125,7 +125,7 @@ fun WorkoutExerciseSet(
             if (mode == ManageWorkoutMode.EXECUTE) {
                 PreviousSet(
                     lastPerformedSet = lastPerformedSet,
-                    type = exercise.exercise?.exercise?.typeEnum,
+                    type = exercise.exercise.exercise.typeEnum,
                     modifier = Modifier.weight(1f)
                 )
 
@@ -133,7 +133,7 @@ fun WorkoutExerciseSet(
             }
 
 
-            when (exercise.exercise?.exercise?.typeEnum) {
+            when (exercise.exercise.exercise.typeEnum) {
                 ExerciseType.WEIGHT -> WeightSet(
                     set = set,
                     onRepsChanged = { reps ->
@@ -192,7 +192,7 @@ fun WorkoutExerciseSet(
 @Composable
 private fun PreviousSet(
     lastPerformedSet: WorkoutExerciseSet?,
-    type: ExerciseType?,
+    type: ExerciseType,
     modifier: Modifier = Modifier
 ) {
     /**
@@ -212,8 +212,6 @@ private fun PreviousSet(
                 ExerciseType.TIME -> {
                     TimeUtils.formatSeconds(set.time?.toLong() ?: 0L)
                 }
-
-                else -> ""
             }
         } ?: "-",
         style = MaterialTheme.typography.bodyMedium,
@@ -229,13 +227,23 @@ private fun RowScope.WeightSet(
     onRepsChanged: (String) -> Unit,
     onWeightChanged: (String) -> Unit
 ) {
+    var inputReps by remember {
+        mutableStateOf(set.reps?.toString().orEmpty())
+    }
+
+    var inputWeight by remember {
+        mutableStateOf(set.weight?.toString().orEmpty())
+    }
+
     TextFields.Default(
         border = false,
         padding = PaddingValues(Dimens.Small),
-        value = set.reps.toString(),
+        value = inputReps,
         onValueChange = { reps ->
             // Check if value can be cast to int, if not don't update the value
             if (reps.isNotEmpty() && reps.toIntOrNull() == null) return@Default
+
+            inputReps = reps
 
             onRepsChanged(reps)
         },
@@ -255,12 +263,14 @@ private fun RowScope.WeightSet(
     TextFields.Default(
         border = false,
         padding = PaddingValues(Dimens.Small),
-        value = set.weight.toString(),
+        value = inputWeight,
         onValueChange = { weight ->
             val filteredWeight = weight.replace(",", ".")
 
             // Check if the number can be cast to double, if not don't update the value
             if (filteredWeight.isNotEmpty() && filteredWeight.toDoubleOrNull() == null) return@Default
+
+            inputWeight = filteredWeight
 
             onWeightChanged(filteredWeight)
         },

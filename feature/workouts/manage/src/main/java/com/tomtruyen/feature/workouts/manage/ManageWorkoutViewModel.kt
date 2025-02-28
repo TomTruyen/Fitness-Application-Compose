@@ -131,18 +131,17 @@ class ManageWorkoutViewModel(
         }
     }
 
-    private fun createWorkoutExercise(exercise: ExerciseWithCategoryAndEquipment): WorkoutExerciseWithSets =
-        with(uiState.value) {
-            val uuid = UUID.randomUUID().toString()
+    private fun createWorkoutExercise(exercise: ExerciseWithCategoryAndEquipment): WorkoutExerciseWithSets {
+        val uuid = UUID.randomUUID().toString()
 
-            WorkoutExerciseWithSets(
-                workoutExercise = WorkoutExercise(
-                    id = uuid
-                ),
-                exercise = exercise,
-                sets = listOf(WorkoutExerciseSet(workoutExerciseId = uuid))
-            )
-        }
+        return WorkoutExerciseWithSets(
+            workoutExercise = WorkoutExercise(
+                id = uuid
+            ),
+            exercise = exercise,
+            sets = listOf(WorkoutExerciseSet(workoutExerciseId = uuid))
+        )
+    }
 
     private fun updateWorkoutName(name: String) = updateState {
         it.copy(

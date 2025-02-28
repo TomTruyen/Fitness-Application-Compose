@@ -74,7 +74,7 @@ data class WorkoutWithExercises(
         reps: String?
     ) = copy(
         exercises = exercises.map { workoutExercise ->
-            if (workoutExercise.exercise.exercise.id == id) {
+            if (workoutExercise.workoutExercise.id == id) {
                 workoutExercise.copy(
                     sets = workoutExercise.sets.mapIndexed { sIndex, set ->
                         if (sIndex == setIndex) set.copy(
@@ -92,7 +92,7 @@ data class WorkoutWithExercises(
         weight: String?
     ) = copy(
         exercises = exercises.map { workoutExercise ->
-            if (workoutExercise.exercise.exercise.id == id) {
+            if (workoutExercise.workoutExercise.id == id) {
                 workoutExercise.copy(
                     sets = workoutExercise.sets.mapIndexed { sIndex, set ->
                         if (sIndex == setIndex) set.copy(
@@ -110,7 +110,7 @@ data class WorkoutWithExercises(
         time: Int?
     ) = copy(
         exercises = exercises.map { workoutExercise ->
-            if (workoutExercise.exercise.exercise.id == id) {
+            if (workoutExercise.workoutExercise.id == id) {
                 workoutExercise.copy(
                     sets = workoutExercise.sets.mapIndexed { sIndex, set ->
                         if (sIndex == setIndex) set.copy(
@@ -127,7 +127,7 @@ data class WorkoutWithExercises(
         setIndex: Int
     ) = copy(
         exercises = exercises.map { workoutExercise ->
-            if (workoutExercise.exercise.exercise.id == id) {
+            if (workoutExercise.workoutExercise.id == id) {
                 workoutExercise.copy(
                     sets = workoutExercise.sets.filterIndexed { sIndex, _ -> sIndex != setIndex }
                 )
@@ -137,7 +137,7 @@ data class WorkoutWithExercises(
 
     fun copyWithAddSet(id: String) = copy(
         exercises = exercises.map { workoutExercise ->
-            if (workoutExercise.exercise.exercise.id == id) {
+            if (workoutExercise.workoutExercise.id == id) {
                 workoutExercise.copy(
                     sets = workoutExercise.sets + WorkoutExerciseSet(
                         workoutExerciseId = workoutExercise.workoutExercise.id,
@@ -150,7 +150,7 @@ data class WorkoutWithExercises(
 
     fun copyWithSetCompleted(id: String, setIndex: Int) = copy(
         exercises = exercises.map { workoutExercise ->
-            if (workoutExercise.exercise.exercise.id == id) {
+            if (workoutExercise.workoutExercise.id == id) {
                 workoutExercise.copy(
                     sets = workoutExercise.sets.toMutableList().apply {
                         this[setIndex] = this[setIndex].copy(completed = !this[setIndex].completed)

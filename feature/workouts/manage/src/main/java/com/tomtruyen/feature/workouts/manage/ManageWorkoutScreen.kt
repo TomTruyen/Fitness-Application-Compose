@@ -231,7 +231,7 @@ fun ManageWorkoutScreenLayout(
             Toolbar(
                 title = {
                     if (state.mode == ManageWorkoutMode.EXECUTE) {
-                        ToolbarTitle(title = state.workout.name)
+                        ToolbarTitle(title = state.fullWorkout.workout.name)
                     } else {
                         TextFields.Default(
                             modifier = Modifier.padding(
@@ -240,7 +240,7 @@ fun ManageWorkoutScreenLayout(
                             textFieldModifier = Modifier.defaultMinSize(minHeight = 36.dp),
                             padding = PaddingValues(Dimens.Small),
                             placeholder = stringResource(id = R.string.title_workout_name),
-                            value = state.workout.name,
+                            value = state.fullWorkout.workout.name,
                             onValueChange = { name ->
                                 onAction(
                                     ManageWorkoutUiAction.OnWorkoutNameChanged(
@@ -345,10 +345,10 @@ fun ExerciseList(
     ) {
         items(
             state.fullWorkout.exercises,
-            key = { it.exercise?.exercise?.id.orEmpty() }) { fullExercise ->
+            key = { it.exercise.exercise.id }) { fullExercise ->
             ReorderableItem(
                 state = reorderableLazyListState,
-                key = fullExercise.exercise?.exercise?.id.orEmpty()
+                key = fullExercise.exercise.exercise.id
             ) { isDragging ->
                 val alpha by animateFloatAsState(if (isDragging) 0.25f else 1f, label = "")
 
@@ -398,7 +398,6 @@ fun ExerciseListItem(
         modifier = modifier,
     ) {
         // Header
-        // TODO: Implement with new logic
         WorkoutExerciseHeader(
             modifier = Modifier
                 .fillMaxWidth()

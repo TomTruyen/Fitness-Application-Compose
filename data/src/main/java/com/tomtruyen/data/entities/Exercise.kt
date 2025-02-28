@@ -7,13 +7,11 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.tomtruyen.core.common.models.ExerciseType
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
 @Serializable
-@Parcelize
 @Entity(
     tableName = Exercise.TABLE_NAME,
     foreignKeys = [
@@ -55,7 +53,7 @@ data class Exercise(
     val steps: List<String>? = emptyList(),
     @SerialName("user_id")
     val userId: String? = null
-) : BaseEntity, Parcelable {
+) : BaseEntity {
     // TODO: See if we can get rid of this by using the enum directly
     val typeEnum
         get() = ExerciseType.entries.firstOrNull { it.value.lowercase() == type }

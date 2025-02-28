@@ -17,7 +17,5 @@ data class ManageWorkoutUiState(
     val showSetMoreActions: Boolean = false,
     val selectedExerciseId: String? = null,
     val selectedSetIndex: Int? = null
-) {
-    val workout = fullWorkout.workout
-}
+)
 

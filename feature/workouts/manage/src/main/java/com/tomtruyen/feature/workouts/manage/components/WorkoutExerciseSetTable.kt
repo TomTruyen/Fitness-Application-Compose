@@ -37,7 +37,7 @@ fun WorkoutExerciseSetTable(
         )
 
         workoutExercise.sets.forEachIndexed { setIndex, set ->
-            WorkoutExerciseSet(
+            WorkoutExerciseSetRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
