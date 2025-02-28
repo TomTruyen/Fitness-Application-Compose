@@ -7,7 +7,7 @@ import com.tomtruyen.data.dao.SettingsDao
 import com.tomtruyen.data.dao.WorkoutDao
 import com.tomtruyen.data.dao.WorkoutExerciseDao
 import com.tomtruyen.data.dao.WorkoutHistoryDao
-import com.tomtruyen.data.dao.WorkoutSetDao
+import com.tomtruyen.data.dao.WorkoutExerciseSetDao
 import com.tomtruyen.data.repositories.CategoryRepositoryImpl
 import com.tomtruyen.data.repositories.EquipmentRepositoryImpl
 import com.tomtruyen.data.repositories.ExerciseRepositoryImpl
@@ -51,7 +51,7 @@ val repositoryModule = module {
         WorkoutRepositoryImpl(
             workoutDao = get<WorkoutDao>(),
             workoutExerciseDao = get<WorkoutExerciseDao>(),
-            workoutSetDao = get<WorkoutSetDao>(),
+            workoutExerciseSetDao = get<WorkoutExerciseSetDao>(),
             exerciseDao = get<ExerciseDao>()
         )
     }

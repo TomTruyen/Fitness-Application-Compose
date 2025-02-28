@@ -2,8 +2,6 @@ package com.tomtruyen.feature.workouts
 
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.base.SnackbarMessage
-import com.tomtruyen.data.firebase.models.FirebaseCallback
-import com.tomtruyen.data.firebase.models.WorkoutResponse
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import kotlinx.coroutines.flow.collectLatest
@@ -49,17 +47,7 @@ class WorkoutsViewModel(
 
         workoutRepository.getWorkouts(
             userId = userId,
-            refresh = refresh,
-            callback = object: FirebaseCallback<List<WorkoutResponse>> {
-                override fun onError(error: String?) {
-                    showSnackbar(SnackbarMessage.Error(error))
-                }
-
-                override fun onStopLoading() {
-                    isLoading(false)
-                    updateState { it.copy(refreshing = false) }
-                }
-            }
+            refresh = refresh
         )
     }
 

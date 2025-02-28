@@ -4,10 +4,10 @@ import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.base.SnackbarMessage
 import com.tomtruyen.core.common.utils.StopwatchTimer
 import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.data.entities.WorkoutSet
-import com.tomtruyen.data.firebase.models.FirebaseCallback
-import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
-import com.tomtruyen.data.firebase.models.WorkoutHistoryResponse
+import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
+import com.tomtruyen.data.entities.WorkoutExercise
+import com.tomtruyen.data.entities.WorkoutExerciseSet
+import com.tomtruyen.data.entities.WorkoutExerciseWithSets
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class ManageWorkoutViewModel(
     private val id: String?,
@@ -42,7 +43,7 @@ class ManageWorkoutViewModel(
     }
 
     private fun startTimer() {
-        if(uiState.value.mode != ManageWorkoutMode.EXECUTE) return
+        if (uiState.value.mode != ManageWorkoutMode.EXECUTE) return
 
         timer.start()
 
@@ -58,22 +59,21 @@ class ManageWorkoutViewModel(
     }
 
     private fun stopTimer() {
-        if(uiState.value.mode != ManageWorkoutMode.EXECUTE) return
+        if (uiState.value.mode != ManageWorkoutMode.EXECUTE) return
 
         timer.stop()
     }
 
     private fun findWorkout() = launchLoading {
-        if(uiState.value.mode == ManageWorkoutMode.CREATE || id == null) return@launchLoading
+        if (uiState.value.mode == ManageWorkoutMode.CREATE || id == null) return@launchLoading
 
-        workoutRepository.findWorkoutById(id)?.let {
-//            updateState { state ->
-                // TODO: Fix without toWorkoutResponse
-//                state.copy(
-//                    initialWorkout = it.toWorkoutResponse(),
-//                    workout = it.toWorkoutResponse()
-//                )
-//            }
+        workoutRepository.findWorkoutById(id)?.let { workout ->
+            updateState {
+                it.copy(
+                    initialWorkout = workout,
+                    fullWorkout = workout
+                )
+            }
         }
     }
 
@@ -92,65 +92,40 @@ class ManageWorkoutViewModel(
             }
     }
 
-    private suspend fun finishWorkout(userId: String) = with(uiState.value) {
-        stopTimer()
+    private fun finishWorkout(userId: String) = launchLoading {
+        with(uiState.value) {
+            stopTimer()
 
-        historyRepository.finishWorkout(
-            userId = userId,
-            history = WorkoutHistoryResponse(
-                duration = duration,
-                workout = workout
-            ),
-            callback = object : FirebaseCallback<Unit> {
-                override fun onSuccess(value: Unit) {
-                    triggerEvent(ManageWorkoutUiEvent.NavigateToDetail(workout.id))
-                }
-
-                override fun onError(error: String?) {
-                    showSnackbar(SnackbarMessage.Error(error))
-                }
-
-                override fun onStopLoading() {
-                    isLoading(false)
-                }
-            }
-        )
+            // TODO: Setup the logic to actually save a workout to the History using `historyRepository`
+        }
     }
 
-    private suspend fun saveWorkout(userId: String) = with(uiState.value) {
-        workoutRepository.saveWorkout(
-            userId = userId,
-            workout = workout.apply {
-                exercises.forEachIndexed { index, workoutExerciseResponse ->
-                    workoutExerciseResponse.order = index
-                }
-                unit = settings.unit
+    private fun saveWorkout(userId: String) = launchLoading {
+        with(uiState.value) {
+            workoutRepository.saveWorkout(
+                userId = userId,
+                workout = fullWorkout.copy(
+                    exercises = fullWorkout.exercises.mapIndexed { index, exercise ->
+                        exercise.copy(
+                            workoutExercise = exercise.workoutExercise.copy(
+                                sortOrder = index
+                            )
+                        )
+                    },
+                    workout = fullWorkout.workout.copy(
+                        unit = settings.unit,
+                        name = if(fullWorkout.workout.name.isBlank()) "Workout" else fullWorkout.workout.name
+                    )
+                ),
+            )
 
-                if(name.isBlank()) {
-                    name = "Workout"
-                }
-            },
-            isUpdate = mode == ManageWorkoutMode.EDIT,
-            callback = object: FirebaseCallback<Unit> {
-                override fun onSuccess(value: Unit) {
-                    triggerEvent(ManageWorkoutUiEvent.NavigateBack)
-                }
-
-                override fun onError(error: String?) {
-                    showSnackbar(SnackbarMessage.Error(error))
-                }
-
-                override fun onStopLoading() {
-                    isLoading(false)
-                }
-            }
-        )
+            triggerEvent(ManageWorkoutUiEvent.NavigateBack)
+        }
     }
 
-    private fun save() = vmScope.launch {
-        val userId = userRepository.getUser()?.id ?: return@launch
 
-        isLoading(true)
+    private fun save() {
+        val userId = userRepository.getUser()?.id ?: return
 
         when(uiState.value.mode) {
             ManageWorkoutMode.EXECUTE -> finishWorkout(userId)
@@ -158,27 +133,41 @@ class ManageWorkoutViewModel(
         }
     }
 
-    private fun createWorkoutExercise(exercise: Exercise) = with(uiState.value) {
-        WorkoutExerciseResponse(
+    private fun createWorkoutExercise(exercise: ExerciseWithCategoryAndEquipment): WorkoutExerciseWithSets = with(uiState.value) {
+        val uuid = UUID.randomUUID().toString()
+
+        WorkoutExerciseWithSets(
+            workoutExercise = WorkoutExercise(
+                id = uuid
+            ),
             exercise = exercise,
-            rest = settings.rest,
-            restEnabled = settings.restEnabled,
-        ).apply { sets = listOf(WorkoutSet(workoutExerciseId = this@apply.id)) }
+            sets = listOf(WorkoutExerciseSet(workoutExerciseId = uuid))
+        )
     }
 
     private fun updateWorkoutName(name: String) = updateState {
         it.copy(
-            workout = it.workout.copy(name = name)
+            fullWorkout = it.fullWorkout.copy(
+                workout = it.fullWorkout.workout.copy(
+                    name = name
+                )
+            ),
         )
     }
 
     private fun updateExerciseNotes(id: String, notes: String) = updateState {
         it.copy(
-            workout = it.workout.copy(
-                exercises = it.workout.exercises.map { exercise ->
-                    if (exercise.id == id) {
-                        exercise.copy(notes = notes)
-                    } else exercise
+            fullWorkout = it.fullWorkout.copy(
+                exercises = it.fullWorkout.exercises.map { exercise ->
+                    if(exercise.workoutExercise.id == id) {
+                        return@map exercise.copy(
+                            workoutExercise = exercise.workoutExercise.copy(
+                                notes = notes
+                            )
+                        )
+                    }
+
+                    exercise
                 }
             )
         )
@@ -186,8 +175,8 @@ class ManageWorkoutViewModel(
 
     private fun reorderExercises(from: Int, to: Int) = updateState {
         it.copy(
-            workout = it.workout.copy(
-                exercises = it.workout.exercises.toMutableList().apply {
+            fullWorkout = it.fullWorkout.copy(
+                exercises = it.fullWorkout.exercises.toMutableList().apply {
                     val exercise = removeAt(from)
                     add(to, exercise)
                 }
@@ -195,14 +184,14 @@ class ManageWorkoutViewModel(
         )
     }
 
-    private fun replaceExercise(exercise: Exercise) {
+    private fun replaceExercise(exercise: ExerciseWithCategoryAndEquipment) {
         var index = 0
 
         updateState {
             it.copy(
-                workout = it.workout.copy(
-                    exercises = it.workout.exercises.toMutableList().apply {
-                        index = indexOfFirst { exercise -> exercise.id == it.selectedExerciseId }
+                fullWorkout = it.fullWorkout.copy(
+                    exercises = it.fullWorkout.exercises.toMutableList().apply {
+                        index = indexOfFirst { exercise -> exercise.workoutExercise.exerciseId == it.selectedExerciseId }
 
                         if(index == -1) return@apply
 
@@ -220,25 +209,25 @@ class ManageWorkoutViewModel(
 
     private fun deleteExercise() = updateState {
         it.copy(
-            workout = it.workout.copy(
-                exercises = it.workout.exercises.toMutableList().apply {
-                    removeIf { exercise -> exercise.id == it.selectedExerciseId }
+            fullWorkout = it.fullWorkout.copy(
+                exercises = it.fullWorkout.exercises.toMutableList().apply {
+                    removeIf { exercise -> exercise.workoutExercise.id == it.selectedExerciseId }
                 }
             ),
             selectedExerciseId = null,
         )
     }
 
-    private fun addExercises(exercises: List<Exercise>) = updateAndGetState {
+    private fun addExercises(exercises: List<ExerciseWithCategoryAndEquipment>) = updateAndGetState {
         val newExercises = exercises.map(::createWorkoutExercise)
 
         it.copy(
-            workout = it.workout.copy(
-                exercises = it.workout.exercises + newExercises
-            ),
+            fullWorkout = it.fullWorkout.copy(
+                exercises = it.fullWorkout.exercises + newExercises
+            )
         )
     }.also { state ->
-        triggerEvent(ManageWorkoutUiEvent.ScrollToExercise(state.workout.exercises.size - 1))
+        triggerEvent(ManageWorkoutUiEvent.ScrollToExercise(state.fullWorkout.exercises.size - 1))
     }
 
     private fun toggleExerciseMoreActionSheet(id: String? = null) = updateState {
@@ -270,7 +259,7 @@ class ManageWorkoutViewModel(
 
     private fun updateReps(id: String, setIndex: Int, reps: String?) = updateState {
         it.copy(
-            workout = it.workout.copyWithRepsChanged(
+            fullWorkout = it.fullWorkout.copyWithRepsChanged(
                 id = id,
                 setIndex = setIndex,
                 reps = reps
@@ -280,7 +269,7 @@ class ManageWorkoutViewModel(
 
     private fun updateWeight(id: String, setIndex: Int, weight: String?) = updateState {
         it.copy(
-            workout = it.workout.copyWithWeightChanged(
+            fullWorkout = it.fullWorkout.copyWithWeightChanged(
                 id = id,
                 setIndex = setIndex,
                 weight = weight
@@ -290,7 +279,7 @@ class ManageWorkoutViewModel(
 
     private fun updateTime(id: String, setIndex: Int, time: Int?) = updateState {
         it.copy(
-            workout = it.workout.copyWithTimeChanged(
+            fullWorkout = it.fullWorkout.copyWithTimeChanged(
                 id = id,
                 setIndex = setIndex,
                 time = time
@@ -300,7 +289,7 @@ class ManageWorkoutViewModel(
 
     private fun deleteSet(id: String, setIndex: Int) = updateState {
         it.copy(
-            workout = it.workout.copyWithDeleteSet(
+            fullWorkout = it.fullWorkout.copyWithDeleteSet(
                 id = id,
                 setIndex = setIndex
             )
@@ -309,7 +298,7 @@ class ManageWorkoutViewModel(
 
     private fun addSet(id: String) = updateState {
         it.copy(
-            workout = it.workout.copyWithAddSet(
+            fullWorkout = it.fullWorkout.copyWithAddSet(
                 id = id,
             )
         )
@@ -317,7 +306,7 @@ class ManageWorkoutViewModel(
 
     private fun toggleSetCompleted(id: String, setIndex: Int) = updateState {
         it.copy(
-            workout = it.workout.copyWithSetCompleted(
+            fullWorkout = it.fullWorkout.copyWithSetCompleted(
                 id = id,
                 setIndex = setIndex
             )

@@ -2,7 +2,6 @@ package com.tomtruyen.feature.workouts.detail
 
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.base.SnackbarMessage
-import com.tomtruyen.data.firebase.models.FirebaseCallback
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import kotlinx.coroutines.flow.collectLatest
@@ -37,28 +36,17 @@ class WorkoutDetailViewModel(
             }
     }
 
-    private fun delete() = vmScope.launch {
-        val userId = userRepository.getUser()?.id ?: return@launch
+    private fun delete() = launchLoading {
+        val userId = userRepository.getUser()?.id ?: return@launchLoading
 
         isLoading(true)
 
         workoutRepository.deleteWorkout(
             userId = userId,
-            workoutId = id,
-            object: FirebaseCallback<Unit> {
-                override fun onSuccess(value: Unit) {
-                    triggerEvent(WorkoutDetailUiEvent.NavigateBack)
-                }
-
-                override fun onError(error: String?) {
-                    showSnackbar(SnackbarMessage.Error(error))
-                }
-
-                override fun onStopLoading() {
-                    isLoading(false)
-                }
-            }
+            workoutId = id
         )
+
+        triggerEvent(WorkoutDetailUiEvent.NavigateBack)
     }
 
     override fun onAction(action: WorkoutDetailUiAction) {

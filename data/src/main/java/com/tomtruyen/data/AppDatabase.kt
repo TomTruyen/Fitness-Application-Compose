@@ -11,7 +11,7 @@ import com.tomtruyen.data.dao.SettingsDao
 import com.tomtruyen.data.dao.WorkoutDao
 import com.tomtruyen.data.dao.WorkoutExerciseDao
 import com.tomtruyen.data.dao.WorkoutHistoryDao
-import com.tomtruyen.data.dao.WorkoutSetDao
+import com.tomtruyen.data.dao.WorkoutExerciseSetDao
 import com.tomtruyen.data.entities.CacheTTL
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
@@ -19,8 +19,8 @@ import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.Settings
 import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.entities.WorkoutExercise
+import com.tomtruyen.data.entities.WorkoutExerciseSet
 import com.tomtruyen.data.entities.WorkoutHistory
-import com.tomtruyen.data.entities.WorkoutSet
 
 @Database(
     entities = [
@@ -28,7 +28,7 @@ import com.tomtruyen.data.entities.WorkoutSet
         Settings::class,
         Workout::class,
         WorkoutExercise::class,
-        WorkoutSet::class,
+        WorkoutExerciseSet::class,
         WorkoutHistory::class,
         CacheTTL::class,
         Equipment::class,
@@ -43,7 +43,7 @@ abstract class AppDatabase: RoomDatabase() {
     abstract fun settingsDao(): SettingsDao
     abstract fun workoutDao(): WorkoutDao
     abstract fun workoutExerciseDao(): WorkoutExerciseDao
-    abstract fun workoutSetDao(): WorkoutSetDao
+    abstract fun workoutExerciseSetDao(): WorkoutExerciseSetDao
     abstract fun workoutHistoryDao(): WorkoutHistoryDao
     abstract fun cacheTTLDao(): CacheTTLDao
     abstract fun equipmentDao(): EquipmentDao

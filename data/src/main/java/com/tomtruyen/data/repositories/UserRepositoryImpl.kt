@@ -1,6 +1,6 @@
 package com.tomtruyen.data.repositories
 
-import com.tomtruyen.data.firebase.auth.GoogleSignInHelper
+import com.tomtruyen.core.common.utils.GoogleSignInHelper
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository

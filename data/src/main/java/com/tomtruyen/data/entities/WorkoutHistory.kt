@@ -6,7 +6,6 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.tomtruyen.core.common.utils.TimeUtils
-import com.tomtruyen.data.firebase.models.WorkoutHistoryResponse
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
@@ -53,8 +52,8 @@ data class WorkoutHistoryWithWorkout(
     val totalWeight get(): Double {
         val weight = workoutWithExercises.exercises.sumOf {
             it.sets.sumOf setSumOf@ { set ->
-                val reps = set.reps
-                val weight = set.weight
+                val reps = set.reps ?: 0
+                val weight = set.weight ?: 0.0
                 reps * weight
             }
         }
@@ -65,6 +64,6 @@ data class WorkoutHistoryWithWorkout(
     val weightUnit get() = workoutWithExercises.workout.unit
 
     val totalTime get() = workoutWithExercises.exercises.sumOf {
-        it.sets.sumOf { set -> set.time }
+        it.sets.sumOf { set -> set.time ?: 0 }
     }
 }

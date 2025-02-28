@@ -1,4 +1,4 @@
-package com.tomtruyen.data.firebase.auth
+package com.tomtruyen.core.common.utils
 
 import android.content.Context
 import androidx.credentials.ClearCredentialStateRequest

@@ -20,7 +20,7 @@ import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 
 @Composable
 fun WorkoutExerciseHeader(
-    exercise: ExerciseWithCategoryAndEquipment,
+    exercise: ExerciseWithCategoryAndEquipment?,
     onActionClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -30,12 +30,12 @@ fun WorkoutExerciseHeader(
         modifier = modifier
     ) {
         Avatar(
-            imageUrl = exercise.exercise.imageUrl,
-            contentDescription = exercise.displayName,
+            imageUrl = exercise?.exercise?.imageUrl,
+            contentDescription = exercise?.displayName,
         )
 
         Text(
-            text = exercise.displayName,
+            text = exercise?.displayName.orEmpty(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.bodyLarge.copy(

@@ -14,15 +14,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.data.firebase.extensions.repsCountCompleted
-import com.tomtruyen.data.firebase.extensions.setCountCompleted
-import com.tomtruyen.data.firebase.extensions.totalVolumeCompleted
-import com.tomtruyen.data.firebase.models.WorkoutResponse
+import com.tomtruyen.data.entities.WorkoutWithExercises
 import com.tomtruyen.feature.workouts.manage.R
 
 @Composable
 fun WorkoutStatistics(
-    workout: WorkoutResponse,
+    workout: WorkoutWithExercises,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -38,17 +35,17 @@ fun WorkoutStatistics(
         ) {
             WorkoutStatisticsItem(
                 name = stringResource(id = R.string.label_volume),
-                value = "${workout.totalVolumeCompleted()} ${workout.unit}"
+                value = "${workout.totalVolumeCompleted} ${workout.workout.unit}"
             )
 
             WorkoutStatisticsItem(
                 name = stringResource(id = R.string.label_sets),
-                value = workout.setCountCompleted().toString()
+                value = workout.setsCountCompleted.toString()
             )
 
             WorkoutStatisticsItem(
                 name = stringResource(id = R.string.label_reps),
-                value = workout.repsCountCompleted().toString()
+                value = workout.repsCountCompleted.toString()
             )
         }
 

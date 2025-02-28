@@ -99,7 +99,7 @@ fun WorkoutListItem(
                     )
                 ) {
                     workoutWithExercises.exercises
-                        .sortedBy { it.workoutExercise.order }
+                        .sortedBy { it.workoutExercise.sortOrder }
                         .forEach { exerciseWithSets ->
                             Text(
                                 text = "${exerciseWithSets.sets.size} x ${exerciseWithSets.exercise.displayName}",

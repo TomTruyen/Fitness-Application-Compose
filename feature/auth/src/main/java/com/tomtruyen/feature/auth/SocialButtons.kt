@@ -25,7 +25,7 @@ import androidx.credentials.CustomCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.common.R as CommonR
-import com.tomtruyen.data.firebase.auth.GoogleSignInHelper
+import com.tomtruyen.core.common.utils.GoogleSignInHelper
 import com.tomtruyen.core.designsystem.theme.LavenderMist
 import kotlinx.coroutines.launch
 

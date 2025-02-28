@@ -48,11 +48,12 @@ import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.toolbars.ToolbarTitle
 import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.data.firebase.models.WorkoutExerciseResponse
+import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
+import com.tomtruyen.data.entities.WorkoutExerciseWithSets
+import com.tomtruyen.feature.workouts.manage.components.WorkoutExerciseHeader
 import com.tomtruyen.feature.workouts.manage.components.WorkoutStatistics
 import com.tomtruyen.feature.workouts.manage.components.WorkoutTimer
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
-import com.tomtruyen.feature.workouts.manage.components.WorkoutExerciseHeader
 import com.tomtruyen.feature.workouts.manage.components.WorkoutExerciseSetTable
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
@@ -116,14 +117,14 @@ fun ManageWorkoutScreen(
                 is ManageWorkoutUiEvent.NavigateToAddExercise -> navController.navigate(Screen.Exercise.Overview(Screen.Exercise.Overview.Mode.SELECT))
                 is ManageWorkoutUiEvent.NavigateToDetail -> navController.navigate(Screen.Workout.Detail(event.id))
                 is ManageWorkoutUiEvent.ScrollToExercise -> {
-                    lazyListState.animateScrollToItem(event.index.coerceIn(0, state.workout.exercises.size - 1))
+                    lazyListState.animateScrollToItem(event.index.coerceIn(0, state.fullWorkout.exercises.size - 1))
                 }
             }
         }
     }
 
     LaunchedEffect(navController) {
-        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Pair<Screen.Exercise.Overview.Mode, List<Exercise>>?>(NavArguments.EXERCISES, null)
+        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Pair<Screen.Exercise.Overview.Mode, List<ExerciseWithCategoryAndEquipment>>?>(NavArguments.EXERCISES, null)
             ?.collectLatest { result ->
                 if(result != null) {
                     val (mode, exercises) = result
@@ -143,7 +144,7 @@ fun ManageWorkoutScreen(
                     }
                 }
 
-                navController.currentBackStackEntry?.savedStateHandle?.remove<Pair<Screen.Exercise.Overview.Mode, List<Exercise>>?>(NavArguments.EXERCISES)
+                navController.currentBackStackEntry?.savedStateHandle?.remove<Pair<Screen.Exercise.Overview.Mode, List<ExerciseWithCategoryAndEquipment>>?>(NavArguments.EXERCISES)
             }
     }
 
@@ -186,7 +187,7 @@ fun ManageWorkoutScreenLayout(
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     val onNavigateUp: () -> Unit = {
-        if(state.workout.exercises != state.initialWorkout.exercises) {
+        if(state.fullWorkout.exercises != state.initialWorkout.exercises) {
             confirmationDialogVisible = true
         } else {
             navController.popBackStack()
@@ -236,7 +237,7 @@ fun ManageWorkoutScreenLayout(
                 }
 
                 Buttons.Default(
-                    enabled = state.workout.exercises.isNotEmpty(),
+                    enabled = state.fullWorkout.exercises.isNotEmpty(),
                     modifier = Modifier.padding(end = Dimens.Small),
                     text = stringResource(id = CommonR.string.button_save),
                     contentPadding = PaddingValues(0.dp),
@@ -263,7 +264,7 @@ fun ManageWorkoutScreenLayout(
                 ) {
                     WorkoutStatistics(
                         modifier = Modifier.fillMaxWidth(),
-                        workout = state.workout
+                        workout = state.fullWorkout
                     )
                 }
 
@@ -313,10 +314,10 @@ fun ExerciseList(
         state = lazyListState,
         modifier = modifier.fillMaxSize()
     ) {
-        items(state.workout.exercises, key = { it.id }) { exercise ->
+        items(state.fullWorkout.exercises, key = { it.exercise?.exercise?.id.orEmpty()}) { fullExercise ->
             ReorderableItem(
                 state = reorderableLazyListState,
-                key = exercise.id
+                key = fullExercise.exercise?.exercise?.id.orEmpty()
             ) { isDragging ->
                 val alpha by animateFloatAsState(if (isDragging) 0.25f else 1f, label = "")
 
@@ -329,7 +330,7 @@ fun ExerciseList(
                             },
                         )
                         .alpha(alpha),
-                    workoutExercise = exercise,
+                    workoutExercise = fullExercise,
                     unit = state.settings.unit,
                     mode = state.mode,
                     onAction = onAction,
@@ -356,7 +357,7 @@ fun ExerciseList(
 
 @Composable
 fun ExerciseListItem(
-    workoutExercise: WorkoutExerciseResponse,
+    workoutExercise: WorkoutExerciseWithSets,
     unit: String,
     mode: ManageWorkoutMode,
     onAction: (ManageWorkoutUiAction) -> Unit,
@@ -367,19 +368,19 @@ fun ExerciseListItem(
     ) {
         // Header
         // TODO: Implement with new logic
-//        WorkoutExerciseHeader(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(Dimens.Normal),
-//            exercise = workoutExercise.exercise,
-//            onActionClick = {
-//                onAction(
-//                    ManageWorkoutUiAction.ToggleExerciseMoreActionSheet(
-//                        id = workoutExercise.id
-//                    )
-//                )
-//            },
-//        )
+        WorkoutExerciseHeader(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Dimens.Normal),
+            exercise = workoutExercise.exercise,
+            onActionClick = {
+                onAction(
+                    ManageWorkoutUiAction.ToggleExerciseMoreActionSheet(
+                        id = workoutExercise.workoutExercise.id
+                    )
+                )
+            },
+        )
 
         // Notes
         TextFields.Default(
@@ -392,11 +393,11 @@ fun ExerciseListItem(
             border = true,
             padding = PaddingValues(Dimens.Small),
             placeholder = stringResource(id = R.string.placeholder_notes),
-            value = workoutExercise.notes,
+            value = workoutExercise.workoutExercise.notes,
             onValueChange = { notes ->
                 onAction(
                     ManageWorkoutUiAction.OnExerciseNotesChanged(
-                        id = workoutExercise.id,
+                        id = workoutExercise.workoutExercise.id,
                         notes = notes
                     )
                 )
@@ -432,7 +433,7 @@ fun ExerciseListItem(
                 contentColor = MaterialTheme.colorScheme.onSurface
             ),
             onClick = {
-                onAction(ManageWorkoutUiAction.OnAddSet(workoutExercise.id))
+                onAction(ManageWorkoutUiAction.OnAddSet(workoutExercise.workoutExercise.id))
             }
         )
     }

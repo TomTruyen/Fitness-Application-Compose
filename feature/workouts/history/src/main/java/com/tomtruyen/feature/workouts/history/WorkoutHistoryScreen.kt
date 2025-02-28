@@ -26,7 +26,7 @@ fun WorkoutHistoryScreen(
 ) {
     val context = LocalContext.current
 
-    val history = viewModel.history.collectAsLazyPagingItems()
+    // TODO: Swipe to refresh logic!
 
     LaunchedEffect(context, viewModel) {
         viewModel.eventFlow.collectLatest { event ->
@@ -41,7 +41,7 @@ fun WorkoutHistoryScreen(
     WorkoutHistoryScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
-        history = history,
+//        history = history,
         onAction = viewModel::onAction
     )
 }
@@ -51,7 +51,7 @@ fun WorkoutHistoryScreen(
 fun WorkoutHistoryScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
-    history: LazyPagingItems<com.tomtruyen.data.entities.WorkoutHistoryWithWorkout>,
+//    history: LazyPagingItems<com.tomtruyen.data.entities.WorkoutHistoryWithWorkout>,
     onAction: (WorkoutHistoryUiAction) -> Unit,
 ) {
     Scaffold(
@@ -68,14 +68,14 @@ fun WorkoutHistoryScreenLayout(
                 .fillMaxSize()
                 .padding(vertical = Dimens.Normal),
         ) {
-            items(count = history.itemCount) { index ->
-                val entry = history[index]
-
-                WorkoutHistoryItem(
-                    entry = entry!!,
-                    onAction = onAction
-                )
-            }
+//            items(count = history.itemCount) { index ->
+//                val entry = history[index]
+//
+//                WorkoutHistoryItem(
+//                    entry = entry!!,
+//                    onAction = onAction
+//                )
+//            }
         }
     }
 }
