@@ -1,5 +1,6 @@
 package com.tomtruyen.feature.workouts.manage.components
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,7 +28,7 @@ fun WorkoutExerciseSetTable(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.animateContentSize(),
     ) {
         WorkoutExerciseSetHeader(
             exerciseType = exerciseType,
