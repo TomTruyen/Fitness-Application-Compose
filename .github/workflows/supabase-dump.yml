@@ -33,18 +33,18 @@ jobs:
         run: |
           brew install supabase/tap/supabase
 
+      - name: Login to Supabase
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |
+          supabase login
+
       - name: Link Supabase Environment
         env:
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
           SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
         run: |
           supabase link --project-ref $SUPABASE_PROJECT_ID
-
-      - name: Login to Supabase
-        env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-        run: |
-          supabase login
 
       - name: Create Supabase Schema Dump
         run: |
