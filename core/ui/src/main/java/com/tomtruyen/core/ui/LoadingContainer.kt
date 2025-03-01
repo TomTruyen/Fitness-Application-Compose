@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
-import com.tomtruyen.core.common.models.Global
+import com.tomtruyen.core.common.models.GlobalAppState
 
 @Composable
 fun LoadingContainer(
@@ -22,7 +22,7 @@ fun LoadingContainer(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    val isBottomBarVisible by Global.isBottomBarVisible
+    val isBottomBarVisible by GlobalAppState.isBottomBarVisible
 
     Box(
         modifier = modifier

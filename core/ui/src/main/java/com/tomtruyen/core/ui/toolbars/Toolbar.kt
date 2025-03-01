@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.tomtruyen.core.common.models.Global
+import com.tomtruyen.core.common.models.GlobalAppState
 import com.tomtruyen.core.designsystem.theme.ChineseBlack
 import com.tomtruyen.core.ui.R
 import com.tomtruyen.navigation.shouldShowNavigationIcon
@@ -47,7 +47,7 @@ fun Toolbar(
     onNavigateUp: () -> Unit = { navController.popBackStack() },
     actions: @Composable RowScope.() -> Unit = {},
 ) {
-    val isBottomBarVisible by Global.isBottomBarVisible
+    val isBottomBarVisible by GlobalAppState.isBottomBarVisible
 
     TopAppBar(
         title = title,

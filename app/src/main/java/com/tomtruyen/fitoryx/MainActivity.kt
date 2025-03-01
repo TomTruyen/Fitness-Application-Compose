@@ -6,7 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -21,7 +20,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.tomtruyen.core.common.models.Global
+import com.tomtruyen.core.common.models.GlobalAppState
 import com.tomtruyen.core.designsystem.theme.FitnessApplicationTheme
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.feature.auth.login.LoginScreen
@@ -57,7 +56,7 @@ class MainActivity : ComponentActivity() {
             FitnessApplicationTheme {
                 val navController = rememberNavController()
 
-                var isBottomBarVisible by Global.isBottomBarVisible
+                var isBottomBarVisible by GlobalAppState.isBottomBarVisible
 
                 val backStackEntry by navController.currentBackStackEntryAsState()
 
