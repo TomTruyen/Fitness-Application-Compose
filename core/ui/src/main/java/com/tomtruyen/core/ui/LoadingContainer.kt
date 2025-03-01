@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
+import com.tomtruyen.core.common.models.Global
 
 @Composable
 fun LoadingContainer(
@@ -20,15 +22,15 @@ fun LoadingContainer(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    val layoutDirection = LocalLayoutDirection.current
+    val isBottomBarVisible by Global.isBottomBarVisible
 
     Box(
         modifier = modifier
             .padding(
                 top = scaffoldPadding.calculateTopPadding(),
-                start = scaffoldPadding.calculateStartPadding(layoutDirection),
-                end = scaffoldPadding.calculateEndPadding(layoutDirection),
-                bottom = 0.dp
+                start = scaffoldPadding.calculateStartPadding(LocalLayoutDirection.current),
+                end = scaffoldPadding.calculateEndPadding(LocalLayoutDirection.current),
+                bottom = if(isBottomBarVisible) 0.dp else scaffoldPadding.calculateBottomPadding()
             )
             .fillMaxSize()
             .animateContentSize(),

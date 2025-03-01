@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -47,34 +49,31 @@ fun MainBottomNavigation(
 ) {
     val backstackEntry by navController.currentBackStackEntryAsState()
 
-    AnimatedVisibility(
-        visible = showBottomBar,
-        enter = fadeIn() + expandIn(expandFrom = Alignment.BottomCenter),
-        exit = shrinkOut(shrinkTowards = Alignment.BottomCenter) + fadeOut()
-    ) {
-        NavigationBar(
-            containerColor = Color.Transparent,
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = Dimens.Small),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                BottomNavigation.items.forEach { item ->
-                    val selected by remember(backstackEntry) {
-                        mutableStateOf(
-                            backstackEntry?.destination?.hasRoute(item.screen::class) ?: false
-                        )
-                    }
+    val height by animateDpAsState(targetValue = if(showBottomBar) 120.dp else 0.dp)
 
-                    BottomBarItem(
-                        navController = navController,
-                        item = item,
-                        selected = selected,
+    NavigationBar(
+        modifier = Modifier.height(height),
+        containerColor = Color.Transparent,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = Dimens.Small),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            BottomNavigation.items.forEach { item ->
+                val selected by remember(backstackEntry) {
+                    mutableStateOf(
+                        backstackEntry?.destination?.hasRoute(item.screen::class) ?: false
                     )
                 }
+
+                BottomBarItem(
+                    navController = navController,
+                    item = item,
+                    selected = selected,
+                )
             }
         }
     }
