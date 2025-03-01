@@ -1,21 +1,20 @@
 [versions]
-agp = "8.8.1"
-android-desugar-jdk-libs = "2.1.4"
+agp = "8.8.2"
+android-desugar-jdk-libs = "2.1.5"
 android-git-version = "0.4.14"
-androidx-activity-compose = "1.10.0"
+androidx-activity-compose = "1.10.1"
 androidx-compose-bom = "2025.02.00"
 androidx-core-ktx = "1.15.0"
 androidx-credentials = "1.5.0-rc01"
 androidx-lifecycle-runtime-ktx = "2.8.7"
-androidx-navigation = "2.8.7"
+androidx-navigation = "2.8.8"
 androidx-paging = "3.3.6"
 androidx-room = "2.6.1"
 appcompat = "1.7.0"
 coil-kt-compose = "2.7.0"
 espresso-core = "3.6.1"
-google-crashlytics-plugin = "3.0.3"
 google-identity-googleid = "1.1.1"
-google-ksp = "2.1.10-1.0.30"
+google-ksp = "2.1.10-1.0.31"
 insert-koin-compose = "4.0.2"
 junit = "4.13.2"
 junit-version = "1.2.1"
@@ -55,7 +54,6 @@ androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.r
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx-room" }
 coil-kt-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-kt-compose" }
-
 google-identity-googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "google-identity-googleid" }
 google-ksp-plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "google-ksp" }
 insert-koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "insert-koin-compose" }
@@ -65,15 +63,14 @@ junit = { module = "junit:junit", version.ref = "junit" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+# Supabase
+ktor = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 squareup-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "squareup-leakcanary" }
-
-# Supabase
-ktor = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+supabase-auth = { module = "io.github.jan-tennert.supabase:auth-kt" }
 supabase-bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "supabase-kt" }
 supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
-supabase-auth = { module = "io.github.jan-tennert.supabase:auth-kt" }
 supabase-storage = { module = "io.github.jan-tennert.supabase:storage-kt" }
 
 [plugins]
