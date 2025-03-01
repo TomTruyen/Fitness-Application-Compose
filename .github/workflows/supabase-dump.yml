@@ -36,8 +36,9 @@ jobs:
       - name: Link Supabase Environment
         env:
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
         run: |
-          supabase link
+          supabase link --project-ref $SUPABASE_PROJECT_ID
 
       - name: Login to Supabase
         env:
