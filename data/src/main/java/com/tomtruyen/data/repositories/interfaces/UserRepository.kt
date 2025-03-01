@@ -4,7 +4,7 @@ import com.tomtruyen.data.repositories.BaseRepository
 import io.github.jan.supabase.auth.user.UserInfo
 
 abstract class UserRepository : BaseRepository() {
-    override val identifier: String
+    override val cacheKey: String
         get() = "users"
 
     abstract suspend fun login(email: String, password: String)

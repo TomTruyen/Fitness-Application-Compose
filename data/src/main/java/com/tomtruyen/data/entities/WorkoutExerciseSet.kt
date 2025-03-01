@@ -36,9 +36,6 @@ data class WorkoutExerciseSet(
     val time: Int? = null,
     @SerialName("sort_order")
     val sortOrder: Int = 0,
-
-    // TODO: Remove these extra fields since I use the WorkoutExerciseSetUiModel now
-    val completed: Boolean = false
 ) : BaseEntity {
     companion object {
         const val TABLE_NAME = "WorkoutExerciseSet"

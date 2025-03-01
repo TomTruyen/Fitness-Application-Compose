@@ -6,7 +6,7 @@ import com.tomtruyen.data.repositories.BaseRepository
 import kotlinx.coroutines.flow.Flow
 
 abstract class EquipmentRepository : BaseRepository() {
-    override val identifier: String
+    override val cacheKey: String
         get() = Equipment.TABLE_NAME
 
     abstract fun findEquipment(): Flow<List<EquipmentUiModel>>

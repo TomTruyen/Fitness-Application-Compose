@@ -1,6 +1,5 @@
 package com.tomtruyen.data.entities
 
-import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -54,11 +53,6 @@ data class Exercise(
     @SerialName("user_id")
     val userId: String? = null
 ) : BaseEntity {
-    // TODO: See if we can get rid of this by using the enum directly
-    val typeEnum
-        get() = ExerciseType.entries.firstOrNull { it.value.lowercase() == type.lowercase() }
-            ?: ExerciseType.WEIGHT
-
     companion object {
         const val TABLE_NAME = "Exercise"
     }

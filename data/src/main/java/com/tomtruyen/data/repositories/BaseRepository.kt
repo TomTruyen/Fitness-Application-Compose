@@ -16,8 +16,7 @@ import org.koin.java.KoinJavaComponent.inject
 
 abstract class BaseRepository(
 ) : KoinComponent {
-    // TODO: Rename to CacheKey (also rename the overrideIdentifier to overrideCacheKey)
-    abstract val identifier: String
+    abstract val cacheKey: String
 
     internal val supabase: SupabaseClient by inject(SupabaseClient::class.java)
 
@@ -36,20 +35,17 @@ abstract class BaseRepository(
         transaction(block)
     }
 
-    fun launchWithCacheTransactions(overrideIdentifier: String? = null, block: suspend () -> Unit) =
+    fun launchWithCacheTransactions(block: suspend () -> Unit) =
         launchWithTransaction {
             block()
 
-            val cacheKey = overrideIdentifier ?: identifier
             cacheDao.save(CacheTTL(cacheKey))
         }
 
     protected suspend fun fetch(
         refresh: Boolean = false,
-        overrideIdentifier: String? = null,
         block: suspend () -> Unit
     ) {
-        val cacheKey = overrideIdentifier ?: identifier
         Log.i(TAG, "Fetching data for $cacheKey from Firebase... (Checking Cache first)")
 
         val isCacheExpired = cacheDao.findById(cacheKey)?.isExpired ?: true

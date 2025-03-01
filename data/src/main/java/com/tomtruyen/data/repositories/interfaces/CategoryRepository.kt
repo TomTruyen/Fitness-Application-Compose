@@ -6,7 +6,7 @@ import com.tomtruyen.data.repositories.BaseRepository
 import kotlinx.coroutines.flow.Flow
 
 abstract class CategoryRepository : BaseRepository() {
-    override val identifier: String
+    override val cacheKey: String
         get() = Category.TABLE_NAME
 
     abstract fun findCategories(): Flow<List<CategoryUiModel>>

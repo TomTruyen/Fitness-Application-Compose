@@ -8,7 +8,7 @@ import com.tomtruyen.data.repositories.BaseRepository
 import kotlinx.coroutines.flow.Flow
 
 abstract class ExerciseRepository : BaseRepository() {
-    override val identifier: String
+    override val cacheKey: String
         get() = Exercise.TABLE_NAME
 
     abstract fun findExercises(

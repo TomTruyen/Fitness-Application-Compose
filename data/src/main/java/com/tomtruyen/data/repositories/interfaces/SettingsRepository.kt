@@ -6,7 +6,7 @@ import com.tomtruyen.data.repositories.BaseRepository
 import kotlinx.coroutines.flow.Flow
 
 abstract class SettingsRepository : BaseRepository() {
-    override val identifier: String
+    override val cacheKey: String
         get() = Settings.TABLE_NAME
 
     abstract fun findSettings(): Flow<SettingsUiModel?>
