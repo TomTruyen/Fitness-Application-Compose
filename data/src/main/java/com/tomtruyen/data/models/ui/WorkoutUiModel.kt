@@ -57,7 +57,7 @@ data class WorkoutUiModel(
             id = entity.workout.id,
             name = entity.workout.name,
             unit = UnitType.fromValue(entity.workout.unit),
-            exercises = entity.exercises.map(WorkoutExerciseUiModel::fromEntity)
+            exercises = entity.exercises.map(WorkoutExerciseUiModel::fromEntity).sortedBy { it.sortOrder }
         )
     }
 }

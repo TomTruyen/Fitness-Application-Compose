@@ -110,11 +110,7 @@ class ManageWorkoutViewModel(
             workoutRepository.saveWorkout(
                 userId = userId,
                 workout = workout.copy(
-                    exercises = workout.exercises.mapIndexed { index, exercise ->
-                        exercise.copy(
-                            sortOrder = index,
-                        )
-                    },
+                    exercises = workout.exercises,
                     unit = settings.unit,
                     name = workout.name.ifBlank { "Workout" }
                 ),

@@ -68,7 +68,7 @@ data class WorkoutExerciseUiModel(
             sortOrder = entity.workoutExercise.sortOrder,
             category = entity.exercise.category?.let(CategoryUiModel::fromEntity),
             equipment = entity.exercise.equipment?.let(EquipmentUiModel::fromEntity),
-            sets = entity.sets.map(WorkoutExerciseSetUiModel::fromEntity)
+            sets = entity.sets.map(WorkoutExerciseSetUiModel::fromEntity).sortedBy { it.sortOrder }
         )
     }
 }

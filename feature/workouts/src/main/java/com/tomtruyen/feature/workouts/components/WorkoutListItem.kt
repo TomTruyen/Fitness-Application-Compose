@@ -100,7 +100,6 @@ fun WorkoutListItem(
                     )
                 ) {
                     workout.exercises
-                        .sortedBy { it.sortOrder }
                         .forEach { exercise ->
                             Text(
                                 text = "${exercise.sets.size} x ${exercise.displayName}",
