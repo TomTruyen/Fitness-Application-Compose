@@ -1,15 +1,11 @@
 package com.tomtruyen.fitoryx.navigation
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandIn
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -49,7 +45,13 @@ fun MainBottomNavigation(
 ) {
     val backstackEntry by navController.currentBackStackEntryAsState()
 
-    val height by animateDpAsState(targetValue = if(showBottomBar) 96.dp else 0.dp)
+    val height by animateDpAsState(
+        targetValue = if(showBottomBar) 96.dp else 0.dp,
+        animationSpec = tween(
+            durationMillis = 200,
+            easing = FastOutSlowInEasing
+        )
+    )
 
     NavigationBar(
         modifier = Modifier.height(height),
