@@ -32,7 +32,7 @@ class WorkoutHistoryViewModel(
         }
     }
 
-    private fun observeWorkoutHistory = vmScope.launch {
+    private fun observeWorkoutHistory() = vmScope.launch {
         // TODO: Implement the collect and state update
     }
 

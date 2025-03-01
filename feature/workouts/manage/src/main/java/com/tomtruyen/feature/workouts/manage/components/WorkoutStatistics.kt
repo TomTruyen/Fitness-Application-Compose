@@ -13,13 +13,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.feature.workouts.manage.R
 
 @Composable
 fun WorkoutStatistics(
-    workout: WorkoutUiModel,
+    volume: Double,
+    sets: Int,
+    reps: Int,
+    unit: UnitType,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -35,17 +38,17 @@ fun WorkoutStatistics(
         ) {
             WorkoutStatisticsItem(
                 name = stringResource(id = R.string.label_volume),
-                value = "${workout.totalVolumeCompleted} ${workout.unit}"
+                value = "$volume ${unit.value}"
             )
 
             WorkoutStatisticsItem(
                 name = stringResource(id = R.string.label_sets),
-                value = workout.setsCountCompleted.toString()
+                value = sets.toString()
             )
 
             WorkoutStatisticsItem(
                 name = stringResource(id = R.string.label_reps),
-                value = workout.repsCountCompleted.toString()
+                value = reps.toString()
             )
         }
 

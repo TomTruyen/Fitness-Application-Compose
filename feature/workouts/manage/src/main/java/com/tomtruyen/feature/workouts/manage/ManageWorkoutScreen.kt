@@ -49,6 +49,7 @@ import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.ui.toolbars.ToolbarTitle
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
+import com.tomtruyen.feature.workouts.manage.components.ExerciseList
 import com.tomtruyen.feature.workouts.manage.components.WorkoutExerciseHeader
 import com.tomtruyen.feature.workouts.manage.components.WorkoutExerciseSetTable
 import com.tomtruyen.feature.workouts.manage.components.WorkoutStatistics
@@ -294,7 +295,10 @@ fun ManageWorkoutScreenLayout(
                 ) {
                     WorkoutStatistics(
                         modifier = Modifier.fillMaxWidth(),
-                        workout = state.workout
+                        volume = state.workout.totalVolumeCompleted,
+                        reps = state.workout.repsCountCompleted,
+                        sets = state.workout.setsCountCompleted,
+                        unit = state.workout.unit
                     )
                 }
 
@@ -326,149 +330,3 @@ fun ManageWorkoutScreenLayout(
         }
     }
 }
-
-@Composable
-fun ExerciseList(
-    modifier: Modifier = Modifier,
-    state: ManageWorkoutUiState,
-    lazyListState: LazyListState,
-    onAction: (ManageWorkoutUiAction) -> Unit,
-) {
-    val haptic = LocalHapticFeedback.current
-
-    val reorderableLazyListState = rememberReorderableLazyListState(lazyListState) { from, to ->
-        onAction(ManageWorkoutUiAction.OnReorder(from.index, to.index))
-    }
-
-    LazyColumn(
-        state = lazyListState,
-        modifier = modifier.fillMaxSize()
-    ) {
-        items(
-            state.workout.exercises,
-            key = { it.id }) { exercise ->
-            ReorderableItem(
-                state = reorderableLazyListState,
-                key = exercise.id
-            ) { isDragging ->
-                val alpha by animateFloatAsState(if (isDragging) 0.25f else 1f, label = "")
-
-                ExerciseListItem(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .longPressDraggableHandle(
-                            onDragStarted = {
-                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            },
-                        )
-                        .alpha(alpha),
-                    exercise = exercise,
-                    unit = state.settings.unit,
-                    mode = state.mode,
-                    onAction = onAction,
-                )
-            }
-
-        }
-
-        item {
-            Buttons.Default(
-                text = stringResource(id = R.string.button_add_exercise),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = Dimens.Normal,
-                        vertical = Dimens.Small
-                    ),
-            ) {
-                onAction(ManageWorkoutUiAction.OnAddExerciseClicked)
-            }
-        }
-    }
-}
-
-@Composable
-fun ExerciseListItem(
-    exercise: WorkoutExerciseUiModel,
-    unit: UnitType,
-    mode: ManageWorkoutMode,
-    onAction: (ManageWorkoutUiAction) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier,
-    ) {
-        // Header
-        WorkoutExerciseHeader(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(Dimens.Normal),
-            exercise = exercise,
-            onActionClick = {
-                onAction(
-                    ManageWorkoutUiAction.ToggleExerciseMoreActionSheet(
-                        id = exercise.id
-                    )
-                )
-            },
-        )
-
-        // Notes
-        TextFields.Default(
-            modifier = Modifier.padding(
-                start = Dimens.Normal,
-                end = Dimens.Normal,
-                bottom = Dimens.Small
-            ),
-            singleLine = false,
-            border = true,
-            padding = PaddingValues(Dimens.Small),
-            placeholder = stringResource(id = R.string.placeholder_notes),
-            value = exercise.notes,
-            onValueChange = { notes ->
-                onAction(
-                    ManageWorkoutUiAction.OnExerciseNotesChanged(
-                        id = exercise.id,
-                        notes = notes
-                    )
-                )
-            }
-        )
-
-        // Sets
-        WorkoutExerciseSetTable(
-            workoutExerciseId = exercise.id,
-            exerciseType = exercise.type,
-            sets = exercise.sets,
-            unit = unit,
-            mode = mode,
-            onSetClick = { id, setIndex ->
-                onAction(
-                    ManageWorkoutUiAction.ToggleSetMoreActionSheet(
-                        id = id,
-                        setIndex = setIndex
-                    )
-                )
-            },
-            onAction = onAction
-        )
-
-        // Add Set Button
-        Buttons.Default(
-            text = stringResource(id = R.string.button_add_set),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(Dimens.Normal),
-            minButtonSize = 0.dp,
-            contentPadding = PaddingValues(Dimens.Small),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.surface,
-                contentColor = MaterialTheme.colorScheme.onSurface
-            ),
-            onClick = {
-                onAction(ManageWorkoutUiAction.OnAddSet(exercise.id))
-            }
-        )
-    }
-}
-

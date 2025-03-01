@@ -16,12 +16,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.ui.Avatar
-import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 
 @Composable
 fun WorkoutExerciseHeader(
-    exercise: WorkoutExerciseUiModel?,
-    onActionClick: () -> Unit,
+    name: String,
+    imageUrl: String?,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -30,12 +30,12 @@ fun WorkoutExerciseHeader(
         modifier = modifier
     ) {
         Avatar(
-            imageUrl = exercise?.imageUrl,
-            contentDescription = exercise?.displayName,
+            imageUrl = imageUrl,
+            contentDescription = name,
         )
 
         Text(
-            text = exercise?.displayName.orEmpty(),
+            text = name,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.bodyLarge.copy(
@@ -46,7 +46,7 @@ fun WorkoutExerciseHeader(
         Spacer(modifier = Modifier.weight(1f))
 
         IconButton(
-            onClick = onActionClick,
+            onClick = onClick,
         ) {
             Icon(
                 imageVector = Icons.Default.MoreVert,
