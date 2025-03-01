@@ -5,7 +5,9 @@ import com.tomtruyen.core.validation.ValidationResult
 import com.tomtruyen.core.validation.rules.EmailRule
 import com.tomtruyen.core.validation.rules.MatchingPasswordsRule
 import com.tomtruyen.core.validation.rules.PasswordRule
+import androidx.compose.runtime.Immutable
 
+@Immutable
 data class RegisterUiState(
     val email: String? = null,
     val password: String? = null,

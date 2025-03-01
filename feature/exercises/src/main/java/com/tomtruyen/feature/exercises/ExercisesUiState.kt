@@ -5,7 +5,9 @@ import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.models.ExerciseFilter
 import com.tomtruyen.navigation.Screen
+import androidx.compose.runtime.Immutable
 
+@Immutable
 data class ExercisesUiState(
     val mode: Screen.Exercise.Overview.Mode = Screen.Exercise.Overview.Mode.VIEW, // Determines if the user is coming from the workout screen
     val search: String = "",

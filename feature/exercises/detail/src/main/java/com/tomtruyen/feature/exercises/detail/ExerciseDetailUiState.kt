@@ -1,7 +1,9 @@
 package com.tomtruyen.feature.exercises.detail
 
 import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
+import androidx.compose.runtime.Immutable
 
+@Immutable
 data class ExerciseDetailUiState(
     val fullExercise: ExerciseWithCategoryAndEquipment? = null,
 

@@ -4,7 +4,9 @@ import com.tomtruyen.core.validation.TextValidator
 import com.tomtruyen.core.validation.ValidationResult
 import com.tomtruyen.core.validation.rules.EmailRule
 import com.tomtruyen.core.validation.rules.RequiredRule
+import androidx.compose.runtime.Immutable
 
+@Immutable
 data class LoginUiState(
     val email: String? = null,
     val password: String? = null,

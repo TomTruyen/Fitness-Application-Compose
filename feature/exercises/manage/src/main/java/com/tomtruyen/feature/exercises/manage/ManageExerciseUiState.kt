@@ -7,7 +7,9 @@ import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.feature.exercises.manage.model.ManageExerciseMode
+import androidx.compose.runtime.Immutable
 
+@Immutable
 data class ManageExerciseUiState(
     val initialExercise: ExerciseWithCategoryAndEquipment = ExerciseWithCategoryAndEquipment(),
     val fullExercise: ExerciseWithCategoryAndEquipment = ExerciseWithCategoryAndEquipment(),
