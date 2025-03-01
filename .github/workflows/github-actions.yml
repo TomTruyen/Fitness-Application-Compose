@@ -51,7 +51,7 @@ jobs:
       - name: Setup gradle cache
         uses: gradle/actions/setup-gradle@v4
         with:
-          cache-cleanup: true
+          cache-cleanup: on-success
 
       - name: Run tests
         run: ./gradlew test
