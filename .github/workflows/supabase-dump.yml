@@ -58,5 +58,5 @@ jobs:
           branch: chore/supabase-schema-dump
           delete-branch: true
           title: '[Chore] Update Supabase Schema Dump'
-          assignee: TomTruyen
+          assignees: TomTruyen
           reviewers: TomTruyen
