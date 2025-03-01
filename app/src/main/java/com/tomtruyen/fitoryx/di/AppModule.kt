@@ -13,8 +13,10 @@ import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.PropertyConversionMethod
+import io.github.jan.supabase.serializer.KotlinXSerializer
 import io.github.jan.supabase.storage.Storage
 import io.github.jan.supabase.storage.storage
+import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 import kotlin.time.Duration.Companion.seconds
 
@@ -24,6 +26,13 @@ val appModule = module {
             supabaseUrl = BuildConfig.SUPABASE_URL,
             supabaseKey = BuildConfig.SUPABASE_KEY
         ) {
+            defaultSerializer = KotlinXSerializer(
+                json = Json {
+                    ignoreUnknownKeys = true
+                    encodeDefaults = true
+                }
+            )
+
             install(Auth)
             install(Postgrest) {
                 propertyConversionMethod = PropertyConversionMethod.SERIAL_NAME

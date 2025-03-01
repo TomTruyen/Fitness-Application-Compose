@@ -15,12 +15,12 @@ data class WorkoutExerciseSetUiModel(
     val sortOrder: Int = 0,
     val completed: Boolean = false
 ) {
-    fun toEntity(workoutExerciseId: String) = WorkoutExerciseSet(
+    fun toEntity(workoutExerciseId: String, index: Int) = WorkoutExerciseSet(
         id = id,
         reps = reps,
         weight = weight,
         time = time,
-        sortOrder = sortOrder,
+        sortOrder = index,
         workoutExerciseId = workoutExerciseId
     )
 

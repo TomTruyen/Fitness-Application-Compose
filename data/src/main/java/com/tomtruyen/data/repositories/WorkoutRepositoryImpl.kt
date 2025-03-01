@@ -1,5 +1,6 @@
 package com.tomtruyen.data.repositories
 
+import android.util.Log
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.entities.WorkoutExercise
@@ -77,16 +78,16 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
     ) {
         val workoutEntity = workout.toEntity(userId)
 
-        val exercises = workout.exercises.map { exercise ->
-            exercise.toEntity(workout.id)
+        val exercises = workout.exercises.mapIndexed { index, exercise ->
+            exercise.toEntity(workout.id, index)
         }
 
         val sets = workout.exercises.flatMap { exercise ->
-            exercise.sets.map { set ->
-                set.toEntity(exercise.id)
+            exercise.sets.mapIndexed { index, set ->
+                set.toEntity(exercise.id, index)
             }
         }
-
+        
         supabase.from(Workout.TABLE_NAME).upsert(workoutEntity)
         supabase.from(WorkoutExercise.TABLE_NAME).upsert(exercises)
         supabase.from(WorkoutExerciseSet.TABLE_NAME).upsert(sets)

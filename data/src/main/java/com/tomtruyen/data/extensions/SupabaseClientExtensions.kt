@@ -3,6 +3,11 @@ package com.tomtruyen.data.extensions
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.exceptions.RestException
 
+class SupabaseTransactionException(
+    override val message: String,
+    override val cause: Throwable?
+): RuntimeException()
+
 /**
  * Supabase does not support transactions yet without using RPC. However RPC's are hard to maintain so not useful for us
  *
@@ -14,4 +19,9 @@ suspend fun SupabaseClient.transaction(onRollback: suspend () -> Unit, block: su
     e.printStackTrace()
 
     onRollback()
+
+    throw SupabaseTransactionException(
+        message = e.error,
+        cause = e
+    )
 }

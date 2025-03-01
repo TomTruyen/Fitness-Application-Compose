@@ -33,12 +33,12 @@ data class WorkoutExerciseUiModel(
             }
         }
 
-    fun toEntity(workoutId: String) = WorkoutExercise(
+    fun toEntity(workoutId: String, index: Int) = WorkoutExercise(
         id = id,
         exerciseId = exerciseId,
         workoutId = workoutId,
         notes = notes,
-        sortOrder = sortOrder,
+        sortOrder = index,
     )
 
     companion object {

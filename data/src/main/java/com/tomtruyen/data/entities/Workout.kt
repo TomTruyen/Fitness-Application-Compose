@@ -6,6 +6,9 @@ import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.tomtruyen.core.common.models.UnitType
 import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -21,7 +24,7 @@ data class Workout(
     @SerialName("unit")
     val unit: String = UnitType.KG.value, // KG or LBS
     @SerialName("created_at")
-    val createdAt: Long = Clock.System.now().epochSeconds,
+    val createdAt: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     @SerialName("user_id")
     val userId: String? = null,
 ) : BaseEntity {
