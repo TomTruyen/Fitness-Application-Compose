@@ -110,9 +110,7 @@ fun WorkoutDetailScreenLayout(
     ) {
         LoadingContainer(
             loading = state.loading,
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize()
+            scaffoldPadding = it
         ) {
             Column(
                 modifier = Modifier

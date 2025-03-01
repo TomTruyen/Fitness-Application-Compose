@@ -95,10 +95,8 @@ fun WorkoutOverviewScreenLayout(
         },
     ) {
         LoadingContainer(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize(),
             loading = state.loading,
+            scaffoldPadding = it
         ) {
             PullToRefreshBox(
                 isRefreshing = state.refreshing,

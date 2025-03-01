@@ -127,10 +127,8 @@ fun ExerciseDetailScreenLayout(
         }
     ) {
         LoadingContainer(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize(),
             loading = state.loading,
+            scaffoldPadding = it
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize()

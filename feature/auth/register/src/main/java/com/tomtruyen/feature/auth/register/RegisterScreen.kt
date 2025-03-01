@@ -3,6 +3,7 @@ package com.tomtruyen.feature.auth.register
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -92,7 +93,7 @@ fun RegisterScreenLayout(
     ) {
         LoadingContainer(
             loading = state.loading,
-            modifier = Modifier.padding(it)
+            scaffoldPadding = it
         ) {
             Column(
                 modifier = Modifier

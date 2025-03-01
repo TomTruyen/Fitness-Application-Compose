@@ -268,10 +268,8 @@ fun ManageWorkoutScreenLayout(
         }
     ) {
         LoadingContainer(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize(),
             loading = state.loading,
+            scaffoldPadding = it
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
