@@ -11,9 +11,9 @@ data class WorkoutExerciseNetworkModel(
     @SerialName(WorkoutExercise.KEY_ID)
     val id: String,
     @SerialName(WorkoutExercise.KEY_EXERCISE_ID)
-    val exerciseId: String?,
+    val exerciseId: String,
     @SerialName(WorkoutExercise.KEY_WORKOUT_ID)
-    val workoutId: String?,
+    val workoutId: String,
     @SerialName(WorkoutExercise.KEY_NOTES)
     val notes: String?,
     @SerialName(WorkoutExercise.KEY_SORT_ORDER)

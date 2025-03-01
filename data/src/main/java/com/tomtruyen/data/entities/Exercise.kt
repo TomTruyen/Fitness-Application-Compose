@@ -37,7 +37,7 @@ data class Exercise(
     @SerialName(KEY_ID)
     override val id: String = UUID.randomUUID().toString(),
     @SerialName(KEY_NAME)
-    val name: String? = null,
+    val name: String = "",
     @SerialName(KEY_CATEGORY_ID)
     val categoryId: String? = null,
     @SerialName(KEY_EQUIPMENT_ID)

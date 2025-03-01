@@ -36,9 +36,9 @@ data class WorkoutExercise(
     @SerialName(KEY_ID)
     override val id: String = UUID.randomUUID().toString(),
     @SerialName(KEY_EXERCISE_ID)
-    val exerciseId: String? = null,
+    val exerciseId: String = "",
     @SerialName(KEY_WORKOUT_ID)
-    val workoutId: String? = null,
+    val workoutId: String = "",
     @SerialName(KEY_NOTES)
     val notes: String? = null,
     @SerialName(KEY_SORT_ORDER)

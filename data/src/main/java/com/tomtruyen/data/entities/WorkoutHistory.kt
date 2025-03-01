@@ -10,6 +10,7 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 // TODO: At SerialName + KEY in companion object
+// TODO: Update OBject to match the format in Supabase
 @Entity(
     tableName = WorkoutHistory.TABLE_NAME,
     foreignKeys = [

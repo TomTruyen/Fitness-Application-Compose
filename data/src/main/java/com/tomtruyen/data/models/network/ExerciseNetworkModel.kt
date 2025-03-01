@@ -11,7 +11,7 @@ data class ExerciseNetworkModel(
     @SerialName(Exercise.KEY_ID)
     val id: String,
     @SerialName(Exercise.KEY_NAME)
-    val name: String?,
+    val name: String,
     @SerialName(Exercise.KEY_CATEGORY_ID)
     val categoryId: String?,
     @SerialName(Exercise.KEY_EQUIPMENT_ID)
