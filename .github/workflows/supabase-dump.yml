@@ -47,6 +47,8 @@ jobs:
           supabase link --project-ref $SUPABASE_PROJECT_ID
 
       - name: Create Supabase Schema Dump
+        env:
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
         run: |
           supabase db dump -f supabase/schema.sql
 
