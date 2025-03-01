@@ -22,9 +22,9 @@ jobs:
 
     steps:
       - name: Checkout repository
-          uses: actions/checkout@v4
-          with:
-            fetch-depth: 0
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install HomeBrew
         run: |
@@ -39,7 +39,7 @@ jobs:
       - name: Login to Supabase
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-        run: |          
+        run: |
           supabase login
 
       - name: Create Supabase Schema Dump
