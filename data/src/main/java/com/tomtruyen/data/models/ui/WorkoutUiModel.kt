@@ -3,6 +3,7 @@ package com.tomtruyen.data.models.ui
 import androidx.compose.runtime.Immutable
 import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.common.models.UnitType
+import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.entities.WorkoutWithExercises
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -43,6 +44,13 @@ data class WorkoutUiModel(
 
     val totalVolumeCompleted: Double
         get() = repsCountCompleted * totalWeightCompleted
+
+    fun toEntity(userId: String) = Workout(
+        id = id,
+        name = name,
+        unit = unit.value,
+        userId = userId,
+    )
 
     companion object {
         fun fromEntity(entity: WorkoutWithExercises) = WorkoutUiModel(

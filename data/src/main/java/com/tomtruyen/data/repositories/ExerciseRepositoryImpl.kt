@@ -76,9 +76,7 @@ class ExerciseRepositoryImpl: ExerciseRepository() {
         userId: String,
         exercise: ExerciseUiModel,
     ) {
-        val newExercise = exercise.toEntity().exercise.copy(
-            userId = userId
-        )
+        val newExercise = exercise.toEntity(userId).exercise
 
         supabase.from(Exercise.TABLE_NAME).upsert(newExercise)
 

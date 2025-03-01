@@ -36,14 +36,7 @@ class WorkoutDetailViewModel(
     }
 
     private fun delete() = launchLoading {
-        val userId = userRepository.getUser()?.id ?: return@launchLoading
-
-        isLoading(true)
-
-        workoutRepository.deleteWorkout(
-            userId = userId,
-            workoutId = id
-        )
+        workoutRepository.deleteWorkout(id)
 
         triggerEvent(WorkoutDetailUiEvent.NavigateBack)
     }

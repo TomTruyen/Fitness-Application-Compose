@@ -33,6 +33,9 @@ interface WorkoutDao {
     suspend fun deleteAllWorkoutsExcept(ids: List<String>): Int
 
     @Upsert
+    suspend fun save(workout: Workout): Long
+
+    @Upsert
     suspend fun saveAll(workouts: List<Workout>): List<Long>
 
     @Query("DELETE FROM ${Workout.TABLE_NAME} WHERE id = :workoutId")

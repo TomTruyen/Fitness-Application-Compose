@@ -2,6 +2,7 @@ package com.tomtruyen.data.models.ui
 
 import androidx.compose.runtime.Immutable
 import com.tomtruyen.core.common.models.ExerciseType
+import com.tomtruyen.data.entities.WorkoutExercise
 import com.tomtruyen.data.entities.WorkoutExerciseWithSets
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -31,6 +32,14 @@ data class WorkoutExerciseUiModel(
                 append(" ($equipmentName)")
             }
         }
+
+    fun toEntity(workoutId: String) = WorkoutExercise(
+        id = id,
+        exerciseId = exerciseId,
+        workoutId = workoutId,
+        notes = notes,
+        sortOrder = sortOrder,
+    )
 
     companion object {
         fun createFromExerciseModel(model: ExerciseUiModel) = WorkoutExerciseUiModel(

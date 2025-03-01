@@ -30,7 +30,7 @@ data class ExerciseUiModel(
             }
         }
 
-    fun toEntity(): ExerciseWithCategoryAndEquipment {
+    fun toEntity(userId: String): ExerciseWithCategoryAndEquipment {
         return ExerciseWithCategoryAndEquipment(
             exercise = Exercise(
                 id = id,

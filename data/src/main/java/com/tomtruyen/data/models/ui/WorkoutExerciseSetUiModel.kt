@@ -15,7 +15,14 @@ data class WorkoutExerciseSetUiModel(
     val sortOrder: Int = 0,
     val completed: Boolean = false
 ) {
-    // TODO: When converting back to the Entity ensure that we set workoutId but we can get that from parent workout
+    fun toEntity(workoutExerciseId: String) = WorkoutExerciseSet(
+        id = id,
+        reps = reps,
+        weight = weight,
+        time = time,
+        sortOrder = sortOrder,
+        workoutExerciseId = workoutExerciseId
+    )
 
     companion object {
         fun fromEntity(entity: WorkoutExerciseSet) = WorkoutExerciseSetUiModel(
