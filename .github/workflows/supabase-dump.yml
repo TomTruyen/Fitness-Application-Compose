@@ -1,4 +1,4 @@
-name: GitHub Actions Pipeline
+name: Supabase Dump
 
 on:
   schedule:
