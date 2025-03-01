@@ -1,6 +1,5 @@
 package com.tomtruyen.data.repositories
 
-import com.tomtruyen.data.dao.EquipmentDao
 import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.models.ui.EquipmentUiModel
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
@@ -21,7 +20,7 @@ class EquipmentRepositoryImpl: EquipmentRepository() {
             .select()
             .decodeList<Equipment>()
             .let { equipment ->
-                launchWithCacheTransactions {
+                cacheTransaction {
                     dao.saveAll(equipment)
                 }
             }

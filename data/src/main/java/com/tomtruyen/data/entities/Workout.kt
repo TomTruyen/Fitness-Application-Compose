@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.tomtruyen.core.common.models.UnitType
+import com.tomtruyen.core.common.serializer.SupabaseDateTimeSerializer
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -24,6 +25,7 @@ data class Workout(
     @SerialName(KEY_UNIT)
     val unit: String = UnitType.KG.value, // KG or LBS
     @SerialName(KEY_CREATED_AT)
+    @Serializable(with = SupabaseDateTimeSerializer::class)
     val createdAt: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     @SerialName(KEY_USER_ID)
     val userId: String? = null,

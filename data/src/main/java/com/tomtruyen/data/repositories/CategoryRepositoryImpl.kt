@@ -1,6 +1,5 @@
 package com.tomtruyen.data.repositories
 
-import com.tomtruyen.data.dao.CategoryDao
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.models.ui.CategoryUiModel
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
@@ -21,7 +20,7 @@ class CategoryRepositoryImpl: CategoryRepository() {
             .select()
             .decodeList<Category>()
             .let { categories ->
-                launchWithCacheTransactions {
+                cacheTransaction {
                     dao.saveAll(categories)
                 }
             }

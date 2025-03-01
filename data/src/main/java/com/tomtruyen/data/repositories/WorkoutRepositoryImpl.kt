@@ -1,6 +1,5 @@
 package com.tomtruyen.data.repositories
 
-import android.util.Log
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.entities.Exercise
@@ -39,16 +38,6 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
     override suspend fun findWorkoutById(id: String) = dao.findById(id)?.let(WorkoutUiModel::fromEntity)
 
     override suspend fun getWorkouts(userId: String, refresh: Boolean) = fetch(refresh) {
-        // TODO: Join all child tables like:
-        /*
-         - Workout
-         - WorkoutExercise
-         - WorkoutExerciseSet
-         - Exercise
-         - Category
-         - Equipment
-         */
-
         supabase.from(Workout.TABLE_NAME)
             .select(
                 columns = Columns.raw(
@@ -73,28 +62,42 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
             }
             .decodeList<WorkoutNetworkModel>()
             .let { response ->
-                // TODO: Extract from WorkoutNetworkModel and Convert to Entities to save in Dao
+                // Using MutableList instead of mapping for each one to reduce amount of loops
+                val categories = mutableListOf<Category>()
+                val equipment = mutableListOf<Equipment>()
+                val exercises = mutableListOf<Exercise>()
+                val workoutExercises = mutableListOf<WorkoutExercise>()
+                val sets = mutableListOf<WorkoutExerciseSet>()
 
-                launchWithCacheTransactions {
+                val workouts = response.map { workout ->
+                    workout.exercises.forEach { workoutExercise ->
+                        workoutExercise.exercise.category?.let { categories.add(it) }
+                        workoutExercise.exercise.equipment?.let { equipment.add(it) }
 
+                        exercises.add(workoutExercise.exercise.toEntity())
+                        sets.addAll(workoutExercise.sets)
+
+                        workoutExercises.add(workoutExercise.toEntity())
+                    }
+
+                    workout.toEntity()
+                }
+
+                cacheTransaction {
+                    // Clear Table
+                    dao.deleteAll()
+
+                    // Add the Entity
+                    dao.saveAll(workouts)
+
+                    // Add Referenced Items (Relations)
+                    categoryDao.saveAll(categories)
+                    equipmentDao.saveAll(equipment)
+                    exerciseDao.saveAll(exercises)
+                    workoutExerciseDao.saveAll(workoutExercises)
+                    workoutExerciseSetDao.saveAll(sets)
                 }
             }
-//        db.collection(USER_WORKOUT_COLLECTION_NAME)
-//            .document(userId)
-//            .get()
-//            .handleCompletionResult(
-//                context = context,
-//                callback = callback,
-//            ) {
-//                val workouts = it.toObject(WorkoutsResponse::class.java)?.data.orEmpty()
-//
-//                launchWithCacheTransactions {
-//                    workoutDao.deleteAll()
-//                    saveWorkoutResponses(workouts)
-//                }
-//
-//                callback.onSuccess(workouts)
-//            }
     }
 
     override suspend fun saveWorkout(
@@ -127,7 +130,7 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
         supabase.from(WorkoutExercise.TABLE_NAME).upsert(exercises)
         supabase.from(WorkoutExerciseSet.TABLE_NAME).upsert(sets)
 
-        launchWithTransaction {
+        transaction {
             dao.save(workoutEntity)
             workoutExerciseDao.saveAll(exercises)
             workoutExerciseSetDao.saveAll(sets)

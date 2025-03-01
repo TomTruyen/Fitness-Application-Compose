@@ -1,6 +1,5 @@
 package com.tomtruyen.data.repositories
 
-import com.tomtruyen.data.dao.SettingsDao
 import com.tomtruyen.data.entities.Settings
 import com.tomtruyen.data.models.ui.SettingsUiModel
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
@@ -24,7 +23,7 @@ class SettingsRepositoryImpl: SettingsRepository() {
 
         supabase.from(Settings.TABLE_NAME).upsert(newSettings)
 
-        launchWithTransaction {
+        transaction {
             dao.save(newSettings)
         }
     }
@@ -38,7 +37,7 @@ class SettingsRepositoryImpl: SettingsRepository() {
             }
             .decodeSingleOrNull<Settings>()
             ?.let { settings ->
-                launchWithCacheTransactions {
+                cacheTransaction {
                     dao.save(settings)
                 }
             }

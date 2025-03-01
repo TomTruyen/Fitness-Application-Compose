@@ -9,7 +9,6 @@ import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
-import io.github.jan.supabase.postgrest.query.Order
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
 
@@ -52,16 +51,26 @@ class ExerciseRepositoryImpl: ExerciseRepository() {
                 }
                 .decodeList<ExerciseNetworkModel>()
                 .let { response ->
-                    val categories = response.mapNotNull { it.category }
-                    val equipment = response.mapNotNull { it.equipment }
-                    val exercises = response.map(ExerciseNetworkModel::toEntity)
+                    // Using MutableList instead of mapping for each one to reduce amount of loops
+                    val categories = mutableListOf<Category>()
+                    val equipment = mutableListOf<Equipment>()
 
-                    launchWithCacheTransactions {
+                    val exercises = response.map { exercise ->
+                        exercise.category?.let(categories::add)
+                        exercise.equipment?.let(equipment::add)
+
+                        exercise.toEntity()
+                    }
+
+                    cacheTransaction {
+                        // Clear Table
                         dao.deleteAll()
 
+                        // Add Referenced Items (Relations)
                         categoryDao.saveAll(categories)
                         equipmentDao.saveAll(equipment)
 
+                        // Add the Entity
                         dao.saveAll(exercises)
                     }
                 }
@@ -75,7 +84,7 @@ class ExerciseRepositoryImpl: ExerciseRepository() {
 
         supabase.from(Exercise.TABLE_NAME).upsert(newExercise)
 
-        launchWithCacheTransactions {
+        cacheTransaction {
             dao.save(newExercise)
         }
     }
@@ -91,7 +100,7 @@ class ExerciseRepositoryImpl: ExerciseRepository() {
                 }
             }
 
-        launchWithTransaction {
+        transaction {
             dao.deleteById(exerciseId)
         }
     }

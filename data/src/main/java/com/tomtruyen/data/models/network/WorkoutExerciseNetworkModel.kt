@@ -22,4 +22,12 @@ data class WorkoutExerciseNetworkModel(
     val exercise: ExerciseNetworkModel,
     @SerialName(WorkoutExerciseSet.TABLE_NAME)
     val sets: List<WorkoutExerciseSet>
-)
+) {
+    fun toEntity() = WorkoutExercise(
+        id = id,
+        exerciseId = exerciseId,
+        workoutId = workoutId,
+        notes = notes,
+        sortOrder = sortOrder
+    )
+}

@@ -25,7 +25,7 @@ data class ExerciseNetworkModel(
     @SerialName(Exercise.KEY_STEPS)
     val steps: List<String>?,
     @SerialName(Exercise.KEY_USER_ID)
-    val userId: String,
+    val userId: String?,
     @SerialName(Category.TABLE_NAME)
     val category: Category?,
     @SerialName(Equipment.TABLE_NAME)

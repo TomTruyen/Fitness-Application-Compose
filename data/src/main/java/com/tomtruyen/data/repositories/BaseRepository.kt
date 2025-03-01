@@ -10,7 +10,6 @@ import io.github.jan.supabase.SupabaseClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.java.KoinJavaComponent.inject
 
@@ -27,16 +26,12 @@ abstract class BaseRepository(
 
     protected val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-    suspend fun transaction(block: suspend () -> Unit) = database.withTransaction {
-        block()
+    suspend fun transaction(block: suspend () -> Unit) {
+        database.withTransaction(block)
     }
 
-    fun launchWithTransaction(block: suspend () -> Unit) = scope.launch {
-        transaction(block)
-    }
-
-    fun launchWithCacheTransactions(block: suspend () -> Unit) =
-        launchWithTransaction {
+    suspend fun cacheTransaction(block: suspend () -> Unit) =
+        transaction {
             block()
 
             cacheDao.save(CacheTTL(cacheKey))
