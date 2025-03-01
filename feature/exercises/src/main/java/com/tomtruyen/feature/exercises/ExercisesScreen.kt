@@ -260,11 +260,11 @@ fun ExercisesScreenLayout(
 
                                     Text(
                                         text = currentLetter.toString(),
-                                        style = MaterialTheme.typography.bodySmall.copy(
+                                        style = MaterialTheme.typography.bodyMedium.copy(
                                             fontWeight = FontWeight.Bold
                                         ),
                                         modifier = Modifier.padding(
-                                            horizontal = Dimens.Normal,
+                                            horizontal = 20.dp,
                                             vertical = Dimens.Small
                                         )
                                     )

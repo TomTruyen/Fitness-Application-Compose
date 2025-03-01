@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.Dimens
 
 @Composable
@@ -43,7 +44,8 @@ fun ListItem(
         Column(
             modifier = Modifier
                 .weight(1f)
-                .animateContentSize()
+                .animateContentSize(),
+            verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Text(
                 text = title,
@@ -54,7 +56,8 @@ fun ListItem(
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodySmall.copy(
-                    fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
+                    fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                    color = MaterialTheme.typography.bodySmall.color.copy(0.5f)
                 )
             )
         }
