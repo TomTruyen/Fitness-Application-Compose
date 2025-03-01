@@ -1,0 +1,56 @@
+name: GitHub Actions Pipeline
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Downloads Supabase CLI, creates dump and creates PR with dump
+jobs:
+  update-supabase-dump:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+
+      - name: Install HomeBrew
+        run: |
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/marko/.profile
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+      - name: Install Supabase CLI
+        run: |
+          brew install supabase/tap/supabase
+
+      - name: Login to Supabase
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |          
+          supabase login
+
+      - name: Create Supabase Schema Dump
+        run: |
+          supabase db dump -f supabase/schema.sql
+
+      - name: Create Pull Request with Supabase Schema Dump
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: chore/supabase-schema-dump
+          delete-branch: true
+          title: '[Chore] Update Supabase Schema Dump'
+          assignee: TomTruyen
+          reviewers: TomTruyen
