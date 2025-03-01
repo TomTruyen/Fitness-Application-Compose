@@ -11,20 +11,27 @@ import java.util.UUID
 @Entity(tableName = Settings.TABLE_NAME)
 data class Settings(
     @PrimaryKey
-    @SerialName("id")
+    @SerialName(KEY_ID)
     override val id: String = UUID.randomUUID().toString(),
-    @SerialName("unit")
+    @SerialName(KEY_UNIT)
     val unit: String = UnitType.KG.value,
-    @SerialName("rest")
+    @SerialName(KEY_REST)
     val rest: Int = 30,
-    @SerialName("rest_enabled")
+    @SerialName(KEY_REST_ENABLED)
     val restEnabled: Boolean = true,
-    @SerialName("rest_vibration_enabled")
+    @SerialName(KEY_REST_VIBRATION_ENABLED)
     val restVibrationEnabled: Boolean = true,
-    @SerialName("user_id")
+    @SerialName(KEY_USER_ID)
     val userId: String? = null,
 ) : BaseEntity {
     companion object {
         const val TABLE_NAME = "Settings"
+
+        const val KEY_ID = "id"
+        const val KEY_UNIT = "unit"
+        const val KEY_REST = "rest"
+        const val KEY_REST_ENABLED = "rest_enabled"
+        const val KEY_REST_VIBRATION_ENABLED = "rest_vibration_enabled"
+        const val KEY_USER_ID = "user_id"
     }
 }

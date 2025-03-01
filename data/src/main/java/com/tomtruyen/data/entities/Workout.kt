@@ -17,19 +17,25 @@ import java.util.UUID
 @Entity(tableName = Workout.TABLE_NAME)
 data class Workout(
     @PrimaryKey
-    @SerialName("id")
+    @SerialName(KEY_ID)
     override val id: String = UUID.randomUUID().toString(),
-    @SerialName("name")
+    @SerialName(KEY_NAME)
     val name: String = "",
-    @SerialName("unit")
+    @SerialName(KEY_UNIT)
     val unit: String = UnitType.KG.value, // KG or LBS
-    @SerialName("created_at")
+    @SerialName(KEY_CREATED_AT)
     val createdAt: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-    @SerialName("user_id")
+    @SerialName(KEY_USER_ID)
     val userId: String? = null,
 ) : BaseEntity {
     companion object {
         const val TABLE_NAME = "Workout"
+
+        const val KEY_ID = "id"
+        const val KEY_NAME = "name"
+        const val KEY_UNIT = "unit"
+        const val KEY_CREATED_AT = "created_at"
+        const val KEY_USER_ID = "user_id"
     }
 }
 

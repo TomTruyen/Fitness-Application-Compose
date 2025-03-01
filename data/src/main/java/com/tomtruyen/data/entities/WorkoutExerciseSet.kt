@@ -24,20 +24,27 @@ import java.util.UUID
 )
 data class WorkoutExerciseSet(
     @PrimaryKey
-    @SerialName("id")
+    @SerialName(KEY_ID)
     override val id: String = UUID.randomUUID().toString(),
-    @SerialName("workout_exercise_id")
+    @SerialName(KEY_WORKOUT_EXERCISE_ID)
     val workoutExerciseId: String? = null,
-    @SerialName("reps")
+    @SerialName(KEY_REPS)
     val reps: Int? = null,
-    @SerialName("weight")
+    @SerialName(KEY_WEIGHT)
     val weight: Double? = null,
-    @SerialName("time")
+    @SerialName(KEY_TIME)
     val time: Int? = null,
-    @SerialName("sort_order")
+    @SerialName(KEY_SORT_ORDER)
     val sortOrder: Int = 0,
 ) : BaseEntity {
     companion object {
         const val TABLE_NAME = "WorkoutExerciseSet"
+
+        const val KEY_ID = "id"
+        const val KEY_WORKOUT_EXERCISE_ID = "workout_exercise_id"
+        const val KEY_REPS = "reps"
+        const val KEY_WEIGHT = "weight"
+        const val KEY_TIME = "time"
+        const val KEY_SORT_ORDER = "sort_order"
     }
 }

@@ -9,6 +9,7 @@ import com.tomtruyen.core.common.utils.TimeUtils
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
+// TODO: At SerialName + KEY in companion object
 @Entity(
     tableName = WorkoutHistory.TABLE_NAME,
     foreignKeys = [

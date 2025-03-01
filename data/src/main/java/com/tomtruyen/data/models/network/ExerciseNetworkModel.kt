@@ -8,27 +8,27 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ExerciseNetworkModel(
-    @SerialName("id")
+    @SerialName(Exercise.KEY_ID)
     val id: String,
-    @SerialName("name")
+    @SerialName(Exercise.KEY_NAME)
     val name: String?,
-    @SerialName("category_id")
+    @SerialName(Exercise.KEY_CATEGORY_ID)
     val categoryId: String?,
-    @SerialName("equipment_id")
+    @SerialName(Exercise.KEY_EQUIPMENT_ID)
     val equipmentId: String?,
-    @SerialName("image_url")
+    @SerialName(Exercise.KEY_IMAGE_URL)
     val imageUrl: String?,
-    @SerialName("image_detail_url")
+    @SerialName(Exercise.KEY_IMAGE_DETAIL_URL)
     val imageDetailUrl: String?,
-    @SerialName("type")
+    @SerialName(Exercise.KEY_TYPE)
     val type: String,
-    @SerialName("steps")
+    @SerialName(Exercise.KEY_STEPS)
     val steps: List<String>?,
-    @SerialName("user_id")
-    val userId: String?,
-    @SerialName("Category")
+    @SerialName(Exercise.KEY_USER_ID)
+    val userId: String,
+    @SerialName(Category.TABLE_NAME)
     val category: Category?,
-    @SerialName("Equipment")
+    @SerialName(Equipment.TABLE_NAME)
     val equipment: Equipment?
 ) {
     fun toEntity() = Exercise(

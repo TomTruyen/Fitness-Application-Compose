@@ -49,11 +49,6 @@ class ExerciseRepositoryImpl: ExerciseRepository() {
                             Exercise::userId isExact null
                         }
                     }
-
-                    order(
-                        column = "name",
-                        order = Order.ASCENDING
-                    )
                 }
                 .decodeList<ExerciseNetworkModel>()
                 .let { response ->

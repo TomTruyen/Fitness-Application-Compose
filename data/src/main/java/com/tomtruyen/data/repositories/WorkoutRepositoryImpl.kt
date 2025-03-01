@@ -1,14 +1,18 @@
 package com.tomtruyen.data.repositories
 
 import android.util.Log
+import com.tomtruyen.data.entities.Category
+import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.entities.WorkoutExercise
 import com.tomtruyen.data.entities.WorkoutExerciseSet
 import com.tomtruyen.data.extensions.transaction
+import com.tomtruyen.data.models.network.WorkoutNetworkModel
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
 
@@ -44,6 +48,37 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
          - Category
          - Equipment
          */
+
+        supabase.from(Workout.TABLE_NAME)
+            .select(
+                columns = Columns.raw(
+                    """
+                        *,
+                        ${WorkoutExercise.TABLE_NAME}(
+                            *, 
+                            ${WorkoutExerciseSet.TABLE_NAME}(*),
+                            ${Exercise.TABLE_NAME}(
+                                *,
+                                ${Category.TABLE_NAME}(*),
+                                ${Equipment.TABLE_NAME}(*)
+                            )
+                        )
+                        
+                    """.trimIndent()
+                )
+            ) {
+                filter {
+                    Workout::userId eq userId
+                }
+            }
+            .decodeList<WorkoutNetworkModel>()
+            .let { response ->
+                // TODO: Extract from WorkoutNetworkModel and Convert to Entities to save in Dao
+
+                launchWithCacheTransactions {
+
+                }
+            }
 //        db.collection(USER_WORKOUT_COLLECTION_NAME)
 //            .document(userId)
 //            .get()
@@ -87,7 +122,7 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
                 set.toEntity(exercise.id, index)
             }
         }
-        
+
         supabase.from(Workout.TABLE_NAME).upsert(workoutEntity)
         supabase.from(WorkoutExercise.TABLE_NAME).upsert(exercises)
         supabase.from(WorkoutExerciseSet.TABLE_NAME).upsert(sets)

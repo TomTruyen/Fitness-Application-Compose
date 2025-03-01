@@ -34,27 +34,37 @@ import java.util.UUID
 )
 data class Exercise(
     @PrimaryKey
-    @SerialName("id")
+    @SerialName(KEY_ID)
     override val id: String = UUID.randomUUID().toString(),
-    @SerialName("name")
+    @SerialName(KEY_NAME)
     val name: String? = null,
-    @SerialName("category_id")
+    @SerialName(KEY_CATEGORY_ID)
     val categoryId: String? = null,
-    @SerialName("equipment_id")
+    @SerialName(KEY_EQUIPMENT_ID)
     val equipmentId: String? = null,
-    @SerialName("image_url")
+    @SerialName(KEY_IMAGE_URL)
     val imageUrl: String? = null,
-    @SerialName("image_detail_url")
+    @SerialName(KEY_IMAGE_DETAIL_URL)
     val imageDetailUrl: String? = null,
-    @SerialName("type")
+    @SerialName(KEY_TYPE)
     val type: String = ExerciseType.WEIGHT.value,
-    @SerialName("steps")
+    @SerialName(KEY_STEPS)
     val steps: List<String>? = emptyList(),
-    @SerialName("user_id")
+    @SerialName(KEY_USER_ID)
     val userId: String? = null
 ) : BaseEntity {
     companion object {
         const val TABLE_NAME = "Exercise"
+
+        const val KEY_ID = "id"
+        const val KEY_NAME = "name"
+        const val KEY_CATEGORY_ID = "category_id"
+        const val KEY_EQUIPMENT_ID = "equipment_id"
+        const val KEY_IMAGE_URL = "image_url"
+        const val KEY_IMAGE_DETAIL_URL = "image_detail_url"
+        const val KEY_TYPE = "type"
+        const val KEY_STEPS = "steps"
+        const val KEY_USER_ID = "user_id"
     }
 }
 

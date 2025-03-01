@@ -10,12 +10,15 @@ import java.util.UUID
 @Entity(tableName = Equipment.TABLE_NAME)
 data class Equipment(
     @PrimaryKey
-    @SerialName("id")
+    @SerialName(KEY_ID)
     override val id: String = UUID.randomUUID().toString(),
-    @SerialName("name")
+    @SerialName(KEY_NAME)
     val name: String,
 ) : BaseEntity {
     companion object {
         const val TABLE_NAME = "Equipment"
+
+        const val KEY_ID = "id"
+        const val KEY_NAME = "name"
     }
 }
