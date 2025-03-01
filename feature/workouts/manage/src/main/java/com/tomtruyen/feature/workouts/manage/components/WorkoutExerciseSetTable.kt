@@ -7,15 +7,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.LighterSuccessGreen
-import com.tomtruyen.data.entities.WorkoutExerciseWithSets
+import com.tomtruyen.data.entities.WorkoutExerciseSet
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 
 @Composable
 fun WorkoutExerciseSetTable(
-    workoutExercise: WorkoutExerciseWithSets,
+    workoutExerciseId: String,
+    exerciseType: ExerciseType,
+    sets: List<WorkoutExerciseSet>,
     unit: String,
     mode: ManageWorkoutMode,
     onAction: (ManageWorkoutUiAction) -> Unit,
@@ -26,7 +29,7 @@ fun WorkoutExerciseSetTable(
         modifier = modifier,
     ) {
         WorkoutExerciseSetHeader(
-            exercise = workoutExercise.exercise.exercise,
+            exerciseType = exerciseType,
             unit = unit,
             mode = mode,
             modifier = Modifier
@@ -36,7 +39,7 @@ fun WorkoutExerciseSetTable(
                 .padding(bottom = Dimens.Tiny)
         )
 
-        workoutExercise.sets.forEachIndexed { setIndex, set ->
+        sets.forEachIndexed { setIndex, set ->
             WorkoutExerciseSetRow(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -51,7 +54,8 @@ fun WorkoutExerciseSetTable(
                         horizontal = Dimens.Normal,
                         vertical = Dimens.Tiny
                     ),
-                exercise = workoutExercise,
+                workoutExerciseId = workoutExerciseId,
+                exerciseType = exerciseType,
                 setIndex = setIndex,
                 set = set,
                 mode = mode,

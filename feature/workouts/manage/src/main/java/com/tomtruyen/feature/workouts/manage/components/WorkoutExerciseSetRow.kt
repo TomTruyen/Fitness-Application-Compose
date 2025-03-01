@@ -1,5 +1,6 @@
 package com.tomtruyen.feature.workouts.manage.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,9 +22,11 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,12 +47,15 @@ import com.tomtruyen.data.entities.WorkoutExerciseSet
 import com.tomtruyen.data.entities.WorkoutExerciseWithSets
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import com.tomtruyen.core.common.R as CommonR
 
 @Composable
 fun WorkoutExerciseSetRow(
     modifier: Modifier = Modifier,
-    exercise: WorkoutExerciseWithSets,
+    exerciseType: ExerciseType,
+    workoutExerciseId: String,
     setIndex: Int,
     set: WorkoutExerciseSet,
     lastPerformedSet: WorkoutExerciseSet? = null,
@@ -63,16 +69,16 @@ fun WorkoutExerciseSetRow(
                 SwipeToDismissBoxValue.EndToStart -> {
                     onAction(
                         ManageWorkoutUiAction.OnDeleteSet(
-                            id = exercise.workoutExercise.id,
+                            id = workoutExerciseId,
                             setIndex = setIndex
                         )
                     )
                 }
 
-                else -> return@rememberSwipeToDismissBoxState false
+                else -> Unit
             }
 
-            return@rememberSwipeToDismissBoxState true
+            return@rememberSwipeToDismissBoxState false
         }
     )
 
@@ -118,14 +124,14 @@ fun WorkoutExerciseSetRow(
                     .width(Dimens.MinButtonHeight)
                     .clip(CircleShape)
                     .clickable {
-                        onSetClick(exercise.workoutExercise.id, setIndex)
+                        onSetClick(workoutExerciseId, setIndex)
                     }
             )
 
             if (mode == ManageWorkoutMode.EXECUTE) {
                 PreviousSet(
                     lastPerformedSet = lastPerformedSet,
-                    type = exercise.exercise.exercise.typeEnum,
+                    type = exerciseType,
                     modifier = Modifier.weight(1f)
                 )
 
@@ -133,13 +139,14 @@ fun WorkoutExerciseSetRow(
             }
 
 
-            when (exercise.exercise.exercise.typeEnum) {
+            when (exerciseType) {
                 ExerciseType.WEIGHT -> WeightSet(
-                    set = set,
+                    weight = set.weight,
+                    reps = set.reps,
                     onRepsChanged = { reps ->
                         onAction(
                             ManageWorkoutUiAction.OnRepsChanged(
-                                id = exercise.workoutExercise.id,
+                                id = workoutExerciseId,
                                 setIndex = setIndex,
                                 reps = reps
                             )
@@ -148,7 +155,7 @@ fun WorkoutExerciseSetRow(
                     onWeightChanged = { weight ->
                         onAction(
                             ManageWorkoutUiAction.OnWeightChanged(
-                                id = exercise.workoutExercise.id,
+                                id = workoutExerciseId,
                                 setIndex = setIndex,
                                 weight = weight
                             )
@@ -157,11 +164,11 @@ fun WorkoutExerciseSetRow(
                 )
 
                 ExerciseType.TIME -> TimeSet(
-                    set = set,
+                    time = set.time,
                     onTimeChanged = { time ->
                         onAction(
                             ManageWorkoutUiAction.OnTimeChanged(
-                                id = exercise.workoutExercise.id,
+                                id = workoutExerciseId,
                                 setIndex = setIndex,
                                 time = time
                             )
@@ -178,7 +185,7 @@ fun WorkoutExerciseSetRow(
                     onClick = {
                         onAction(
                             ManageWorkoutUiAction.ToggleSetCompleted(
-                                id = exercise.workoutExercise.id,
+                                id = workoutExerciseId,
                                 setIndex = setIndex
                             )
                         )
@@ -223,29 +230,30 @@ private fun PreviousSet(
 
 @Composable
 private fun RowScope.WeightSet(
-    set: WorkoutExerciseSet,
+    weight: Double?,
+    reps: Int?,
     onRepsChanged: (String) -> Unit,
     onWeightChanged: (String) -> Unit
 ) {
     var inputReps by remember {
-        mutableStateOf(set.reps?.toString().orEmpty())
+        mutableStateOf(reps?.toString().orEmpty())
     }
 
     var inputWeight by remember {
-        mutableStateOf(set.weight?.toString().orEmpty())
+        mutableStateOf(weight?.toString().orEmpty())
     }
 
     TextFields.Default(
         border = false,
         padding = PaddingValues(Dimens.Small),
         value = inputReps,
-        onValueChange = { reps ->
+        onValueChange = { newReps ->
             // Check if value can be cast to int, if not don't update the value
-            if (reps.isNotEmpty() && reps.toIntOrNull() == null) return@Default
+            if (newReps.isNotEmpty() && newReps.toIntOrNull() == null) return@Default
 
-            inputReps = reps
+            inputReps = newReps
 
-            onRepsChanged(reps)
+            onRepsChanged(newReps)
         },
         placeholder = "-",
         keyboardOptions = KeyboardOptions.Default.copy(
@@ -264,8 +272,8 @@ private fun RowScope.WeightSet(
         border = false,
         padding = PaddingValues(Dimens.Small),
         value = inputWeight,
-        onValueChange = { weight ->
-            val filteredWeight = weight.replace(",", ".")
+        onValueChange = { newWeight ->
+            val filteredWeight = newWeight.replace(",", ".")
 
             // Check if the number can be cast to double, if not don't update the value
             if (filteredWeight.isNotEmpty() && filteredWeight.toDoubleOrNull() == null) return@Default
@@ -287,13 +295,13 @@ private fun RowScope.WeightSet(
 
 @Composable
 private fun RowScope.TimeSet(
-    set: WorkoutExerciseSet,
+    time: Int?,
     onTimeChanged: (Int) -> Unit
 ) {
     var timeDialogVisible by remember { mutableStateOf(false) }
 
     Text(
-        text = TimeUtils.formatSeconds(set.time?.toLong() ?: 0L),
+        text = TimeUtils.formatSeconds(time?.toLong() ?: 0L),
         textAlign = TextAlign.Center,
         modifier = Modifier
             .weight(1f)
@@ -309,11 +317,11 @@ private fun RowScope.TimeSet(
             onDismiss = {
                 timeDialogVisible = false
             },
-            onConfirm = { time, _ ->
-                onTimeChanged(time)
+            onConfirm = { newTime, _ ->
+                onTimeChanged(newTime)
                 timeDialogVisible = false
             },
-            rest = set.time ?: 0,
+            rest = time ?: 0,
             type = RestAlertType.SET_TIME
         )
     }

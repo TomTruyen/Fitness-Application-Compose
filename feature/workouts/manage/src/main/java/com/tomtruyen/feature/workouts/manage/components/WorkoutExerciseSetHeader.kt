@@ -20,13 +20,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.feature.workouts.manage.R
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 
 @Composable
 fun WorkoutExerciseSetHeader(
-    exercise: Exercise,
+    exerciseType: ExerciseType,
     mode: ManageWorkoutMode,
     unit: String,
     modifier: Modifier = Modifier
@@ -57,7 +56,7 @@ fun WorkoutExerciseSetHeader(
             Spacer(modifier = Modifier.width(Dimens.Small))
         }
 
-        when (exercise.typeEnum) {
+        when (exerciseType) {
             ExerciseType.WEIGHT -> {
                 Text(
                     text = stringResource(id = R.string.label_reps).uppercase(),

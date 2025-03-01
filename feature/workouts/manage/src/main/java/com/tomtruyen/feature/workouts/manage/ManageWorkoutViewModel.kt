@@ -1,5 +1,6 @@
 package com.tomtruyen.feature.workouts.manage
 
+import android.util.Log
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.utils.StopwatchTimer
 import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
@@ -366,7 +367,7 @@ class ManageWorkoutViewModel(
             )
 
             is ManageWorkoutUiAction.OnDeleteSet -> {
-                toggleSetMoreActionSheet(false)
+//                toggleSetMoreActionSheet(false)
 
                 deleteSet(
                     id = action.id,

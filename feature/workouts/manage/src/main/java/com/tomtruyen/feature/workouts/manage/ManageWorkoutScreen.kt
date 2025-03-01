@@ -436,7 +436,9 @@ fun ExerciseListItem(
 
         // Sets
         WorkoutExerciseSetTable(
-            workoutExercise = workoutExercise,
+            workoutExerciseId = workoutExercise.workoutExercise.id,
+            exerciseType = workoutExercise.exercise.exercise.typeEnum,
+            sets = workoutExercise.sets,
             unit = unit,
             mode = mode,
             onSetClick = { id, setIndex ->
