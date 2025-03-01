@@ -1,15 +1,11 @@
 package com.tomtruyen.feature.exercises.detail
 
-import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import androidx.compose.runtime.Immutable
+import com.tomtruyen.data.models.ui.ExerciseUiModel
 
 @Immutable
 data class ExerciseDetailUiState(
-    val fullExercise: ExerciseWithCategoryAndEquipment? = null,
+    val exercise: ExerciseUiModel? = null,
 
     val loading: Boolean = false,
-) {
-    val exercise get() = fullExercise?.exercise
-    val category get() = fullExercise?.category
-    val equipment get() = fullExercise?.equipment
-}
+)

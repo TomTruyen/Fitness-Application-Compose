@@ -3,6 +3,8 @@ package com.tomtruyen.feature.exercises.manage
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
+import com.tomtruyen.data.models.ui.CategoryUiModel
+import com.tomtruyen.data.models.ui.EquipmentUiModel
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
@@ -38,7 +40,7 @@ class ManageExerciseViewModel(
             updateAndGetState { state ->
                 state.copy(
                     initialExercise = it,
-                    fullExercise = it
+                    exercise = it
                 )
             }.also { state ->
                 state.validateAll()
@@ -57,7 +59,7 @@ class ManageExerciseViewModel(
             .distinctUntilChanged()
             .collectLatest { categories ->
                 updateState {
-                    it.copy(categories = listOf(Category.DEFAULT) + categories)
+                    it.copy(categories = listOf(CategoryUiModel.DEFAULT) + categories)
                 }
             }
     }
@@ -68,7 +70,7 @@ class ManageExerciseViewModel(
             .collectLatest { equipment ->
                 updateState {
                     it.copy(
-                        equipment = listOf(Equipment.DEFAULT) + equipment
+                        equipment = listOf(EquipmentUiModel.DEFAULT) + equipment
                     )
                 }
             }
@@ -79,7 +81,7 @@ class ManageExerciseViewModel(
 
         exerciseRepository.saveExercise(
             userId = userId,
-            userExercise = uiState.value.fullExercise,
+            exercise = uiState.value.exercise,
         )
 
         triggerEvent(ManageExerciseUiEvent.NavigateBack)
@@ -89,10 +91,8 @@ class ManageExerciseViewModel(
         when (action) {
             is ManageExerciseUiAction.OnExerciseNameChanged -> updateState {
                 it.copy(
-                    fullExercise = it.fullExercise.copy(
-                        exercise = it.fullExercise.exercise.copy(
-                            name = action.name
-                        )
+                    exercise = it.exercise.copy(
+                        name = action.name
                     ),
                     nameValidationResult = it.validateName(action.name)
                 )
@@ -100,26 +100,24 @@ class ManageExerciseViewModel(
 
             is ManageExerciseUiAction.OnCategoryChanged -> updateState {
                 it.copy(
-                    fullExercise = it.fullExercise.copy(
-                        category = action.category as Category
+                    exercise = it.exercise.copy(
+                        category = action.category as CategoryUiModel
                     ),
                 )
             }
 
             is ManageExerciseUiAction.OnEquipmentChanged -> updateState {
                 it.copy(
-                    fullExercise = it.fullExercise.copy(
-                        equipment = action.equipment as Equipment
+                    exercise = it.exercise.copy(
+                        equipment = action.equipment as EquipmentUiModel
                     ),
                 )
             }
 
             is ManageExerciseUiAction.OnTypeChanged -> updateState {
                 it.copy(
-                    fullExercise = it.fullExercise.copy(
-                        exercise = it.fullExercise.exercise.copy(
-                            type = action.type
-                        ),
+                    exercise = it.exercise.copy(
+                        type = action.type
                     ),
                 )
             }

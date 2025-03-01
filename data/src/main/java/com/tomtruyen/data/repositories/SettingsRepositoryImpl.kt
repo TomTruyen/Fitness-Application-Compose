@@ -1,19 +1,26 @@
 package com.tomtruyen.data.repositories
 
+import com.tomtruyen.data.dao.SettingsDao
 import com.tomtruyen.data.entities.Settings
+import com.tomtruyen.data.models.ui.SettingsUiModel
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import io.github.jan.supabase.postgrest.from
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.mapLatest
 
 class SettingsRepositoryImpl(
-    private val settingsDao: com.tomtruyen.data.dao.SettingsDao
+    private val settingsDao: SettingsDao
 ) : SettingsRepository() {
-    override fun findSettings() = settingsDao.findSettings()
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun findSettings() = settingsDao.findSettings().mapLatest { settings ->
+        settings?.let(SettingsUiModel::fromEntity)
+    }
 
     override suspend fun saveSettings(
         userId: String,
-        settings: Settings,
+        settings: SettingsUiModel,
     ) {
-        val newSettings = settings.copy(userId = userId)
+        val newSettings = settings.toEntity().copy(userId = userId)
 
         supabase.from(Settings.TABLE_NAME).upsert(newSettings)
 

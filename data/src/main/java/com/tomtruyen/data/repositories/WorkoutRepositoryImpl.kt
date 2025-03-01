@@ -1,7 +1,11 @@
 package com.tomtruyen.data.repositories
 
 import com.tomtruyen.data.entities.WorkoutWithExercises
+import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 
 class WorkoutRepositoryImpl(
     private val workoutDao: com.tomtruyen.data.dao.WorkoutDao,
@@ -9,13 +13,19 @@ class WorkoutRepositoryImpl(
     private val workoutExerciseSetDao: com.tomtruyen.data.dao.WorkoutExerciseSetDao,
     private val exerciseDao: com.tomtruyen.data.dao.ExerciseDao
 ) : WorkoutRepository() {
-    override fun findWorkoutsAsync() = workoutDao.findWorkoutsAsync()
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun findWorkoutsAsync() = workoutDao.findWorkoutsAsync().mapLatest { workouts ->
+        workouts.map(WorkoutUiModel::fromEntity)
+    }
 
-    override suspend fun findWorkouts() = workoutDao.findWorkouts()
+    override suspend fun findWorkouts() = workoutDao.findWorkouts().map(WorkoutUiModel::fromEntity)
 
-    override fun findWorkoutByIdAsync(id: String) = workoutDao.findByIdAsync(id)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun findWorkoutByIdAsync(id: String) = workoutDao.findByIdAsync(id).mapLatest { workout ->
+        workout?.let(WorkoutUiModel::fromEntity)
+    }
 
-    override suspend fun findWorkoutById(id: String) = workoutDao.findById(id)
+    override suspend fun findWorkoutById(id: String) = workoutDao.findById(id)?.let(WorkoutUiModel::fromEntity)
 
     override suspend fun getWorkouts(userId: String, refresh: Boolean) = fetch(refresh) {
 //        db.collection(USER_WORKOUT_COLLECTION_NAME)
@@ -38,7 +48,7 @@ class WorkoutRepositoryImpl(
 
     override suspend fun saveWorkout(
         userId: String,
-        workout: WorkoutWithExercises,
+        workout: WorkoutUiModel,
     ) {
 //        val workouts = workoutDao.findWorkouts().map {
 //            it.toWorkoutResponse()

@@ -12,16 +12,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.R
 import com.tomtruyen.core.ui.listitems.RadioListItem
 
 @Composable
 fun UnitAlertDialog(
-    units: List<String>,
-    onConfirm: (String) -> Unit,
+    units: List<UnitType>,
+    onConfirm: (UnitType) -> Unit,
     onDismiss: () -> Unit,
-    unit: String,
+    unit: UnitType,
 ) {
     var selectedUnit by remember { mutableStateOf(unit) }
 
@@ -39,7 +40,7 @@ fun UnitAlertDialog(
             Column {
                 units.forEach { unit ->
                     RadioListItem(
-                        title = unit,
+                        title = unit.value,
                         selected = selectedUnit == unit,
                         onCheckedChange = {
                             selectedUnit = unit

@@ -2,6 +2,7 @@ package com.tomtruyen.data.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.tomtruyen.core.common.models.UnitType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -22,13 +23,7 @@ data class Settings(
     val restVibrationEnabled: Boolean = true,
     @SerialName("user_id")
     val userId: String? = null,
-
-    ) : BaseEntity {
-    enum class UnitType(val value: String) {
-        KG("kg"),
-        LBS("lbs")
-    }
-
+) : BaseEntity {
     companion object {
         const val TABLE_NAME = "Settings"
     }

@@ -31,7 +31,7 @@ class ExerciseDetailViewModel(
             .filterNotNull()
             .distinctUntilChanged()
             .collectLatest { exercise ->
-                updateState { it.copy(fullExercise = exercise) }
+                updateState { it.copy(exercise = exercise) }
             }
     }
 

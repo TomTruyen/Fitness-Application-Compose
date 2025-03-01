@@ -1,7 +1,9 @@
 package com.tomtruyen.feature.profile
 
+import com.tomtruyen.core.common.models.UnitType
+
 sealed class ProfileUiAction {
-    data class UnitChanged(val value: String) : ProfileUiAction()
+    data class UnitChanged(val value: UnitType) : ProfileUiAction()
 
     data class RestChanged(val value: Int) : ProfileUiAction()
 

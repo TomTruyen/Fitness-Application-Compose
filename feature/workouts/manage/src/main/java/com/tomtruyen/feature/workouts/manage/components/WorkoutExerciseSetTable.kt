@@ -8,9 +8,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.tomtruyen.core.common.models.ExerciseType
+import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.LighterSuccessGreen
 import com.tomtruyen.data.entities.WorkoutExerciseSet
+import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 
@@ -18,8 +20,8 @@ import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 fun WorkoutExerciseSetTable(
     workoutExerciseId: String,
     exerciseType: ExerciseType,
-    sets: List<WorkoutExerciseSet>,
-    unit: String,
+    sets: List<WorkoutExerciseSetUiModel>,
+    unit: UnitType,
     mode: ManageWorkoutMode,
     onAction: (ManageWorkoutUiAction) -> Unit,
     onSetClick: (id: String, setIndex: Int) -> Unit,

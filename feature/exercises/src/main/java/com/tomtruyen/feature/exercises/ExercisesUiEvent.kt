@@ -1,6 +1,7 @@
 package com.tomtruyen.feature.exercises
 
 import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
+import com.tomtruyen.data.models.ui.ExerciseUiModel
 
 sealed class ExercisesUiEvent {
     data object NavigateToFilter : ExercisesUiEvent()
@@ -11,6 +12,5 @@ sealed class ExercisesUiEvent {
 
     data class NavigateToDetail(val id: String) : ExercisesUiEvent()
 
-    data class NavigateBackToWorkout(val exercises: List<ExerciseWithCategoryAndEquipment>) :
-        ExercisesUiEvent()
+    data class NavigateBackToWorkout(val exercises: List<ExerciseUiModel>) : ExercisesUiEvent()
 }

@@ -37,7 +37,7 @@ data class WorkoutExerciseSet(
     @SerialName("sort_order")
     val sortOrder: Int = 0,
 
-    // Extra fields, not in DB
+    // TODO: Remove these extra fields since I use the WorkoutExerciseSetUiModel now
     val completed: Boolean = false
 ) : BaseEntity {
     companion object {

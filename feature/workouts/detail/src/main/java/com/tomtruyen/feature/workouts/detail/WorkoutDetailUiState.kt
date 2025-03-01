@@ -1,11 +1,11 @@
 package com.tomtruyen.feature.workouts.detail
 
-import com.tomtruyen.data.entities.WorkoutWithExercises
 import androidx.compose.runtime.Immutable
+import com.tomtruyen.data.models.ui.WorkoutUiModel
 
 @Immutable
 data class WorkoutDetailUiState(
-    val workout: WorkoutWithExercises? = null,
+    val workout: WorkoutUiModel? = null,
 
     val loading: Boolean = false
 )

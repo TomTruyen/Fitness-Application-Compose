@@ -139,9 +139,9 @@ fun ExerciseDetailScreenLayout(
                     item {
                         AsyncImage(
                             model = imageLoader.load(
-                                state.exercise?.imageDetailUrl ?: state.exercise?.imageUrl
+                                state.exercise.imageDetailUrl ?: state.exercise.imageUrl
                             ),
-                            contentDescription = state.exercise?.name,
+                            contentDescription = state.exercise.name,
                             contentScale = ContentScale.Fit,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -158,14 +158,14 @@ fun ExerciseDetailScreenLayout(
                     ) {
                         itemsIndexed(
                             arrayOf(
-                                state.category?.name,
-                                state.equipment?.name,
-                                state.exercise?.type
+                                state.exercise?.category?.name,
+                                state.exercise?.equipment?.name,
+                                state.exercise?.type?.value
                             ).filter { value -> !value.isNullOrBlank() }
                         ) { index, filter ->
                             Chip(
                                 modifier = Modifier.padding(start = if (index == 0) Dimens.Normal else 0.dp),
-                                text = filter?.lowercase()?.replaceFirstChar { it.uppercase() }
+                                text = filter?.lowercase()?.replaceFirstChar { char -> char.uppercase() }
                                     .orEmpty(),
                                 selected = true,
                             )
@@ -187,7 +187,7 @@ fun ExerciseDetailScreenLayout(
                         )
                     }
 
-                    itemsIndexed(state.exercise?.steps.orEmpty()) { index, step ->
+                    itemsIndexed(state.exercise.steps) { index, step ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()

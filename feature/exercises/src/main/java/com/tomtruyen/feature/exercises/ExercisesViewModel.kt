@@ -1,8 +1,8 @@
 package com.tomtruyen.feature.exercises
 
 import com.tomtruyen.core.common.base.BaseViewModel
-import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.models.ExerciseFilter
+import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
@@ -76,10 +76,10 @@ class ExercisesViewModel(
             }
     }
 
-    private fun handleExerciseClick(exercise: ExerciseWithCategoryAndEquipment) {
+    private fun handleExerciseClick(exercise: ExerciseUiModel) {
         when (mode) {
             Screen.Exercise.Overview.Mode.VIEW -> {
-                triggerEvent(ExercisesUiEvent.NavigateToDetail(exercise.exercise.id))
+                triggerEvent(ExercisesUiEvent.NavigateToDetail(exercise.id))
             }
 
             Screen.Exercise.Overview.Mode.SELECT -> {

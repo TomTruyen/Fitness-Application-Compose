@@ -7,6 +7,14 @@ import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.entities.WorkoutExercise
 import com.tomtruyen.data.entities.WorkoutExerciseSet
 import com.tomtruyen.data.entities.WorkoutExerciseWithSets
+import com.tomtruyen.data.models.ui.ExerciseUiModel
+import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
+import com.tomtruyen.data.models.ui.copyWithAddSet
+import com.tomtruyen.data.models.ui.copyWithDeleteSet
+import com.tomtruyen.data.models.ui.copyWithRepsChanged
+import com.tomtruyen.data.models.ui.copyWithSetCompleted
+import com.tomtruyen.data.models.ui.copyWithTimeChanged
+import com.tomtruyen.data.models.ui.copyWithWeightChanged
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
@@ -70,7 +78,7 @@ class ManageWorkoutViewModel(
             updateState {
                 it.copy(
                     initialWorkout = workout,
-                    fullWorkout = workout
+                    workout = workout
                 )
             }
         }
@@ -101,18 +109,14 @@ class ManageWorkoutViewModel(
         with(uiState.value) {
             workoutRepository.saveWorkout(
                 userId = userId,
-                workout = fullWorkout.copy(
-                    exercises = fullWorkout.exercises.mapIndexed { index, exercise ->
+                workout = workout.copy(
+                    exercises = workout.exercises.mapIndexed { index, exercise ->
                         exercise.copy(
-                            workoutExercise = exercise.workoutExercise.copy(
-                                sortOrder = index
-                            )
+                            sortOrder = index,
                         )
                     },
-                    workout = fullWorkout.workout.copy(
-                        unit = settings.unit,
-                        name = fullWorkout.workout.name.ifBlank { "Workout" }
-                    )
+                    unit = settings.unit,
+                    name = workout.name.ifBlank { "Workout" }
                 ),
             )
 
@@ -130,37 +134,27 @@ class ManageWorkoutViewModel(
         }
     }
 
-    private fun createWorkoutExercise(exercise: ExerciseWithCategoryAndEquipment): WorkoutExerciseWithSets {
-        val uuid = UUID.randomUUID().toString()
-
-        return WorkoutExerciseWithSets(
-            workoutExercise = WorkoutExercise(
-                id = uuid
-            ),
-            exercise = exercise,
-            sets = listOf(WorkoutExerciseSet(workoutExerciseId = uuid))
+    private fun createWorkoutExercise(exercise: ExerciseUiModel): WorkoutExerciseUiModel {
+        return WorkoutExerciseUiModel.createFromExerciseModel(
+            model = exercise
         )
     }
 
     private fun updateWorkoutName(name: String) = updateState {
         it.copy(
-            fullWorkout = it.fullWorkout.copy(
-                workout = it.fullWorkout.workout.copy(
-                    name = name
-                )
+            workout = it.workout.copy(
+                name = name
             ),
         )
     }
 
     private fun updateExerciseNotes(id: String, notes: String) = updateState {
         it.copy(
-            fullWorkout = it.fullWorkout.copy(
-                exercises = it.fullWorkout.exercises.map { exercise ->
-                    if (exercise.workoutExercise.id == id) {
+            workout = it.workout.copy(
+                exercises = it.workout.exercises.map { exercise ->
+                    if(exercise.id == id) {
                         return@map exercise.copy(
-                            workoutExercise = exercise.workoutExercise.copy(
-                                notes = notes
-                            )
+                            notes = notes
                         )
                     }
 
@@ -172,8 +166,8 @@ class ManageWorkoutViewModel(
 
     private fun reorderExercises(from: Int, to: Int) = updateState {
         it.copy(
-            fullWorkout = it.fullWorkout.copy(
-                exercises = it.fullWorkout.exercises.toMutableList().apply {
+            workout = it.workout.copy(
+                exercises = it.workout.exercises.toMutableList().apply {
                     val exercise = removeAt(from)
                     add(to, exercise)
                 }
@@ -181,15 +175,15 @@ class ManageWorkoutViewModel(
         )
     }
 
-    private fun replaceExercise(exercise: ExerciseWithCategoryAndEquipment) {
+    private fun replaceExercise(exercise: ExerciseUiModel) {
         var index = 0
 
         updateState {
             it.copy(
-                fullWorkout = it.fullWorkout.copy(
-                    exercises = it.fullWorkout.exercises.toMutableList().apply {
+                workout = it.workout.copy(
+                    exercises = it.workout.exercises.toMutableList().apply {
                         index = indexOfFirst { exercise ->
-                            exercise.workoutExercise.id == it.selectedExerciseId
+                            exercise.id == it.selectedExerciseId
                         }
 
                         if (index == -1) return@apply
@@ -208,26 +202,26 @@ class ManageWorkoutViewModel(
 
     private fun deleteExercise() = updateState {
         it.copy(
-            fullWorkout = it.fullWorkout.copy(
-                exercises = it.fullWorkout.exercises.toMutableList().apply {
-                    removeIf { exercise -> exercise.workoutExercise.id == it.selectedExerciseId }
+            workout = it.workout.copy(
+                exercises = it.workout.exercises.toMutableList().apply {
+                    removeIf { exercise -> exercise.id == it.selectedExerciseId }
                 }
             ),
             selectedExerciseId = null,
         )
     }.also { toggleExerciseMoreActionSheet(show = false) }
 
-    private fun addExercises(exercises: List<ExerciseWithCategoryAndEquipment>) =
+    private fun addExercises(exercises: List<ExerciseUiModel>) =
         updateAndGetState {
             val newExercises = exercises.map(::createWorkoutExercise)
 
             it.copy(
-                fullWorkout = it.fullWorkout.copy(
-                    exercises = it.fullWorkout.exercises + newExercises
+                workout = it.workout.copy(
+                    exercises = it.workout.exercises + newExercises
                 )
             )
         }.also { state ->
-            triggerEvent(ManageWorkoutUiEvent.ScrollToExercise(state.fullWorkout.exercises.size - 1))
+            triggerEvent(ManageWorkoutUiEvent.ScrollToExercise(state.workout.exercises.size - 1))
         }
 
     private fun setSelectedExerciseId(id: String?) = updateState {
@@ -248,7 +242,7 @@ class ManageWorkoutViewModel(
 
     private fun updateReps(id: String, setIndex: Int, reps: String?) = updateState {
         it.copy(
-            fullWorkout = it.fullWorkout.copyWithRepsChanged(
+            workout = it.workout.copyWithRepsChanged(
                 id = id,
                 setIndex = setIndex,
                 reps = reps
@@ -258,7 +252,7 @@ class ManageWorkoutViewModel(
 
     private fun updateWeight(id: String, setIndex: Int, weight: String?) = updateState {
         it.copy(
-            fullWorkout = it.fullWorkout.copyWithWeightChanged(
+            workout = it.workout.copyWithWeightChanged(
                 id = id,
                 setIndex = setIndex,
                 weight = weight
@@ -268,7 +262,7 @@ class ManageWorkoutViewModel(
 
     private fun updateTime(id: String, setIndex: Int, time: Int?) = updateState {
         it.copy(
-            fullWorkout = it.fullWorkout.copyWithTimeChanged(
+            workout = it.workout.copyWithTimeChanged(
                 id = id,
                 setIndex = setIndex,
                 time = time
@@ -278,7 +272,7 @@ class ManageWorkoutViewModel(
 
     private fun deleteSet(id: String, setIndex: Int) = updateState {
         it.copy(
-            fullWorkout = it.fullWorkout.copyWithDeleteSet(
+            workout = it.workout.copyWithDeleteSet(
                 id = id,
                 setIndex = setIndex
             )
@@ -287,7 +281,7 @@ class ManageWorkoutViewModel(
 
     private fun addSet(id: String) = updateState {
         it.copy(
-            fullWorkout = it.fullWorkout.copyWithAddSet(
+            workout = it.workout.copyWithAddSet(
                 id = id,
             )
         )
@@ -295,7 +289,7 @@ class ManageWorkoutViewModel(
 
     private fun toggleSetCompleted(id: String, setIndex: Int) = updateState {
         it.copy(
-            fullWorkout = it.fullWorkout.copyWithSetCompleted(
+            workout = it.workout.copyWithSetCompleted(
                 id = id,
                 setIndex = setIndex
             )
@@ -367,7 +361,7 @@ class ManageWorkoutViewModel(
             )
 
             is ManageWorkoutUiAction.OnDeleteSet -> {
-//                toggleSetMoreActionSheet(false)
+                toggleSetMoreActionSheet(false)
 
                 deleteSet(
                     id = action.id,

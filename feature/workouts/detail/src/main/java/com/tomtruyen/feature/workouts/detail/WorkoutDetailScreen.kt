@@ -76,17 +76,13 @@ fun WorkoutDetailScreenLayout(
     state: WorkoutDetailUiState,
     onAction: (WorkoutDetailUiAction) -> Unit
 ) {
-    val workoutWithExercise by remember(state) {
-        derivedStateOf { state.workout }
-    }
-
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     Scaffold(
         snackbarHost = snackbarHost,
         topBar = {
             Toolbar(
-                title = workoutWithExercise?.workout?.name.orEmpty(),
+                title = state.workout?.name.orEmpty(),
                 navController = navController
             ) {
                 IconButton(

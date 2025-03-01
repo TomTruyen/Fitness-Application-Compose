@@ -2,13 +2,19 @@ package com.tomtruyen.data.repositories
 
 import com.tomtruyen.data.dao.CategoryDao
 import com.tomtruyen.data.entities.Category
+import com.tomtruyen.data.models.ui.CategoryUiModel
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import io.github.jan.supabase.postgrest.from
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.mapLatest
 
 class CategoryRepositoryImpl(
     private val categoryDao: CategoryDao
 ) : CategoryRepository() {
-    override fun findCategories() = categoryDao.findCategories()
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun findCategories() = categoryDao.findCategories().mapLatest { categories ->
+        categories.map(CategoryUiModel::fromEntity)
+    }
 
     override suspend fun getCategories() {
         supabase.from(Category.TABLE_NAME)

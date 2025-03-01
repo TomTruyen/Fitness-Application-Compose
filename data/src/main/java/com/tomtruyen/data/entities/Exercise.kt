@@ -79,14 +79,4 @@ data class ExerciseWithCategoryAndEquipment(
         entity = Equipment::class
     )
     val equipment: Equipment? = null
-) {
-    val displayName
-        get() = buildString {
-            append(exercise.name)
-
-            val equipmentName = equipment?.name.orEmpty()
-            if (equipmentName.isNotBlank()) {
-                append(" ($equipmentName)")
-            }
-        }
-}
+)

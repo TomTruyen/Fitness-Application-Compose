@@ -4,21 +4,30 @@ import com.tomtruyen.data.dao.ExerciseDao
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.models.ExerciseFilter
+import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Order
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.mapLatest
 
 class ExerciseRepositoryImpl(
     private val exerciseDao: ExerciseDao
 ) : ExerciseRepository() {
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun findExercises(query: String, filter: ExerciseFilter) = exerciseDao.findAllAsync(
         query = query,
         filter = filter,
-    )
+    ).mapLatest { exercises ->
+        exercises.map(ExerciseUiModel::fromEntity)
+    }
 
-    override suspend fun findExerciseById(id: String) = exerciseDao.findById(id)
+    override suspend fun findExerciseById(id: String) = exerciseDao.findById(id)?.let(ExerciseUiModel::fromEntity)
 
-    override fun findExerciseByIdAsync(id: String) = exerciseDao.findByIdAsync(id)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun findExerciseByIdAsync(id: String) = exerciseDao.findByIdAsync(id).mapLatest { exercise ->
+        exercise?.let(ExerciseUiModel::fromEntity)
+    }
 
     override suspend fun getExercises(userId: String?, refresh: Boolean) =
         fetch(refresh = refresh) {
@@ -30,6 +39,8 @@ class ExerciseRepositoryImpl(
                             Exercise::userId isExact null
                         }
                     }
+
+                    // TODO: Join to get actual Category and Equipment
 
                     order(
                         column = "name",
@@ -47,22 +58,10 @@ class ExerciseRepositoryImpl(
 
     override suspend fun saveExercise(
         userId: String,
-        userExercise: ExerciseWithCategoryAndEquipment,
+        exercise: ExerciseUiModel,
     ) {
-        val (exercise, category, equipment) = userExercise
-
-        val newExercise = exercise.copy(
-            userId = userId,
-            categoryId = if (category?.isDefault == true) {
-                null
-            } else {
-                category?.id
-            },
-            equipmentId = if (equipment?.isDefault == true) {
-                null
-            } else {
-                equipment?.id
-            }
+        val newExercise = exercise.toEntity().exercise.copy(
+            userId = userId
         )
 
         supabase.from(Exercise.TABLE_NAME).upsert(newExercise)

@@ -1,6 +1,7 @@
 package com.tomtruyen.feature.workouts.manage
 
 import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
+import com.tomtruyen.data.models.ui.ExerciseUiModel
 
 sealed class ManageWorkoutUiAction {
     data class OnWorkoutNameChanged(val name: String) : ManageWorkoutUiAction()
@@ -9,12 +10,12 @@ sealed class ManageWorkoutUiAction {
 
     data object OnReplaceExerciseClicked : ManageWorkoutUiAction()
 
-    data class OnReplaceExercise(val exercise: ExerciseWithCategoryAndEquipment) :
+    data class OnReplaceExercise(val exercise: ExerciseUiModel) :
         ManageWorkoutUiAction()
 
     data object OnAddExerciseClicked : ManageWorkoutUiAction()
 
-    data class OnAddExercises(val exercises: List<ExerciseWithCategoryAndEquipment>) :
+    data class OnAddExercises(val exercises: List<ExerciseUiModel>) :
         ManageWorkoutUiAction()
 
     data object OnDeleteExercise : ManageWorkoutUiAction()

@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.common.models.ExerciseType
+import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.feature.workouts.manage.R
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
@@ -27,7 +28,7 @@ import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 fun WorkoutExerciseSetHeader(
     exerciseType: ExerciseType,
     mode: ManageWorkoutMode,
-    unit: String,
+    unit: UnitType,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -70,7 +71,7 @@ fun WorkoutExerciseSetHeader(
                 Spacer(modifier = Modifier.width(Dimens.Small))
 
                 Text(
-                    text = unit.uppercase(),
+                    text = unit.value.uppercase(),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.bodySmall.copy(

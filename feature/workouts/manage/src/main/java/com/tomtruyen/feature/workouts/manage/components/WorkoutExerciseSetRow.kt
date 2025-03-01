@@ -1,6 +1,5 @@
 package com.tomtruyen.feature.workouts.manage.components
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,11 +21,9 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,12 +40,9 @@ import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.dialogs.RestAlertDialog
-import com.tomtruyen.data.entities.WorkoutExerciseSet
-import com.tomtruyen.data.entities.WorkoutExerciseWithSets
+import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import com.tomtruyen.core.common.R as CommonR
 
 @Composable
@@ -57,8 +51,8 @@ fun WorkoutExerciseSetRow(
     exerciseType: ExerciseType,
     workoutExerciseId: String,
     setIndex: Int,
-    set: WorkoutExerciseSet,
-    lastPerformedSet: WorkoutExerciseSet? = null,
+    set: WorkoutExerciseSetUiModel,
+    lastPerformedSet: WorkoutExerciseSetUiModel? = null,
     mode: ManageWorkoutMode,
     onAction: (ManageWorkoutUiAction) -> Unit,
     onSetClick: (id: String, setIndex: Int) -> Unit
@@ -198,7 +192,7 @@ fun WorkoutExerciseSetRow(
 
 @Composable
 private fun PreviousSet(
-    lastPerformedSet: WorkoutExerciseSet?,
+    lastPerformedSet: WorkoutExerciseSetUiModel?,
     type: ExerciseType,
     modifier: Modifier = Modifier
 ) {

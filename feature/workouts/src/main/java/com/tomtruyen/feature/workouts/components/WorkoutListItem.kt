@@ -26,12 +26,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.feature.workouts.R
 import com.tomtruyen.feature.workouts.WorkoutsUiAction
 
 @Composable
 fun WorkoutListItem(
-    workoutWithExercises: com.tomtruyen.data.entities.WorkoutWithExercises,
+    workout: WorkoutUiModel,
     onAction: (WorkoutsUiAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -50,7 +51,7 @@ fun WorkoutListItem(
         ),
         elevation = CardDefaults.cardElevation(0.dp),
         onClick = {
-            onAction(WorkoutsUiAction.OnDetailClicked(workoutWithExercises.workout.id))
+            onAction(WorkoutsUiAction.OnDetailClicked(workout.id))
         }
     ) {
         Column(
@@ -64,7 +65,7 @@ fun WorkoutListItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = workoutWithExercises.workout.name,
+                    text = workout.name,
                     style = MaterialTheme.typography.bodyLarge.copy(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.W500
@@ -98,11 +99,11 @@ fun WorkoutListItem(
                         top = Dimens.Small,
                     )
                 ) {
-                    workoutWithExercises.exercises
-                        .sortedBy { it.workoutExercise.sortOrder }
-                        .forEach { exerciseWithSets ->
+                    workout.exercises
+                        .sortedBy { it.sortOrder }
+                        .forEach { exercise ->
                             Text(
-                                text = "${exerciseWithSets.sets.size} x ${exerciseWithSets.exercise.displayName}",
+                                text = "${exercise.sets.size} x ${exercise.displayName}",
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                         }
@@ -114,7 +115,7 @@ fun WorkoutListItem(
                             .fillMaxWidth()
                             .padding(top = Dimens.Normal)
                     ) {
-                        onAction(WorkoutsUiAction.OnStartWorkoutClicked(workoutWithExercises.workout.id))
+                        onAction(WorkoutsUiAction.OnStartWorkoutClicked(workout.id))
                     }
                 }
             }

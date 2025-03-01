@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.BottomSheetItem
@@ -46,8 +47,8 @@ import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.ui.toolbars.ToolbarTitle
-import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
-import com.tomtruyen.data.entities.WorkoutExerciseWithSets
+import com.tomtruyen.data.models.ui.ExerciseUiModel
+import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 import com.tomtruyen.feature.workouts.manage.components.WorkoutExerciseHeader
 import com.tomtruyen.feature.workouts.manage.components.WorkoutExerciseSetTable
 import com.tomtruyen.feature.workouts.manage.components.WorkoutStatistics
@@ -139,7 +140,7 @@ fun ManageWorkoutScreen(
                     lazyListState.animateScrollToItem(
                         event.index.coerceIn(
                             0,
-                            state.fullWorkout.exercises.size - 1
+                            state.workout.exercises.size - 1
                         )
                     )
                 }
@@ -148,7 +149,7 @@ fun ManageWorkoutScreen(
     }
 
     LaunchedEffect(navController) {
-        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Pair<Screen.Exercise.Overview.Mode, List<ExerciseWithCategoryAndEquipment>>?>(
+        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Pair<Screen.Exercise.Overview.Mode, List<ExerciseUiModel>>?>(
             NavArguments.EXERCISES,
             null
         )
@@ -171,7 +172,7 @@ fun ManageWorkoutScreen(
                     }
                 }
 
-                navController.currentBackStackEntry?.savedStateHandle?.remove<Pair<Screen.Exercise.Overview.Mode, List<ExerciseWithCategoryAndEquipment>>?>(
+                navController.currentBackStackEntry?.savedStateHandle?.remove<Pair<Screen.Exercise.Overview.Mode, List<ExerciseUiModel>>?>(
                     NavArguments.EXERCISES
                 )
             }
@@ -216,7 +217,7 @@ fun ManageWorkoutScreenLayout(
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     val onNavigateUp: () -> Unit = {
-        if (state.fullWorkout.exercises != state.initialWorkout.exercises) {
+        if (state.workout.exercises != state.initialWorkout.exercises) {
             confirmationDialogVisible = true
         } else {
             navController.popBackStack()
@@ -231,7 +232,7 @@ fun ManageWorkoutScreenLayout(
             Toolbar(
                 title = {
                     if (state.mode == ManageWorkoutMode.EXECUTE) {
-                        ToolbarTitle(title = state.fullWorkout.workout.name)
+                        ToolbarTitle(title = state.workout.name)
                     } else {
                         TextFields.Default(
                             modifier = Modifier.padding(
@@ -240,7 +241,7 @@ fun ManageWorkoutScreenLayout(
                             textFieldModifier = Modifier.defaultMinSize(minHeight = 36.dp),
                             padding = PaddingValues(Dimens.Small),
                             placeholder = stringResource(id = R.string.title_workout_name),
-                            value = state.fullWorkout.workout.name,
+                            value = state.workout.name,
                             onValueChange = { name ->
                                 onAction(
                                     ManageWorkoutUiAction.OnWorkoutNameChanged(
@@ -266,7 +267,7 @@ fun ManageWorkoutScreenLayout(
                 }
 
                 Buttons.Default(
-                    enabled = state.fullWorkout.exercises.isNotEmpty(),
+                    enabled = state.workout.exercises.isNotEmpty(),
                     modifier = Modifier.padding(end = Dimens.Small),
                     text = stringResource(id = CommonR.string.button_save),
                     contentPadding = PaddingValues(0.dp),
@@ -293,7 +294,7 @@ fun ManageWorkoutScreenLayout(
                 ) {
                     WorkoutStatistics(
                         modifier = Modifier.fillMaxWidth(),
-                        workout = state.fullWorkout
+                        workout = state.workout
                     )
                 }
 
@@ -344,11 +345,11 @@ fun ExerciseList(
         modifier = modifier.fillMaxSize()
     ) {
         items(
-            state.fullWorkout.exercises,
-            key = { it.exercise.exercise.id }) { fullExercise ->
+            state.workout.exercises,
+            key = { it.id }) { exercise ->
             ReorderableItem(
                 state = reorderableLazyListState,
-                key = fullExercise.exercise.exercise.id
+                key = exercise.id
             ) { isDragging ->
                 val alpha by animateFloatAsState(if (isDragging) 0.25f else 1f, label = "")
 
@@ -361,7 +362,7 @@ fun ExerciseList(
                             },
                         )
                         .alpha(alpha),
-                    workoutExercise = fullExercise,
+                    exercise = exercise,
                     unit = state.settings.unit,
                     mode = state.mode,
                     onAction = onAction,
@@ -388,8 +389,8 @@ fun ExerciseList(
 
 @Composable
 fun ExerciseListItem(
-    workoutExercise: WorkoutExerciseWithSets,
-    unit: String,
+    exercise: WorkoutExerciseUiModel,
+    unit: UnitType,
     mode: ManageWorkoutMode,
     onAction: (ManageWorkoutUiAction) -> Unit,
     modifier: Modifier = Modifier,
@@ -402,11 +403,11 @@ fun ExerciseListItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(Dimens.Normal),
-            exercise = workoutExercise.exercise,
+            exercise = exercise,
             onActionClick = {
                 onAction(
                     ManageWorkoutUiAction.ToggleExerciseMoreActionSheet(
-                        id = workoutExercise.workoutExercise.id
+                        id = exercise.id
                     )
                 )
             },
@@ -423,11 +424,11 @@ fun ExerciseListItem(
             border = true,
             padding = PaddingValues(Dimens.Small),
             placeholder = stringResource(id = R.string.placeholder_notes),
-            value = workoutExercise.workoutExercise.notes,
+            value = exercise.notes,
             onValueChange = { notes ->
                 onAction(
                     ManageWorkoutUiAction.OnExerciseNotesChanged(
-                        id = workoutExercise.workoutExercise.id,
+                        id = exercise.id,
                         notes = notes
                     )
                 )
@@ -436,9 +437,9 @@ fun ExerciseListItem(
 
         // Sets
         WorkoutExerciseSetTable(
-            workoutExerciseId = workoutExercise.workoutExercise.id,
-            exerciseType = workoutExercise.exercise.exercise.typeEnum,
-            sets = workoutExercise.sets,
+            workoutExerciseId = exercise.id,
+            exerciseType = exercise.type,
+            sets = exercise.sets,
             unit = unit,
             mode = mode,
             onSetClick = { id, setIndex ->
@@ -465,7 +466,7 @@ fun ExerciseListItem(
                 contentColor = MaterialTheme.colorScheme.onSurface
             ),
             onClick = {
-                onAction(ManageWorkoutUiAction.OnAddSet(workoutExercise.workoutExercise.id))
+                onAction(ManageWorkoutUiAction.OnAddSet(exercise.id))
             }
         )
     }

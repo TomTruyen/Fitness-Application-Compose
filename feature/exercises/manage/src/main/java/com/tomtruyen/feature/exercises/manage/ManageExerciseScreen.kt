@@ -35,6 +35,8 @@ import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.validation.isValid
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
+import com.tomtruyen.data.models.ui.CategoryUiModel
+import com.tomtruyen.data.models.ui.EquipmentUiModel
 import com.tomtruyen.feature.exercises.create.R
 import com.tomtruyen.feature.exercises.manage.model.ManageExerciseMode
 import kotlinx.coroutines.flow.collectLatest
@@ -90,7 +92,7 @@ fun ManageExerciseScreenLayout(
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     val onNavigateUp: () -> Unit = {
-        if (state.fullExercise != state.initialExercise) {
+        if (state.exercise != state.initialExercise) {
             confirmationDialogVisible = true
         } else {
             navController.popBackStack()
@@ -146,7 +148,7 @@ fun ManageExerciseScreenLayout(
                     FilterDropdown(
                         placeholder = stringResource(id = CommonR.string.placeholder_category),
                         options = state.categories,
-                        selectedOption = state.fullExercise.category ?: Category.DEFAULT,
+                        selectedOption = state.exercise.category ?: CategoryUiModel.DEFAULT,
                         onOptionSelected = { category ->
                             onAction(
                                 ManageExerciseUiAction.OnCategoryChanged(
@@ -159,7 +161,7 @@ fun ManageExerciseScreenLayout(
                     FilterDropdown(
                         placeholder = stringResource(id = CommonR.string.placeholder_equipment),
                         options = state.equipment,
-                        selectedOption = state.fullExercise.equipment ?: Equipment.DEFAULT,
+                        selectedOption = state.exercise.equipment ?: EquipmentUiModel.DEFAULT,
                         onOptionSelected = { equipment ->
                             onAction(
                                 ManageExerciseUiAction.OnEquipmentChanged(
@@ -172,11 +174,11 @@ fun ManageExerciseScreenLayout(
                     Dropdown(
                         placeholder = stringResource(id = CommonR.string.placeholder_type),
                         options = types,
-                        selectedOption = state.fullExercise.exercise.type,
+                        selectedOption = state.exercise.type.value,
                         onOptionSelected = { type ->
                             onAction(
                                 ManageExerciseUiAction.OnTypeChanged(
-                                    type
+                                    ExerciseType.fromValue(type)
                                 )
                             )
                         },

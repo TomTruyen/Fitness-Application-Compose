@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.common.providers.BuildConfigFieldProvider
 import com.tomtruyen.core.common.utils.EmailUtils
 import com.tomtruyen.core.common.utils.TimeUtils
@@ -139,7 +140,7 @@ fun ProfileScreenLayout(
 
                     ListItem(
                         title = stringResource(id = R.string.label_weight_unit),
-                        message = state.settings.unit,
+                        message = state.settings.unit.value,
                         onClick = {
                             unitDialogVisible = true
                         }
@@ -234,7 +235,7 @@ fun ProfileScreenLayout(
 
             if (unitDialogVisible) {
                 UnitAlertDialog(
-                    units = Settings.UnitType.entries.map { it.value },
+                    units = UnitType.entries,
                     onDismiss = {
                         unitDialogVisible = false
                     },

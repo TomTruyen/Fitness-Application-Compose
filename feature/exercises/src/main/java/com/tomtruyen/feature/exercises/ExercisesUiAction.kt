@@ -4,6 +4,9 @@ import com.tomtruyen.core.common.models.FilterOption
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
+import com.tomtruyen.data.models.ui.CategoryUiModel
+import com.tomtruyen.data.models.ui.EquipmentUiModel
+import com.tomtruyen.data.models.ui.ExerciseUiModel
 
 sealed class ExercisesUiAction {
     data object OnToggleSearch : ExercisesUiAction()
@@ -14,16 +17,15 @@ sealed class ExercisesUiAction {
 
     data class OnSearchQueryChanged(val query: String) : ExercisesUiAction()
 
-    data class OnCategoryFilterChanged(val category: Category) : ExercisesUiAction()
+    data class OnCategoryFilterChanged(val category: CategoryUiModel) : ExercisesUiAction()
 
-    data class OnEquipmentFilterChanged(val equipment: Equipment) : ExercisesUiAction()
+    data class OnEquipmentFilterChanged(val equipment: EquipmentUiModel) : ExercisesUiAction()
 
     data object OnClearFilterClicked : ExercisesUiAction()
 
     data class OnRemoveFilterClicked(val filter: FilterOption) : ExercisesUiAction()
 
-    data class OnExerciseClicked(val exercise: ExerciseWithCategoryAndEquipment) :
-        ExercisesUiAction()
+    data class OnExerciseClicked(val exercise: ExerciseUiModel) : ExercisesUiAction()
 
     data object OnAddExerciseToWorkoutClicked : ExercisesUiAction()
 

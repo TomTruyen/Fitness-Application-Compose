@@ -16,11 +16,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.ui.Avatar
-import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
+import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 
 @Composable
 fun WorkoutExerciseHeader(
-    exercise: ExerciseWithCategoryAndEquipment?,
+    exercise: WorkoutExerciseUiModel?,
     onActionClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -30,7 +30,7 @@ fun WorkoutExerciseHeader(
         modifier = modifier
     ) {
         Avatar(
-            imageUrl = exercise?.exercise?.imageUrl,
+            imageUrl = exercise?.imageUrl,
             contentDescription = exercise?.displayName,
         )
 

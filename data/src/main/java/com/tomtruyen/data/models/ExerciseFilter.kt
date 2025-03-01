@@ -1,13 +1,13 @@
 package com.tomtruyen.data.models
 
-import com.tomtruyen.data.entities.Category
-import com.tomtruyen.data.entities.Equipment
+import com.tomtruyen.data.models.ui.CategoryUiModel
+import com.tomtruyen.data.models.ui.EquipmentUiModel
 
 data class ExerciseFilter(
-    var categories: List<Category> = emptyList(),
-    var equipment: List<Equipment> = emptyList(),
+    var categories: List<CategoryUiModel> = emptyList(),
+    var equipment: List<EquipmentUiModel> = emptyList(),
 ) {
-    fun tryAddCategory(category: Category) {
+    fun tryAddCategory(category: CategoryUiModel) {
         this.categories = this.categories.toMutableList().apply {
             if (contains(category)) {
                 remove(category)
@@ -17,7 +17,7 @@ data class ExerciseFilter(
         }
     }
 
-    fun tryAddEquipment(equipment: Equipment) {
+    fun tryAddEquipment(equipment: EquipmentUiModel) {
         this.equipment = this.equipment.toMutableList().apply {
             if (contains(equipment)) {
                 remove(equipment)

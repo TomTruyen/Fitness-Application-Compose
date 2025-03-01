@@ -114,7 +114,7 @@ fun WorkoutOverviewScreenLayout(
                 ) {
                     items(state.workouts) { workout ->
                         WorkoutListItem(
-                            workoutWithExercises = workout,
+                            workout = workout,
                             onAction = onAction,
                             modifier = Modifier.fillMaxWidth()
                         )

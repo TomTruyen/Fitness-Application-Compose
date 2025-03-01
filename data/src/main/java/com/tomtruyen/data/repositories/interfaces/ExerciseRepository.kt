@@ -3,6 +3,7 @@ package com.tomtruyen.data.repositories.interfaces
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.models.ExerciseFilter
+import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.repositories.BaseRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -13,14 +14,14 @@ abstract class ExerciseRepository : BaseRepository() {
     abstract fun findExercises(
         query: String,
         filter: ExerciseFilter
-    ): Flow<List<ExerciseWithCategoryAndEquipment>>
+    ): Flow<List<ExerciseUiModel>>
 
-    abstract suspend fun findExerciseById(id: String): ExerciseWithCategoryAndEquipment?
-    abstract fun findExerciseByIdAsync(id: String): Flow<ExerciseWithCategoryAndEquipment?>
+    abstract suspend fun findExerciseById(id: String): ExerciseUiModel?
+    abstract fun findExerciseByIdAsync(id: String): Flow<ExerciseUiModel?>
     abstract suspend fun getExercises(userId: String?, refresh: Boolean)
     abstract suspend fun saveExercise(
         userId: String,
-        userExercise: ExerciseWithCategoryAndEquipment
+        exercise: ExerciseUiModel
     )
 
     abstract suspend fun deleteExercise(userId: String, exerciseId: String)
