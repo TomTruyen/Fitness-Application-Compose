@@ -1,31 +1,26 @@
 package com.tomtruyen.data.repositories
 
-import com.tomtruyen.data.entities.WorkoutWithExercises
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 
-class WorkoutRepositoryImpl(
-    private val workoutDao: com.tomtruyen.data.dao.WorkoutDao,
-    private val workoutExerciseDao: com.tomtruyen.data.dao.WorkoutExerciseDao,
-    private val workoutExerciseSetDao: com.tomtruyen.data.dao.WorkoutExerciseSetDao,
-    private val exerciseDao: com.tomtruyen.data.dao.ExerciseDao
-) : WorkoutRepository() {
+class WorkoutRepositoryImpl: WorkoutRepository() {
+    private val dao = database.workoutDao()
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun findWorkoutsAsync() = workoutDao.findWorkoutsAsync().mapLatest { workouts ->
+    override fun findWorkoutsAsync() = dao.findWorkoutsAsync().mapLatest { workouts ->
         workouts.map(WorkoutUiModel::fromEntity)
     }
 
-    override suspend fun findWorkouts() = workoutDao.findWorkouts().map(WorkoutUiModel::fromEntity)
+    override suspend fun findWorkouts() = dao.findWorkouts().map(WorkoutUiModel::fromEntity)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun findWorkoutByIdAsync(id: String) = workoutDao.findByIdAsync(id).mapLatest { workout ->
+    override fun findWorkoutByIdAsync(id: String) = dao.findByIdAsync(id).mapLatest { workout ->
         workout?.let(WorkoutUiModel::fromEntity)
     }
 
-    override suspend fun findWorkoutById(id: String) = workoutDao.findById(id)?.let(WorkoutUiModel::fromEntity)
+    override suspend fun findWorkoutById(id: String) = dao.findById(id)?.let(WorkoutUiModel::fromEntity)
 
     override suspend fun getWorkouts(userId: String, refresh: Boolean) = fetch(refresh) {
 //        db.collection(USER_WORKOUT_COLLECTION_NAME)

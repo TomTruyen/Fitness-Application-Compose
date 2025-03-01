@@ -1,13 +1,5 @@
 package com.tomtruyen.data.di
 
-import com.tomtruyen.data.dao.CategoryDao
-import com.tomtruyen.data.dao.EquipmentDao
-import com.tomtruyen.data.dao.ExerciseDao
-import com.tomtruyen.data.dao.SettingsDao
-import com.tomtruyen.data.dao.WorkoutDao
-import com.tomtruyen.data.dao.WorkoutExerciseDao
-import com.tomtruyen.data.dao.WorkoutExerciseSetDao
-import com.tomtruyen.data.dao.WorkoutHistoryDao
 import com.tomtruyen.data.repositories.CategoryRepositoryImpl
 import com.tomtruyen.data.repositories.EquipmentRepositoryImpl
 import com.tomtruyen.data.repositories.ExerciseRepositoryImpl
@@ -22,6 +14,7 @@ import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val repositoryModule = module {
@@ -34,43 +27,15 @@ val repositoryModule = module {
         )
     }
 
-    single<ExerciseRepository> {
-        ExerciseRepositoryImpl(
-            exerciseDao = get<ExerciseDao>()
-        )
-    }
+    singleOf<ExerciseRepository>(::ExerciseRepositoryImpl)
 
-    single<SettingsRepository> {
-        SettingsRepositoryImpl(
-            settingsDao = get<SettingsDao>()
-        )
-    }
+    singleOf<SettingsRepository>(::SettingsRepositoryImpl)
 
-    single<WorkoutRepository> {
-        // TODO: See if we can limit the amount of parameters passed to the constructor
-        WorkoutRepositoryImpl(
-            workoutDao = get<WorkoutDao>(),
-            workoutExerciseDao = get<WorkoutExerciseDao>(),
-            workoutExerciseSetDao = get<WorkoutExerciseSetDao>(),
-            exerciseDao = get<ExerciseDao>()
-        )
-    }
+    singleOf<WorkoutRepository>(::WorkoutRepositoryImpl)
 
-    single<WorkoutHistoryRepository> {
-        WorkoutHistoryRepositoryImpl(
-            workoutHistoryDao = get<WorkoutHistoryDao>()
-        )
-    }
+    singleOf<WorkoutHistoryRepository>(::WorkoutHistoryRepositoryImpl)
 
-    single<CategoryRepository> {
-        CategoryRepositoryImpl(
-            categoryDao = get<CategoryDao>()
-        )
-    }
+    singleOf<CategoryRepository>(::CategoryRepositoryImpl)
 
-    single<EquipmentRepository> {
-        EquipmentRepositoryImpl(
-            equipmentDao = get<EquipmentDao>()
-        )
-    }
+    singleOf<EquipmentRepository>(::EquipmentRepositoryImpl)
 }

@@ -249,9 +249,9 @@ fun ExercisesScreenLayout(
                             ) {
                                 // Add Text with First Letter of Exercise Name when it changes
                                 val currentFirstLetter =
-                                    exercise.displayName.first().uppercaseChar()
+                                    exercise.displayName.firstOrNull()?.uppercaseChar()
                                 val previousFirstLetter =
-                                    state.exercises.getOrNull(index - 1)?.displayName?.first()
+                                    state.exercises.getOrNull(index - 1)?.displayName?.firstOrNull()
                                         ?.uppercaseChar()
 
                                 if (currentFirstLetter != previousFirstLetter) {

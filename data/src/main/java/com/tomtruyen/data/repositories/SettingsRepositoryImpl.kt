@@ -8,11 +8,11 @@ import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
 
-class SettingsRepositoryImpl(
-    private val settingsDao: SettingsDao
-) : SettingsRepository() {
+class SettingsRepositoryImpl: SettingsRepository() {
+    private val dao = database.settingsDao()
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun findSettings() = settingsDao.findSettings().mapLatest { settings ->
+    override fun findSettings() = dao.findSettings().mapLatest { settings ->
         settings?.let(SettingsUiModel::fromEntity)
     }
 
@@ -25,7 +25,7 @@ class SettingsRepositoryImpl(
         supabase.from(Settings.TABLE_NAME).upsert(newSettings)
 
         launchWithTransaction {
-            settingsDao.save(newSettings)
+            dao.save(newSettings)
         }
     }
 
@@ -39,7 +39,7 @@ class SettingsRepositoryImpl(
             .decodeSingleOrNull<Settings>()
             ?.let { settings ->
                 launchWithCacheTransactions {
-                    settingsDao.save(settings)
+                    dao.save(settings)
                 }
             }
     }

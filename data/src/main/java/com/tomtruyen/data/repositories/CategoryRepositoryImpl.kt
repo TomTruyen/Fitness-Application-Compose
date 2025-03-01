@@ -8,11 +8,11 @@ import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
 
-class CategoryRepositoryImpl(
-    private val categoryDao: CategoryDao
-) : CategoryRepository() {
+class CategoryRepositoryImpl: CategoryRepository() {
+    private val dao = database.categoryDao()
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun findCategories() = categoryDao.findCategories().mapLatest { categories ->
+    override fun findCategories() = dao.findCategories().mapLatest { categories ->
         categories.map(CategoryUiModel::fromEntity)
     }
 
@@ -22,7 +22,7 @@ class CategoryRepositoryImpl(
             .decodeList<Category>()
             .let { categories ->
                 launchWithCacheTransactions {
-                    categoryDao.saveAll(categories)
+                    dao.saveAll(categories)
                 }
             }
     }

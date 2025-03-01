@@ -18,7 +18,7 @@ class UserRepositoryImpl(
     private val settingsRepository: SettingsRepository,
     private val equipmentRepository: EquipmentRepository,
     private val categoryRepository: CategoryRepository
-) : UserRepository() {
+): UserRepository() {
     private val auth = supabase.auth
 
     override suspend fun login(email: String, password: String) {

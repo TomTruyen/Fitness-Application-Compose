@@ -1,38 +1,48 @@
 package com.tomtruyen.data.repositories
 
-import com.tomtruyen.data.dao.ExerciseDao
+import com.tomtruyen.data.entities.Category
+import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.models.ExerciseFilter
+import com.tomtruyen.data.models.network.ExerciseNetworkModel
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
 
-class ExerciseRepositoryImpl(
-    private val exerciseDao: ExerciseDao
-) : ExerciseRepository() {
+class ExerciseRepositoryImpl: ExerciseRepository() {
+    private val dao = database.exerciseDao()
+    private val categoryDao = database.categoryDao()
+    private val equipmentDao = database.equipmentDao()
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun findExercises(query: String, filter: ExerciseFilter) = exerciseDao.findAllAsync(
+    override fun findExercises(query: String, filter: ExerciseFilter) = dao.findAllAsync(
         query = query,
         filter = filter,
     ).mapLatest { exercises ->
         exercises.map(ExerciseUiModel::fromEntity)
     }
 
-    override suspend fun findExerciseById(id: String) = exerciseDao.findById(id)?.let(ExerciseUiModel::fromEntity)
+    override suspend fun findExerciseById(id: String) = dao.findById(id)?.let(ExerciseUiModel::fromEntity)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun findExerciseByIdAsync(id: String) = exerciseDao.findByIdAsync(id).mapLatest { exercise ->
+    override fun findExerciseByIdAsync(id: String) = dao.findByIdAsync(id).mapLatest { exercise ->
         exercise?.let(ExerciseUiModel::fromEntity)
     }
 
     override suspend fun getExercises(userId: String?, refresh: Boolean) =
         fetch(refresh = refresh) {
             supabase.from(Exercise.TABLE_NAME)
-                .select {
+                .select(
+                    columns = Columns.list(
+                        "*",
+                        "${Category.TABLE_NAME}(*)",
+                        "${Equipment.TABLE_NAME}(*)"
+                    )
+                ) {
                     filter {
                         or {
                             Exercise::userId eq userId
@@ -40,18 +50,24 @@ class ExerciseRepositoryImpl(
                         }
                     }
 
-                    // TODO: Join to get actual Category and Equipment
-
                     order(
                         column = "name",
                         order = Order.ASCENDING
                     )
                 }
-                .decodeList<Exercise>()
-                .let { exercises ->
+                .decodeList<ExerciseNetworkModel>()
+                .let { response ->
+                    val categories = response.mapNotNull { it.category }
+                    val equipment = response.mapNotNull { it.equipment }
+                    val exercises = response.map(ExerciseNetworkModel::toEntity)
+
                     launchWithCacheTransactions {
-                        exerciseDao.deleteAll()
-                        exerciseDao.saveAll(exercises)
+                        dao.deleteAll()
+
+                        categoryDao.saveAll(categories)
+                        equipmentDao.saveAll(equipment)
+
+                        dao.saveAll(exercises)
                     }
                 }
         }
@@ -67,7 +83,7 @@ class ExerciseRepositoryImpl(
         supabase.from(Exercise.TABLE_NAME).upsert(newExercise)
 
         launchWithCacheTransactions {
-            exerciseDao.save(newExercise)
+            dao.save(newExercise)
         }
     }
 
@@ -83,7 +99,7 @@ class ExerciseRepositoryImpl(
             }
 
         launchWithTransaction {
-            exerciseDao.deleteById(exerciseId)
+            dao.deleteById(exerciseId)
         }
     }
 }

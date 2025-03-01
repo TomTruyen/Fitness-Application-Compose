@@ -8,11 +8,11 @@ import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
 
-class EquipmentRepositoryImpl(
-    private val equipmentDao: EquipmentDao
-) : EquipmentRepository() {
+class EquipmentRepositoryImpl: EquipmentRepository() {
+    private val dao = database.equipmentDao()
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun findEquipment() = equipmentDao.findEquipment().mapLatest { equipment ->
+    override fun findEquipment() = dao.findEquipment().mapLatest { equipment ->
         equipment.map(EquipmentUiModel::fromEntity)
     }
 
@@ -22,7 +22,7 @@ class EquipmentRepositoryImpl(
             .decodeList<Equipment>()
             .let { equipment ->
                 launchWithCacheTransactions {
-                    equipmentDao.saveAll(equipment)
+                    dao.saveAll(equipment)
                 }
             }
     }
