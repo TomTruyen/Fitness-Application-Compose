@@ -49,7 +49,7 @@ fun MainBottomNavigation(
 ) {
     val backstackEntry by navController.currentBackStackEntryAsState()
 
-    val height by animateDpAsState(targetValue = if(showBottomBar) 120.dp else 0.dp)
+    val height by animateDpAsState(targetValue = if(showBottomBar) 96.dp else 0.dp)
 
     NavigationBar(
         modifier = Modifier.height(height),
