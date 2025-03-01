@@ -59,16 +59,6 @@ class MainActivity : ComponentActivity() {
 
                 val backStackEntry by navController.currentBackStackEntryAsState()
 
-                LaunchedEffect(Unit) {
-                    if (userRepository.isLoggedIn()) {
-                        navController.navigate(Screen.Workout.Graph) {
-                            popUpTo(Screen.Auth.Graph) {
-                                inclusive = true
-                            }
-                        }
-                    }
-                }
-
                 LaunchedEffect(backStackEntry) {
                     val isRootDestination = listOf(
                         Screen.Workout.Overview,
@@ -103,6 +93,16 @@ class MainActivity : ComponentActivity() {
                             startDestination = Screen.Auth.Login
                         ) {
                             composable<Screen.Auth.Login> {
+                                LaunchedEffect(Unit) {
+                                    if (userRepository.isLoggedIn()) {
+                                        navController.navigate(Screen.Workout.Graph) {
+                                            popUpTo(Screen.Auth.Graph) {
+                                                inclusive = true
+                                            }
+                                        }
+                                    }
+                                }
+
                                 LoginScreen(navController)
                             }
 
