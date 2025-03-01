@@ -26,11 +26,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install HomeBrew
-        run: |
-          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/marko/.profile
-          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+      - name: Install Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
 
       - name: Install Supabase CLI
         run: |
