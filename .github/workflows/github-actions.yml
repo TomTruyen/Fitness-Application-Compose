@@ -31,14 +31,19 @@ jobs:
           ENCODED_SIGNING_GRADLE: ${{ secrets.SIGNING_GRADLE }}
         run: echo $ENCODED_SIGNING_GRADLE | base64 -di > signing.gradle
 
-      - name: Decode Google Server Client ID and add to local.properties
+      - name: Add Secrets to local.properties
         env:
-          ENCODED_STRING: ${{ secrets.GOOGLE_SERVER_CLIENT_ID }}
+          GOOGLE_SERVER_CLIENT_ID: ${{ secrets.GOOGLE_SERVER_CLIENT_ID }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
           if [ ! -f local.properties ]; then
             touch local.properties
           fi
-          echo $ENCODED_STRING | base64 -di >> local.properties
+
+          echo "GOOGLE_SERVER_CLIENT_ID=$GOOGLE_SERVER_CLIENT_ID" >> local.properties
+          echo "SUPABASE_URL=$SUPABASE_URL" >> local.properties
+          echo "SUPABASE_KEY=$SUPABASE_KEY" >> local.properties
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
@@ -59,14 +64,3 @@ jobs:
         with:
           name: app-bundle
           path: app/build/outputs/bundle/release/app-release.aab
-
-
-
-
-
-
-
-
-
-    
-
