@@ -18,8 +18,6 @@
 
     <!-- Errors -->
     <string name="error_weak_password">Password is too weak</string>
-    <string name="error_wrong_credentials">Invalid credentials</string>
-    <string name="error_email_already_exists">Email is already used</string>
     <string name="error_invalid_email">Email is invalid</string>
     <string name="error_required">This field is required</string>
     <string name="error_passwords_match">Passwords don\'t match</string>
@@ -31,7 +29,6 @@
     <string name="button_discard">Discard</string>
     <string name="button_delete">Delete</string>
     <string name="button_clear">Clear</string>
-    <string name="button_apply">Apply</string>
 
     <!-- Content Descriptions -->
     <string name="content_description_edit">Edit</string>

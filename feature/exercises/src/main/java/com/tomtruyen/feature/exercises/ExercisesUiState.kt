@@ -1,14 +1,11 @@
 package com.tomtruyen.feature.exercises
 
-import com.tomtruyen.data.entities.Category
-import com.tomtruyen.data.entities.Equipment
-import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
-import com.tomtruyen.data.models.ExerciseFilter
-import com.tomtruyen.navigation.Screen
 import androidx.compose.runtime.Immutable
+import com.tomtruyen.data.models.ExerciseFilter
 import com.tomtruyen.data.models.ui.CategoryUiModel
 import com.tomtruyen.data.models.ui.EquipmentUiModel
 import com.tomtruyen.data.models.ui.ExerciseUiModel
+import com.tomtruyen.navigation.Screen
 
 @Immutable
 data class ExercisesUiState(

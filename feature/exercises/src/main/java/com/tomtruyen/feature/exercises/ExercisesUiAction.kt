@@ -1,9 +1,6 @@
 package com.tomtruyen.feature.exercises
 
 import com.tomtruyen.core.common.models.FilterOption
-import com.tomtruyen.data.entities.Category
-import com.tomtruyen.data.entities.Equipment
-import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.models.ui.CategoryUiModel
 import com.tomtruyen.data.models.ui.EquipmentUiModel
 import com.tomtruyen.data.models.ui.ExerciseUiModel

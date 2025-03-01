@@ -1,6 +1,5 @@
 package com.tomtruyen.feature.workouts.manage
 
-import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 
 sealed class ManageWorkoutUiAction {

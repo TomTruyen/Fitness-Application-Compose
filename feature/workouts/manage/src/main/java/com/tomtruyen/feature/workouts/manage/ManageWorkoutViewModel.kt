@@ -1,12 +1,7 @@
 package com.tomtruyen.feature.workouts.manage
 
-import android.util.Log
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.utils.StopwatchTimer
-import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
-import com.tomtruyen.data.entities.WorkoutExercise
-import com.tomtruyen.data.entities.WorkoutExerciseSet
-import com.tomtruyen.data.entities.WorkoutExerciseWithSets
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 import com.tomtruyen.data.models.ui.copyWithAddSet
@@ -24,7 +19,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 class ManageWorkoutViewModel(
     private val id: String?,

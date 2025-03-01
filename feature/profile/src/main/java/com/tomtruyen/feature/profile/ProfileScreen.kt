@@ -42,7 +42,6 @@ import com.tomtruyen.core.ui.dialogs.UnitAlertDialog
 import com.tomtruyen.core.ui.listitems.ListItem
 import com.tomtruyen.core.ui.listitems.SwitchListItem
 import com.tomtruyen.core.ui.toolbars.Toolbar
-import com.tomtruyen.data.entities.Settings
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel

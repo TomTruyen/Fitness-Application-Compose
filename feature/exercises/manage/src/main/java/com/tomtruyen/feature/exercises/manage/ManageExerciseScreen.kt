@@ -33,8 +33,6 @@ import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.validation.isValid
-import com.tomtruyen.data.entities.Category
-import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.models.ui.CategoryUiModel
 import com.tomtruyen.data.models.ui.EquipmentUiModel
 import com.tomtruyen.feature.exercises.create.R

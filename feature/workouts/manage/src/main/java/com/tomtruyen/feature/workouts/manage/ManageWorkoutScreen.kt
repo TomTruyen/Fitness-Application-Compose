@@ -2,7 +2,6 @@ package com.tomtruyen.feature.workouts.manage
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,14 +10,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Sync
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -28,15 +24,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.BottomSheetItem
@@ -48,18 +40,13 @@ import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.ui.toolbars.ToolbarTitle
 import com.tomtruyen.data.models.ui.ExerciseUiModel
-import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 import com.tomtruyen.feature.workouts.manage.components.ExerciseList
-import com.tomtruyen.feature.workouts.manage.components.WorkoutExerciseHeader
-import com.tomtruyen.feature.workouts.manage.components.WorkoutExerciseSetTable
 import com.tomtruyen.feature.workouts.manage.components.WorkoutStatistics
 import com.tomtruyen.feature.workouts.manage.components.WorkoutTimer
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 import com.tomtruyen.navigation.NavArguments
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
-import sh.calvin.reorderable.ReorderableItem
-import sh.calvin.reorderable.rememberReorderableLazyListState
 import java.util.concurrent.TimeUnit
 import com.tomtruyen.core.common.R as CommonR
 

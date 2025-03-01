@@ -1,6 +1,5 @@
 package com.tomtruyen.feature.exercises
 
-import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 
 sealed class ExercisesUiEvent {

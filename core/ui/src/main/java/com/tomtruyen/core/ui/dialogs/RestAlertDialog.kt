@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.intl.Locale
 import com.tomtruyen.core.common.models.RestAlertType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Buttons
@@ -124,7 +125,7 @@ fun RestTimeLayout(
             val minutes = TimeUnit.SECONDS.toMinutes(it.toLong())
             val seconds = it - TimeUnit.MINUTES.toSeconds(minutes)
 
-            String.format("%d:%02d", minutes, seconds)
+            String.format(Locale.current.platformLocale, "%d:%02d", minutes, seconds)
         },
         list = (0..300 step 5).toList() // 0 to 300 seconds, step of 5 per
     )

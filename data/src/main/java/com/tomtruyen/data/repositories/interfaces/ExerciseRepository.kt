@@ -1,7 +1,6 @@
 package com.tomtruyen.data.repositories.interfaces
 
 import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.models.ExerciseFilter
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.repositories.BaseRepository
