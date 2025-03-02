@@ -116,7 +116,7 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
         workout: WorkoutUiModel,
         duration: Long
     ): String {
-        val sets = mutableListOf<WorkoutHistoryExerciseSet>()
+        val sets = mutableSetOf<WorkoutHistoryExerciseSet>()
 
         val workoutHistory = workout.toWorkoutHistoryEntity(userId, duration)
 
@@ -132,7 +132,7 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
             )
 
             workoutHistoryExercise
-        }
+        }.toSet()
 
         supabase.from(WorkoutHistory.TABLE_NAME).upsert(workoutHistory)
         supabase.from(WorkoutHistoryExercise.TABLE_NAME).upsert(exercises)
