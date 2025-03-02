@@ -166,7 +166,8 @@ CREATE TABLE IF NOT EXISTS "public"."WorkoutHistory" (
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "name" character varying NOT NULL,
     "unit" character varying DEFAULT 'kg'::character varying,
-    "user_id" "uuid" NOT NULL
+    "user_id" "uuid" NOT NULL,
+    "duration" bigint NOT NULL
 );
 
 
