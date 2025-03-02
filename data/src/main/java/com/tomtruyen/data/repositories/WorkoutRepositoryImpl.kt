@@ -6,7 +6,6 @@ import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.entities.WorkoutExercise
 import com.tomtruyen.data.entities.WorkoutExerciseSet
-import com.tomtruyen.data.extensions.transaction
 import com.tomtruyen.data.models.network.WorkoutNetworkModel
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
@@ -103,16 +102,6 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
     override suspend fun saveWorkout(
         userId: String,
         workout: WorkoutUiModel,
-    ) = supabase.transaction(
-        onRollback = {
-            supabase.from(Workout.TABLE_NAME).delete {
-                filter {
-                    Workout::id eq workout.id
-                }
-            }
-
-            dao.deleteById(workout.id)
-        }
     ) {
         val workoutEntity = workout.toEntity(userId)
 
