@@ -18,7 +18,7 @@ abstract class ExerciseDao {
     abstract suspend fun save(exercise: Exercise): Long
 
     @Upsert
-    abstract suspend fun saveAll(exercises: Set<Exercise>): List<Long>
+    abstract suspend fun saveAll(exercises: List<Exercise>): List<Long>
 
     @Query("DELETE FROM ${Exercise.TABLE_NAME}")
     abstract suspend fun deleteAll(): Int

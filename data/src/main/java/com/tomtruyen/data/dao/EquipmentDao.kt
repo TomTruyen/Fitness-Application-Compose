@@ -12,5 +12,5 @@ interface EquipmentDao {
     fun findEquipment(): Flow<List<Equipment>>
 
     @Upsert
-    suspend fun saveAll(equipment: Set<Equipment>): List<Long>
+    suspend fun saveAll(equipment: List<Equipment>): List<Long>
 }

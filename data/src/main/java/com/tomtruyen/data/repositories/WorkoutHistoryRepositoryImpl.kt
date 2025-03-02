@@ -99,11 +99,11 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
                         dao.saveAll(histories)
 
                         // Add Referenced Items (Relations)
-                        categoryDao.saveAll(categories)
-                        equipmentDao.saveAll(equipment)
-                        exerciseDao.saveAll(exercises)
-                        workoutHistoryExerciseDao.saveAll(workoutHistoryExercises)
-                        workoutHistoryExerciseSetDao.saveAll(sets)
+                        categoryDao.saveAll(categories.toList())
+                        equipmentDao.saveAll(equipment.toList())
+                        exerciseDao.saveAll(exercises.toList())
+                        workoutHistoryExerciseDao.saveAll(workoutHistoryExercises.toList())
+                        workoutHistoryExerciseSetDao.saveAll(sets.toList())
                     }
                 }
 
@@ -116,7 +116,7 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
         workout: WorkoutUiModel,
         duration: Long
     ): String {
-        val sets = mutableSetOf<WorkoutHistoryExerciseSet>()
+        val sets = mutableListOf<WorkoutHistoryExerciseSet>()
 
         val workoutHistory = workout.toWorkoutHistoryEntity(userId, duration)
 
@@ -132,7 +132,7 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
             )
 
             workoutHistoryExercise
-        }.toSet()
+        }
 
         supabase.from(WorkoutHistory.TABLE_NAME).upsert(workoutHistory)
         supabase.from(WorkoutHistoryExercise.TABLE_NAME).upsert(exercises)

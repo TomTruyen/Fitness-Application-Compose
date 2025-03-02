@@ -12,5 +12,5 @@ interface CategoryDao {
     fun findCategories(): Flow<List<Category>>
 
     @Upsert
-    suspend fun saveAll(categories: Set<Category>): List<Long>
+    suspend fun saveAll(categories: List<Category>): List<Long>
 }
