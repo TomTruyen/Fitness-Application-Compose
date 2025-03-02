@@ -16,7 +16,7 @@ data class WorkoutHistoryUiModel(
     val id: String = UUID.randomUUID().toString(),
     val name: String = "",
     val unit: UnitType = UnitType.KG,
-    val duration: Int = 0,
+    val duration: Long = 0L,
     val createdAt: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     val exercises: List<WorkoutHistoryExerciseUiModel> = emptyList()
 ) {
