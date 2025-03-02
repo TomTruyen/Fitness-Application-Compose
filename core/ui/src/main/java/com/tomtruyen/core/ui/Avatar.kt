@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -26,10 +27,11 @@ fun Avatar(
     size: Dp = 40.dp,
     backgroundColor: Color = MaterialTheme.colorScheme.surface
 ) {
+    val context = LocalContext.current
     val imageLoader: ImageLoader = koinInject()
 
     AsyncImage(
-        model = imageLoader.load(imageUrl),
+        model = imageLoader.load(context, imageUrl),
         fallback = painterResource(R.drawable.ic_fallback),
         contentDescription = contentDescription,
         contentScale = ContentScale.Fit,

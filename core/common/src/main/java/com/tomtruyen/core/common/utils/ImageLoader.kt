@@ -1,5 +1,6 @@
 package com.tomtruyen.core.common.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import io.github.jan.supabase.storage.Storage
 
@@ -14,8 +15,10 @@ class ImageLoader(
         fromLocal(context, url) ?: storage.from(BUCKET_ID).publicUrl(it)
     }
 
+    @SuppressLint("DiscouragedApi")
     private fun fromLocal(context: Context, url: String): String? {
-        val resourceId = context.resources.getIdentifier(url, "drawable", context.packageName)
+        val resourceName = url.substringBeforeLast(".")
+        val resourceId = context.resources.getIdentifier(resourceName, "drawable", context.packageName)
 
         return if(resourceId != 0) {
             "android.resource://${context.packageName}/$resourceId"

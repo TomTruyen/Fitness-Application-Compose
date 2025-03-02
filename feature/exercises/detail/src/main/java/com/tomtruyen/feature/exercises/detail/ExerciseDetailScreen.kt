@@ -91,6 +91,7 @@ private fun ExerciseDetailScreenLayout(
     imageLoader: ImageLoader,
     onAction: (ExerciseDetailUiAction) -> Unit
 ) {
+    val context = LocalContext.current
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -137,7 +138,8 @@ private fun ExerciseDetailScreenLayout(
                     item {
                         AsyncImage(
                             model = imageLoader.load(
-                                state.exercise.imageDetailUrl ?: state.exercise.imageUrl
+                                context = context,
+                                url = state.exercise.imageDetailUrl ?: state.exercise.imageUrl
                             ),
                             contentDescription = state.exercise.name,
                             contentScale = ContentScale.Fit,
