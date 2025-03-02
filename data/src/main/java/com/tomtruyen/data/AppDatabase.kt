@@ -12,6 +12,8 @@ import com.tomtruyen.data.dao.WorkoutDao
 import com.tomtruyen.data.dao.WorkoutExerciseDao
 import com.tomtruyen.data.dao.WorkoutExerciseSetDao
 import com.tomtruyen.data.dao.WorkoutHistoryDao
+import com.tomtruyen.data.dao.WorkoutHistoryExerciseDao
+import com.tomtruyen.data.dao.WorkoutHistoryExerciseSetDao
 import com.tomtruyen.data.entities.CacheTTL
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
@@ -21,18 +23,22 @@ import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.entities.WorkoutExercise
 import com.tomtruyen.data.entities.WorkoutExerciseSet
 import com.tomtruyen.data.entities.WorkoutHistory
+import com.tomtruyen.data.entities.WorkoutHistoryExercise
+import com.tomtruyen.data.entities.WorkoutHistoryExerciseSet
 
 @Database(
     entities = [
         Exercise::class,
-        Settings::class,
+        Equipment::class,
+        Category::class,
         Workout::class,
         WorkoutExercise::class,
         WorkoutExerciseSet::class,
         WorkoutHistory::class,
+        WorkoutHistoryExercise::class,
+        WorkoutHistoryExerciseSet::class,
+        Settings::class,
         CacheTTL::class,
-        Equipment::class,
-        Category::class
     ],
     version = 1,
     exportSchema = false
@@ -40,12 +46,14 @@ import com.tomtruyen.data.entities.WorkoutHistory
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun exerciseDao(): ExerciseDao
-    abstract fun settingsDao(): SettingsDao
+    abstract fun equipmentDao(): EquipmentDao
+    abstract fun categoryDao(): CategoryDao
     abstract fun workoutDao(): WorkoutDao
     abstract fun workoutExerciseDao(): WorkoutExerciseDao
     abstract fun workoutExerciseSetDao(): WorkoutExerciseSetDao
     abstract fun workoutHistoryDao(): WorkoutHistoryDao
+    abstract fun workoutHistoryExerciseDao(): WorkoutHistoryExerciseDao
+    abstract fun workoutHistoryExerciseSetDao(): WorkoutHistoryExerciseSetDao
+    abstract fun settingsDao(): SettingsDao
     abstract fun cacheTTLDao(): CacheTTLDao
-    abstract fun equipmentDao(): EquipmentDao
-    abstract fun categoryDao(): CategoryDao
 }

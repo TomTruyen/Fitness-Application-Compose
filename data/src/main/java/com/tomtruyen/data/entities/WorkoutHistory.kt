@@ -2,73 +2,54 @@ package com.tomtruyen.data.entities
 
 import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.Relation
-import com.tomtruyen.core.common.utils.TimeUtils
+import com.tomtruyen.core.common.models.UnitType
+import com.tomtruyen.core.common.serializer.SupabaseDateTimeSerializer
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import java.util.UUID
-import java.util.concurrent.TimeUnit
 
-// TODO: At SerialName + KEY in companion object
-// TODO: Update OBject to match the format in Supabase
+@Serializable
 @Entity(
-    tableName = WorkoutHistory.TABLE_NAME,
-    foreignKeys = [
-        ForeignKey(
-            entity = Workout::class,
-            parentColumns = ["id"],
-            childColumns = ["workoutId"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ],
-    indices = [
-        androidx.room.Index(value = ["workoutId"])
-    ]
+    tableName = WorkoutHistory.TABLE_NAME
 )
 data class WorkoutHistory(
-    @PrimaryKey override val id: String = UUID.randomUUID().toString(),
-    val workoutId: String? = null,
-    val duration: Long = 0L,
-    val createdAt: Long = System.currentTimeMillis(),
-) : BaseEntity {
-    val formattedDuration
-        get() = TimeUtils.formatSeconds(
-            seconds = duration,
-            alwaysShow = listOf(TimeUnit.HOURS, TimeUnit.MINUTES, TimeUnit.SECONDS),
-        )
-
+    @PrimaryKey
+    @SerialName(KEY_ID)
+    override val id: String = UUID.randomUUID().toString(),
+    @SerialName(KEY_NAME)
+    val name: String = "",
+    @SerialName(KEY_UNIT)
+    val unit: String = UnitType.KG.value, // KG or LBS
+    @SerialName(KEY_CREATED_AT)
+    @Serializable(with = SupabaseDateTimeSerializer::class)
+    val createdAt: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+    @SerialName(KEY_USER_ID)
+    val userId: String? = null,
+): BaseEntity {
     companion object {
-        const val TABLE_NAME = "workout_history"
+        const val TABLE_NAME = "WorkoutHistory"
+
+        const val KEY_ID = "id"
+        const val KEY_NAME = "name"
+        const val KEY_UNIT = "unit"
+        const val KEY_CREATED_AT = "created_at"
+        const val KEY_USER_ID = "user_id"
     }
 }
 
-data class WorkoutHistoryWithWorkout(
+data class WorkoutHistoryWithExercises(
     @Embedded
-    val history: WorkoutHistory,
+    val workoutHistory: WorkoutHistory = WorkoutHistory(),
     @Relation(
-        parentColumn = "workoutId",
-        entityColumn = "id",
-        entity = Workout::class
+        parentColumn = "id",
+        entityColumn = "workoutHistoryId",
+        entity = WorkoutHistoryExercise::class
     )
-    val workoutWithExercises: WorkoutWithExercises
-) {
-    val totalWeight
-        get(): Double {
-            val weight = workoutWithExercises.exercises.sumOf {
-                it.sets.sumOf setSumOf@{ set ->
-                    val reps = set.reps ?: 0
-                    val weight = set.weight ?: 0.0
-                    reps * weight
-                }
-            }
-
-            return weight
-        }
-
-    val weightUnit get() = workoutWithExercises.workout.unit
-
-    val totalTime
-        get() = workoutWithExercises.exercises.sumOf {
-            it.sets.sumOf { set -> set.time ?: 0 }
-        }
-}
+    val exercises: List<WorkoutHistoryExercise> = emptyList()
+)
