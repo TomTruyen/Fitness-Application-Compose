@@ -12,10 +12,11 @@ import java.util.concurrent.atomic.AtomicBoolean
 class StopwatchTimer(
     initialTimeInSeconds: Long = 0L,
 ) {
-    private var scope = CoroutineScope(Dispatchers.IO)
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     private val isActive = AtomicBoolean(false)
 
+    // Time in Seconds
     private val _time = MutableStateFlow(initialTimeInSeconds)
     val time = _time.asStateFlow()
 

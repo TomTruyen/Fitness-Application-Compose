@@ -26,6 +26,8 @@ data class WorkoutHistory(
     val name: String = "",
     @SerialName(KEY_UNIT)
     val unit: String = UnitType.KG.value, // KG or LBS
+    @SerialName(KEY_DURATION)
+    val duration: Long = 0L,
     @SerialName(KEY_CREATED_AT)
     @Serializable(with = SupabaseDateTimeSerializer::class)
     val createdAt: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
@@ -38,6 +40,7 @@ data class WorkoutHistory(
         const val KEY_ID = "id"
         const val KEY_NAME = "name"
         const val KEY_UNIT = "unit"
+        const val KEY_DURATION = "duration"
         const val KEY_CREATED_AT = "created_at"
         const val KEY_USER_ID = "user_id"
     }

@@ -98,7 +98,8 @@ class ManageWorkoutViewModel(
 
         val workoutHistoryId = historyRepository.saveWorkoutHistory(
             userId = userId,
-            workout = uiState.value.workout
+            workout = uiState.value.workout,
+            duration = timer.time.value
         )
 
         triggerEvent(ManageWorkoutUiEvent.NavigateToHistoryDetail(workoutHistoryId))

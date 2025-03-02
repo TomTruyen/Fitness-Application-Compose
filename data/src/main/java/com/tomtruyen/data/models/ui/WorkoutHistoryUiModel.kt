@@ -16,6 +16,7 @@ data class WorkoutHistoryUiModel(
     val id: String = UUID.randomUUID().toString(),
     val name: String = "",
     val unit: UnitType = UnitType.KG,
+    val duration: Int = 0,
     val createdAt: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     val exercises: List<WorkoutHistoryExerciseUiModel> = emptyList()
 ) {
@@ -24,6 +25,7 @@ data class WorkoutHistoryUiModel(
             id = entity.workoutHistory.id,
             name = entity.workoutHistory.name,
             unit = UnitType.fromValue(entity.workoutHistory.unit),
+            duration = entity.workoutHistory.duration,
             createdAt = entity.workoutHistory.createdAt,
             exercises = entity.exercises.map(WorkoutHistoryExerciseUiModel::fromEntity).sortedBy { it.sortOrder }
         )

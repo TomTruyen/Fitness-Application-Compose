@@ -10,6 +10,7 @@ abstract class WorkoutHistoryRepository : BaseRepository() {
 
     abstract suspend fun saveWorkoutHistory(
         userId: String,
-        workout: WorkoutUiModel
+        workout: WorkoutUiModel,
+        duration: Long,
     ): String
 }

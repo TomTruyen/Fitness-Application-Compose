@@ -24,7 +24,7 @@ data class WorkoutUiModel(
 
     private val totalWeightCompleted: Double
         get() = weightExercises.sumOf { exercise ->
-            exercise.sets.sumOf { set ->
+            exercise.sets.filter(WorkoutExerciseSetUiModel::completed).sumOf { set ->
                 val reps = set.reps ?: 0
                 val weight = set.weight ?: 0.0
                 reps * weight
@@ -33,14 +33,14 @@ data class WorkoutUiModel(
 
     val repsCountCompleted: Int
         get() = weightExercises.sumOf { exercise ->
-            exercise.sets.sumOf { set ->
+            exercise.sets.filter(WorkoutExerciseSetUiModel::completed).sumOf { set ->
                 set.reps ?: 0
             }
         }
 
     val setsCountCompleted: Int
         get() = weightExercises.sumOf { exercise ->
-            exercise.sets.size
+            exercise.sets.filter(WorkoutExerciseSetUiModel::completed).size
         }
 
     val totalVolumeCompleted: Double
@@ -53,10 +53,11 @@ data class WorkoutUiModel(
         userId = userId,
     )
 
-    fun toWorkoutHistoryEntity(userId: String) = WorkoutHistory(
+    fun toWorkoutHistoryEntity(userId: String, duration: Long) = WorkoutHistory(
         name = name,
         unit = unit.value,
         userId = userId,
+        duration = duration
     )
 
     companion object {

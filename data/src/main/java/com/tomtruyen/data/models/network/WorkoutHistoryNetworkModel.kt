@@ -15,6 +15,8 @@ data class WorkoutHistoryNetworkModel(
     val name: String,
     @SerialName(WorkoutHistory.KEY_UNIT)
     val unit: String,
+    @SerialName(WorkoutHistory.KEY_DURATION)
+    val duration: Int,
     @SerialName(WorkoutHistory.KEY_CREATED_AT)
     @Serializable(with = SupabaseDateTimeSerializer::class)
     val createdAt: LocalDateTime,
