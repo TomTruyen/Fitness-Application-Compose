@@ -34,6 +34,7 @@ import com.tomtruyen.feature.profile.ProfileScreen
 import com.tomtruyen.feature.workouts.WorkoutsScreen
 import com.tomtruyen.feature.workouts.detail.WorkoutDetailScreen
 import com.tomtruyen.feature.workouts.history.WorkoutHistoryScreen
+import com.tomtruyen.feature.workouts.history.detail.WorkoutHistoryDetailScreen
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutScreen
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel
 import com.tomtruyen.fitoryx.navigation.MainBottomNavigation
@@ -64,7 +65,7 @@ class MainActivity : ComponentActivity() {
                     val isRootDestination = listOf(
                         Screen.Workout.Overview,
                         Screen.Exercise.Overview(),
-                        Screen.Workout.HistoryOverview,
+                        Screen.History.Overview,
                         Screen.Profile
                     ).any { backStackEntry?.destination?.hasRoute(it::class) ?: false }
 
@@ -147,12 +148,6 @@ class MainActivity : ComponentActivity() {
                                     viewModel = viewModel
                                 )
                             }
-
-                            composable<Screen.Workout.HistoryOverview> {
-                                WorkoutHistoryScreen(
-                                    navController
-                                )
-                            }
                         }
 
                         navigation<Screen.Exercise.Graph>(
@@ -202,6 +197,23 @@ class MainActivity : ComponentActivity() {
                                 ExercisesFilterScreen(
                                     navController = navController,
                                     viewModel = viewModel
+                                )
+                            }
+                        }
+
+                        navigation<Screen.History.Graph>(
+                            startDestination = Screen.History.Overview
+                        ) {
+                            composable<Screen.History.Overview> {
+                                WorkoutHistoryScreen(navController)
+                            }
+
+                            composable<Screen.History.Detail> { backStackEntry ->
+                                val args = backStackEntry.toRoute<Screen.History.Detail>()
+
+                                WorkoutHistoryDetailScreen(
+                                    id = args.id,
+                                    navController = navController
                                 )
                             }
                         }

@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.tomtruyen.feature.workouts.history"
+    namespace = "com.tomtruyen.feature.workouts.history.detail"
 }
 
 dependencies {

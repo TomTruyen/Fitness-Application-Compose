@@ -119,14 +119,11 @@ fun ManageWorkoutScreen(
                 )
 
                 is ManageWorkoutUiEvent.NavigateToDetail -> navController.navigate(
-                    Screen.Workout.Detail(
-                        event.id
-                    )
+                    Screen.Workout.Detail(event.id)
                 )
 
-                // TODO: Update this to actually go the a HistoryDetailScreen so that we can display it to the user
                 is ManageWorkoutUiEvent.NavigateToHistoryDetail -> navController.navigate(
-                    Screen.Workout.HistoryOverview
+                    Screen.History.Detail(event.workoutHistoryId)
                 )
 
                 is ManageWorkoutUiEvent.ScrollToExercise -> {

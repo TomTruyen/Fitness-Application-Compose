@@ -1,9 +1,7 @@
 package com.tomtruyen.feature.workouts.history
 
-import android.util.Log
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.data.entities.WorkoutHistory
-import com.tomtruyen.data.models.ui.WorkoutHistoryUiModel
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
 import kotlinx.coroutines.flow.collectLatest

@@ -8,7 +8,6 @@ androidx-core-ktx = "1.15.0"
 androidx-credentials = "1.5.0-rc01"
 androidx-lifecycle-runtime-ktx = "2.8.7"
 androidx-navigation = "2.8.8"
-androidx-paging = "3.3.6"
 androidx-room = "2.6.1"
 appcompat = "1.7.0"
 coil-kt-compose = "2.7.0"
@@ -49,8 +48,6 @@ androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junit-vers
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle-runtime-ktx" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-runtime-ktx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
-androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "androidx-paging" }
-androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "androidx-paging" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx-room" }
 coil-kt-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-kt-compose" }

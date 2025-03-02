@@ -91,24 +91,27 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":navigation"))
 
+    // Auth
     implementation(project(":feature:auth:login"))
     implementation(project(":feature:auth:register"))
 
+    // Profile
     implementation(project(":feature:profile"))
 
+    // Exercise
     implementation(project(":feature:exercises"))
     implementation(project(":feature:exercises:manage"))
     implementation(project(":feature:exercises:detail"))
     implementation(project(":feature:exercises:filter"))
 
+    // Workout
     implementation(project(":feature:workouts"))
     implementation(project(":feature:workouts:manage"))
     implementation(project(":feature:workouts:detail"))
-    implementation(project(":feature:workouts:history"))
 
-    // Paging 3
-    implementation(libs.androidx.paging.runtime)
-    implementation(libs.androidx.paging.compose)
+    // History
+    implementation(project(":feature:workouts:history"))
+    implementation(project(":feature:workouts:history:detail"))
 
     // Debug Only
     debugImplementation(libs.squareup.leakcanary)

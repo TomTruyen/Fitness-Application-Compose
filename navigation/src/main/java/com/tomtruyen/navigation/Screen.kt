@@ -54,8 +54,16 @@ sealed interface Screen {
 
         @Serializable
         data class Manage(val id: String? = null, val execute: Boolean = false) : Workout
+    }
+
+    sealed interface History: Screen {
+        @Serializable
+        data object Graph: History
 
         @Serializable
-        data object HistoryOverview : Workout
+        data object Overview: History
+
+        @Serializable
+        data class Detail(val id: String): History
     }
 }

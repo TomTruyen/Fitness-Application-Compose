@@ -25,7 +25,7 @@ object BottomNavigation {
         BottomNavigationItem(
             label = R.string.history,
             icon = Icons.Filled.History,
-            screen = Screen.Workout.HistoryOverview
+            screen = Screen.History.Overview
         ),
         BottomNavigationItem(
             label = R.string.profile,

@@ -16,6 +16,7 @@ import com.tomtruyen.feature.profile.ProfileViewModel
 import com.tomtruyen.feature.workouts.WorkoutsViewModel
 import com.tomtruyen.feature.workouts.detail.WorkoutDetailViewModel
 import com.tomtruyen.feature.workouts.history.WorkoutHistoryViewModel
+import com.tomtruyen.feature.workouts.history.detail.WorkoutHistoryDetailViewModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel
 import com.tomtruyen.navigation.Screen
 import org.koin.core.module.dsl.viewModel
@@ -79,4 +80,11 @@ val viewModelModule = module {
     }
 
     viewModelOf(::WorkoutHistoryViewModel)
+
+    viewModel { (id: String) ->
+        WorkoutHistoryDetailViewModel(
+            id = id,
+            historyRepository = get<WorkoutHistoryRepository>()
+        )
+    }
 }
