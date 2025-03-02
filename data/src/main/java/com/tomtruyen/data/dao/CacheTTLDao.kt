@@ -12,4 +12,7 @@ interface CacheTTLDao {
 
     @Query("SELECT * FROM ${CacheTTL.TABLE_NAME} WHERE id = :id")
     suspend fun findById(id: String?): CacheTTL?
+
+    @Query("DELETE FROM ${CacheTTL.TABLE_NAME} WHERE id LIKE :startsWith || '%'")
+    suspend fun deleteStartsWith(startsWith: String): Int
 }

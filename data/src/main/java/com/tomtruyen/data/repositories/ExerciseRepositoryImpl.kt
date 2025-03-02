@@ -32,7 +32,7 @@ class ExerciseRepositoryImpl: ExerciseRepository() {
         exercise?.let(ExerciseUiModel::fromEntity)
     }
 
-    override suspend fun getExercises(userId: String?, refresh: Boolean) =
+    override suspend fun getExercises(userId: String?, refresh: Boolean) {
         fetch(refresh = refresh) {
             supabase.from(Exercise.TABLE_NAME)
                 .select(
@@ -75,6 +75,7 @@ class ExerciseRepositoryImpl: ExerciseRepository() {
                     }
                 }
         }
+    }
 
     override suspend fun saveExercise(
         userId: String,

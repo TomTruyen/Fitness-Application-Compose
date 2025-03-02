@@ -36,11 +36,12 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
 
     override suspend fun findWorkoutById(id: String) = dao.findById(id)?.let(WorkoutUiModel::fromEntity)
 
-    override suspend fun getWorkouts(userId: String, refresh: Boolean) = fetch(refresh) {
-        supabase.from(Workout.TABLE_NAME)
-            .select(
-                columns = Columns.raw(
-                    """
+    override suspend fun getWorkouts(userId: String, refresh: Boolean) {
+        fetch(refresh) {
+            supabase.from(Workout.TABLE_NAME)
+                .select(
+                    columns = Columns.raw(
+                        """
                         *,
                         ${WorkoutExercise.TABLE_NAME}(
                             *, 
@@ -53,50 +54,51 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
                         )
                         
                     """.trimIndent()
-                )
-            ) {
-                filter {
-                    Workout::userId eq userId
+                    )
+                ) {
+                    filter {
+                        Workout::userId eq userId
+                    }
                 }
-            }
-            .decodeList<WorkoutNetworkModel>()
-            .let { response ->
-                // Using MutableList instead of mapping for each one to reduce amount of loops
-                val categories = mutableSetOf<Category>()
-                val equipment = mutableSetOf<Equipment>()
-                val exercises = mutableSetOf<Exercise>()
-                val workoutExercises = mutableSetOf<WorkoutExercise>()
-                val sets = mutableSetOf<WorkoutExerciseSet>()
+                .decodeList<WorkoutNetworkModel>()
+                .let { response ->
+                    // Using MutableList instead of mapping for each one to reduce amount of loops
+                    val categories = mutableSetOf<Category>()
+                    val equipment = mutableSetOf<Equipment>()
+                    val exercises = mutableSetOf<Exercise>()
+                    val workoutExercises = mutableSetOf<WorkoutExercise>()
+                    val sets = mutableSetOf<WorkoutExerciseSet>()
 
-                val workouts = response.map { workout ->
-                    workout.exercises.forEach { workoutExercise ->
-                        workoutExercise.exercise.category?.let { categories.add(it) }
-                        workoutExercise.exercise.equipment?.let { equipment.add(it) }
+                    val workouts = response.map { workout ->
+                        workout.exercises.forEach { workoutExercise ->
+                            workoutExercise.exercise.category?.let { categories.add(it) }
+                            workoutExercise.exercise.equipment?.let { equipment.add(it) }
 
-                        exercises.add(workoutExercise.exercise.toEntity())
-                        sets.addAll(workoutExercise.sets)
+                            exercises.add(workoutExercise.exercise.toEntity())
+                            sets.addAll(workoutExercise.sets)
 
-                        workoutExercises.add(workoutExercise.toEntity())
+                            workoutExercises.add(workoutExercise.toEntity())
+                        }
+
+                        workout.toEntity()
                     }
 
-                    workout.toEntity()
+                    cacheTransaction {
+                        // Clear Table
+                        dao.deleteAll()
+
+                        // Add the Entity
+                        dao.saveAll(workouts)
+
+                        // Add Referenced Items (Relations)
+                        categoryDao.saveAll(categories.toList())
+                        equipmentDao.saveAll(equipment.toList())
+                        exerciseDao.saveAll(exercises.toList())
+                        workoutExerciseDao.saveAll(workoutExercises.toList())
+                        workoutExerciseSetDao.saveAll(sets.toList())
+                    }
                 }
-
-                cacheTransaction {
-                    // Clear Table
-                    dao.deleteAll()
-
-                    // Add the Entity
-                    dao.saveAll(workouts)
-
-                    // Add Referenced Items (Relations)
-                    categoryDao.saveAll(categories.toList())
-                    equipmentDao.saveAll(equipment.toList())
-                    exerciseDao.saveAll(exercises.toList())
-                    workoutExerciseDao.saveAll(workoutExercises.toList())
-                    workoutExerciseSetDao.saveAll(sets.toList())
-                }
-            }
+        }
     }
 
     override suspend fun saveWorkout(

@@ -12,6 +12,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import java.util.UUID
 
 @Serializable
@@ -33,7 +34,8 @@ data class WorkoutHistory(
     val createdAt: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     @SerialName(KEY_USER_ID)
     val userId: String? = null,
-    val page: Int = 0,
+    @Transient
+    val page: Int = INITIAL_PAGE,
 ): BaseEntity {
     companion object {
         const val TABLE_NAME = "WorkoutHistory"
@@ -44,6 +46,9 @@ data class WorkoutHistory(
         const val KEY_DURATION = "duration"
         const val KEY_CREATED_AT = "created_at"
         const val KEY_USER_ID = "user_id"
+
+        const val INITIAL_PAGE = 1
+        const val PAGE_SIZE = 10
     }
 }
 

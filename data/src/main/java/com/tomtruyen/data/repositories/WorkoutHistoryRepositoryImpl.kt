@@ -8,11 +8,14 @@ import com.tomtruyen.data.entities.WorkoutHistoryExercise
 import com.tomtruyen.data.entities.WorkoutHistoryExerciseSet
 import com.tomtruyen.data.models.network.WorkoutHistoryNetworkModel
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
+import com.tomtruyen.data.models.ui.WorkoutHistoryUiModel
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.mapLatest
 
 class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
     private val dao = database.workoutHistoryDao()
@@ -22,19 +25,23 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
     private val categoryDao = database.categoryDao()
     private val equipmentDao = database.equipmentDao()
 
-    // Page should be > 0
-    override suspend fun getWorkoutHistoryPaginated(userId: String, page: Int, refresh: Boolean) {
-        val pageCacheKey = "${cacheKey}_${page}"
-        val pageSize = 10
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun findHistoriesAsync() = dao.findHistoriesAsync().mapLatest { histories ->
+        histories.map(WorkoutHistoryUiModel::fromEntity)
+    }
 
-        fetch(
+    // Page should be > 0
+    override suspend fun getWorkoutHistoryPaginated(userId: String, page: Int, refresh: Boolean): Boolean {
+        val pageCacheKey = "${cacheKey}_${page}"
+
+        return fetch(
             refresh = refresh,
             pageCacheKey = pageCacheKey
         ) {
-            val from = (page - 1) * pageSize
-            val to = from + pageSize - 1
+            val from = (page - 1) * WorkoutHistory.PAGE_SIZE
+            val to = from + WorkoutHistory.PAGE_SIZE - 1
 
-            supabase.from(WorkoutHistory.TABLE_NAME)
+            return@fetch supabase.from(WorkoutHistory.TABLE_NAME)
                 .select(
                     columns = Columns.raw(
                         """
@@ -68,8 +75,6 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
                 }
                 .decodeList<WorkoutHistoryNetworkModel>()
                 .let { response ->
-                    // TODO: Filter out duplicates before saving? Do the same for WorkoutRepository
-
                     // Using MutableList instead of mapping for each one to reduce amount of loops
                     val categories = mutableSetOf<Category>()
                     val equipment = mutableSetOf<Equipment>()
@@ -92,8 +97,11 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
                     }
 
                     cacheTransaction(pageCacheKey) {
-                        // Clear Table
-                        dao.deleteAll()
+                        if(refresh || page == 1) {
+                            // Clear Table
+                            dao.deleteAll()
+                            cacheDao.deleteStartsWith(cacheKey)
+                        }
 
                         // Add the Entity
                         dao.saveAll(histories)
@@ -105,10 +113,14 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
                         workoutHistoryExerciseDao.saveAll(workoutHistoryExercises.toList())
                         workoutHistoryExerciseSetDao.saveAll(sets.toList())
                     }
+
+                    // We have reached the end once we can't get a full page when fetching data
+                    // This will stop us from Fetching More data in the UI
+                    val hasReachedEnd = histories.size < WorkoutHistory.PAGE_SIZE
+
+                    return@let hasReachedEnd
                 }
-
-
-        }
+        } ?: true
     }
 
     override suspend fun saveWorkoutHistory(

@@ -10,7 +10,7 @@ import java.util.UUID
 @Immutable
 data class WorkoutHistoryExerciseUiModel(
     val id: String = UUID.randomUUID().toString(),
-    val exerciseId: String = "",
+    val exerciseId: String? = null,
     val name: String = "",
     val imageUrl: String? = null,
     val type: ExerciseType = ExerciseType.WEIGHT,

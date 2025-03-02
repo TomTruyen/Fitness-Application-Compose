@@ -47,7 +47,7 @@ data class WorkoutHistoryExercise(
     @SerialName(KEY_SORT_ORDER)
     val sortOrder: Int = 0,
     @SerialName(KEY_EXERCISE_ID)
-    val exerciseId: String = "",
+    val exerciseId: String? = null,
     @SerialName(KEY_WORKOUT_HISTORY_ID)
     val workoutHistoryId: String = "",
     @SerialName(KEY_CATEGORY)

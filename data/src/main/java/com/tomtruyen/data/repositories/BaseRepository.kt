@@ -22,7 +22,7 @@ abstract class BaseRepository(
     val context: Context by inject(Context::class.java)
 
     internal val database: AppDatabase by inject(AppDatabase::class.java)
-    private val cacheDao: CacheTTLDao by inject(CacheTTLDao::class.java)
+    protected val cacheDao: CacheTTLDao by inject(CacheTTLDao::class.java)
 
     protected val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -39,25 +39,25 @@ abstract class BaseRepository(
         cacheDao.save(CacheTTL(pageCacheKey ?: cacheKey))
     }
 
-    protected suspend fun fetch(
+    protected suspend fun <T> fetch(
         refresh: Boolean = false,
         pageCacheKey: String? = null,
-        block: suspend () -> Unit
-    ) {
+        block: suspend () -> T
+    ): T? {
         val cacheKey = pageCacheKey ?: cacheKey
 
-        Log.i(TAG, "Fetching data for $cacheKey from Firebase... (Checking Cache first)")
+        Log.i(TAG, "Fetching data for $cacheKey from Supabase... (Checking Cache first)")
 
         val isCacheExpired = cacheDao.findById(cacheKey)?.isExpired ?: true
 
         if (isCacheExpired || refresh) {
-            Log.i(TAG, "Cache is expired or refresh is true, fetching $cacheKey from Firebase")
+            Log.i(TAG, "Cache is expired or refresh is true, fetching $cacheKey from Supabase")
 
-            block()
-            return
+            return block()
         }
+        Log.i(TAG, "Cache is not expired. Skipping Supabase fetch for $cacheKey")
 
-        Log.i(TAG, "Cache is not expired. Skipping Firebase fetch for $cacheKey")
+        return null
     }
 
     companion object {

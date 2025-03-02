@@ -28,18 +28,20 @@ class SettingsRepositoryImpl: SettingsRepository() {
         }
     }
 
-    override suspend fun getSettings(userId: String, refresh: Boolean) = fetch(refresh) {
-        supabase.from(Settings.TABLE_NAME)
-            .select {
-                filter {
-                    Settings::userId eq userId
+    override suspend fun getSettings(userId: String, refresh: Boolean) {
+        fetch(refresh) {
+            supabase.from(Settings.TABLE_NAME)
+                .select {
+                    filter {
+                        Settings::userId eq userId
+                    }
                 }
-            }
-            .decodeSingleOrNull<Settings>()
-            ?.let { settings ->
-                cacheTransaction {
-                    dao.save(settings)
+                .decodeSingleOrNull<Settings>()
+                ?.let { settings ->
+                    cacheTransaction {
+                        dao.save(settings)
+                    }
                 }
-            }
+        }
     }
 }

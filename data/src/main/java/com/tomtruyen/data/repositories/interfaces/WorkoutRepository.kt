@@ -10,9 +10,13 @@ abstract class WorkoutRepository : BaseRepository() {
         get() = Workout.TABLE_NAME
 
     abstract fun findWorkoutsAsync(): Flow<List<WorkoutUiModel>>
+
     abstract suspend fun findWorkouts(): List<WorkoutUiModel>
+
     abstract fun findWorkoutByIdAsync(id: String): Flow<WorkoutUiModel?>
+
     abstract suspend fun findWorkoutById(id: String): WorkoutUiModel?
+
     abstract suspend fun getWorkouts(
         userId: String,
         refresh: Boolean,
