@@ -3,6 +3,10 @@ package com.tomtruyen.data.models.ui
 import androidx.compose.runtime.Immutable
 import com.tomtruyen.data.entities.WorkoutExerciseSet
 import com.tomtruyen.data.entities.WorkoutHistoryExerciseSet
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
@@ -14,6 +18,8 @@ data class WorkoutExerciseSetUiModel(
     val weight: Double? = null,
     val time: Int? = null,
     val sortOrder: Int = 0,
+    val exerciseId: String? = null,
+    val createdAt: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     val completed: Boolean = false
 ) {
     fun toEntity(workoutExerciseId: String, index: Int) = WorkoutExerciseSet(
@@ -25,11 +31,13 @@ data class WorkoutExerciseSetUiModel(
         workoutExerciseId = workoutExerciseId
     )
 
-    fun toWorkoutHistorySetEntity(workoutHistoryExerciseId: String, index: Int) = WorkoutHistoryExerciseSet(
+    fun toWorkoutHistorySetEntity(workoutHistoryExerciseId: String, exerciseId: String?, index: Int) = WorkoutHistoryExerciseSet(
         reps = reps,
         weight = weight,
         time = time,
         sortOrder = index,
+        exerciseId = exerciseId,
+        createdAt = createdAt,
         workoutHistoryExerciseId = workoutHistoryExerciseId
     )
 

@@ -145,7 +145,7 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
 
             sets.addAll(
                 exercise.sets.filter(WorkoutExerciseSetUiModel::completed).mapIndexed { setIndex, set ->
-                    set.toWorkoutHistorySetEntity(workoutHistoryExercise.id, setIndex)
+                    set.toWorkoutHistorySetEntity(workoutHistoryExercise.id, exercise.exerciseId, setIndex)
                 }
             )
 

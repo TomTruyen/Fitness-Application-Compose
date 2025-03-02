@@ -3,6 +3,11 @@ package com.tomtruyen.data.entities
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.tomtruyen.core.common.serializer.SupabaseDateTimeSerializer
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -36,6 +41,11 @@ data class WorkoutHistoryExerciseSet(
     val time: Int? = null,
     @SerialName(KEY_SORT_ORDER)
     val sortOrder: Int = 0,
+    @SerialName(KEY_EXERCISE_ID)
+    val exerciseId: String? = null,
+    @SerialName(KEY_CREATED_AT)
+    @Serializable(with = SupabaseDateTimeSerializer::class)
+    val createdAt: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
 ): BaseEntity {
     companion object {
         const val TABLE_NAME = "WorkoutHistoryExerciseSet"
@@ -46,5 +56,7 @@ data class WorkoutHistoryExerciseSet(
         const val KEY_WEIGHT = "weight"
         const val KEY_TIME = "time"
         const val KEY_SORT_ORDER = "sort_order"
+        const val KEY_EXERCISE_ID = "exercise_id"
+        const val KEY_CREATED_AT = "created_at"
     }
 }
