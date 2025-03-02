@@ -54,6 +54,10 @@ fun ConfirmationDialog(
                 onClick = onDismiss,
                 colors = dismissButtonColors
             )
-        }
+        },
+        containerColor = MaterialTheme.colorScheme.background,
+        iconContentColor = MaterialTheme.colorScheme.onBackground,
+        textContentColor = MaterialTheme.colorScheme.onBackground,
+        titleContentColor = MaterialTheme.colorScheme.onBackground
     )
 }
