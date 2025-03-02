@@ -8,6 +8,12 @@ abstract class WorkoutHistoryRepository : BaseRepository() {
     override val cacheKey: String
         get() = WorkoutHistory.TABLE_NAME
 
+    abstract suspend fun getWorkoutHistoryPaginated(
+        userId: String,
+        page: Int,
+        refresh: Boolean
+    )
+
     abstract suspend fun saveWorkoutHistory(
         userId: String,
         workout: WorkoutUiModel,

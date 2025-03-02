@@ -32,4 +32,17 @@ data class WorkoutHistoryExerciseNetworkModel(
     val exercise: ExerciseNetworkModel?,
     @SerialName(WorkoutHistoryExerciseSet.TABLE_NAME)
     val sets: List<WorkoutHistoryExerciseSet>
-)
+) {
+    fun toEntity() = WorkoutHistoryExercise(
+        id = id,
+        name = name,
+        imageUrl = imageUrl,
+        type = type,
+        notes = notes,
+        sortOrder = sortOrder,
+        exerciseId = exerciseId,
+        workoutHistoryId = workoutHistoryId,
+        category = category,
+        equipment = equipment,
+    )
+}

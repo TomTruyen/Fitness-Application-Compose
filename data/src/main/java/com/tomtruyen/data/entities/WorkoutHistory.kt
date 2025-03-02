@@ -33,6 +33,7 @@ data class WorkoutHistory(
     val createdAt: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
     @SerialName(KEY_USER_ID)
     val userId: String? = null,
+    val page: Int = 0,
 ): BaseEntity {
     companion object {
         const val TABLE_NAME = "WorkoutHistory"

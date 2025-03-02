@@ -62,11 +62,11 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
             .decodeList<WorkoutNetworkModel>()
             .let { response ->
                 // Using MutableList instead of mapping for each one to reduce amount of loops
-                val categories = mutableListOf<Category>()
-                val equipment = mutableListOf<Equipment>()
-                val exercises = mutableListOf<Exercise>()
-                val workoutExercises = mutableListOf<WorkoutExercise>()
-                val sets = mutableListOf<WorkoutExerciseSet>()
+                val categories = mutableSetOf<Category>()
+                val equipment = mutableSetOf<Equipment>()
+                val exercises = mutableSetOf<Exercise>()
+                val workoutExercises = mutableSetOf<WorkoutExercise>()
+                val sets = mutableSetOf<WorkoutExerciseSet>()
 
                 val workouts = response.map { workout ->
                     workout.exercises.forEach { workoutExercise ->

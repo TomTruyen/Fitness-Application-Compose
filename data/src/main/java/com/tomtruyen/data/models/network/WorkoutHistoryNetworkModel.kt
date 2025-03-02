@@ -16,7 +16,7 @@ data class WorkoutHistoryNetworkModel(
     @SerialName(WorkoutHistory.KEY_UNIT)
     val unit: String,
     @SerialName(WorkoutHistory.KEY_DURATION)
-    val duration: Int,
+    val duration: Long,
     @SerialName(WorkoutHistory.KEY_CREATED_AT)
     @Serializable(with = SupabaseDateTimeSerializer::class)
     val createdAt: LocalDateTime,
@@ -24,4 +24,14 @@ data class WorkoutHistoryNetworkModel(
     val userId: String,
     @SerialName(WorkoutHistoryExercise.TABLE_NAME)
     val exercises: List<WorkoutHistoryExerciseNetworkModel>
-)
+) {
+    fun toEntity(page: Int) = WorkoutHistory(
+        id = id,
+        name = name,
+        unit = unit,
+        duration = duration,
+        createdAt = createdAt,
+        userId = userId,
+        page = page
+    )
+}

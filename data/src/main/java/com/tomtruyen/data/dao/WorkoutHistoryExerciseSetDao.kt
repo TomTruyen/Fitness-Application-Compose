@@ -7,5 +7,5 @@ import com.tomtruyen.data.entities.WorkoutHistoryExerciseSet
 @Dao
 fun interface WorkoutHistoryExerciseSetDao {
     @Upsert
-    suspend fun saveAll(sets: MutableList<WorkoutHistoryExerciseSet>): List<Long>
+    suspend fun saveAll(sets: Set<WorkoutHistoryExerciseSet>): List<Long>
 }

@@ -30,17 +30,22 @@ abstract class BaseRepository(
         database.withTransaction(block)
     }
 
-    suspend fun cacheTransaction(block: suspend () -> Unit) =
-        transaction {
-            block()
+    suspend fun cacheTransaction(
+        pageCacheKey: String? = null,
+        block: suspend () -> Unit
+    ) = transaction {
+        block()
 
-            cacheDao.save(CacheTTL(cacheKey))
-        }
+        cacheDao.save(CacheTTL(pageCacheKey ?: cacheKey))
+    }
 
     protected suspend fun fetch(
         refresh: Boolean = false,
+        pageCacheKey: String? = null,
         block: suspend () -> Unit
     ) {
+        val cacheKey = pageCacheKey ?: cacheKey
+
         Log.i(TAG, "Fetching data for $cacheKey from Firebase... (Checking Cache first)")
 
         val isCacheExpired = cacheDao.findById(cacheKey)?.isExpired ?: true
