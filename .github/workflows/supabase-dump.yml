@@ -51,6 +51,9 @@ jobs:
         with:
           branch: chore/supabase-schema-dump
           delete-branch: true
+          commit-message: 'chore: Supabase schema dump'
+          committer: supabase-schema-dump[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           title: '[Chore] Update Supabase Schema Dump'
-          assignees: TomTruyen
-          reviewers: TomTruyen
+          labels: |
+            supabase
+            automation
