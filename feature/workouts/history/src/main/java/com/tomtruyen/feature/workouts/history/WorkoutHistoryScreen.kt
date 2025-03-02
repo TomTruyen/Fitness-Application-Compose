@@ -73,9 +73,7 @@ fun WorkoutHistoryScreenLayout(
     val listState = rememberLazyListState()
 
     LaunchedEffect(listState, state.histories.size) {
-        // TODO: Stop this from fetching way too much. Maybe we should keep track of a Boolean to determine if we can fetch more
-        // TODO: The way we can check if we can fetch more is to simply see if the response we get has less items then the PAGE_SIZE
-
+        // Handle fetching paginated
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0 }
             .distinctUntilChanged()
             .debounce(100)
@@ -116,7 +114,11 @@ fun WorkoutHistoryScreenLayout(
                         .fillMaxSize()
                         .padding(vertical = Dimens.Normal),
                 ) {
-                    itemsIndexed(state.histories) { index,  history ->
+                    itemsIndexed(
+                        items = state.histories.sortedByDescending { history ->
+                            history.createdAt
+                        }
+                    ) { index, history ->
                         Box(
                             modifier = Modifier.fillMaxWidth()
                                 .height(300.dp)

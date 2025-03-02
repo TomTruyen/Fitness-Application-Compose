@@ -25,12 +25,18 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
     private val categoryDao = database.categoryDao()
     private val equipmentDao = database.equipmentDao()
 
+    private fun calculatePageStart(page: Int): Int {
+        return (page - 1).coerceAtLeast(0) * WorkoutHistory.PAGE_SIZE
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun findHistoriesAsync() = dao.findHistoriesAsync().mapLatest { histories ->
+    override fun findHistoriesAsync(page: Int) = dao.findHistoriesAsync(
+        offset = calculatePageStart(page),
+        limit = WorkoutHistory.PAGE_SIZE
+    ).mapLatest { histories ->
         histories.map(WorkoutHistoryUiModel::fromEntity)
     }
 
-    // Page should be > 0
     override suspend fun getWorkoutHistoryPaginated(userId: String, page: Int, refresh: Boolean): Boolean {
         val pageCacheKey = "${cacheKey}_${page}"
 
@@ -38,7 +44,7 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
             refresh = refresh,
             pageCacheKey = pageCacheKey
         ) {
-            val from = (page - 1) * WorkoutHistory.PAGE_SIZE
+            val from = calculatePageStart(page)
             val to = from + WorkoutHistory.PAGE_SIZE - 1
 
             return@fetch supabase.from(WorkoutHistory.TABLE_NAME)

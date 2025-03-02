@@ -12,8 +12,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface WorkoutHistoryDao {
     @Transaction
-    @Query("SELECT * FROM ${WorkoutHistory.TABLE_NAME} ORDER BY createdAt DESC")
-    fun findHistoriesAsync(): Flow<List<WorkoutHistoryWithExercises>>
+    @Query("SELECT * FROM ${WorkoutHistory.TABLE_NAME} ORDER BY createdAt DESC LIMIT :limit OFFSET :offset")
+    fun findHistoriesAsync(
+        offset: Int,
+        limit: Int = WorkoutHistory.PAGE_SIZE
+    ): Flow<List<WorkoutHistoryWithExercises>>
 
     @Upsert
     suspend fun save(workoutHistory: WorkoutHistory): Long

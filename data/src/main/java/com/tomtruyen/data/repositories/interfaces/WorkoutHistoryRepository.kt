@@ -10,7 +10,7 @@ abstract class WorkoutHistoryRepository : BaseRepository() {
     override val cacheKey: String
         get() = WorkoutHistory.TABLE_NAME
 
-    abstract fun findHistoriesAsync(): Flow<List<WorkoutHistoryUiModel>>
+    abstract fun findHistoriesAsync(page: Int): Flow<List<WorkoutHistoryUiModel>>
 
     abstract suspend fun getWorkoutHistoryPaginated(
         userId: String,
