@@ -84,7 +84,7 @@ fun ExerciseDetailScreen(
 }
 
 @Composable
-fun ExerciseDetailScreenLayout(
+private fun ExerciseDetailScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: ExerciseDetailUiState,

@@ -78,7 +78,7 @@ fun LoginScreen(
 }
 
 @Composable
-fun LoginScreenLayout(
+private fun LoginScreenLayout(
     snackbarHost: @Composable () -> Unit,
     state: LoginUiState,
     onAction: (LoginUiAction) -> Unit

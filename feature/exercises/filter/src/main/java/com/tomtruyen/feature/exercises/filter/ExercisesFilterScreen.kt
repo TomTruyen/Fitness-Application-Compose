@@ -69,7 +69,7 @@ fun ExercisesFilterScreen(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ExercisesFilterScreenLayout(
+private fun ExercisesFilterScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: ExercisesUiState,

@@ -82,7 +82,7 @@ fun ProfileScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreenLayout(
+private fun ProfileScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: ProfileUiState,

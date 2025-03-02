@@ -72,7 +72,7 @@ fun ManageExerciseScreen(
 }
 
 @Composable
-fun ManageExerciseScreenLayout(
+private fun ManageExerciseScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: ManageExerciseUiState,

@@ -63,7 +63,7 @@ fun WorkoutHistoryScreen(
 
 @OptIn(ExperimentalMaterial3Api::class, FlowPreview::class)
 @Composable
-fun WorkoutHistoryScreenLayout(
+private fun WorkoutHistoryScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: WorkoutHistoryUiState,

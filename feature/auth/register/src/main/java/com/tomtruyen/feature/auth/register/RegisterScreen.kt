@@ -75,7 +75,7 @@ fun RegisterScreen(
 }
 
 @Composable
-fun RegisterScreenLayout(
+private fun RegisterScreenLayout(
     snackbarHost: @Composable () -> Unit,
     state: RegisterUiState,
     onAction: (RegisterUiAction) -> Unit

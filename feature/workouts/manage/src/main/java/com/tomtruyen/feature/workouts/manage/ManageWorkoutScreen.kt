@@ -190,7 +190,7 @@ fun ManageWorkoutScreen(
 }
 
 @Composable
-fun ManageWorkoutScreenLayout(
+private fun ManageWorkoutScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: ManageWorkoutUiState,

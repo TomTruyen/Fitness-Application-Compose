@@ -93,7 +93,7 @@ fun ExercisesScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExercisesScreenLayout(
+private fun ExercisesScreenLayout(
     snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: ExercisesUiState,
