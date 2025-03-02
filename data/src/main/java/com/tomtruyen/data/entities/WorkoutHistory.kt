@@ -51,5 +51,5 @@ data class WorkoutHistoryWithExercises(
         entityColumn = "workoutHistoryId",
         entity = WorkoutHistoryExercise::class
     )
-    val exercises: List<WorkoutHistoryExercise> = emptyList()
+    val exercises: List<WorkoutHistoryExerciseWithSets> = emptyList()
 )
