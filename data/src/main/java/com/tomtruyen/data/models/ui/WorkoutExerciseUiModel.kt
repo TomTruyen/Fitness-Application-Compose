@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.data.entities.WorkoutExercise
 import com.tomtruyen.data.entities.WorkoutExerciseWithSets
+import com.tomtruyen.data.entities.WorkoutHistoryExercise
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
@@ -39,6 +40,18 @@ data class WorkoutExerciseUiModel(
         workoutId = workoutId,
         notes = notes,
         sortOrder = index,
+    )
+
+    fun toWorkoutHistoryExerciseEntity(workoutHistoryId: String, index: Int) = WorkoutHistoryExercise(
+        name = name,
+        imageUrl = imageUrl,
+        type = type.value,
+        notes = notes,
+        sortOrder = sortOrder,
+        exerciseId = exerciseId,
+        workoutHistoryId = workoutHistoryId,
+        category = category?.name,
+        equipment = equipment?.name
     )
 
     companion object {

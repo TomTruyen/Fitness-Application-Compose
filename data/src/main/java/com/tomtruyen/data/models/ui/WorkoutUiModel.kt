@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.data.entities.Workout
+import com.tomtruyen.data.entities.WorkoutHistory
 import com.tomtruyen.data.entities.WorkoutWithExercises
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -47,6 +48,12 @@ data class WorkoutUiModel(
 
     fun toEntity(userId: String) = Workout(
         id = id,
+        name = name,
+        unit = unit.value,
+        userId = userId,
+    )
+
+    fun toWorkoutHistoryEntity(userId: String) = WorkoutHistory(
         name = name,
         unit = unit.value,
         userId = userId,

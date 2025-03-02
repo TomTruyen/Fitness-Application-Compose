@@ -103,16 +103,20 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
         userId: String,
         workout: WorkoutUiModel,
     ) {
+        val sets = mutableListOf<WorkoutExerciseSet>()
+
         val workoutEntity = workout.toEntity(userId)
 
         val exercises = workout.exercises.mapIndexed { index, exercise ->
-            exercise.toEntity(workout.id, index)
-        }
+            val workoutExercise = exercise.toEntity(workout.id, index)
 
-        val sets = workout.exercises.flatMap { exercise ->
-            exercise.sets.mapIndexed { index, set ->
-                set.toEntity(exercise.id, index)
-            }
+            sets.addAll(
+                exercise.sets.mapIndexed { setIndex, set ->
+                    set.toEntity(exercise.id, setIndex)
+                }
+            )
+
+            workoutExercise
         }
 
         supabase.from(Workout.TABLE_NAME).upsert(workoutEntity)
