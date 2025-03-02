@@ -19,11 +19,15 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
 
         val workoutHistory = workout.toWorkoutHistoryEntity(userId)
 
-        val exercises = workout.exercises.mapIndexed { index, exercise ->
+        val exercises = workout.exercises.filter { exercise ->
+            exercise.sets.count { it.completed } > 0
+        }.mapIndexed { index, exercise ->
             val workoutHistoryExercise = exercise.toWorkoutHistoryExerciseEntity(workoutHistory.id, index)
 
             sets.addAll(
-                exercise.sets.mapIndexed { setIndex, set ->
+                exercise.sets.filter{
+                    it.completed
+                }.mapIndexed { setIndex, set ->
                     set.toWorkoutHistorySetEntity(workoutHistoryExercise.id, setIndex)
                 }
             )
