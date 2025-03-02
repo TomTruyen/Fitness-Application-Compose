@@ -11,5 +11,5 @@ abstract class WorkoutHistoryRepository : BaseRepository() {
     abstract suspend fun saveWorkoutHistory(
         userId: String,
         workout: WorkoutUiModel
-    )
+    ): String
 }

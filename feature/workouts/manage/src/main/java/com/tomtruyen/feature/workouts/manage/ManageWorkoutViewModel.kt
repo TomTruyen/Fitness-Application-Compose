@@ -96,7 +96,12 @@ class ManageWorkoutViewModel(
     private fun finishWorkout(userId: String) = launchLoading {
         stopTimer()
 
-        // TODO: Setup the logic to actually save a workout to the History using `historyRepository`
+        val workoutHistoryId = historyRepository.saveWorkoutHistory(
+            userId = userId,
+            workout = uiState.value.workout
+        )
+
+        triggerEvent(ManageWorkoutUiEvent.NavigateToHistoryDetail(workoutHistoryId))
     }
 
     private fun saveWorkout(userId: String) = launchLoading {
@@ -104,7 +109,6 @@ class ManageWorkoutViewModel(
             workoutRepository.saveWorkout(
                 userId = userId,
                 workout = workout.copy(
-                    exercises = workout.exercises,
                     unit = settings.unit,
                     name = workout.name.ifBlank { "Workout" }
                 ),

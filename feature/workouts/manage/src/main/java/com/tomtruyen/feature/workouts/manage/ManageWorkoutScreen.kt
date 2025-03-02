@@ -124,6 +124,11 @@ fun ManageWorkoutScreen(
                     )
                 )
 
+                // TODO: Update this to actually go the a HistoryDetailScreen so that we can display it to the user
+                is ManageWorkoutUiEvent.NavigateToHistoryDetail -> navController.navigate(
+                    Screen.Workout.HistoryOverview
+                )
+
                 is ManageWorkoutUiEvent.ScrollToExercise -> {
                     lazyListState.animateScrollToItem(
                         event.index.coerceIn(

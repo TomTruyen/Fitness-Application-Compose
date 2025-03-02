@@ -14,7 +14,7 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
 
     // TODO: When getting WorkoutHistory -> Use Pagination + Cache based on dates?
 
-    override suspend fun saveWorkoutHistory(userId: String, workout: WorkoutUiModel) {
+    override suspend fun saveWorkoutHistory(userId: String, workout: WorkoutUiModel): String {
         val sets = mutableListOf<WorkoutHistoryExerciseSet>()
 
         val workoutHistory = workout.toWorkoutHistoryEntity(userId)
@@ -40,5 +40,7 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
             workoutHistoryExerciseDao.saveAll(exercises)
             workoutHistoryExerciseSetDao.saveAll(sets)
         }
+
+        return workoutHistory.id
     }
 }
