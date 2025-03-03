@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.tomtruyen.core.common.extensions.tryIntString
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.feature.workouts.manage.R
@@ -38,7 +39,7 @@ fun WorkoutStatistics(
         ) {
             WorkoutStatisticsItem(
                 name = stringResource(id = R.string.label_volume),
-                value = "$volume ${unit.value}"
+                value = "${volume.tryIntString()} ${unit.value}"
             )
 
             WorkoutStatisticsItem(

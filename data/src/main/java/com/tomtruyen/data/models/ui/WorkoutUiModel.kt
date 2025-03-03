@@ -22,7 +22,7 @@ data class WorkoutUiModel(
             it.type == ExerciseType.WEIGHT
         }
 
-    private val totalWeightCompleted: Double
+    val totalVolumeCompleted: Double
         get() = weightExercises.sumOf { exercise ->
             exercise.sets.filter(WorkoutExerciseSetUiModel::completed).sumOf { set ->
                 val reps = set.reps ?: 0
@@ -42,9 +42,6 @@ data class WorkoutUiModel(
         get() = weightExercises.sumOf { exercise ->
             exercise.sets.filter(WorkoutExerciseSetUiModel::completed).size
         }
-
-    val totalVolumeCompleted: Double
-        get() = repsCountCompleted * totalWeightCompleted
 
     fun toEntity(userId: String) = Workout(
         id = id,
