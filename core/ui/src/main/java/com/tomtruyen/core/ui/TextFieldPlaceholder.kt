@@ -4,11 +4,12 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
-import com.tomtruyen.core.designsystem.theme.BlueGrey
+import com.tomtruyen.core.designsystem.theme.placeholder
 
 @Composable
 fun TextFieldPlaceholder(
@@ -24,7 +25,7 @@ fun TextFieldPlaceholder(
         Text(
             text = placeholder,
             style = textStyle.copy(
-                color = BlueGrey
+                color = MaterialTheme.colorScheme.placeholder
             ),
             textAlign = textStyle.textAlign,
             modifier = Modifier.fillMaxWidth()

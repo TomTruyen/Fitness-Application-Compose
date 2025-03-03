@@ -20,6 +20,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,6 +38,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.ChineseBlack
 import com.tomtruyen.core.designsystem.theme.ChineseSilver
+import com.tomtruyen.core.designsystem.theme.navigationItemBackgroundColorActive
+import com.tomtruyen.core.designsystem.theme.navigationItemContentColorActive
+import com.tomtruyen.core.designsystem.theme.navigationItemContentColorInactive
 
 @Composable
 fun MainBottomNavigation(
@@ -90,13 +94,13 @@ fun BottomBarItem(
     val animationSpec: AnimationSpec<Color> = tween(100, 0, LinearEasing)
 
     val animatedContentColor by animateColorAsState(
-        targetValue = if (selected) Color.White else ChineseSilver,
+        targetValue = if (selected) MaterialTheme.colorScheme.navigationItemContentColorActive else MaterialTheme.colorScheme.navigationItemContentColorInactive,
         animationSpec = animationSpec,
         label = ""
     )
 
     val animatedContainerColor by animateColorAsState(
-        targetValue = if (selected) ChineseBlack else Color.Transparent,
+        targetValue = if (selected) MaterialTheme.colorScheme.navigationItemBackgroundColorActive else Color.Transparent,
         animationSpec = animationSpec,
         label = ""
     )

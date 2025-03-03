@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.BlueGrey
+import com.tomtruyen.core.designsystem.theme.textButtonContentColor
 
 object Buttons {
     @Composable
@@ -58,7 +58,7 @@ object Buttons {
         enabled: Boolean = true,
         shape: Shape = MaterialTheme.shapes.small,
         colors: ButtonColors = ButtonDefaults.textButtonColors(
-            contentColor = BlueGrey
+            contentColor = MaterialTheme.colorScheme.textButtonContentColor
         ),
         onClick: () -> Unit,
     ) {

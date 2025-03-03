@@ -1,6 +1,5 @@
 package com.tomtruyen.feature.workouts.manage.components
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,7 +26,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,13 +41,12 @@ import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.common.models.RestAlertType
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.BlueGrey
+import com.tomtruyen.core.designsystem.theme.placeholder
 import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.dialogs.RestAlertDialog
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
-import kotlin.reflect.jvm.internal.impl.descriptors.Visibilities.Local
 import com.tomtruyen.core.common.R as CommonR
 
 @Composable
@@ -349,7 +346,7 @@ private fun RowScope.TimeSet(
         textAlign = TextAlign.Center,
         style = LocalTextStyle.current.copy(
             color = if(!hasBeenCompleted && (inputTime == null || (mode.isExecute() && !completed))) {
-                BlueGrey
+                MaterialTheme.colorScheme.placeholder
             } else {
                 LocalTextStyle.current.color
             }

@@ -5,9 +5,10 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.tomtruyen.core.designsystem.theme.BlueGrey
+import com.tomtruyen.core.designsystem.theme.textFieldIcon
 
 @Composable
 fun PasswordEyeToggle(
@@ -28,7 +29,7 @@ fun PasswordEyeToggle(
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
-            tint = BlueGrey
+            tint = MaterialTheme.colorScheme.textFieldIcon
         )
     }
 }

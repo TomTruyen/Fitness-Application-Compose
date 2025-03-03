@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.BlueGrey
+import com.tomtruyen.core.designsystem.theme.secondaryTextColor
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.TextFields
@@ -120,7 +121,7 @@ private fun RegisterScreenLayout(
                     Text(
                         text = stringResource(id = R.string.subtitle_register),
                         style = MaterialTheme.typography.titleMedium.copy(
-                            color = BlueGrey,
+                            color = MaterialTheme.colorScheme.secondaryTextColor,
                             fontWeight = FontWeight.Normal
                         ),
                     )
