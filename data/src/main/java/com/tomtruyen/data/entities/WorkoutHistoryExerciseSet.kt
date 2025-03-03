@@ -20,7 +20,8 @@ import java.util.UUID
             entity = WorkoutHistoryExercise::class,
             parentColumns = ["id"],
             childColumns = ["workoutHistoryExerciseId"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE
         )
     ],
     indices = [

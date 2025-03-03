@@ -18,13 +18,15 @@ import java.util.UUID
             entity = Exercise::class,
             parentColumns = ["id"],
             childColumns = ["exerciseId"],
-            onDelete = ForeignKey.SET_NULL
+            onDelete = ForeignKey.SET_NULL,
+            onUpdate = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = WorkoutHistory::class,
             parentColumns = ["id"],
             childColumns = ["workoutHistoryId"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE
         )
     ],
     indices = [
