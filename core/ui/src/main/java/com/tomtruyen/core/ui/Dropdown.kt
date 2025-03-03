@@ -61,6 +61,7 @@ fun Dropdown(
             error = error,
             readOnly = true,
             enabled = false,
+            withLabel = true,
             placeholder = placeholder,
             value = selectedOption.capitalize(),
             onValueChange = { },

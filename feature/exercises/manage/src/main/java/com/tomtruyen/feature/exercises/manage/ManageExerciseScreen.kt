@@ -130,17 +130,18 @@ private fun ManageExerciseScreenLayout(
                         .weight(1f)
                         .animateContentSize()
                         .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(Dimens.Small)
+                    verticalArrangement = Arrangement.spacedBy(Dimens.Normal)
                 ) {
                     TextFields.Default(
                         value = state.exercise.name,
                         onValueChange = { name ->
                             onAction(ManageExerciseUiAction.OnExerciseNameChanged(name))
                         },
+                        withLabel = true,
                         placeholder = stringResource(id = CommonR.string.placeholder_name),
                         padding = PaddingValues(
                             horizontal = Dimens.Normal,
-                            vertical = Dimens.Tiny + Dimens.Normal
+                            vertical = Dimens.Normal
                         )
                     )
 

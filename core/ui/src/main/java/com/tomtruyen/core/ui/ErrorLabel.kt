@@ -3,9 +3,9 @@ package com.tomtruyen.core.ui
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ErrorOutline
@@ -27,9 +27,9 @@ fun ErrorLabel(message: String?) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(top = Dimens.Tiny),
-            verticalAlignment = Alignment.CenterVertically
+                .wrapContentHeight(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(Dimens.Tiny)
         ) {
             Icon(
                 imageVector = Icons.Filled.ErrorOutline,
@@ -43,7 +43,6 @@ fun ErrorLabel(message: String?) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .padding(start = Dimens.Tiny)
             )
         }
     }

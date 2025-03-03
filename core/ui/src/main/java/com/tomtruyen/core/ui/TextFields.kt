@@ -3,6 +3,7 @@ package com.tomtruyen.core.ui
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -48,6 +49,7 @@ object TextFields {
         enabled: Boolean = true,
         singleLine: Boolean = true,
         border: Boolean = true,
+        withLabel: Boolean = false,
         padding: PaddingValues = PaddingValues(Dimens.Normal),
         textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
         trailingIcon: (@Composable () -> Unit)? = null,
@@ -74,7 +76,14 @@ object TextFields {
             }
         }
 
-        Column(modifier = modifier) {
+        Column(
+            modifier = modifier,
+            verticalArrangement = Arrangement.spacedBy(Dimens.Tiny)
+        ) {
+            if(withLabel) {
+                Label(placeholder)
+            }
+
             BasicTextField(
                 value = value.orEmpty(),
                 onValueChange = onValueChange,
