@@ -39,7 +39,7 @@ fun ExerciseListItem(
             imageUrl = exercise.imageUrl,
             onClick = {
                 onAction(
-                    ManageWorkoutUiAction.ToggleExerciseMoreActionSheet(
+                    ManageWorkoutUiAction.ShowExerciseMoreActionSheet(
                         id = exercise.id
                     )
                 )
@@ -77,7 +77,7 @@ fun ExerciseListItem(
             mode = mode,
             onSetClick = { id, setIndex ->
                 onAction(
-                    ManageWorkoutUiAction.ToggleSetMoreActionSheet(
+                    ManageWorkoutUiAction.ShowSetMoreActionSheet(
                         id = id,
                         setIndex = setIndex
                     )

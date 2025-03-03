@@ -43,7 +43,6 @@ import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.feature.workouts.manage.components.ExerciseList
 import com.tomtruyen.feature.workouts.manage.components.WorkoutStatistics
 import com.tomtruyen.feature.workouts.manage.components.WorkoutTimer
-import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
 import com.tomtruyen.navigation.NavArguments
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
@@ -65,14 +64,14 @@ fun ManageWorkoutScreen(
     val exerciseActions = remember {
         listOf(
             BottomSheetItem(
-                title = R.string.action_exercise_replace,
+                titleRes = R.string.action_exercise_replace,
                 icon = Icons.Default.Sync,
                 onClick = {
                     viewModel.onAction(ManageWorkoutUiAction.OnReplaceExerciseClicked)
                 }
             ),
             BottomSheetItem(
-                title = R.string.action_remove_exercise,
+                titleRes = R.string.action_remove_exercise,
                 icon = Icons.Default.Close,
                 onClick = {
                     viewModel.onAction(ManageWorkoutUiAction.OnDeleteExercise)
@@ -85,7 +84,7 @@ fun ManageWorkoutScreen(
     val setActions = remember {
         listOf(
             BottomSheetItem(
-                title = R.string.action_remove_set,
+                titleRes = R.string.action_remove_set,
                 icon = Icons.Default.Close,
                 onClick = {
                     if (state.selectedExerciseId != null && state.selectedSetIndex != null) {
@@ -179,13 +178,13 @@ fun ManageWorkoutScreen(
     BottomSheetList(
         items = exerciseActions,
         visible = state.showExerciseMoreActions,
-        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.ToggleExerciseMoreActionSheet()) },
+        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.DismissExerciseMoreActionSheet) },
     )
 
     BottomSheetList(
         items = setActions,
         visible = state.showSetMoreActions,
-        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.ToggleSetMoreActionSheet()) },
+        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.DismissSetMoreActionSheet) },
     )
 }
 

@@ -21,10 +21,12 @@ sealed class ManageWorkoutUiAction {
 
     data class OnReorder(val from: Int, val to: Int) : ManageWorkoutUiAction()
 
-    data class ToggleExerciseMoreActionSheet(val id: String? = null) : ManageWorkoutUiAction()
+    data class ShowExerciseMoreActionSheet(val id: String? = null) : ManageWorkoutUiAction()
 
-    data class ToggleSetMoreActionSheet(val id: String? = null, val setIndex: Int? = null) :
-        ManageWorkoutUiAction()
+    data class ShowSetMoreActionSheet(val id: String? = null, val setIndex: Int? = null) : ManageWorkoutUiAction()
+
+    data object DismissExerciseMoreActionSheet: ManageWorkoutUiAction()
+    data object DismissSetMoreActionSheet: ManageWorkoutUiAction()
 
     data object Save : ManageWorkoutUiAction()
 

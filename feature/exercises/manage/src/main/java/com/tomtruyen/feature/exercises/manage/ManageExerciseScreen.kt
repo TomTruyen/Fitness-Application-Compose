@@ -27,9 +27,9 @@ import androidx.navigation.NavController
 import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Buttons
-import com.tomtruyen.core.ui.Dropdown
-import com.tomtruyen.core.ui.FilterDropdown
+import com.tomtruyen.core.ui.FilterSelectSheet
 import com.tomtruyen.core.ui.LoadingContainer
+import com.tomtruyen.core.ui.SelectSheet
 import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
@@ -145,7 +145,7 @@ private fun ManageExerciseScreenLayout(
                         )
                     )
 
-                    FilterDropdown(
+                    FilterSelectSheet(
                         placeholder = stringResource(id = CommonR.string.placeholder_category),
                         options = state.categories,
                         selectedOption = state.exercise.category ?: CategoryUiModel.DEFAULT,
@@ -158,7 +158,7 @@ private fun ManageExerciseScreenLayout(
                         },
                     )
 
-                    FilterDropdown(
+                    FilterSelectSheet(
                         placeholder = stringResource(id = CommonR.string.placeholder_equipment),
                         options = state.equipment,
                         selectedOption = state.exercise.equipment ?: EquipmentUiModel.DEFAULT,
@@ -171,7 +171,7 @@ private fun ManageExerciseScreenLayout(
                         },
                     )
 
-                    Dropdown(
+                    SelectSheet(
                         placeholder = stringResource(id = CommonR.string.placeholder_type),
                         options = types,
                         selectedOption = state.exercise.type.value,

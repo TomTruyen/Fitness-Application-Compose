@@ -204,7 +204,7 @@ class ManageWorkoutViewModel(
             ),
             selectedExerciseId = null,
         )
-    }.also { toggleExerciseMoreActionSheet(show = false) }
+    }
 
     private fun addExercises(exercises: List<ExerciseUiModel>) =
         updateAndGetState {
@@ -227,11 +227,11 @@ class ManageWorkoutViewModel(
         it.copy(selectedSetIndex = index)
     }
 
-    private fun toggleExerciseMoreActionSheet(show: Boolean) = updateState {
+    private fun showExerciseMoreActionSheet(show: Boolean) = updateState {
         it.copy(showExerciseMoreActions = show)
     }
 
-    private fun toggleSetMoreActionSheet(show: Boolean) = updateState {
+    private fun showSetMoreActionSheet(show: Boolean) = updateState {
         it.copy(showSetMoreActions = show)
     }
 
@@ -307,7 +307,6 @@ class ManageWorkoutViewModel(
             is ManageWorkoutUiAction.OnDeleteExercise -> deleteExercise()
 
             is ManageWorkoutUiAction.OnReplaceExerciseClicked -> {
-                toggleExerciseMoreActionSheet(show = false)
                 triggerEvent(ManageWorkoutUiEvent.NavigateToReplaceExercise)
             }
 
@@ -326,15 +325,23 @@ class ManageWorkoutViewModel(
                 to = action.to
             )
 
-            is ManageWorkoutUiAction.ToggleExerciseMoreActionSheet -> {
+            is ManageWorkoutUiAction.ShowExerciseMoreActionSheet -> {
                 setSelectedExerciseId(action.id)
-                toggleExerciseMoreActionSheet(!uiState.value.showExerciseMoreActions)
+                showExerciseMoreActionSheet(true)
             }
 
-            is ManageWorkoutUiAction.ToggleSetMoreActionSheet -> {
+            is ManageWorkoutUiAction.DismissExerciseMoreActionSheet -> {
+                showExerciseMoreActionSheet(false)
+            }
+
+            is ManageWorkoutUiAction.ShowSetMoreActionSheet -> {
                 setSelectedExerciseId(action.id)
                 setSelectedSetIndex(action.setIndex)
-                toggleSetMoreActionSheet(!uiState.value.showSetMoreActions)
+                showSetMoreActionSheet(true)
+            }
+
+            is ManageWorkoutUiAction.DismissSetMoreActionSheet -> {
+                showSetMoreActionSheet(false)
             }
 
             is ManageWorkoutUiAction.OnRepsChanged -> updateReps(
@@ -356,8 +363,6 @@ class ManageWorkoutViewModel(
             )
 
             is ManageWorkoutUiAction.OnDeleteSet -> {
-                toggleSetMoreActionSheet(false)
-
                 deleteSet(
                     id = action.id,
                     setIndex = action.setIndex

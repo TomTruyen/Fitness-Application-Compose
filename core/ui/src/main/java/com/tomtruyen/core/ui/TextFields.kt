@@ -3,6 +3,7 @@ package com.tomtruyen.core.ui
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalFocusManager
@@ -50,6 +52,7 @@ object TextFields {
         singleLine: Boolean = true,
         border: Boolean = true,
         withLabel: Boolean = false,
+        onClick: (() -> Unit)? = null,
         padding: PaddingValues = PaddingValues(Dimens.Normal),
         textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
         trailingIcon: (@Composable () -> Unit)? = null,
@@ -115,6 +118,12 @@ object TextFields {
                             Modifier
                         }
                     )
+                    .clip(shape)
+                    .clickable(
+                        enabled = onClick != null
+                    ) {
+                        onClick?.invoke()
+                    }
                     .animateContentSize(),
             ) { innerTextField ->
                 Row(
