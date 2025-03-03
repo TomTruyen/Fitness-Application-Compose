@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -48,7 +49,7 @@ object TextFields {
         singleLine: Boolean = true,
         border: Boolean = true,
         padding: PaddingValues = PaddingValues(Dimens.Normal),
-        textStyle: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.bodyMedium,
+        textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
         trailingIcon: (@Composable () -> Unit)? = null,
         keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
         containerColor: Color = Color.Transparent,

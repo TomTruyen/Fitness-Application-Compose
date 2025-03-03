@@ -221,7 +221,7 @@ private fun ManageWorkoutScreenLayout(
         topBar = {
             Toolbar(
                 title = {
-                    if (state.mode == ManageWorkoutMode.EXECUTE) {
+                    if (state.mode.isExecute()) {
                         ToolbarTitle(title = state.workout.name)
                     } else {
                         TextFields.Default(
@@ -246,7 +246,7 @@ private fun ManageWorkoutScreenLayout(
                 onNavigateUp = onNavigateUp
             ) {
                 AnimatedVisibility(
-                    visible = state.mode == ManageWorkoutMode.EXECUTE
+                    visible = state.mode.isExecute()
                 ) {
                     WorkoutTimer(
                         time = workoutDuration,
@@ -278,7 +278,7 @@ private fun ManageWorkoutScreenLayout(
                 verticalArrangement = Arrangement.Top
             ) {
                 AnimatedVisibility(
-                    visible = state.mode == ManageWorkoutMode.EXECUTE,
+                    visible = state.mode.isExecute(),
                 ) {
                     WorkoutStatistics(
                         modifier = Modifier.fillMaxWidth(),

@@ -7,3 +7,9 @@ fun Double.format() = if (this % 1 != 0.0) {
 } else {
     String.format(Locale.getDefault(), "%.1f", this)
 }
+
+fun Double.tryIntString(): String {
+    val isInt = this % 1 == 0.0
+
+    return if(isInt) this.toInt().toString() else this.toString()
+}

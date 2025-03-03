@@ -5,6 +5,8 @@ enum class ManageWorkoutMode {
     EDIT,
     EXECUTE;
 
+    fun isExecute() = this == EXECUTE
+
     companion object {
         fun fromArgs(id: String?, execute: Boolean) = when {
             id == null -> CREATE

@@ -44,7 +44,7 @@ fun WorkoutExerciseSetHeader(
             )
         )
 
-        if (mode == ManageWorkoutMode.EXECUTE) {
+        if (mode.isExecute()) {
             Text(
                 text = stringResource(id = R.string.label_previous).uppercase(),
                 textAlign = TextAlign.Center,
@@ -93,7 +93,7 @@ fun WorkoutExerciseSetHeader(
         }
 
 
-        if (mode == ManageWorkoutMode.EXECUTE) {
+        if (mode.isExecute()) {
             Box(
                 modifier = Modifier.width(24.dp),
                 contentAlignment = Alignment.Center

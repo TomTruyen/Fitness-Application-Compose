@@ -44,7 +44,7 @@ class ManageWorkoutViewModel(
     }
 
     private fun startTimer() {
-        if (uiState.value.mode != ManageWorkoutMode.EXECUTE) return
+        if (!uiState.value.mode.isExecute()) return
 
         timer.start()
 
@@ -60,7 +60,7 @@ class ManageWorkoutViewModel(
     }
 
     private fun stopTimer() {
-        if (uiState.value.mode != ManageWorkoutMode.EXECUTE) return
+        if (!uiState.value.mode.isExecute()) return
 
         timer.stop()
     }
