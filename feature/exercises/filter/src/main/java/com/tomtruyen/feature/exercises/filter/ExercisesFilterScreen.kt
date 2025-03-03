@@ -5,9 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -96,12 +93,7 @@ private fun ExercisesFilterScreenLayout(
     ) {
         Column(
             modifier = Modifier
-                .padding(
-                    top = it.calculateTopPadding(),
-                    start = it.calculateStartPadding(LocalLayoutDirection.current),
-                    end = it.calculateEndPadding(LocalLayoutDirection.current),
-                    bottom = 0.dp
-                )
+                .padding(it)
                 .fillMaxSize()
                 .padding(Dimens.Normal)
                 .verticalScroll(rememberScrollState())
