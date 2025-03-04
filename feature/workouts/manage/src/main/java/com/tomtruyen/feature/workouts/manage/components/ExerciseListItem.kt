@@ -37,6 +37,7 @@ fun ExerciseListItem(
                 .padding(Dimens.Normal),
             name = exercise.displayName,
             imageUrl = exercise.imageUrl,
+            mode = mode,
             onTitleClick = {
                 onAction(
                     ManageWorkoutUiAction.NavigateExerciseDetail(
@@ -60,6 +61,7 @@ fun ExerciseListItem(
                 end = Dimens.Normal,
                 bottom = Dimens.Small
             ),
+            readOnly = mode.isView,
             singleLine = false,
             border = true,
             padding = PaddingValues(Dimens.Small),
@@ -93,21 +95,23 @@ fun ExerciseListItem(
             onAction = onAction
         )
 
-        // Add Set Button
-        Buttons.Default(
-            text = stringResource(id = R.string.button_add_set),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(Dimens.Normal),
-            minButtonSize = 0.dp,
-            contentPadding = PaddingValues(Dimens.Small),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.surface,
-                contentColor = MaterialTheme.colorScheme.onSurface
-            ),
-            onClick = {
-                onAction(ManageWorkoutUiAction.OnAddSet(exercise.id))
-            }
-        )
+        if(!mode.isView) {
+            // Add Set Button
+            Buttons.Default(
+                text = stringResource(id = R.string.button_add_set),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(Dimens.Normal),
+                minButtonSize = 0.dp,
+                contentPadding = PaddingValues(Dimens.Small),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                ),
+                onClick = {
+                    onAction(ManageWorkoutUiAction.OnAddSet(exercise.id))
+                }
+            )
+        }
     }
 }

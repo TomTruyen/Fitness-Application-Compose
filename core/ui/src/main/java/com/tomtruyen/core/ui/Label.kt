@@ -12,14 +12,15 @@ import com.tomtruyen.core.designsystem.theme.secondaryTextColor
 
 @Composable
 fun Label(
-    label: String
+    label: String,
+    modifier: Modifier = Modifier
 ) {
     Text(
         text = label,
         style = MaterialTheme.typography.labelMedium.copy(
             color = MaterialTheme.colorScheme.secondaryTextColor
         ),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(start = Dimens.Tiny)

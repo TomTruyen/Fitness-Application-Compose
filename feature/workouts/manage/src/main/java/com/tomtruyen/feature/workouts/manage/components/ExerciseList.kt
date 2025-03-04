@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -27,6 +28,7 @@ fun ExerciseList(
     modifier: Modifier = Modifier,
     state: ManageWorkoutUiState,
     lazyListState: LazyListState,
+    listHeader: LazyListScope.() -> Unit = {},
     onAction: (ManageWorkoutUiAction) -> Unit,
 ) {
     val haptic = LocalHapticFeedback.current
@@ -39,12 +41,15 @@ fun ExerciseList(
         state = lazyListState,
         modifier = modifier.fillMaxSize()
     ) {
+        listHeader()
+        
         items(
             state.workout.exercises,
             key = { it.id }) { exercise ->
             ReorderableItem(
                 state = reorderableLazyListState,
-                key = exercise.id
+                key = exercise.id,
+                enabled = !state.mode.isView
             ) { isDragging ->
                 val alpha by animateFloatAsState(if (isDragging) 0.25f else 1f, label = "")
 
@@ -52,6 +57,7 @@ fun ExerciseList(
                     modifier = Modifier
                         .fillMaxWidth()
                         .longPressDraggableHandle(
+                            enabled = !state.mode.isView,
                             onDragStarted = {
                                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             },
@@ -66,17 +72,19 @@ fun ExerciseList(
 
         }
 
-        item {
-            Buttons.Default(
-                text = stringResource(id = R.string.button_add_exercise),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = Dimens.Normal,
-                        vertical = Dimens.Small
-                    ),
-            ) {
-                onAction(ManageWorkoutUiAction.OnAddExerciseClicked)
+        if(!state.mode.isView) {
+            item {
+                Buttons.Default(
+                    text = stringResource(id = R.string.button_add_exercise),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = Dimens.Normal,
+                            vertical = Dimens.Small
+                        ),
+                ) {
+                    onAction(ManageWorkoutUiAction.OnAddExerciseClicked)
+                }
             }
         }
     }

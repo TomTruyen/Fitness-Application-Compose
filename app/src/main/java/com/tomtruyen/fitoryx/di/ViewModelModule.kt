@@ -15,7 +15,6 @@ import com.tomtruyen.feature.exercises.detail.ExerciseDetailViewModel
 import com.tomtruyen.feature.exercises.manage.ManageExerciseViewModel
 import com.tomtruyen.feature.profile.ProfileViewModel
 import com.tomtruyen.feature.workouts.WorkoutsViewModel
-import com.tomtruyen.feature.workouts.detail.WorkoutDetailViewModel
 import com.tomtruyen.feature.workouts.history.WorkoutHistoryViewModel
 import com.tomtruyen.feature.workouts.history.detail.WorkoutHistoryDetailViewModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel
@@ -32,14 +31,6 @@ val viewModelModule = module {
     viewModelOf(::ProfileViewModel)
 
     viewModelOf(::WorkoutsViewModel)
-
-    viewModel { (id: String) ->
-        WorkoutDetailViewModel(
-            id = id,
-            workoutRepository = get<WorkoutRepository>(),
-            userRepository = get<UserRepository>()
-        )
-    }
 
     viewModel { (id: String?, mode: ManageWorkoutMode) ->
         ManageWorkoutViewModel(

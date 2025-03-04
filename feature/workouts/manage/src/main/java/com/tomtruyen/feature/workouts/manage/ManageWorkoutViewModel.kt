@@ -35,7 +35,7 @@ class ManageWorkoutViewModel(
     private val timer by lazy { StopwatchTimer() }
 
     init {
-        findWorkout()
+        observeWorkout()
 
         observeLoading()
         observeSettings()
@@ -44,7 +44,7 @@ class ManageWorkoutViewModel(
     }
 
     private fun startTimer() {
-        if (!uiState.value.mode.isExecute()) return
+        if (!uiState.value.mode.isExecute) return
 
         timer.start()
 
@@ -60,22 +60,25 @@ class ManageWorkoutViewModel(
     }
 
     private fun stopTimer() {
-        if (!uiState.value.mode.isExecute()) return
+        if (!uiState.value.mode.isExecute) return
 
         timer.stop()
     }
 
-    private fun findWorkout() = launchLoading {
-        if (uiState.value.mode == ManageWorkoutMode.CREATE || id == null) return@launchLoading
+    private fun observeWorkout() = vmScope.launch {
+        if (uiState.value.mode.isCreate || id == null) return@launch
 
-        workoutRepository.findWorkoutById(id)?.let { workout ->
-            updateState {
-                it.copy(
-                    initialWorkout = workout,
-                    workout = workout
-                )
+        workoutRepository.findWorkoutByIdAsync(id)
+            .filterNotNull()
+            .distinctUntilChanged()
+            .collectLatest { workout ->
+                updateState {
+                    it.copy(
+                        initialWorkout = workout,
+                        workout = workout
+                    )
+                }
             }
-        }
     }
 
     private fun observeLoading() = vmScope.launch {
@@ -119,13 +122,19 @@ class ManageWorkoutViewModel(
         }
     }
 
-
     private fun save() {
         val userId = userRepository.getUser()?.id ?: return
 
         when (uiState.value.mode) {
             ManageWorkoutMode.EXECUTE -> finishWorkout(userId)
             else -> saveWorkout(userId)
+        }
+    }
+
+    private fun delete() = launchLoading {
+        id?.let { workoutId ->
+            workoutRepository.deleteWorkout(workoutId)
+            triggerEvent(ManageWorkoutUiEvent.NavigateBack)
         }
     }
 
@@ -235,6 +244,10 @@ class ManageWorkoutViewModel(
         it.copy(showSetMoreActions = show)
     }
 
+    private fun showWorkoutMoreActionSheet(show: Boolean) = updateState {
+        it.copy(showWorkoutMoreActions = show)
+    }
+
     private fun updateReps(id: String, setIndex: Int, reps: String?) = updateState {
         it.copy(
             workout = it.workout.copyWithRepsChanged(
@@ -295,6 +308,16 @@ class ManageWorkoutViewModel(
         when (action) {
             is ManageWorkoutUiAction.Save -> save()
 
+            is ManageWorkoutUiAction.DeleteWorkout -> delete()
+
+            is ManageWorkoutUiAction.StartWorkout -> triggerEvent(
+                ManageWorkoutUiEvent.NavigateToExecuteWorkout(id)
+            )
+
+            is ManageWorkoutUiAction.NavigateEditWorkout -> triggerEvent(
+                ManageWorkoutUiEvent.NavigateToEditWorkout(id)
+            )
+
             is ManageWorkoutUiAction.NavigateExerciseDetail -> triggerEvent(
                 ManageWorkoutUiEvent.NavigateToExerciseDetail(action.id)
             )
@@ -346,6 +369,14 @@ class ManageWorkoutViewModel(
 
             is ManageWorkoutUiAction.DismissSetMoreActionSheet -> {
                 showSetMoreActionSheet(false)
+            }
+
+            is ManageWorkoutUiAction.ShowWorkoutMoreActionSheet -> {
+                showWorkoutMoreActionSheet(true)
+            }
+
+            is ManageWorkoutUiAction.DismissWorkoutMoreActionSheet -> {
+                showWorkoutMoreActionSheet(false)
             }
 
             is ManageWorkoutUiAction.OnRepsChanged -> updateReps(

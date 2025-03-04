@@ -46,7 +46,7 @@ fun WorkoutsScreen(
                 )
 
                 is WorkoutsUiEvent.NavigateToDetail -> navController.navigate(
-                    Screen.Workout.Detail(event.id)
+                    Screen.Workout.Manage(event.id, ManageWorkoutMode.VIEW)
                 )
 
                 is WorkoutsUiEvent.NavigateToStartWorkout -> navController.navigate(

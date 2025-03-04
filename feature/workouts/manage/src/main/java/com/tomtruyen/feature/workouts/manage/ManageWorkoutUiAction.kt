@@ -22,15 +22,22 @@ sealed class ManageWorkoutUiAction {
     data class OnReorder(val from: Int, val to: Int) : ManageWorkoutUiAction()
 
     data class ShowExerciseMoreActionSheet(val id: String? = null) : ManageWorkoutUiAction()
+    data object DismissExerciseMoreActionSheet: ManageWorkoutUiAction()
 
     data class ShowSetMoreActionSheet(val id: String? = null, val setIndex: Int? = null) : ManageWorkoutUiAction()
-
-    data object DismissExerciseMoreActionSheet: ManageWorkoutUiAction()
     data object DismissSetMoreActionSheet: ManageWorkoutUiAction()
+
+    data object ShowWorkoutMoreActionSheet: ManageWorkoutUiAction()
+    data object DismissWorkoutMoreActionSheet: ManageWorkoutUiAction()
 
     data class NavigateExerciseDetail(val id: String): ManageWorkoutUiAction()
 
     data object Save : ManageWorkoutUiAction()
+
+    data object NavigateEditWorkout: ManageWorkoutUiAction()
+
+    data object DeleteWorkout: ManageWorkoutUiAction()
+    data object StartWorkout: ManageWorkoutUiAction()
 
     data class OnRepsChanged(
         val id: String,

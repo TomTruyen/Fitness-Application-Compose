@@ -107,7 +107,6 @@ dependencies {
     // Workout
     implementation(project(":feature:workouts"))
     implementation(project(":feature:workouts:manage"))
-    implementation(project(":feature:workouts:detail"))
 
     // History
     implementation(project(":feature:workouts:history"))

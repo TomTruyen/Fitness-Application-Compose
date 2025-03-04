@@ -51,9 +51,6 @@ sealed interface Screen {
         data object Overview : Workout
 
         @Serializable
-        data class Detail(val id: String) : Workout
-
-        @Serializable
         data class Manage(val id: String? = null, val mode: ManageWorkoutMode) : Workout
     }
 

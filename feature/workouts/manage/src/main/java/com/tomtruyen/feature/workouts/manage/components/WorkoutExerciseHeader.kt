@@ -16,12 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.ui.Avatar
 
 @Composable
 fun WorkoutExerciseHeader(
     name: String,
     imageUrl: String?,
+    mode: ManageWorkoutMode,
     onTitleClick: () -> Unit,
     onActionClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -50,13 +52,15 @@ fun WorkoutExerciseHeader(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        IconButton(
-            onClick = onActionClick,
-        ) {
-            Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = null,
-            )
+        if(!mode.isView) {
+            IconButton(
+                onClick = onActionClick,
+            ) {
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    contentDescription = null,
+                )
+            }
         }
     }
 }

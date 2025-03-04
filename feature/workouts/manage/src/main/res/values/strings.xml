@@ -14,4 +14,8 @@
     <string name="label_set">Set</string>
     <string name="label_previous">Previous</string>
     <string name="label_time">Time</string>
+    <string name="action_edit_workout">Edit Workout</string>
+    <string name="action_delete_workout">Delete Workout</string>
+    <string name="title_start_workout">Start workout</string>
+    <string name="label_exercises">Exercises</string>
 </resources>

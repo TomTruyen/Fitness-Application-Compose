@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="title_start_workout">Start workout</string>
-    <string name="title_delete_workout">Delete workout</string>
-    <string name="message_delete_workout">Are you sure you want to delete this workout? This action can\\\'t be undone.</string>
-</resources>

@@ -33,7 +33,6 @@ import com.tomtruyen.feature.exercises.filter.ExercisesFilterScreen
 import com.tomtruyen.feature.exercises.manage.ManageExerciseScreen
 import com.tomtruyen.feature.profile.ProfileScreen
 import com.tomtruyen.feature.workouts.WorkoutsScreen
-import com.tomtruyen.feature.workouts.detail.WorkoutDetailScreen
 import com.tomtruyen.feature.workouts.history.WorkoutHistoryScreen
 import com.tomtruyen.feature.workouts.history.detail.WorkoutHistoryDetailScreen
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutScreen
@@ -125,15 +124,6 @@ class MainActivity : ComponentActivity() {
                         ) {
                             composable<Screen.Workout.Overview> {
                                 WorkoutsScreen(navController)
-                            }
-
-                            composable<Screen.Workout.Detail> { backStackEntry ->
-                                val args = backStackEntry.toRoute<Screen.Workout.Detail>()
-
-                                WorkoutDetailScreen(
-                                    id = args.id,
-                                    navController = navController
-                                )
                             }
 
                             composable<Screen.Workout.Manage> { backStackEntry ->

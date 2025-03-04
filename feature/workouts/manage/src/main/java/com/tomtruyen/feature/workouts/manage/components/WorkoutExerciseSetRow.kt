@@ -47,6 +47,8 @@ import com.tomtruyen.core.ui.dialogs.RestAlertDialog
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.core.common.models.ManageWorkoutMode
+import com.tomtruyen.feature.workouts.manage.remember.rememberSetHasBeenCompleted
+import com.tomtruyen.feature.workouts.manage.remember.rememberSetInputValue
 import com.tomtruyen.core.common.R as CommonR
 
 @Composable
@@ -83,6 +85,7 @@ fun WorkoutExerciseSetRow(
     SwipeToDismissBox(
         state = dismissState,
         enableDismissFromStartToEnd = false,
+        gesturesEnabled = !mode.isView,
         backgroundContent = {
             Row(
                 modifier = Modifier
@@ -121,12 +124,14 @@ fun WorkoutExerciseSetRow(
                 modifier = Modifier
                     .width(Dimens.MinButtonHeight)
                     .clip(CircleShape)
-                    .clickable {
+                    .clickable(
+                        enabled = !mode.isView
+                    ) {
                         onSetClick(workoutExerciseId, setIndex)
                     }
             )
 
-            if (mode.isExecute()) {
+            if (mode.isExecute) {
                 PreviousSet(
                     lastPerformedSet = lastPerformedSet,
                     type = exerciseType,
@@ -181,7 +186,7 @@ fun WorkoutExerciseSetRow(
                 else -> Unit
             }
 
-            if (mode.isExecute()) {
+            if (mode.isExecute) {
                 WorkoutCheckbox(
                     checked = set.completed,
                     onClick = {
@@ -239,41 +244,26 @@ private fun RowScope.WeightSet(
     onRepsChanged: (String) -> Unit,
     onWeightChanged: (String) -> Unit
 ) {
-    val initialReps = remember { reps }
-    val initialWeight = remember { weight }
+    val hasBeenCompleted = rememberSetHasBeenCompleted(completed)
 
-    // TODO: Move to a "rememberSetHasBeenCompleted()"
-    // Keeps track whether or not a user has pressed the "completed" button before.
-    // If they have then we can remove the placeholder thing at all times
-    var hasBeenCompleted by remember { mutableStateOf(false) }
+    val (inputReps, initialReps) = rememberSetInputValue(
+        currentValue = reps,
+        hasBeenCompleted = hasBeenCompleted,
+        mode = mode,
+    )
 
-    LaunchedEffect(completed) {
-        if(completed) hasBeenCompleted = true
-    }
-
-
-    val inputReps by remember(reps, hasBeenCompleted) {
-        val value = if(!mode.isExecute() || initialReps != reps || hasBeenCompleted) {
-            reps?.toString().orEmpty()
-        } else ""
-
-        mutableStateOf(value)
-    }
-
-    var inputWeight by remember(weight, hasBeenCompleted) {
-        val value = if(!mode.isExecute() || initialWeight != weight || hasBeenCompleted) {
-            weight?.tryIntString().orEmpty()
-        } else ""
-
-        mutableStateOf(value)
-    }
-
+    val (inputWeight, initialWeight) = rememberSetInputValue(
+        currentValue = weight,
+        hasBeenCompleted = hasBeenCompleted,
+        mode = mode
+    )
 
     TextFields.Default(
         border = false,
+        readOnly = mode.isView,
         padding = PaddingValues(Dimens.Small),
         placeholder = initialReps?.toString() ?: "-",
-        value = inputReps,
+        value = inputReps.value,
         onValueChange = { newReps ->
             // Check if value can be cast to int, if not don't update the value
             if (newReps.isNotEmpty() && newReps.toIntOrNull() == null) return@Default
@@ -294,9 +284,10 @@ private fun RowScope.WeightSet(
 
     TextFields.Default(
         border = false,
+        readOnly = mode.isView,
         padding = PaddingValues(Dimens.Small),
         placeholder = initialWeight?.tryIntString() ?: "-",
-        value = inputWeight,
+        value = inputWeight.value,
         onValueChange = { newWeight ->
             val filteredWeight = newWeight.replace(",", ".")
 
@@ -304,7 +295,7 @@ private fun RowScope.WeightSet(
             if (filteredWeight.isNotEmpty() && filteredWeight.toDoubleOrNull() == null) return@Default
 
             // Must be set like this, otherwise we can't set the decimal separator
-            inputWeight = filteredWeight
+            inputWeight.value = filteredWeight
 
             onWeightChanged(filteredWeight)
         },
@@ -327,25 +318,19 @@ private fun RowScope.TimeSet(
 ) {
     var timeDialogVisible by remember { mutableStateOf(false) }
 
+    val hasBeenCompleted = rememberSetHasBeenCompleted(completed)
+
     val initialTime = remember { time?.toLong() }
 
     val inputTime by remember(time) {
         mutableStateOf(time?.toLong())
     }
 
-    // Keeps track whether or not a user has pressed the "completed" button before.
-    // If they have then we can remove the placeholder thing at all times
-    var hasBeenCompleted by remember { mutableStateOf(false) }
-
-    LaunchedEffect(completed) {
-        if(completed) hasBeenCompleted = true
-    }
-
     Text(
         text = TimeUtils.formatSeconds(inputTime ?: initialTime ?: 0L),
         textAlign = TextAlign.Center,
         style = LocalTextStyle.current.copy(
-            color = if(!hasBeenCompleted && (inputTime == null || (mode.isExecute() && !completed))) {
+            color = if(!mode.isView && !hasBeenCompleted && (inputTime == null || (mode.isExecute && !completed))) {
                 MaterialTheme.colorScheme.placeholder
             } else {
                 LocalTextStyle.current.color
@@ -354,7 +339,9 @@ private fun RowScope.TimeSet(
         modifier = Modifier
             .weight(1f)
             .clip(MaterialTheme.shapes.small)
-            .clickable {
+            .clickable(
+                enabled = !mode.isView
+            ) {
                 timeDialogVisible = true
             }
             .padding(Dimens.Small)

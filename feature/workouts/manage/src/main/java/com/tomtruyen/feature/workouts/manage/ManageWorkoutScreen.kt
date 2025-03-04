@@ -1,7 +1,6 @@
 package com.tomtruyen.feature.workouts.manage
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,9 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Sync
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,11 +28,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.ui.BottomSheetItem
 import com.tomtruyen.core.ui.BottomSheetList
 import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
@@ -43,6 +43,9 @@ import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.feature.workouts.manage.components.ExerciseList
 import com.tomtruyen.feature.workouts.manage.components.WorkoutStatistics
 import com.tomtruyen.feature.workouts.manage.components.WorkoutTimer
+import com.tomtruyen.feature.workouts.manage.remember.rememberExerciseActions
+import com.tomtruyen.feature.workouts.manage.remember.rememberSetActions
+import com.tomtruyen.feature.workouts.manage.remember.rememberWorkoutActions
 import com.tomtruyen.navigation.NavArguments
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
@@ -55,51 +58,24 @@ fun ManageWorkoutScreen(
     viewModel: ManageWorkoutViewModel
 ) {
     val context = LocalContext.current
-    val errorColor = MaterialTheme.colorScheme.error
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     val lazyListState = rememberLazyListState()
 
-    val exerciseActions = remember {
-        listOf(
-            BottomSheetItem(
-                titleRes = R.string.action_exercise_replace,
-                icon = Icons.Default.Sync,
-                onClick = {
-                    viewModel.onAction(ManageWorkoutUiAction.OnReplaceExerciseClicked)
-                }
-            ),
-            BottomSheetItem(
-                titleRes = R.string.action_remove_exercise,
-                icon = Icons.Default.Close,
-                onClick = {
-                    viewModel.onAction(ManageWorkoutUiAction.OnDeleteExercise)
-                },
-                color = errorColor
-            ),
-        )
-    }
+    val exerciseActions = rememberExerciseActions(
+        onAction = viewModel::onAction
+    )
 
-    val setActions = remember {
-        listOf(
-            BottomSheetItem(
-                titleRes = R.string.action_remove_set,
-                icon = Icons.Default.Close,
-                onClick = {
-                    if (state.selectedExerciseId != null && state.selectedSetIndex != null) {
-                        viewModel.onAction(
-                            ManageWorkoutUiAction.OnDeleteSet(
-                                state.selectedExerciseId!!,
-                                state.selectedSetIndex!!
-                            )
-                        )
-                    }
-                },
-                color = errorColor
-            ),
-        )
-    }
+    val setActions = rememberSetActions(
+        selectedExerciseId = state.selectedExerciseId,
+        selectedSetIndex = state.selectedSetIndex,
+        onAction = viewModel::onAction
+    )
+
+    val workoutActions = rememberWorkoutActions(
+        onAction = viewModel::onAction
+    )
 
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
@@ -123,6 +99,14 @@ fun ManageWorkoutScreen(
 
                 is ManageWorkoutUiEvent.NavigateToHistoryDetail -> navController.navigate(
                     Screen.History.Detail(event.workoutHistoryId)
+                )
+
+                is ManageWorkoutUiEvent.NavigateToEditWorkout -> navController.navigate(
+                    Screen.Workout.Manage(event.id, ManageWorkoutMode.EDIT),
+                )
+
+                is ManageWorkoutUiEvent.NavigateToExecuteWorkout -> navController.navigate(
+                    Screen.Workout.Manage(event.id, ManageWorkoutMode.EXECUTE)
                 )
 
                 is ManageWorkoutUiEvent.ScrollToExercise -> {
@@ -186,6 +170,12 @@ fun ManageWorkoutScreen(
         visible = state.showSetMoreActions,
         onDismiss = { viewModel.onAction(ManageWorkoutUiAction.DismissSetMoreActionSheet) },
     )
+
+    BottomSheetList(
+        items = workoutActions,
+        visible = state.showWorkoutMoreActions,
+        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.DismissWorkoutMoreActionSheet) },
+    )
 }
 
 @Composable
@@ -220,7 +210,7 @@ private fun ManageWorkoutScreenLayout(
         topBar = {
             Toolbar(
                 title = {
-                    if (state.mode.isExecute()) {
+                    if (state.mode.isExecute || state.mode.isView) {
                         ToolbarTitle(title = state.workout.name)
                     } else {
                         TextFields.Default(
@@ -244,9 +234,7 @@ private fun ManageWorkoutScreenLayout(
                 navController = navController,
                 onNavigateUp = onNavigateUp
             ) {
-                AnimatedVisibility(
-                    visible = state.mode.isExecute()
-                ) {
+                if(state.mode.isExecute) {
                     WorkoutTimer(
                         time = workoutDuration,
                         modifier = Modifier
@@ -255,16 +243,29 @@ private fun ManageWorkoutScreenLayout(
                     )
                 }
 
-                Buttons.Default(
-                    enabled = state.workout.exercises.isNotEmpty(),
-                    modifier = Modifier.padding(end = Dimens.Small),
-                    text = stringResource(id = CommonR.string.button_save),
-                    contentPadding = PaddingValues(0.dp),
-                    minButtonSize = 36.dp,
-                    onClick = {
-                        onAction(ManageWorkoutUiAction.Save)
+                if(state.mode.isView) {
+                    IconButton(
+                        onClick = {
+                            onAction(ManageWorkoutUiAction.ShowWorkoutMoreActionSheet)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.MoreHoriz,
+                            contentDescription = null
+                        )
                     }
-                )
+                } else {
+                    Buttons.Default(
+                        enabled = state.workout.exercises.isNotEmpty(),
+                        modifier = Modifier.padding(end = Dimens.Small),
+                        text = stringResource(id = CommonR.string.button_save),
+                        contentPadding = PaddingValues(0.dp),
+                        minButtonSize = 36.dp,
+                        onClick = {
+                            onAction(ManageWorkoutUiAction.Save)
+                        }
+                    )
+                }
             }
         }
     ) {
@@ -276,9 +277,8 @@ private fun ManageWorkoutScreenLayout(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Top
             ) {
-                AnimatedVisibility(
-                    visible = state.mode.isExecute(),
-                ) {
+
+                if(state.mode.isExecute) {
                     WorkoutStatistics(
                         modifier = Modifier.fillMaxWidth(),
                         volume = state.workout.totalVolumeCompleted,
@@ -288,12 +288,32 @@ private fun ManageWorkoutScreenLayout(
                     )
                 }
 
-
                 ExerciseList(
                     modifier = Modifier.weight(1f),
                     state = state,
                     lazyListState = lazyListState,
                     onAction = onAction,
+                    listHeader = {
+                        // Items that will be prepended to the top of the list
+                        if(state.mode.isView) {
+                            item {
+                                Buttons.Default(
+                                    text = stringResource(id = R.string.title_start_workout),
+                                    modifier = Modifier.fillMaxWidth()
+                                        .padding(Dimens.Normal)
+                                ) {
+                                    onAction(ManageWorkoutUiAction.StartWorkout)
+                                }
+                            }
+
+                            item {
+                                Label(
+                                    modifier = Modifier.padding(start = Dimens.Normal),
+                                    label = stringResource(id = R.string.label_exercises)
+                                )
+                            }
+                        }
+                    }
                 )
             }
 
