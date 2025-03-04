@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.LoadingContainer
@@ -49,12 +50,12 @@ fun WorkoutDetailScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is WorkoutDetailUiEvent.NavigateToEdit -> {
-                    navController.navigate(Screen.Workout.Manage(event.id))
+                    navController.navigate(Screen.Workout.Manage(event.id, ManageWorkoutMode.EDIT))
                 }
 
                 is WorkoutDetailUiEvent.NavigateBack -> navController.popBackStack()
                 is WorkoutDetailUiEvent.NavigateToStartWorkout -> {
-                    navController.navigate(Screen.Workout.Manage(event.id, true))
+                    navController.navigate(Screen.Workout.Manage(event.id, ManageWorkoutMode.EXECUTE))
                 }
             }
         }

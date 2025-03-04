@@ -14,7 +14,7 @@ import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.LighterSuccessGreen
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
-import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
+import com.tomtruyen.core.common.models.ManageWorkoutMode
 
 @Composable
 fun WorkoutExerciseSetTable(

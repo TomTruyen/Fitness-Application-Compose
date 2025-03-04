@@ -14,7 +14,7 @@ import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
-import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
+import com.tomtruyen.core.common.models.ManageWorkoutMode
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -22,14 +22,14 @@ import kotlinx.coroutines.launch
 
 class ManageWorkoutViewModel(
     private val id: String?,
-    execute: Boolean,
+    mode: ManageWorkoutMode,
     private val userRepository: UserRepository,
     private val workoutRepository: WorkoutRepository,
     private val historyRepository: WorkoutHistoryRepository,
     private val settingsRepository: SettingsRepository
 ) : BaseViewModel<ManageWorkoutUiState, ManageWorkoutUiAction, ManageWorkoutUiEvent>(
     initialState = ManageWorkoutUiState(
-        mode = ManageWorkoutMode.fromArgs(id, execute)
+        mode = mode
     )
 ) {
     private val timer by lazy { StopwatchTimer() }

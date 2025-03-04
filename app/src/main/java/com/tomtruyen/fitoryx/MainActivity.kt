@@ -141,7 +141,7 @@ class MainActivity : ComponentActivity() {
 
                                 val viewModel = koinViewModel<ManageWorkoutViewModel>(
                                     viewModelStoreOwner = backStackEntry,
-                                    parameters = { parametersOf(args.id, args.execute) }
+                                    parameters = { parametersOf(args.id, args.mode) }
                                 )
 
                                 ManageWorkoutScreen(

@@ -46,7 +46,7 @@ import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.dialogs.RestAlertDialog
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
-import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
+import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.common.R as CommonR
 
 @Composable

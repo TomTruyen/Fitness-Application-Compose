@@ -1,6 +1,7 @@
 package com.tomtruyen.navigation
 
 import androidx.annotation.Keep
+import com.tomtruyen.core.common.models.ManageWorkoutMode
 import kotlinx.serialization.Serializable
 
 @Keep
@@ -53,7 +54,7 @@ sealed interface Screen {
         data class Detail(val id: String) : Workout
 
         @Serializable
-        data class Manage(val id: String? = null, val execute: Boolean = false) : Workout
+        data class Manage(val id: String? = null, val mode: ManageWorkoutMode) : Workout
     }
 
     sealed interface History: Screen {

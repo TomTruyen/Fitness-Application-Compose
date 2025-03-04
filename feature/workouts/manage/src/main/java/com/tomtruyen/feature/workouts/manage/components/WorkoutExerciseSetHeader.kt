@@ -22,7 +22,7 @@ import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.feature.workouts.manage.R
-import com.tomtruyen.feature.workouts.manage.models.ManageWorkoutMode
+import com.tomtruyen.core.common.models.ManageWorkoutMode
 
 @Composable
 fun WorkoutExerciseSetHeader(

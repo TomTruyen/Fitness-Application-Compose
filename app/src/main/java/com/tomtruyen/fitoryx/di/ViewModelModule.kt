@@ -1,5 +1,6 @@
 package com.tomtruyen.fitoryx.di
 
+import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
@@ -40,10 +41,10 @@ val viewModelModule = module {
         )
     }
 
-    viewModel { (id: String?, execute: Boolean) ->
+    viewModel { (id: String?, mode: ManageWorkoutMode) ->
         ManageWorkoutViewModel(
             id = id,
-            execute = execute,
+            mode = mode,
             userRepository = get<UserRepository>(),
             workoutRepository = get<WorkoutRepository>(),
             historyRepository = get<WorkoutHistoryRepository>(),
