@@ -41,7 +41,7 @@ fun ExerciseListItem(
             onTitleClick = {
                 onAction(
                     ManageWorkoutUiAction.NavigateExerciseDetail(
-                        id = exercise.id
+                        id = exercise.exerciseId
                     )
                 )
             },
