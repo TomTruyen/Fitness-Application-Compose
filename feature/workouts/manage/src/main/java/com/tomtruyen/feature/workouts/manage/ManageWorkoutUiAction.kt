@@ -28,6 +28,8 @@ sealed class ManageWorkoutUiAction {
     data object DismissExerciseMoreActionSheet: ManageWorkoutUiAction()
     data object DismissSetMoreActionSheet: ManageWorkoutUiAction()
 
+    data class NavigateExerciseDetail(val id: String): ManageWorkoutUiAction()
+
     data object Save : ManageWorkoutUiAction()
 
     data class OnRepsChanged(

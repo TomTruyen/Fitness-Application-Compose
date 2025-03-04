@@ -117,8 +117,8 @@ fun ManageWorkoutScreen(
                     )
                 )
 
-                is ManageWorkoutUiEvent.NavigateToDetail -> navController.navigate(
-                    Screen.Workout.Detail(event.id)
+                is ManageWorkoutUiEvent.NavigateToExerciseDetail -> navController.navigate(
+                    Screen.Exercise.Detail(event.id)
                 )
 
                 is ManageWorkoutUiEvent.NavigateToHistoryDetail -> navController.navigate(

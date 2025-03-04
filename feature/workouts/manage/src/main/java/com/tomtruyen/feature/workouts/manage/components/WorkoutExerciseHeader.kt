@@ -1,5 +1,6 @@
 package com.tomtruyen.feature.workouts.manage.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,7 +22,8 @@ import com.tomtruyen.core.ui.Avatar
 fun WorkoutExerciseHeader(
     name: String,
     imageUrl: String?,
-    onClick: () -> Unit,
+    onTitleClick: () -> Unit,
+    onActionClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -40,13 +42,16 @@ fun WorkoutExerciseHeader(
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier.clickable(
+                onClick = onTitleClick
             )
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         IconButton(
-            onClick = onClick,
+            onClick = onActionClick,
         ) {
             Icon(
                 imageVector = Icons.Default.MoreVert,

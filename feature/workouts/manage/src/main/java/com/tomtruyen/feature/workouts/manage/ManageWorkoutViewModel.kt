@@ -295,6 +295,10 @@ class ManageWorkoutViewModel(
         when (action) {
             is ManageWorkoutUiAction.Save -> save()
 
+            is ManageWorkoutUiAction.NavigateExerciseDetail -> triggerEvent(
+                ManageWorkoutUiEvent.NavigateToExerciseDetail(action.id)
+            )
+
             is ManageWorkoutUiAction.OnWorkoutNameChanged -> updateWorkoutName(
                 name = action.name
             )

@@ -37,7 +37,14 @@ fun ExerciseListItem(
                 .padding(Dimens.Normal),
             name = exercise.displayName,
             imageUrl = exercise.imageUrl,
-            onClick = {
+            onTitleClick = {
+                onAction(
+                    ManageWorkoutUiAction.NavigateExerciseDetail(
+                        id = exercise.id
+                    )
+                )
+            },
+            onActionClick = {
                 onAction(
                     ManageWorkoutUiAction.ShowExerciseMoreActionSheet(
                         id = exercise.id
