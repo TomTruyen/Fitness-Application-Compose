@@ -293,3 +293,4 @@ key.jks
 local.properties
 
 .kotlin/
+/.kotlin
