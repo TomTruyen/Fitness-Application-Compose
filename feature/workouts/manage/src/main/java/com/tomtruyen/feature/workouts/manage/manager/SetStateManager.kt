@@ -1,5 +1,6 @@
 package com.tomtruyen.feature.workouts.manage.manager
 
+import com.tomtruyen.core.common.manager.StateManager
 import com.tomtruyen.data.models.ui.copyWithAddSet
 import com.tomtruyen.data.models.ui.copyWithDeleteSet
 import com.tomtruyen.data.models.ui.copyWithRepsChanged

@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.workouts.manage.manager
+package com.tomtruyen.core.common.manager
 
 fun interface StateManager<T> {
     fun onAction(action: T)

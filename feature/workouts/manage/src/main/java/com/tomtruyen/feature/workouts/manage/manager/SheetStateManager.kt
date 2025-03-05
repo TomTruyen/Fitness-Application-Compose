@@ -1,5 +1,6 @@
 package com.tomtruyen.feature.workouts.manage.manager
 
+import com.tomtruyen.core.common.manager.StateManager
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiState
 
