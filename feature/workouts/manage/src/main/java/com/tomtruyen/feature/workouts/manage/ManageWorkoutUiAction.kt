@@ -3,71 +3,74 @@ package com.tomtruyen.feature.workouts.manage
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 
 sealed class ManageWorkoutUiAction {
-    data class OnWorkoutNameChanged(val name: String) : ManageWorkoutUiAction()
+    sealed class Workout: ManageWorkoutUiAction() {
+        data class OnNameChanged(val name: String): Workout()
 
-    data class OnExerciseNotesChanged(val id: String, val notes: String) : ManageWorkoutUiAction()
+        data object OnSave: Workout()
 
-    data object OnReplaceExerciseClicked : ManageWorkoutUiAction()
+        data object OnDelete: Workout()
+    }
 
-    data class OnReplaceExercise(val exercise: ExerciseUiModel) :
-        ManageWorkoutUiAction()
+    sealed class Exercise: ManageWorkoutUiAction() {
+        data class OnNotesChanged(val id: String, val notes: String) : Exercise()
 
-    data object OnAddExerciseClicked : ManageWorkoutUiAction()
+        data object OnReplaceClicked : Exercise()
 
-    data class OnAddExercises(val exercises: List<ExerciseUiModel>) :
-        ManageWorkoutUiAction()
+        data class Replace(val exercise: ExerciseUiModel): Exercise()
 
-    data object OnDeleteExercise : ManageWorkoutUiAction()
+        data object OnAddClicked: Exercise()
 
-    data class OnReorder(val from: Int, val to: Int) : ManageWorkoutUiAction()
+        data class Add(val exercises: List<ExerciseUiModel>): Exercise()
 
-    data class ShowExerciseMoreActionSheet(val id: String? = null) : ManageWorkoutUiAction()
-    data object DismissExerciseMoreActionSheet: ManageWorkoutUiAction()
+        data object Delete: Exercise()
 
-    data class ShowSetMoreActionSheet(val id: String? = null, val setIndex: Int? = null) : ManageWorkoutUiAction()
-    data object DismissSetMoreActionSheet: ManageWorkoutUiAction()
+        data class Reorder(val from: Int, val to: Int): Exercise()
+    }
 
-    data object ShowWorkoutMoreActionSheet: ManageWorkoutUiAction()
-    data object DismissWorkoutMoreActionSheet: ManageWorkoutUiAction()
+    sealed class Set: ManageWorkoutUiAction() {
+        data class OnRepsChanged(val exerciseId: String, val setIndex: Int, val reps: String?) : Set()
 
-    data class NavigateExerciseDetail(val id: String): ManageWorkoutUiAction()
+        data class OnWeightChanged(val exerciseId: String, val setIndex: Int, val weight: String?) : Set()
 
-    data object Save : ManageWorkoutUiAction()
+        data class OnTimeChanged(val exerciseId: String, val setIndex: Int, val time: Int?) : Set()
 
-    data object NavigateEditWorkout: ManageWorkoutUiAction()
+        data class Delete(val exerciseId: String, val setIndex: Int
+        ) : Set()
 
-    data object DeleteWorkout: ManageWorkoutUiAction()
-    data object StartWorkout: ManageWorkoutUiAction()
+        data class Add(val exerciseId: String) : Set()
 
-    data class OnRepsChanged(
-        val id: String,
-        val setIndex: Int,
-        val reps: String?
-    ) : ManageWorkoutUiAction()
+        data class OnToggleCompleted(val exerciseId: String, val setIndex: Int) : Set()
+    }
 
-    data class OnWeightChanged(
-        val id: String,
-        val setIndex: Int,
-        val weight: String?
-    ) : ManageWorkoutUiAction()
+    sealed class Sheet: ManageWorkoutUiAction() {
+        sealed class Workout: Sheet() {
+            data object Show: Workout()
 
-    data class OnTimeChanged(
-        val id: String,
-        val setIndex: Int,
-        val time: Int?
-    ) : ManageWorkoutUiAction()
+            data object Dismiss: Workout()
+        }
 
-    data class OnDeleteSet(
-        val id: String,
-        val setIndex: Int
-    ) : ManageWorkoutUiAction()
+        sealed class Exercise: Sheet() {
+            data class Show(val id: String? = null): Exercise()
 
-    data class OnAddSet(
-        val id: String
-    ) : ManageWorkoutUiAction()
+            data object Dismiss: Exercise()
+        }
 
-    data class ToggleSetCompleted(
-        val id: String,
-        val setIndex: Int
-    ) : ManageWorkoutUiAction()
+        sealed class Set: Sheet() {
+            data class Show(val exerciseId: String? = null, val setIndex: Int? = null): Set()
+
+            data object Dismiss: Set()
+        }
+    }
+
+    sealed class Navigate: ManageWorkoutUiAction() {
+        sealed class Workout: Navigate() {
+            data object Execute: Workout()
+
+            data object Edit: Workout()
+        }
+
+        sealed class Exercise: Navigate() {
+            data class Detail(val id: String): ManageWorkoutUiAction()
+        }
+    }
 }

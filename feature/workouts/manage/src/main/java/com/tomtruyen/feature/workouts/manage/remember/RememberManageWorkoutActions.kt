@@ -23,14 +23,14 @@ fun rememberExerciseActions(
                 titleRes = R.string.action_exercise_replace,
                 icon = Icons.Default.Sync,
                 onClick = {
-                    onAction(ManageWorkoutUiAction.OnReplaceExerciseClicked)
+                    onAction(ManageWorkoutUiAction.Exercise.OnReplaceClicked)
                 }
             ),
             BottomSheetItem(
                 titleRes = R.string.action_remove_exercise,
                 icon = Icons.Default.Close,
                 onClick = {
-                    onAction(ManageWorkoutUiAction.OnDeleteExercise)
+                    onAction(ManageWorkoutUiAction.Exercise.Delete)
                 },
                 color = errorColor
             ),
@@ -54,7 +54,7 @@ fun rememberSetActions(
                 onClick = {
                     if (selectedExerciseId != null && selectedSetIndex != null) {
                         onAction(
-                            ManageWorkoutUiAction.OnDeleteSet(
+                            ManageWorkoutUiAction.Set.Delete(
                                 selectedExerciseId,
                                 selectedSetIndex
                             )
@@ -80,7 +80,7 @@ fun rememberWorkoutActions(
                 icon = Icons.Default.Edit,
                 onClick = {
                     onAction(
-                        ManageWorkoutUiAction.NavigateEditWorkout
+                        ManageWorkoutUiAction.Navigate.Workout.Edit
                     )
                 }
             ),
@@ -89,7 +89,7 @@ fun rememberWorkoutActions(
                 icon = Icons.Default.Close,
                 onClick = {
                     onAction(
-                        ManageWorkoutUiAction.DeleteWorkout
+                        ManageWorkoutUiAction.Workout.OnDelete
                     )
                 },
                 color = errorColor

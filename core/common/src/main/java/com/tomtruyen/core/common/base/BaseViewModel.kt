@@ -62,8 +62,8 @@ abstract class BaseViewModel<UIState, UIAction, UIEvent>(
     private val _refreshing = MutableStateFlow(false)
     val refreshing = _refreshing.asStateFlow()
 
-    private val _uiState = MutableStateFlow(initialState)
-    val uiState = _uiState.asStateFlow()
+    protected val state = MutableStateFlow(initialState)
+    val uiState = state.asStateFlow()
 
     private val _eventChannel = Channel<UIEvent>()
     val eventFlow = _eventChannel.receiveAsFlow()
@@ -88,11 +88,11 @@ abstract class BaseViewModel<UIState, UIAction, UIEvent>(
         }
 
     protected fun updateState(block: (UIState) -> UIState) {
-        _uiState.update(block)
+        state.update(block)
     }
 
     protected fun updateAndGetState(block: (UIState) -> UIState): UIState {
-        return _uiState.updateAndGet(block)
+        return state.updateAndGet(block)
     }
 
     protected fun triggerEvent(event: UIEvent) = vmScope.launch {

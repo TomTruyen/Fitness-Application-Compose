@@ -1,12 +1,27 @@
 package com.tomtruyen.feature.workouts.manage
 
 sealed class ManageWorkoutUiEvent {
-    data object NavigateToReplaceExercise : ManageWorkoutUiEvent()
-    data object NavigateToAddExercise : ManageWorkoutUiEvent()
-    data object NavigateBack : ManageWorkoutUiEvent()
-    data class NavigateToHistoryDetail(val workoutHistoryId: String): ManageWorkoutUiEvent()
+    sealed class Navigate: ManageWorkoutUiEvent() {
+        sealed class Workout: Navigate() {
+            data class Edit(val id: String?): ManageWorkoutUiEvent()
+
+            data class Execute(val id: String?): ManageWorkoutUiEvent()
+        }
+
+        sealed class Exercise : Navigate() {
+            data object Add : Exercise()
+
+            data object Replace : Exercise()
+
+            data class Detail(val id: String): Exercise()
+        }
+
+        sealed class History: Navigate() {
+            data class Detail(val workoutHistoryId: String): History()
+        }
+
+        data object Back: Navigate()
+    }
+
     data class ScrollToExercise(val index: Int) : ManageWorkoutUiEvent()
-    data class NavigateToExerciseDetail(val id: String): ManageWorkoutUiEvent()
-    data class NavigateToEditWorkout(val id: String?): ManageWorkoutUiEvent()
-    data class NavigateToExecuteWorkout(val id: String?): ManageWorkoutUiEvent()
 }

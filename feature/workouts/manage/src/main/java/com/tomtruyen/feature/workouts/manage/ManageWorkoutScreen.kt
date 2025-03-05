@@ -80,32 +80,33 @@ fun ManageWorkoutScreen(
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is ManageWorkoutUiEvent.NavigateBack -> navController.popBackStack()
-                is ManageWorkoutUiEvent.NavigateToReplaceExercise -> navController.navigate(
-                    Screen.Exercise.Overview(
-                        Screen.Exercise.Overview.Mode.REPLACE
-                    )
-                )
+                is ManageWorkoutUiEvent.Navigate.Back -> navController.popBackStack()
 
-                is ManageWorkoutUiEvent.NavigateToAddExercise -> navController.navigate(
+                is ManageWorkoutUiEvent.Navigate.Exercise.Add -> navController.navigate(
                     Screen.Exercise.Overview(
                         Screen.Exercise.Overview.Mode.SELECT
                     )
                 )
 
-                is ManageWorkoutUiEvent.NavigateToExerciseDetail -> navController.navigate(
+                is ManageWorkoutUiEvent.Navigate.Exercise.Replace -> navController.navigate(
+                    Screen.Exercise.Overview(
+                        Screen.Exercise.Overview.Mode.REPLACE
+                    )
+                )
+
+                is ManageWorkoutUiEvent.Navigate.Exercise.Detail -> navController.navigate(
                     Screen.Exercise.Detail(event.id)
                 )
 
-                is ManageWorkoutUiEvent.NavigateToHistoryDetail -> navController.navigate(
+                is ManageWorkoutUiEvent.Navigate.History.Detail -> navController.navigate(
                     Screen.History.Detail(event.workoutHistoryId)
                 )
 
-                is ManageWorkoutUiEvent.NavigateToEditWorkout -> navController.navigate(
+                is ManageWorkoutUiEvent.Navigate.Workout.Edit -> navController.navigate(
                     Screen.Workout.Manage(event.id, ManageWorkoutMode.EDIT),
                 )
 
-                is ManageWorkoutUiEvent.NavigateToExecuteWorkout -> navController.navigate(
+                is ManageWorkoutUiEvent.Navigate.Workout.Execute -> navController.navigate(
                     Screen.Workout.Manage(event.id, ManageWorkoutMode.EXECUTE)
                 )
 
@@ -133,12 +134,12 @@ fun ManageWorkoutScreen(
                     when (mode) {
                         Screen.Exercise.Overview.Mode.REPLACE -> {
                             exercises.firstOrNull()?.let { exercise ->
-                                viewModel.onAction(ManageWorkoutUiAction.OnReplaceExercise(exercise))
+                                viewModel.onAction(ManageWorkoutUiAction.Exercise.Replace(exercise))
                             }
                         }
 
                         Screen.Exercise.Overview.Mode.SELECT -> {
-                            viewModel.onAction(ManageWorkoutUiAction.OnAddExercises(exercises))
+                            viewModel.onAction(ManageWorkoutUiAction.Exercise.Add(exercises))
                         }
 
                         else -> Unit
@@ -160,21 +161,21 @@ fun ManageWorkoutScreen(
     )
 
     BottomSheetList(
+        items = workoutActions,
+        visible = state.showWorkoutMoreActions,
+        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.Sheet.Workout.Dismiss) },
+    )
+
+    BottomSheetList(
         items = exerciseActions,
         visible = state.showExerciseMoreActions,
-        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.DismissExerciseMoreActionSheet) },
+        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.Sheet.Exercise.Dismiss) },
     )
 
     BottomSheetList(
         items = setActions,
         visible = state.showSetMoreActions,
-        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.DismissSetMoreActionSheet) },
-    )
-
-    BottomSheetList(
-        items = workoutActions,
-        visible = state.showWorkoutMoreActions,
-        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.DismissWorkoutMoreActionSheet) },
+        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.Sheet.Set.Dismiss) },
     )
 }
 
@@ -223,7 +224,7 @@ private fun ManageWorkoutScreenLayout(
                             value = state.workout.name,
                             onValueChange = { name ->
                                 onAction(
-                                    ManageWorkoutUiAction.OnWorkoutNameChanged(
+                                    ManageWorkoutUiAction.Workout.OnNameChanged(
                                         name = name
                                     )
                                 )
@@ -246,7 +247,7 @@ private fun ManageWorkoutScreenLayout(
                 if(state.mode.isView) {
                     IconButton(
                         onClick = {
-                            onAction(ManageWorkoutUiAction.ShowWorkoutMoreActionSheet)
+                            onAction(ManageWorkoutUiAction.Sheet.Workout.Show)
                         }
                     ) {
                         Icon(
@@ -262,7 +263,7 @@ private fun ManageWorkoutScreenLayout(
                         contentPadding = PaddingValues(0.dp),
                         minButtonSize = 36.dp,
                         onClick = {
-                            onAction(ManageWorkoutUiAction.Save)
+                            onAction(ManageWorkoutUiAction.Workout.OnSave)
                         }
                     )
                 }
@@ -302,7 +303,7 @@ private fun ManageWorkoutScreenLayout(
                                     modifier = Modifier.fillMaxWidth()
                                         .padding(Dimens.Normal)
                                 ) {
-                                    onAction(ManageWorkoutUiAction.StartWorkout)
+                                    onAction(ManageWorkoutUiAction.Navigate.Workout.Execute)
                                 }
                             }
 

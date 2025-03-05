@@ -34,7 +34,7 @@ fun ExerciseList(
     val haptic = LocalHapticFeedback.current
 
     val reorderableLazyListState = rememberReorderableLazyListState(lazyListState) { from, to ->
-        onAction(ManageWorkoutUiAction.OnReorder(from.index, to.index))
+        onAction(ManageWorkoutUiAction.Exercise.Reorder(from.index, to.index))
     }
 
     LazyColumn(
@@ -83,7 +83,7 @@ fun ExerciseList(
                             vertical = Dimens.Small
                         ),
                 ) {
-                    onAction(ManageWorkoutUiAction.OnAddExerciseClicked)
+                    onAction(ManageWorkoutUiAction.Exercise.OnAddClicked)
                 }
             }
         }

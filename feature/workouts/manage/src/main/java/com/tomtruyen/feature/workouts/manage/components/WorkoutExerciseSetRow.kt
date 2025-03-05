@@ -22,7 +22,6 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -68,8 +67,8 @@ fun WorkoutExerciseSetRow(
             when (it) {
                 SwipeToDismissBoxValue.EndToStart -> {
                     onAction(
-                        ManageWorkoutUiAction.OnDeleteSet(
-                            id = workoutExerciseId,
+                        ManageWorkoutUiAction.Set.Delete(
+                            exerciseId = workoutExerciseId,
                             setIndex = setIndex
                         )
                     )
@@ -150,8 +149,8 @@ fun WorkoutExerciseSetRow(
                     completed = set.completed,
                     onRepsChanged = { reps ->
                         onAction(
-                            ManageWorkoutUiAction.OnRepsChanged(
-                                id = workoutExerciseId,
+                            ManageWorkoutUiAction.Set.OnRepsChanged(
+                                exerciseId = workoutExerciseId,
                                 setIndex = setIndex,
                                 reps = reps
                             )
@@ -159,8 +158,8 @@ fun WorkoutExerciseSetRow(
                     },
                     onWeightChanged = { weight ->
                         onAction(
-                            ManageWorkoutUiAction.OnWeightChanged(
-                                id = workoutExerciseId,
+                            ManageWorkoutUiAction.Set.OnWeightChanged(
+                                exerciseId = workoutExerciseId,
                                 setIndex = setIndex,
                                 weight = weight
                             )
@@ -174,8 +173,8 @@ fun WorkoutExerciseSetRow(
                     completed = set.completed,
                     onTimeChanged = { time ->
                         onAction(
-                            ManageWorkoutUiAction.OnTimeChanged(
-                                id = workoutExerciseId,
+                            ManageWorkoutUiAction.Set.OnTimeChanged(
+                                exerciseId = workoutExerciseId,
                                 setIndex = setIndex,
                                 time = time
                             )
@@ -191,8 +190,8 @@ fun WorkoutExerciseSetRow(
                     checked = set.completed,
                     onClick = {
                         onAction(
-                            ManageWorkoutUiAction.ToggleSetCompleted(
-                                id = workoutExerciseId,
+                            ManageWorkoutUiAction.Set.OnToggleCompleted(
+                                exerciseId = workoutExerciseId,
                                 setIndex = setIndex
                             )
                         )

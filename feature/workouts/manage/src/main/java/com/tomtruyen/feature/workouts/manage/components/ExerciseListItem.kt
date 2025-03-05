@@ -40,14 +40,14 @@ fun ExerciseListItem(
             mode = mode,
             onTitleClick = {
                 onAction(
-                    ManageWorkoutUiAction.NavigateExerciseDetail(
+                    ManageWorkoutUiAction.Navigate.Exercise.Detail(
                         id = exercise.exerciseId
                     )
                 )
             },
             onActionClick = {
                 onAction(
-                    ManageWorkoutUiAction.ShowExerciseMoreActionSheet(
+                    ManageWorkoutUiAction.Sheet.Exercise.Show(
                         id = exercise.id
                     )
                 )
@@ -69,7 +69,7 @@ fun ExerciseListItem(
             value = exercise.notes,
             onValueChange = { notes ->
                 onAction(
-                    ManageWorkoutUiAction.OnExerciseNotesChanged(
+                    ManageWorkoutUiAction.Exercise.OnNotesChanged(
                         id = exercise.id,
                         notes = notes
                     )
@@ -86,8 +86,8 @@ fun ExerciseListItem(
             mode = mode,
             onSetClick = { id, setIndex ->
                 onAction(
-                    ManageWorkoutUiAction.ShowSetMoreActionSheet(
-                        id = id,
+                    ManageWorkoutUiAction.Sheet.Set.Show(
+                        exerciseId = id,
                         setIndex = setIndex
                     )
                 )
@@ -109,7 +109,7 @@ fun ExerciseListItem(
                     contentColor = MaterialTheme.colorScheme.onSurface
                 ),
                 onClick = {
-                    onAction(ManageWorkoutUiAction.OnAddSet(exercise.id))
+                    onAction(ManageWorkoutUiAction.Set.Add(exercise.id))
                 }
             )
         }
