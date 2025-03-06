@@ -66,26 +66,26 @@ fun BottomSheetList(
                     .padding(Dimens.Normal)
                     .clip(MaterialTheme.shapes.medium)
                     .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)),
-                ) {
-                    itemsIndexed(items) { index, item ->
-                        Column {
-                            BottomSheetListItem(
-                                item = item,
-                                selected = index == selectedIndex,
-                                onDismiss = {
-                                    scope.launch {
-                                        state.hide()
-                                    }.invokeOnCompletion {
-                                        onDismiss()
-                                    }
+            ) {
+                itemsIndexed(items) { index, item ->
+                    Column {
+                        BottomSheetListItem(
+                            item = item,
+                            selected = index == selectedIndex,
+                            onDismiss = {
+                                scope.launch {
+                                    state.hide()
+                                }.invokeOnCompletion {
+                                    onDismiss()
                                 }
-                            )
-
-                            if(index < items.lastIndex) {
-                                HorizontalDivider()
                             }
+                        )
+
+                        if (index < items.lastIndex) {
+                            HorizontalDivider()
                         }
                     }
+                }
             }
         }
     }
@@ -118,13 +118,14 @@ private fun BottomSheetListItem(
 
         Text(
             modifier = Modifier.weight(1f),
-            text = item.titleRes?.let { stringResource(id = item.titleRes) } ?: item.title.orEmpty(),
+            text = item.titleRes?.let { stringResource(id = item.titleRes) }
+                ?: item.title.orEmpty(),
             style = MaterialTheme.typography.bodyMedium.copy(
                 color = item.color ?: MaterialTheme.colorScheme.onSurface
             )
         )
 
-        if(selected) {
+        if (selected) {
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = null,

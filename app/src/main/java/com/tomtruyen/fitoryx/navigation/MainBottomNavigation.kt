@@ -36,8 +36,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.ChineseBlack
-import com.tomtruyen.core.designsystem.theme.ChineseSilver
 import com.tomtruyen.core.designsystem.theme.navigationItemBackgroundColorActive
 import com.tomtruyen.core.designsystem.theme.navigationItemContentColorActive
 import com.tomtruyen.core.designsystem.theme.navigationItemContentColorInactive
@@ -50,7 +48,7 @@ fun MainBottomNavigation(
     val backstackEntry by navController.currentBackStackEntryAsState()
 
     val height by animateDpAsState(
-        targetValue = if(showBottomBar) 96.dp else 0.dp,
+        targetValue = if (showBottomBar) 96.dp else 0.dp,
         animationSpec = tween(
             durationMillis = 200,
             easing = FastOutSlowInEasing

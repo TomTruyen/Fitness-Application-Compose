@@ -10,7 +10,7 @@ import com.tomtruyen.feature.exercises.manage.ManageExerciseUiState
 
 class ExerciseStateManager(
     private val updateState: ((ManageExerciseUiState) -> ManageExerciseUiState) -> Unit,
-): StateManager<ManageExerciseUiAction> {
+) : StateManager<ManageExerciseUiAction> {
     private fun updateName(name: String) = updateState {
         it.copy(
             exercise = it.exercise.copy(
@@ -45,7 +45,7 @@ class ExerciseStateManager(
     }
 
     override fun onAction(action: ManageExerciseUiAction) {
-        when(action) {
+        when (action) {
             is ManageExerciseUiAction.OnExerciseNameChanged -> updateName(
                 name = action.name
             )

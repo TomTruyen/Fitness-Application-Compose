@@ -17,7 +17,8 @@ data class WorkoutHistoryUiModel(
     val name: String = "",
     val unit: UnitType = UnitType.KG,
     val duration: Long = 0L,
-    val createdAt: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+    val createdAt: LocalDateTime = Clock.System.now()
+        .toLocalDateTime(TimeZone.currentSystemDefault()),
     val page: Int,
     val exercises: List<WorkoutHistoryExerciseUiModel> = emptyList()
 ) {
@@ -29,7 +30,8 @@ data class WorkoutHistoryUiModel(
             duration = entity.workoutHistory.duration,
             createdAt = entity.workoutHistory.createdAt,
             page = entity.workoutHistory.page,
-            exercises = entity.exercises.map(WorkoutHistoryExerciseUiModel::fromEntity).sortedBy { it.sortOrder }
+            exercises = entity.exercises.map(WorkoutHistoryExerciseUiModel::fromEntity)
+                .sortedBy { it.sortOrder }
         )
     }
 }

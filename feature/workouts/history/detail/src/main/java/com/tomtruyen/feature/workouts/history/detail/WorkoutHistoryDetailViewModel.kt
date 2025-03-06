@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 class WorkoutHistoryDetailViewModel(
     private val id: String,
     private val historyRepository: WorkoutHistoryRepository
-): BaseViewModel<WorkoutHistoryDetailUiState, WorkoutHistoryDetailUiAction, WorkoutHistoryDetailUiEvent>(
+) : BaseViewModel<WorkoutHistoryDetailUiState, WorkoutHistoryDetailUiAction, WorkoutHistoryDetailUiEvent>(
     initialState = WorkoutHistoryDetailUiState()
 ) {
     init {

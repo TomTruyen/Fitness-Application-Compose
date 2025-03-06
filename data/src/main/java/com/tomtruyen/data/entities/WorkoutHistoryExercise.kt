@@ -56,7 +56,7 @@ data class WorkoutHistoryExercise(
     val category: String? = null,
     @SerialName(KEY_EQUIPMENT)
     val equipment: String? = null
-): BaseEntity {
+) : BaseEntity {
     companion object {
         const val TABLE_NAME = "WorkoutHistoryExercise"
 

@@ -3,7 +3,6 @@
 package com.tomtruyen.core.validation.rules
 
 import android.content.Context
-import com.tomtruyen.core.common.utils.EmailUtils.getKoin
 import com.tomtruyen.core.validation.TextRule
 import com.tomtruyen.core.common.R as CommonR
 

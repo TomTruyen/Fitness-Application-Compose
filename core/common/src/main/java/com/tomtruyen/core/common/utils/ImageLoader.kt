@@ -18,9 +18,10 @@ class ImageLoader(
     @SuppressLint("DiscouragedApi")
     private fun fromLocal(context: Context, url: String): String? {
         val resourceName = url.substringBeforeLast(".")
-        val resourceId = context.resources.getIdentifier(resourceName, "drawable", context.packageName)
+        val resourceId =
+            context.resources.getIdentifier(resourceName, "drawable", context.packageName)
 
-        return if(resourceId != 0) {
+        return if (resourceId != 0) {
             "android.resource://${context.packageName}/$resourceId"
         } else null
     }

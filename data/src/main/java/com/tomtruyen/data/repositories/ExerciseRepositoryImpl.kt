@@ -12,7 +12,7 @@ import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
 
-class ExerciseRepositoryImpl: ExerciseRepository() {
+class ExerciseRepositoryImpl : ExerciseRepository() {
     private val dao = database.exerciseDao()
     private val categoryDao = database.categoryDao()
     private val equipmentDao = database.equipmentDao()
@@ -25,7 +25,8 @@ class ExerciseRepositoryImpl: ExerciseRepository() {
         exercises.map(ExerciseUiModel::fromEntity)
     }
 
-    override suspend fun findExerciseById(id: String) = dao.findById(id)?.let(ExerciseUiModel::fromEntity)
+    override suspend fun findExerciseById(id: String) =
+        dao.findById(id)?.let(ExerciseUiModel::fromEntity)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun findExerciseByIdAsync(id: String) = dao.findByIdAsync(id).mapLatest { exercise ->

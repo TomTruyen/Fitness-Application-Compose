@@ -1,24 +1,24 @@
 package com.tomtruyen.feature.workouts
 
 sealed class WorkoutsUiAction {
-    sealed class Sheet: WorkoutsUiAction() {
-        data class Show(val id: String): Sheet()
+    sealed class Sheet : WorkoutsUiAction() {
+        data class Show(val id: String) : Sheet()
 
-        data object Dismiss: Sheet()
+        data object Dismiss : Sheet()
     }
 
-    sealed class Dialog: WorkoutsUiAction() {
-        sealed class Discard: Dialog() {
-            data object Show: Discard()
+    sealed class Dialog : WorkoutsUiAction() {
+        sealed class Discard : Dialog() {
+            data object Show : Discard()
 
-            data object Dismiss: Discard()
+            data object Dismiss : Discard()
         }
     }
 
-    sealed class ActiveWorkout: WorkoutsUiAction() {
-        data object Resume: ActiveWorkout()
+    sealed class ActiveWorkout : WorkoutsUiAction() {
+        data object Resume : ActiveWorkout()
 
-        data object Discard: ActiveWorkout()
+        data object Discard : ActiveWorkout()
     }
 
     data object OnCreateClicked : WorkoutsUiAction()
@@ -27,11 +27,11 @@ sealed class WorkoutsUiAction {
 
     data class Execute(val id: String) : WorkoutsUiAction()
 
-    data object ExecuteEmpty: WorkoutsUiAction()
+    data object ExecuteEmpty : WorkoutsUiAction()
 
-    data object Edit: WorkoutsUiAction()
+    data object Edit : WorkoutsUiAction()
 
-    data object Delete: WorkoutsUiAction()
+    data object Delete : WorkoutsUiAction()
 
-    data object Refresh: WorkoutsUiAction()
+    data object Refresh : WorkoutsUiAction()
 }

@@ -39,10 +39,10 @@ data class ExerciseUiModel(
                 imageDetailUrl = imageDetailUrl,
                 type = type.value,
                 steps = steps,
-                equipmentId = if(equipment != EquipmentUiModel.DEFAULT) {
+                equipmentId = if (equipment != EquipmentUiModel.DEFAULT) {
                     equipment?.id
                 } else null,
-                categoryId = if(category != CategoryUiModel.DEFAULT) {
+                categoryId = if (category != CategoryUiModel.DEFAULT) {
                     category?.id
                 } else null,
                 userId = userId

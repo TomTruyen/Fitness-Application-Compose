@@ -235,7 +235,7 @@ private fun ManageWorkoutScreenLayout(
                 navController = navController,
                 onNavigateUp = onNavigateUp
             ) {
-                if(state.mode.isExecute) {
+                if (state.mode.isExecute) {
                     WorkoutTimer(
                         time = workoutDuration,
                         modifier = Modifier
@@ -244,7 +244,7 @@ private fun ManageWorkoutScreenLayout(
                     )
                 }
 
-                if(state.mode.isView) {
+                if (state.mode.isView) {
                     IconButton(
                         onClick = {
                             onAction(ManageWorkoutUiAction.Sheet.Workout.Show)
@@ -279,7 +279,7 @@ private fun ManageWorkoutScreenLayout(
                 verticalArrangement = Arrangement.Top
             ) {
 
-                if(state.mode.isExecute) {
+                if (state.mode.isExecute) {
                     WorkoutStatistics(
                         modifier = Modifier.fillMaxWidth(),
                         volume = state.workout.totalVolumeCompleted,
@@ -296,11 +296,12 @@ private fun ManageWorkoutScreenLayout(
                     onAction = onAction,
                     listHeader = {
                         // Items that will be prepended to the top of the list
-                        if(state.mode.isView) {
+                        if (state.mode.isView) {
                             item {
                                 Buttons.Default(
                                     text = stringResource(id = R.string.title_start_workout),
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier
+                                        .fillMaxWidth()
                                         .padding(Dimens.Normal)
                                 ) {
                                     onAction(ManageWorkoutUiAction.Navigate.Workout.Execute)

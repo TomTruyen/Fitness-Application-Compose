@@ -13,7 +13,7 @@ fun <T> rememberSetInputValue(
     hasBeenCompleted: Boolean,
     mode: ManageWorkoutMode,
     transform: (T?) -> String = {
-        when(it) {
+        when (it) {
             is Double? -> it?.tryIntString()
             else -> it?.toString()
         }.orEmpty()
@@ -24,7 +24,7 @@ fun <T> rememberSetInputValue(
     val value = remember(mode, currentValue, hasBeenCompleted) {
         val evaluation = (!mode.isExecute || initial != currentValue || hasBeenCompleted)
 
-        val transformedValue = if(evaluation)  {
+        val transformedValue = if (evaluation) {
             transform(currentValue)
         } else ""
         mutableStateOf(transformedValue)

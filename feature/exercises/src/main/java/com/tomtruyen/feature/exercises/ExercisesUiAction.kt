@@ -6,29 +6,29 @@ import com.tomtruyen.data.models.ui.EquipmentUiModel
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 
 sealed class ExercisesUiAction {
-    sealed class Workout: ExercisesUiAction() {
-        data object AddExercise: Workout()
+    sealed class Workout : ExercisesUiAction() {
+        data object AddExercise : Workout()
     }
 
-    sealed class Filter: ExercisesUiAction() {
-        data object ToggleSearch: Filter()
+    sealed class Filter : ExercisesUiAction() {
+        data object ToggleSearch : Filter()
 
-        data object OnClearClicked: Filter()
+        data object OnClearClicked : Filter()
 
-        data class OnRemoveClicked(val option: FilterOption): Filter()
+        data class OnRemoveClicked(val option: FilterOption) : Filter()
 
-        data class OnSearchQueryChanged(val query: String): Filter()
+        data class OnSearchQueryChanged(val query: String) : Filter()
 
-        data class OnCategoryFilterChanged(val category: CategoryUiModel): Filter()
+        data class OnCategoryFilterChanged(val category: CategoryUiModel) : Filter()
 
-        data class OnEquipmentFilterChanged(val equipment: EquipmentUiModel): Filter()
+        data class OnEquipmentFilterChanged(val equipment: EquipmentUiModel) : Filter()
     }
 
-    data object OnFilterClicked: ExercisesUiAction()
+    data object OnFilterClicked : ExercisesUiAction()
 
-    data object OnAddClicked: ExercisesUiAction()
+    data object OnAddClicked : ExercisesUiAction()
 
-    data class OnDetailClicked(val exercise: ExerciseUiModel): ExercisesUiAction()
+    data class OnDetailClicked(val exercise: ExerciseUiModel) : ExercisesUiAction()
 
     data object Refresh : ExercisesUiAction()
 }

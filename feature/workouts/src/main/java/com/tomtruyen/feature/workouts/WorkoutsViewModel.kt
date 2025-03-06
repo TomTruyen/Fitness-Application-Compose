@@ -119,7 +119,7 @@ class WorkoutsViewModel(
 
             WorkoutsUiAction.ActiveWorkout.Discard -> discardActiveWorkout()
 
-            is WorkoutsUiAction.Dialog-> dialogStateManager.onAction(action)
+            is WorkoutsUiAction.Dialog -> dialogStateManager.onAction(action)
             is WorkoutsUiAction.Sheet -> sheetStateManager.onAction(action)
         }
     }

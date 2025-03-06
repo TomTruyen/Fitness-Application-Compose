@@ -9,12 +9,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.tomtruyen.core.common.models.ExerciseType
+import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.LighterSuccessGreen
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
-import com.tomtruyen.core.common.models.ManageWorkoutMode
 
 @Composable
 fun WorkoutExerciseSetTable(

@@ -42,7 +42,7 @@ fun ExerciseList(
         modifier = modifier.fillMaxSize()
     ) {
         listHeader()
-        
+
         items(
             state.workout.exercises,
             key = { it.id }) { exercise ->
@@ -72,7 +72,7 @@ fun ExerciseList(
 
         }
 
-        if(!state.mode.isView) {
+        if (!state.mode.isView) {
             item {
                 Buttons.Default(
                     text = stringResource(id = R.string.button_add_exercise),

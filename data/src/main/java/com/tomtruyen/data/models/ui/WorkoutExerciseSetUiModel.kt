@@ -19,7 +19,8 @@ data class WorkoutExerciseSetUiModel(
     val time: Int? = null,
     val sortOrder: Int = 0,
     val exerciseId: String? = null,
-    val createdAt: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+    val createdAt: LocalDateTime = Clock.System.now()
+        .toLocalDateTime(TimeZone.currentSystemDefault()),
     val completed: Boolean = false
 ) {
     fun toEntity(workoutExerciseId: String, index: Int) = WorkoutExerciseSet(
@@ -31,7 +32,11 @@ data class WorkoutExerciseSetUiModel(
         workoutExerciseId = workoutExerciseId
     )
 
-    fun toWorkoutHistorySetEntity(workoutHistoryExerciseId: String, exerciseId: String?, index: Int) = WorkoutHistoryExerciseSet(
+    fun toWorkoutHistorySetEntity(
+        workoutHistoryExerciseId: String,
+        exerciseId: String?,
+        index: Int
+    ) = WorkoutHistoryExerciseSet(
         reps = reps,
         weight = weight,
         time = time,

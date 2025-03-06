@@ -31,7 +31,8 @@ data class WorkoutHistoryExerciseUiModel(
             sortOrder = entity.workoutHistoryExercise.sortOrder,
             category = entity.workoutHistoryExercise.category,
             equipment = entity.workoutHistoryExercise.equipment,
-            sets = entity.sets.map(WorkoutHistoryExerciseSetUiModel::fromEntity).sortedBy { it.sortOrder }
+            sets = entity.sets.map(WorkoutHistoryExerciseSetUiModel::fromEntity)
+                .sortedBy { it.sortOrder }
         )
     }
 }

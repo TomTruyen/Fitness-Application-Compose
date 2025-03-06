@@ -89,7 +89,9 @@ class MainActivity : ComponentActivity() {
                     }
                 ) {
                     NavHost(
-                        modifier = Modifier.padding(it).consumeWindowInsets(it),
+                        modifier = Modifier
+                            .padding(it)
+                            .consumeWindowInsets(it),
                         navController = navController,
                         startDestination = Screen.Auth.Graph
                     ) {

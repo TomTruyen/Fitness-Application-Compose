@@ -165,7 +165,8 @@ private fun ExerciseDetailScreenLayout(
                         ) { index, filter ->
                             Chip(
                                 modifier = Modifier.padding(start = if (index == 0) Dimens.Normal else 0.dp),
-                                text = filter?.lowercase()?.replaceFirstChar { char -> char.uppercase() }
+                                text = filter?.lowercase()
+                                    ?.replaceFirstChar { char -> char.uppercase() }
                                     .orEmpty(),
                                 selected = true,
                             )

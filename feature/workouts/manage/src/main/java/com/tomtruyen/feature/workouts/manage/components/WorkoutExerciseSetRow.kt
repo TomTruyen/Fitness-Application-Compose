@@ -37,6 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.tomtruyen.core.common.extensions.format
 import com.tomtruyen.core.common.extensions.tryIntString
 import com.tomtruyen.core.common.models.ExerciseType
+import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.common.models.RestAlertType
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
@@ -45,7 +46,6 @@ import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.dialogs.RestAlertDialog
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
-import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.feature.workouts.manage.remember.rememberSetHasBeenCompleted
 import com.tomtruyen.feature.workouts.manage.remember.rememberSetInputValue
 import com.tomtruyen.core.common.R as CommonR
@@ -329,7 +329,7 @@ private fun RowScope.TimeSet(
         text = TimeUtils.formatSeconds(inputTime ?: initialTime ?: 0L),
         textAlign = TextAlign.Center,
         style = LocalTextStyle.current.copy(
-            color = if(!mode.isView && !hasBeenCompleted && (inputTime == null || (mode.isExecute && !completed))) {
+            color = if (!mode.isView && !hasBeenCompleted && (inputTime == null || (mode.isExecute && !completed))) {
                 MaterialTheme.colorScheme.placeholder
             } else {
                 LocalTextStyle.current.color

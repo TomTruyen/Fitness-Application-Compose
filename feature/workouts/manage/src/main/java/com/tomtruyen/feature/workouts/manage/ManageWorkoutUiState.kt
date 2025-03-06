@@ -1,9 +1,9 @@
 package com.tomtruyen.feature.workouts.manage
 
 import androidx.compose.runtime.Immutable
+import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.data.models.ui.SettingsUiModel
 import com.tomtruyen.data.models.ui.WorkoutUiModel
-import com.tomtruyen.core.common.models.ManageWorkoutMode
 
 @Immutable
 data class ManageWorkoutUiState(

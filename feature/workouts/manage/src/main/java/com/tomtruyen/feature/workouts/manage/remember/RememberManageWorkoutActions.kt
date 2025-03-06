@@ -73,7 +73,7 @@ fun rememberWorkoutActions(
 ): List<BottomSheetItem> {
     val errorColor = MaterialTheme.colorScheme.error
 
-    return  remember {
+    return remember {
         listOf(
             BottomSheetItem(
                 titleRes = R.string.action_edit_workout,

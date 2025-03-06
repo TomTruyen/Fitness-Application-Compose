@@ -77,7 +77,7 @@ private fun WorkoutHistoryScreenLayout(
             .collect { lastVisibleItem ->
                 val threshold = 2
 
-                if(lastVisibleItem >= state.histories.size - threshold) {
+                if (lastVisibleItem >= state.histories.size - threshold) {
                     state.histories.getOrNull(lastVisibleItem)?.let {
                         onAction(WorkoutHistoryUiAction.LoadMore(it.page))
                     }
@@ -119,10 +119,11 @@ private fun WorkoutHistoryScreenLayout(
                         }
                     ) { index, history ->
                         Box(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
                                 .height(300.dp)
                                 .background(
-                                    color = if(index % 2 == 0) {
+                                    color = if (index % 2 == 0) {
                                         Color.Green
                                     } else {
                                         Color.Red

@@ -46,8 +46,9 @@ data class WorkoutHistoryExerciseSet(
     val exerciseId: String? = null,
     @SerialName(KEY_CREATED_AT)
     @Serializable(with = SupabaseDateTimeSerializer::class)
-    val createdAt: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-): BaseEntity {
+    val createdAt: LocalDateTime = Clock.System.now()
+        .toLocalDateTime(TimeZone.currentSystemDefault()),
+) : BaseEntity {
     companion object {
         const val TABLE_NAME = "WorkoutHistoryExerciseSet"
 

@@ -11,7 +11,7 @@ import java.util.UUID
 data class EquipmentUiModel(
     override val id: String = UUID.randomUUID().toString(),
     override val name: String
-): FilterOption {
+) : FilterOption {
     fun toEntity() = Equipment(
         id = id,
         name = name

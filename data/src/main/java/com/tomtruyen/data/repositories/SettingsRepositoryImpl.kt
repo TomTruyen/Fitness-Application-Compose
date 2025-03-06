@@ -7,7 +7,7 @@ import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
 
-class SettingsRepositoryImpl: SettingsRepository() {
+class SettingsRepositoryImpl : SettingsRepository() {
     private val dao = database.settingsDao()
 
     @OptIn(ExperimentalCoroutinesApi::class)

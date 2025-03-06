@@ -51,7 +51,7 @@ fun SelectSheet(
     var visible by remember { mutableStateOf(false) }
 
     val trailingRotation by animateFloatAsState(
-        targetValue = if(visible) 180f else 0f,
+        targetValue = if (visible) 180f else 0f,
         animationSpec = tween(200)
     )
 

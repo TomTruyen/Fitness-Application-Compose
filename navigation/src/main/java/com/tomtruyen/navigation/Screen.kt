@@ -54,14 +54,14 @@ sealed interface Screen {
         data class Manage(val id: String? = null, val mode: ManageWorkoutMode) : Workout
     }
 
-    sealed interface History: Screen {
+    sealed interface History : Screen {
         @Serializable
-        data object Graph: History
+        data object Graph : History
 
         @Serializable
-        data object Overview: History
+        data object Overview : History
 
         @Serializable
-        data class Detail(val id: String): History
+        data class Detail(val id: String) : History
     }
 }

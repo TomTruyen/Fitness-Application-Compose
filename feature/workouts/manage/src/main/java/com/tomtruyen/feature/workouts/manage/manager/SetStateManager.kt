@@ -12,7 +12,7 @@ import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiState
 
 class SetStateManager(
     private val updateState: ((ManageWorkoutUiState) -> ManageWorkoutUiState) -> Unit,
-): StateManager<ManageWorkoutUiAction.Set> {
+) : StateManager<ManageWorkoutUiAction.Set> {
     private fun addSet(id: String) = updateState {
         it.copy(
             workout = it.workout.copyWithAddSet(
@@ -70,7 +70,7 @@ class SetStateManager(
     }
 
     override fun onAction(action: ManageWorkoutUiAction.Set) {
-        when(action) {
+        when (action) {
             is ManageWorkoutUiAction.Set.Add -> addSet(
                 id = action.exerciseId
             )

@@ -91,7 +91,7 @@ fun WorkoutsScreen(
             title = R.string.title_discard_workout,
             message = R.string.message_discard_workout,
             onConfirm = {
-               viewModel.onAction(WorkoutsUiAction.ActiveWorkout.Discard)
+                viewModel.onAction(WorkoutsUiAction.ActiveWorkout.Discard)
             },
             onDismiss = {
                 viewModel.onAction(WorkoutsUiAction.Dialog.Discard.Dismiss)

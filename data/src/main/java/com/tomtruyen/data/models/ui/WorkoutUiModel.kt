@@ -62,7 +62,8 @@ data class WorkoutUiModel(
             id = entity.workout.id,
             name = entity.workout.name,
             unit = UnitType.fromValue(entity.workout.unit),
-            exercises = entity.exercises.map(WorkoutExerciseUiModel::fromEntity).sortedBy { it.sortOrder }
+            exercises = entity.exercises.map(WorkoutExerciseUiModel::fromEntity)
+                .sortedBy { it.sortOrder }
         )
     }
 }
@@ -154,9 +155,9 @@ fun WorkoutUiModel.copyWithSetCompleted(id: String, setIndex: Int) = copy(
                 sets = exercise.sets.toMutableList().apply {
                     this[setIndex] = this[setIndex].copy(
                         completed = !this[setIndex].completed,
-                        reps = if(exercise.type == ExerciseType.WEIGHT && this[setIndex].reps == null) 0 else this[setIndex].reps,
-                        weight = if(exercise.type == ExerciseType.WEIGHT && this[setIndex].weight == null) 0.0 else this[setIndex].weight,
-                        time = if(exercise.type == ExerciseType.TIME && this[setIndex].time == null) 0 else this[setIndex].time
+                        reps = if (exercise.type == ExerciseType.WEIGHT && this[setIndex].reps == null) 0 else this[setIndex].reps,
+                        weight = if (exercise.type == ExerciseType.WEIGHT && this[setIndex].weight == null) 0.0 else this[setIndex].weight,
+                        time = if (exercise.type == ExerciseType.TIME && this[setIndex].time == null) 0 else this[setIndex].time
 
                     )
                 }

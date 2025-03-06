@@ -18,7 +18,7 @@ import io.github.jan.supabase.postgrest.query.Order
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
 
-class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
+class WorkoutHistoryRepositoryImpl : WorkoutHistoryRepository() {
     private val dao = database.workoutHistoryDao()
     private val workoutHistoryExerciseDao = database.workoutHistoryExerciseDao()
     private val workoutHistoryExerciseSetDao = database.workoutHistoryExerciseSetDao()
@@ -39,7 +39,11 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
         histories.map(WorkoutHistoryUiModel::fromEntity)
     }
 
-    override suspend fun getWorkoutHistoryPaginated(userId: String, page: Int, refresh: Boolean): Boolean {
+    override suspend fun getWorkoutHistoryPaginated(
+        userId: String,
+        page: Int,
+        refresh: Boolean
+    ): Boolean {
         val pageCacheKey = "${cacheKey}_${page}"
 
         return fetch(
@@ -105,7 +109,7 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
                     }
 
                     cacheTransaction(pageCacheKey) {
-                        if(refresh || page == 1) {
+                        if (refresh || page == 1) {
                             // Clear Table
                             dao.deleteAll()
                             cacheDao.deleteStartsWith(cacheKey)
@@ -143,12 +147,18 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
         val exercises = workout.exercises.filter { exercise ->
             exercise.sets.count(WorkoutExerciseSetUiModel::completed) > 0
         }.mapIndexed { index, exercise ->
-            val workoutHistoryExercise = exercise.toWorkoutHistoryExerciseEntity(workoutHistory.id, index)
+            val workoutHistoryExercise =
+                exercise.toWorkoutHistoryExerciseEntity(workoutHistory.id, index)
 
             sets.addAll(
-                exercise.sets.filter(WorkoutExerciseSetUiModel::completed).mapIndexed { setIndex, set ->
-                    set.toWorkoutHistorySetEntity(workoutHistoryExercise.id, exercise.exerciseId, setIndex)
-                }
+                exercise.sets.filter(WorkoutExerciseSetUiModel::completed)
+                    .mapIndexed { setIndex, set ->
+                        set.toWorkoutHistorySetEntity(
+                            workoutHistoryExercise.id,
+                            exercise.exerciseId,
+                            setIndex
+                        )
+                    }
             )
 
             workoutHistoryExercise
