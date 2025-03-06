@@ -64,13 +64,13 @@ fun ExercisesScreen(
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is ExercisesUiEvent.NavigateToFilter -> navController.navigate(Screen.Exercise.Filter)
-                is ExercisesUiEvent.NavigateToAdd -> navController.navigate(Screen.Exercise.Manage())
-                is ExercisesUiEvent.NavigateToDetail -> navController.navigate(
+                ExercisesUiEvent.Navigate.Exercise.Filter -> navController.navigate(Screen.Exercise.Filter)
+                ExercisesUiEvent.Navigate.Exercise.Add -> navController.navigate(Screen.Exercise.Manage())
+                is ExercisesUiEvent.Navigate.Exercise.Detail -> navController.navigate(
                     Screen.Exercise.Detail(event.id)
                 )
 
-                is ExercisesUiEvent.NavigateBackToWorkout -> {
+                is ExercisesUiEvent.Navigate.Workout.Back -> {
                     navController.previousBackStackEntry?.savedStateHandle?.set(
                         NavArguments.EXERCISES,
                         state.mode to event.exercises
@@ -112,11 +112,11 @@ private fun ExercisesScreenLayout(
                 SearchToolbar(
                     value = state.search,
                     onValueChange = { query ->
-                        onAction(ExercisesUiAction.OnSearchQueryChanged(query))
+                        onAction(ExercisesUiAction.Filter.OnSearchQueryChanged(query))
                     },
                     onClose = {
-                        onAction(ExercisesUiAction.OnSearchQueryChanged(""))
-                        onAction(ExercisesUiAction.OnToggleSearch)
+                        onAction(ExercisesUiAction.Filter.OnSearchQueryChanged(""))
+                        onAction(ExercisesUiAction.Filter.ToggleSearch)
                     }
                 ) {
                     IconButton(
@@ -137,7 +137,7 @@ private fun ExercisesScreenLayout(
                     actions = {
                         IconButton(
                             onClick = {
-                                onAction(ExercisesUiAction.OnToggleSearch)
+                                onAction(ExercisesUiAction.Filter.ToggleSearch)
                             }
                         ) {
                             Icon(
@@ -179,7 +179,7 @@ private fun ExercisesScreenLayout(
             ) {
                 FloatingActionButton(
                     onClick = {
-                        onAction(ExercisesUiAction.OnAddExerciseToWorkoutClicked)
+                        onAction(ExercisesUiAction.Workout.AddExercise)
                     }
                 ) {
                     Icon(
@@ -222,7 +222,7 @@ private fun ExercisesScreenLayout(
                                     )
                                 }
                             ) {
-                                onAction(ExercisesUiAction.OnRemoveFilterClicked(filter))
+                                onAction(ExercisesUiAction.Filter.OnRemoveClicked(filter))
                             }
                         }
                     }
@@ -276,7 +276,7 @@ private fun ExercisesScreenLayout(
                                     selected = state.selectedExercises.contains(exercise),
                                     showChevron = state.mode == Screen.Exercise.Overview.Mode.VIEW,
                                     onClick = {
-                                        onAction(ExercisesUiAction.OnExerciseClicked(exercise))
+                                        onAction(ExercisesUiAction.OnDetailClicked(exercise))
                                     },
                                     prefix = {
                                         Avatar(

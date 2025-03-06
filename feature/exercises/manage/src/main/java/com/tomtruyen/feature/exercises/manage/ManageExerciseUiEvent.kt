@@ -1,5 +1,7 @@
 package com.tomtruyen.feature.exercises.manage
 
 sealed class ManageExerciseUiEvent {
-    data object NavigateBack : ManageExerciseUiEvent()
+    sealed class Navigate: ManageExerciseUiEvent() {
+        data object Back: Navigate()
+    }
 }

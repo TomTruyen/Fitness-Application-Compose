@@ -1,12 +1,12 @@
 package com.tomtruyen.feature.exercises
 
 import com.tomtruyen.core.common.base.BaseViewModel
-import com.tomtruyen.data.models.ExerciseFilter
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
+import com.tomtruyen.feature.manager.ExerciseStateManager
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
@@ -24,6 +24,12 @@ class ExercisesViewModel(
 ) : BaseViewModel<ExercisesUiState, ExercisesUiAction, ExercisesUiEvent>(
     initialState = ExercisesUiState(mode = mode)
 ) {
+    private val exerciseStateManager by lazy {
+        ExerciseStateManager(
+            updateState = ::updateState
+        )
+    }
+
     init {
         fetchExercises()
 
@@ -79,7 +85,7 @@ class ExercisesViewModel(
     private fun handleExerciseClick(exercise: ExerciseUiModel) {
         when (mode) {
             Screen.Exercise.Overview.Mode.VIEW -> {
-                triggerEvent(ExercisesUiEvent.NavigateToDetail(exercise.id))
+                triggerEvent(ExercisesUiEvent.Navigate.Exercise.Detail(exercise.id))
             }
 
             Screen.Exercise.Overview.Mode.SELECT -> {
@@ -108,51 +114,25 @@ class ExercisesViewModel(
 
     override fun onAction(action: ExercisesUiAction) {
         when (action) {
-            is ExercisesUiAction.OnToggleSearch -> updateState {
-                it.copy(searching = !it.searching)
-            }
+            ExercisesUiAction.OnRefresh -> fetchExercises(true)
 
-            is ExercisesUiAction.OnSearchQueryChanged -> updateState {
-                it.copy(search = action.query)
-            }
-
-            is ExercisesUiAction.OnCategoryFilterChanged -> updateState {
-                it.copy(filter = it.filter.copy().apply {
-                    tryAddCategory(action.category)
-                })
-            }
-
-            is ExercisesUiAction.OnEquipmentFilterChanged -> updateState {
-                it.copy(filter = it.filter.copy().apply {
-                    tryAddEquipment(action.equipment)
-                })
-            }
-
-            is ExercisesUiAction.OnClearFilterClicked -> updateState {
-                it.copy(filter = ExerciseFilter())
-            }
-
-            is ExercisesUiAction.OnRemoveFilterClicked -> updateState {
-                it.copy(
-                    filter = it.filter.copy(
-                        categories = it.filter.categories.toMutableList()
-                            .apply { remove(action.filter) },
-                        equipment = it.filter.equipment.toMutableList()
-                            .apply { remove(action.filter) }
-                    )
-                )
-            }
-
-            is ExercisesUiAction.OnFilterClicked -> triggerEvent(ExercisesUiEvent.NavigateToFilter)
-            is ExercisesUiAction.OnAddClicked -> triggerEvent(ExercisesUiEvent.NavigateToAdd)
-            is ExercisesUiAction.OnExerciseClicked -> handleExerciseClick(action.exercise)
-            is ExercisesUiAction.OnAddExerciseToWorkoutClicked -> {
-                triggerEvent(ExercisesUiEvent.NavigateBackToWorkout(uiState.value.selectedExercises))
-            }
-
-            is ExercisesUiAction.OnRefresh -> fetchExercises(
-                refresh = true
+            ExercisesUiAction.OnFilterClicked -> triggerEvent(
+                ExercisesUiEvent.Navigate.Exercise.Filter
             )
+
+            ExercisesUiAction.OnAddClicked -> triggerEvent(
+                ExercisesUiEvent.Navigate.Exercise.Add
+            )
+
+            is ExercisesUiAction.OnDetailClicked -> handleExerciseClick(
+                exercise = action.exercise
+            )
+
+            ExercisesUiAction.Workout.AddExercise -> triggerEvent(
+                ExercisesUiEvent.Navigate.Workout.Back(uiState.value.selectedExercises)
+            )
+
+            else -> exerciseStateManager.onAction(action)
         }
     }
 

@@ -7,6 +7,7 @@ import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
+import com.tomtruyen.feature.exercises.manage.manager.ExerciseStateManager
 import com.tomtruyen.feature.exercises.manage.model.ManageExerciseMode
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -23,6 +24,12 @@ class ManageExerciseViewModel(
         mode = ManageExerciseMode.fromArgs(id)
     )
 ) {
+    private val exerciseStateManager by lazy {
+        ExerciseStateManager(
+            updateState = ::updateState
+        )
+    }
+
     init {
         findExercise()
 
@@ -82,45 +89,13 @@ class ManageExerciseViewModel(
             exercise = uiState.value.exercise,
         )
 
-        triggerEvent(ManageExerciseUiEvent.NavigateBack)
+        triggerEvent(ManageExerciseUiEvent.Navigate.Back)
     }
 
     override fun onAction(action: ManageExerciseUiAction) {
         when (action) {
-            is ManageExerciseUiAction.OnExerciseNameChanged -> updateState {
-                it.copy(
-                    exercise = it.exercise.copy(
-                        name = action.name
-                    ),
-                    nameValidationResult = it.validateName(action.name)
-                )
-            }
-
-            is ManageExerciseUiAction.OnCategoryChanged -> updateState {
-                it.copy(
-                    exercise = it.exercise.copy(
-                        category = action.category as CategoryUiModel
-                    ),
-                )
-            }
-
-            is ManageExerciseUiAction.OnEquipmentChanged -> updateState {
-                it.copy(
-                    exercise = it.exercise.copy(
-                        equipment = action.equipment as EquipmentUiModel
-                    ),
-                )
-            }
-
-            is ManageExerciseUiAction.OnTypeChanged -> updateState {
-                it.copy(
-                    exercise = it.exercise.copy(
-                        type = action.type
-                    ),
-                )
-            }
-
-            is ManageExerciseUiAction.OnSaveClicked -> save()
+            is ManageExerciseUiAction.Save -> save()
+            else -> exerciseStateManager.onAction(action)
         }
     }
 }

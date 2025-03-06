@@ -5,7 +5,6 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -58,7 +57,7 @@ fun ManageExerciseScreen(
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is ManageExerciseUiEvent.NavigateBack -> navController.popBackStack()
+                is ManageExerciseUiEvent.Navigate.Back -> navController.popBackStack()
             }
         }
     }
@@ -190,7 +189,7 @@ private fun ManageExerciseScreenLayout(
                     enabled = isValid,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    onAction(ManageExerciseUiAction.OnSaveClicked)
+                    onAction(ManageExerciseUiAction.Save)
                 }
 
                 if (confirmationDialogVisible) {

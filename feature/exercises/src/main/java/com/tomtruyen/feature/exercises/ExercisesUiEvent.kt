@@ -3,13 +3,19 @@ package com.tomtruyen.feature.exercises
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 
 sealed class ExercisesUiEvent {
-    data object NavigateToFilter : ExercisesUiEvent()
+    sealed class Navigate: ExercisesUiEvent() {
+        sealed class Exercise: Navigate() {
+            data object Filter: Exercise()
 
-    data object NavigateToAdd : ExercisesUiEvent()
+            data object Add: Exercise()
 
-    data object NavigateBack : ExercisesUiEvent()
+            data class Detail(val id: String): Exercise()
+        }
 
-    data class NavigateToDetail(val id: String) : ExercisesUiEvent()
+        sealed class Workout: Navigate() {
+            data class Back(val exercises: List<ExerciseUiModel>): Workout()
+        }
 
-    data class NavigateBackToWorkout(val exercises: List<ExerciseUiModel>) : ExercisesUiEvent()
+        data object Back: Navigate()
+    }
 }

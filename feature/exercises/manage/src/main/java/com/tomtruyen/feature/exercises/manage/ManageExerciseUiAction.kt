@@ -12,5 +12,5 @@ sealed class ManageExerciseUiAction {
 
     data class OnTypeChanged(val type: ExerciseType) : ManageExerciseUiAction()
 
-    data object OnSaveClicked : ManageExerciseUiAction()
+    data object Save : ManageExerciseUiAction()
 }

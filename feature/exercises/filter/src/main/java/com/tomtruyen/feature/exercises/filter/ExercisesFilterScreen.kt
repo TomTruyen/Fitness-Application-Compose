@@ -50,7 +50,7 @@ fun ExercisesFilterScreen(
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { navigationType ->
             when (navigationType) {
-                is ExercisesUiEvent.NavigateBack -> navController.popBackStack()
+                is ExercisesUiEvent.Navigate.Back -> navController.popBackStack()
                 else -> Unit
             }
         }
@@ -86,7 +86,7 @@ private fun ExercisesFilterScreenLayout(
                     ),
                     modifier = Modifier.align(Alignment.CenterVertically),
                 ) {
-                    onAction(ExercisesUiAction.OnClearFilterClicked)
+                    onAction(ExercisesUiAction.Filter.OnClearClicked)
                 }
             }
         }
@@ -111,7 +111,7 @@ private fun ExercisesFilterScreenLayout(
             ) {
                 state.categories.forEach { category ->
                     Chip(category.name, state.filter.categories.contains(category)) {
-                        onAction(ExercisesUiAction.OnCategoryFilterChanged(category))
+                        onAction(ExercisesUiAction.Filter.OnCategoryFilterChanged(category))
                     }
                 }
             }
@@ -131,7 +131,7 @@ private fun ExercisesFilterScreenLayout(
             ) {
                 state.equipment.forEach { equipment ->
                     Chip(equipment.name, state.filter.equipment.contains(equipment)) {
-                        onAction(ExercisesUiAction.OnEquipmentFilterChanged(equipment))
+                        onAction(ExercisesUiAction.Filter.OnEquipmentFilterChanged(equipment))
                     }
                 }
             }
