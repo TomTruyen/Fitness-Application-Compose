@@ -6,7 +6,7 @@ import com.tomtruyen.feature.workouts.WorkoutsUiState
 
 class SheetStateManager(
     private val updateState: ((WorkoutsUiState) -> WorkoutsUiState) -> Unit,
-): StateManager<WorkoutsUiAction> {
+): StateManager<WorkoutsUiAction.Sheet> {
     private fun setSelectedWorkoutId(id: String?) = updateState {
         it.copy(selectedWorkoutId = id)
     }
@@ -15,7 +15,7 @@ class SheetStateManager(
         it.copy(showSheet = show)
     }
 
-    override fun onAction(action: WorkoutsUiAction) {
+    override fun onAction(action: WorkoutsUiAction.Sheet) {
         when(action) {
             is WorkoutsUiAction.Sheet.Show -> {
                 setSelectedWorkoutId(action.id)
@@ -23,8 +23,6 @@ class SheetStateManager(
             }
 
             WorkoutsUiAction.Sheet.Dismiss -> showSheet(false)
-
-            else -> Unit
         }
     }
 }

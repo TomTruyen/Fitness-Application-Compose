@@ -40,6 +40,7 @@ import com.tomtruyen.core.ui.BottomSheetList
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.LoadingContainer
+import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.modifiers.BorderSide
 import com.tomtruyen.core.ui.modifiers.directionalBorder
 import com.tomtruyen.core.ui.toolbars.Toolbar
@@ -96,6 +97,20 @@ fun WorkoutsScreen(
         visible = state.showSheet,
         onDismiss = { viewModel.onAction(WorkoutsUiAction.Sheet.Dismiss) }
     )
+
+    if (state.showDiscardConfirmation) {
+        ConfirmationDialog(
+            title = R.string.title_discard_workout,
+            message = R.string.message_discard_workout,
+            onConfirm = {
+               viewModel.onAction(WorkoutsUiAction.ActiveWorkout.Discard)
+            },
+            onDismiss = {
+                viewModel.onAction(WorkoutsUiAction.Dialog.Discard.Dismiss)
+            },
+            confirmText = com.tomtruyen.core.common.R.string.button_discard
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -161,7 +176,7 @@ private fun WorkoutOverviewScreenLayout(
                             contentColor = MaterialTheme.colorScheme.error
                         ),
                         onClick = {
-                            onAction(WorkoutsUiAction.ActiveWorkout.Discard)
+                            onAction(WorkoutsUiAction.Dialog.Discard.Show)
                         }
                     )
                 }

@@ -4,6 +4,7 @@ import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
+import com.tomtruyen.feature.workouts.manager.DialogStateManager
 import com.tomtruyen.feature.workouts.manager.SheetStateManager
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -17,6 +18,12 @@ class WorkoutsViewModel(
 ) {
     private val sheetStateManager by lazy {
         SheetStateManager(
+            updateState = ::updateState
+        )
+    }
+
+    private val dialogStateManager by lazy {
+        DialogStateManager(
             updateState = ::updateState
         )
     }
@@ -73,6 +80,7 @@ class WorkoutsViewModel(
 
     private fun discardActiveWorkout() = launchLoading {
         workoutRepository.deleteActiveWorkout()
+        onAction(WorkoutsUiAction.Dialog.Discard.Dismiss)
     }
 
     override fun onAction(action: WorkoutsUiAction) {
@@ -111,8 +119,8 @@ class WorkoutsViewModel(
 
             WorkoutsUiAction.ActiveWorkout.Discard -> discardActiveWorkout()
 
-            is WorkoutsUiAction.Sheet.Show,
-            WorkoutsUiAction.Sheet.Dismiss -> sheetStateManager.onAction(action)
+            is WorkoutsUiAction.Dialog-> dialogStateManager.onAction(action)
+            is WorkoutsUiAction.Sheet -> sheetStateManager.onAction(action)
         }
     }
 }

@@ -11,6 +11,7 @@ data class WorkoutsUiState(
     val selectedWorkoutId: String? = null,
 
     val showSheet: Boolean = false,
+    val showDiscardConfirmation: Boolean = false,
     val loading: Boolean = false,
     val refreshing: Boolean = false
 )

@@ -7,6 +7,14 @@ sealed class WorkoutsUiAction {
         data object Dismiss: Sheet()
     }
 
+    sealed class Dialog: WorkoutsUiAction() {
+        sealed class Discard: Dialog() {
+            data object Show: Discard()
+
+            data object Dismiss: Discard()
+        }
+    }
+
     sealed class ActiveWorkout: WorkoutsUiAction() {
         data object Resume: ActiveWorkout()
 

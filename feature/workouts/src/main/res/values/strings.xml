@@ -12,4 +12,6 @@
     <string name="content_description_create_workout">Create workout</string>
     <string name="button_resume">Resume</string>
     <string name="button_discard">Discard</string>
+    <string name="title_discard_workout">Discard Workout</string>
+    <string name="message_discard_workout">Are you sure you want to delete your active workout? You will lose all progress. If you want to save it, then press \"Resume\" and finish the workout.</string>
 </resources>
