@@ -44,6 +44,7 @@ import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.modifiers.BorderSide
 import com.tomtruyen.core.ui.modifiers.directionalBorder
 import com.tomtruyen.core.ui.toolbars.Toolbar
+import com.tomtruyen.feature.workouts.components.ActiveWorkoutBar
 import com.tomtruyen.feature.workouts.components.WorkoutListItem
 import com.tomtruyen.feature.workouts.remember.rememberWorkoutActions
 import com.tomtruyen.navigation.Screen
@@ -143,44 +144,10 @@ private fun WorkoutOverviewScreenLayout(
             }
         },
         bottomBar = {
-            AnimatedVisibility(
-                visible = state.activeWorkout != null
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .directionalBorder(
-                            side = BorderSide.TOP
-                        )
-                        .padding(
-                            start = Dimens.Normal,
-                            end = Dimens.Normal,
-                            top = Dimens.Small
-                        ),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Buttons.Text(
-                        modifier = Modifier.weight(1f),
-                        text = stringResource(id = R.string.button_resume),
-                        icon = Icons.Default.PlayArrow,
-                        onClick = {
-                            onAction(WorkoutsUiAction.ActiveWorkout.Resume)
-                        }
-                    )
-
-                    Buttons.Text(
-                        modifier = Modifier.weight(1f),
-                        text = stringResource(id = R.string.button_discard),
-                        icon = Icons.Default.Close,
-                        colors = ButtonDefaults.textButtonColors(
-                            contentColor = MaterialTheme.colorScheme.error
-                        ),
-                        onClick = {
-                            onAction(WorkoutsUiAction.Dialog.Discard.Show)
-                        }
-                    )
-                }
-            }
+            ActiveWorkoutBar(
+                hasActiveWorkout = state.activeWorkout != null,
+                onAction = onAction
+            )
         }
     ) {
         LoadingContainer(
