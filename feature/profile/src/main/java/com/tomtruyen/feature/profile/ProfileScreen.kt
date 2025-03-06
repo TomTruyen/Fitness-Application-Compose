@@ -116,7 +116,7 @@ private fun ProfileScreenLayout(
             PullToRefreshBox(
                 isRefreshing = state.refreshing,
                 onRefresh = {
-                    onAction(ProfileUiAction.OnRefresh)
+                    onAction(ProfileUiAction.Refresh)
                 },
                 state = refreshState,
             ) {
@@ -167,14 +167,14 @@ private fun ProfileScreenLayout(
                         title = stringResource(id = R.string.label_rest_timer_enabled),
                         checked = state.settings.restEnabled
                     ) {
-                        onAction(ProfileUiAction.RestEnabledChanged(it))
+                        onAction(ProfileUiAction.OnRestEnabledChanged(it))
                     }
 
                     SwitchListItem(
                         title = stringResource(id = R.string.label_vibrate_upon_finish),
                         checked = state.settings.restVibrationEnabled
                     ) {
-                        onAction(ProfileUiAction.RestVibrationEnabledChanged(it))
+                        onAction(ProfileUiAction.OnRestVibrationEnabledChanged(it))
                     }
 
                     HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
@@ -237,7 +237,7 @@ private fun ProfileScreenLayout(
                         unitDialogVisible = false
                     },
                     onConfirm = { unit ->
-                        onAction(ProfileUiAction.UnitChanged(unit))
+                        onAction(ProfileUiAction.OnUnitChanged(unit))
                         unitDialogVisible = false
                     },
                     unit = state.settings.unit
@@ -250,7 +250,7 @@ private fun ProfileScreenLayout(
                         restDialogVisible = false
                     },
                     onConfirm = { rest, _ ->
-                        onAction(ProfileUiAction.RestChanged(rest))
+                        onAction(ProfileUiAction.OnRestChanged(rest))
                         restDialogVisible = false
                     },
                     rest = state.settings.rest

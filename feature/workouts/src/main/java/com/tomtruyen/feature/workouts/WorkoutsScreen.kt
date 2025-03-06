@@ -22,9 +22,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.common.models.ManageWorkoutMode
+import com.tomtruyen.core.ui.BottomSheetList
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.feature.workouts.components.WorkoutListItem
+import com.tomtruyen.feature.workouts.remember.rememberWorkoutActions
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -38,18 +40,26 @@ fun WorkoutsScreen(
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val workoutActions = rememberWorkoutActions(
+        onAction = viewModel::onAction
+    )
+
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is WorkoutsUiEvent.NavigateToManageWorkout -> navController.navigate(
+                WorkoutsUiEvent.Navigate.Create -> navController.navigate(
                     Screen.Workout.Manage(mode = ManageWorkoutMode.CREATE)
                 )
 
-                is WorkoutsUiEvent.NavigateToDetail -> navController.navigate(
+                is WorkoutsUiEvent.Navigate.Edit -> navController.navigate(
+                    Screen.Workout.Manage(event.id, ManageWorkoutMode.EDIT)
+                )
+
+                is WorkoutsUiEvent.Navigate.Detail -> navController.navigate(
                     Screen.Workout.Manage(event.id, ManageWorkoutMode.VIEW)
                 )
 
-                is WorkoutsUiEvent.NavigateToStartWorkout -> navController.navigate(
+                is WorkoutsUiEvent.Navigate.Execute -> navController.navigate(
                     Screen.Workout.Manage(event.id, ManageWorkoutMode.EXECUTE)
                 )
             }
@@ -61,6 +71,12 @@ fun WorkoutsScreen(
         navController = navController,
         state = state,
         onAction = viewModel::onAction
+    )
+
+    BottomSheetList(
+        items = workoutActions,
+        visible = state.showSheet,
+        onDismiss = { viewModel.onAction(WorkoutsUiAction.Sheet.Dismiss) }
     )
 }
 
@@ -83,7 +99,7 @@ private fun WorkoutOverviewScreenLayout(
             ) {
                 IconButton(
                     onClick = {
-                        onAction(WorkoutsUiAction.OnCreateWorkoutClicked)
+                        onAction(WorkoutsUiAction.OnCreateClicked)
                     }
                 ) {
                     Icon(
@@ -101,7 +117,7 @@ private fun WorkoutOverviewScreenLayout(
             PullToRefreshBox(
                 isRefreshing = state.refreshing,
                 onRefresh = {
-                    onAction(WorkoutsUiAction.OnRefresh)
+                    onAction(WorkoutsUiAction.Refresh)
                 },
                 state = refreshState,
             ) {

@@ -30,5 +30,5 @@ sealed class ExercisesUiAction {
 
     data class OnDetailClicked(val exercise: ExerciseUiModel): ExercisesUiAction()
 
-    data object OnRefresh : ExercisesUiAction()
+    data object Refresh : ExercisesUiAction()
 }

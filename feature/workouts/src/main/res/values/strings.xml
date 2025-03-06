@@ -5,4 +5,6 @@
     <string name="button_start_workout">Start workout</string>
 
     <string name="content_description_create_workout">Create workout</string>
+    <string name="action_edit_workout">Edit Workout</string>
+    <string name="action_delete_workout">Delete Workout</string>
 </resources>

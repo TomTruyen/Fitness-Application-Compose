@@ -1,10 +1,13 @@
 package com.tomtruyen.feature.workouts
 
 sealed class WorkoutsUiEvent {
-    data object NavigateToManageWorkout : WorkoutsUiEvent()
+    sealed class Navigate: WorkoutsUiEvent() {
+        data object Create: Navigate()
 
-    data class NavigateToDetail(val id: String) : WorkoutsUiEvent()
+        data class Edit(val id: String): Navigate()
 
-    data class NavigateToStartWorkout(val id: String) : WorkoutsUiEvent()
+        data class Execute(val id: String): Navigate()
 
+        data class Detail(val id: String): Navigate()
+    }
 }

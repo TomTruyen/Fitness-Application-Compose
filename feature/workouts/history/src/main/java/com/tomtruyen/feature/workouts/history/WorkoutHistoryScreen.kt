@@ -1,6 +1,5 @@
 package com.tomtruyen.feature.workouts.history
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,7 +29,6 @@ import androidx.navigation.NavController
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.toolbars.Toolbar
-import com.tomtruyen.data.entities.WorkoutHistory
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -82,7 +79,7 @@ private fun WorkoutHistoryScreenLayout(
 
                 if(lastVisibleItem >= state.histories.size - threshold) {
                     state.histories.getOrNull(lastVisibleItem)?.let {
-                        onAction(WorkoutHistoryUiAction.OnLoadMore(it.page))
+                        onAction(WorkoutHistoryUiAction.LoadMore(it.page))
                     }
                 }
             }
@@ -104,7 +101,7 @@ private fun WorkoutHistoryScreenLayout(
             PullToRefreshBox(
                 isRefreshing = state.refreshing,
                 onRefresh = {
-                    onAction(WorkoutHistoryUiAction.OnRefresh)
+                    onAction(WorkoutHistoryUiAction.Refresh)
                 },
                 state = refreshState,
             ) {

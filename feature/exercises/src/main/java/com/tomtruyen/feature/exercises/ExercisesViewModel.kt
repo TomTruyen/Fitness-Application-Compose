@@ -114,7 +114,7 @@ class ExercisesViewModel(
 
     override fun onAction(action: ExercisesUiAction) {
         when (action) {
-            ExercisesUiAction.OnRefresh -> fetchExercises(true)
+            ExercisesUiAction.Refresh -> fetchExercises(true)
 
             ExercisesUiAction.OnFilterClicked -> triggerEvent(
                 ExercisesUiEvent.Navigate.Exercise.Filter

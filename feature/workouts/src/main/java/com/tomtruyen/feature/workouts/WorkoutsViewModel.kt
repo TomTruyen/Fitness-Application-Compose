@@ -3,6 +3,7 @@ package com.tomtruyen.feature.workouts
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
+import com.tomtruyen.feature.workouts.manager.SheetStateManager
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -13,6 +14,12 @@ class WorkoutsViewModel(
 ) : BaseViewModel<WorkoutsUiState, WorkoutsUiAction, WorkoutsUiEvent>(
     initialState = WorkoutsUiState()
 ) {
+    private val sheetStateManager by lazy {
+        SheetStateManager(
+            updateState = ::updateState
+        )
+    }
+
     init {
         fetchWorkouts()
 
@@ -50,22 +57,38 @@ class WorkoutsViewModel(
         )
     }
 
+    private fun delete(id: String) = launchLoading {
+        workoutRepository.deleteWorkout(id)
+    }
+
     override fun onAction(action: WorkoutsUiAction) {
         when (action) {
-            is WorkoutsUiAction.OnCreateWorkoutClicked -> triggerEvent(WorkoutsUiEvent.NavigateToManageWorkout)
+            WorkoutsUiAction.Refresh -> fetchWorkouts(true)
+
+            WorkoutsUiAction.OnCreateClicked -> triggerEvent(
+                WorkoutsUiEvent.Navigate.Create
+            )
+
+            WorkoutsUiAction.Edit -> uiState.value.selectedWorkoutId?.let { id ->
+                triggerEvent(
+                    WorkoutsUiEvent.Navigate.Edit(id)
+                )
+            }
+
+            is WorkoutsUiAction.Execute -> triggerEvent(
+                WorkoutsUiEvent.Navigate.Execute(action.id)
+            )
+
             is WorkoutsUiAction.OnDetailClicked -> triggerEvent(
-                WorkoutsUiEvent.NavigateToDetail(
+                WorkoutsUiEvent.Navigate.Detail(
                     action.id
                 )
             )
 
-            is WorkoutsUiAction.OnStartWorkoutClicked -> triggerEvent(
-                WorkoutsUiEvent.NavigateToStartWorkout(
-                    action.id
-                )
-            )
+            WorkoutsUiAction.Delete -> uiState.value.selectedWorkoutId?.let(::delete)
 
-            WorkoutsUiAction.OnRefresh -> fetchWorkouts(refresh = true)
+            is WorkoutsUiAction.Sheet.Show,
+            WorkoutsUiAction.Sheet.Dismiss -> sheetStateManager.onAction(action)
         }
     }
 }

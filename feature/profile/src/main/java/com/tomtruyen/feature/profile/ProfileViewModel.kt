@@ -81,23 +81,23 @@ class ProfileViewModel(
 
     override fun onAction(action: ProfileUiAction) {
         when (action) {
-            is ProfileUiAction.UnitChanged -> updateState {
+            is ProfileUiAction.OnUnitChanged -> updateState {
                 it.copy(settings = it.settings.copy(unit = action.value))
             }
 
-            is ProfileUiAction.RestChanged -> updateState {
+            is ProfileUiAction.OnRestChanged -> updateState {
                 it.copy(settings = it.settings.copy(rest = action.value))
             }
 
-            is ProfileUiAction.RestEnabledChanged -> updateState {
+            is ProfileUiAction.OnRestEnabledChanged -> updateState {
                 it.copy(settings = it.settings.copy(restEnabled = action.value))
             }
 
-            is ProfileUiAction.RestVibrationEnabledChanged -> updateState {
+            is ProfileUiAction.OnRestVibrationEnabledChanged -> updateState {
                 it.copy(settings = it.settings.copy(restVibrationEnabled = action.value))
             }
 
-            is ProfileUiAction.OnRefresh -> fetchSettings(refresh = true)
+            is ProfileUiAction.Refresh -> fetchSettings(refresh = true)
 
             is ProfileUiAction.Logout -> logout()
         }

@@ -1,12 +1,13 @@
 package com.tomtruyen.feature.workouts.components
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -14,15 +15,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Buttons
@@ -36,16 +33,9 @@ fun WorkoutListItem(
     onAction: (WorkoutsUiAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var expanded by remember {
-        mutableStateOf(false)
-    }
-
     Card(
         modifier = modifier
-            .padding(
-                horizontal = Dimens.Normal,
-                vertical = Dimens.Small
-            ),
+            .padding(Dimens.Normal),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
@@ -75,47 +65,35 @@ fun WorkoutListItem(
 
                 IconButton(
                     onClick = {
-                        expanded = !expanded
+                        onAction(WorkoutsUiAction.Sheet.Show(workout.id))
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.KeyboardArrowDown,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.rotate(
-                            if (expanded) 180f else 0f
-                        )
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = null
                     )
                 }
             }
 
             // Exercises
-            AnimatedVisibility(visible = expanded) {
-                Column(
-                    modifier = Modifier.padding(
-                        start = Dimens.Normal,
-                        end = Dimens.Normal,
-                        bottom = Dimens.Normal,
-                        top = Dimens.Small,
-                    )
-                ) {
-                    workout.exercises
-                        .forEach { exercise ->
-                            Text(
-                                text = "${exercise.sets.size} x ${exercise.displayName}",
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
-                        }
+            Column(
+                modifier = Modifier.padding(Dimens.Normal),
+                verticalArrangement = Arrangement.spacedBy(Dimens.Small)
+            ) {
+                Text(
+                    text = workout.exercises.joinToString { it.displayName },
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
 
-                    Buttons.Default(
-                        text = stringResource(id = R.string.button_start_workout),
-                        minButtonSize = 0.dp,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = Dimens.Normal)
-                    ) {
-                        onAction(WorkoutsUiAction.OnStartWorkoutClicked(workout.id))
-                    }
+                Buttons.Default(
+                    text = stringResource(id = R.string.button_start_workout),
+                    minButtonSize = 0.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    onAction(WorkoutsUiAction.Execute(workout.id))
                 }
             }
         }

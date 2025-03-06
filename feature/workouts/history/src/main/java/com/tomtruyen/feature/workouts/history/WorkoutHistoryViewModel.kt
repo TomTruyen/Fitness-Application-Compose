@@ -82,12 +82,12 @@ class WorkoutHistoryViewModel(
 
     override fun onAction(action: WorkoutHistoryUiAction) {
         when(action) {
-            WorkoutHistoryUiAction.OnRefresh -> fetchWorkoutHistory(
+            WorkoutHistoryUiAction.Refresh -> fetchWorkoutHistory(
                 page = WorkoutHistory.INITIAL_PAGE,
                 refresh = true
             )
 
-            is WorkoutHistoryUiAction.OnLoadMore -> fetchWorkoutHistory(
+            is WorkoutHistoryUiAction.LoadMore -> fetchWorkoutHistory(
                 page = action.page + 1
             )
         }

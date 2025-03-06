@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -251,7 +251,7 @@ private fun ManageWorkoutScreenLayout(
                         }
                     ) {
                         Icon(
-                            imageVector = Icons.Default.MoreHoriz,
+                            imageVector = Icons.Default.MoreVert,
                             contentDescription = null
                         )
                     }

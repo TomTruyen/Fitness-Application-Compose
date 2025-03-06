@@ -234,7 +234,7 @@ private fun ExercisesScreenLayout(
                         .animateContentSize(),
                     isRefreshing = state.refreshing,
                     onRefresh = {
-                        onAction(ExercisesUiAction.OnRefresh)
+                        onAction(ExercisesUiAction.Refresh)
                     },
                     state = refreshState
                 ) {
