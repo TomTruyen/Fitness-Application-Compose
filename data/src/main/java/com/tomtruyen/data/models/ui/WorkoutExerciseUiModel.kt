@@ -42,17 +42,18 @@ data class WorkoutExerciseUiModel(
         sortOrder = index,
     )
 
-    fun toWorkoutHistoryExerciseEntity(workoutHistoryId: String, index: Int) = WorkoutHistoryExercise(
-        name = name,
-        imageUrl = imageUrl,
-        type = type.value,
-        notes = notes,
-        sortOrder = sortOrder,
-        exerciseId = exerciseId,
-        workoutHistoryId = workoutHistoryId,
-        category = category?.name,
-        equipment = equipment?.name
-    )
+    fun toWorkoutHistoryExerciseEntity(workoutHistoryId: String, index: Int) =
+        WorkoutHistoryExercise(
+            name = name,
+            imageUrl = imageUrl,
+            type = type.value,
+            notes = notes,
+            sortOrder = sortOrder,
+            exerciseId = exerciseId,
+            workoutHistoryId = workoutHistoryId,
+            category = category?.name,
+            equipment = equipment?.name
+        )
 
     companion object {
         fun createFromExerciseModel(model: ExerciseUiModel) = WorkoutExerciseUiModel(

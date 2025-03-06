@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Buttons
@@ -17,7 +18,6 @@ import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.feature.workouts.manage.R
-import com.tomtruyen.core.common.models.ManageWorkoutMode
 
 @Composable
 fun ExerciseListItem(
@@ -95,7 +95,7 @@ fun ExerciseListItem(
             onAction = onAction
         )
 
-        if(!mode.isView) {
+        if (!mode.isView) {
             // Add Set Button
             Buttons.Default(
                 text = stringResource(id = R.string.button_add_set),

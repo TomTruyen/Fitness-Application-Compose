@@ -50,7 +50,7 @@ class WorkoutHistoryViewModel(
                 .collectLatest { histories ->
                     updateState {
                         // First page = overwrite, Next Pages = append
-                        val newHistories = if(newPage == WorkoutHistory.INITIAL_PAGE) {
+                        val newHistories = if (newPage == WorkoutHistory.INITIAL_PAGE) {
                             histories
                         } else {
                             (it.histories + histories).distinct()
@@ -62,14 +62,17 @@ class WorkoutHistoryViewModel(
         }
     }
 
-    private fun fetchWorkoutHistory(page: Int = WorkoutHistory.INITIAL_PAGE, refresh: Boolean = false) = launchLoading(refresh) {
+    private fun fetchWorkoutHistory(
+        page: Int = WorkoutHistory.INITIAL_PAGE,
+        refresh: Boolean = false
+    ) = launchLoading(refresh) {
         val userId = userRepository.getUser()?.id ?: return@launchLoading
 
-        if(refresh) hasReachedEndOfPagination.set(false)
+        if (refresh) hasReachedEndOfPagination.set(false)
 
         updateState { it.copy(page = page) }
 
-        if(!hasReachedEndOfPagination.get()) {
+        if (!hasReachedEndOfPagination.get()) {
             val hasReachedEnd = historyRepository.getWorkoutHistoryPaginated(
                 userId = userId,
                 refresh = refresh,
@@ -81,7 +84,7 @@ class WorkoutHistoryViewModel(
     }
 
     override fun onAction(action: WorkoutHistoryUiAction) {
-        when(action) {
+        when (action) {
             WorkoutHistoryUiAction.Refresh -> fetchWorkoutHistory(
                 page = WorkoutHistory.INITIAL_PAGE,
                 refresh = true

@@ -83,7 +83,7 @@ object TextFields {
             modifier = modifier,
             verticalArrangement = Arrangement.spacedBy(Dimens.Tiny)
         ) {
-            if(withLabel) {
+            if (withLabel) {
                 Label(placeholder)
             }
 

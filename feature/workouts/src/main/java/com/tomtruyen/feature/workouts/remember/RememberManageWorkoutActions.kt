@@ -7,8 +7,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.tomtruyen.core.ui.BottomSheetItem
-import com.tomtruyen.feature.workouts.WorkoutsUiAction
 import com.tomtruyen.feature.workouts.R
+import com.tomtruyen.feature.workouts.WorkoutsUiAction
 
 @Composable
 fun rememberWorkoutActions(
@@ -16,7 +16,7 @@ fun rememberWorkoutActions(
 ): List<BottomSheetItem> {
     val errorColor = MaterialTheme.colorScheme.error
 
-    return  remember {
+    return remember {
         listOf(
             BottomSheetItem(
                 titleRes = R.string.action_edit_workout,

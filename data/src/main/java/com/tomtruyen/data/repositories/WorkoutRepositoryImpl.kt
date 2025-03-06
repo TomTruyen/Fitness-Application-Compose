@@ -15,7 +15,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
 import java.util.UUID
 
-class WorkoutRepositoryImpl: WorkoutRepository() {
+class WorkoutRepositoryImpl : WorkoutRepository() {
     private val dao = database.workoutDao()
     private val workoutExerciseDao = database.workoutExerciseDao()
     private val workoutExerciseSetDao = database.workoutExerciseSetDao()
@@ -35,7 +35,8 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
         workout?.let(WorkoutUiModel::fromEntity)
     }
 
-    override suspend fun findWorkoutById(id: String) = dao.findById(id)?.let(WorkoutUiModel::fromEntity)
+    override suspend fun findWorkoutById(id: String) =
+        dao.findById(id)?.let(WorkoutUiModel::fromEntity)
 
     override suspend fun getWorkouts(userId: String, refresh: Boolean) {
         fetch(refresh) {
@@ -155,7 +156,7 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
         // 2. They can't have just some random id, since we don't want to update its id on every save as that causes too much rendering and database changes
         val exercises = workout.exercises.mapIndexed { index, exercise ->
             val workoutExercise = exercise.toEntity(workoutEntity.id, index).let { newExercise ->
-                if(newExercise.id.startsWith(Workout.ACTIVE_WORKOUT_ID)) return@let newExercise
+                if (newExercise.id.startsWith(Workout.ACTIVE_WORKOUT_ID)) return@let newExercise
 
                 newExercise.copy(
                     id = "${Workout.ACTIVE_WORKOUT_ID}_${UUID.randomUUID()}"
@@ -165,7 +166,7 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
             sets.addAll(
                 exercise.sets.mapIndexed { setIndex, set ->
                     set.toEntity(workoutExercise.id, setIndex).let { newSet ->
-                        if(newSet.id.startsWith(Workout.ACTIVE_WORKOUT_ID)) return@let newSet
+                        if (newSet.id.startsWith(Workout.ACTIVE_WORKOUT_ID)) return@let newSet
 
                         newSet.copy(
                             id = "${Workout.ACTIVE_WORKOUT_ID}_${UUID.randomUUID()}"

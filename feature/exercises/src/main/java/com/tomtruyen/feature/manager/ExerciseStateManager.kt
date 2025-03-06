@@ -10,7 +10,7 @@ import com.tomtruyen.feature.exercises.ExercisesUiState
 
 class ExerciseStateManager(
     private val updateState: ((ExercisesUiState) -> ExercisesUiState) -> Unit,
-): StateManager<ExercisesUiAction> {
+) : StateManager<ExercisesUiAction> {
     private fun toggleSearch() = updateState {
         it.copy(searching = !it.searching)
     }
@@ -53,7 +53,7 @@ class ExerciseStateManager(
     }
 
     override fun onAction(action: ExercisesUiAction) {
-        when(action) {
+        when (action) {
             ExercisesUiAction.Filter.ToggleSearch -> toggleSearch()
 
             is ExercisesUiAction.Filter.OnSearchQueryChanged -> updateSearchQuery(

@@ -1,11 +1,11 @@
 package com.tomtruyen.feature.workouts.manage
 
 sealed class ManageWorkoutUiEvent {
-    sealed class Navigate: ManageWorkoutUiEvent() {
-        sealed class Workout: Navigate() {
-            data class Edit(val id: String?): ManageWorkoutUiEvent()
+    sealed class Navigate : ManageWorkoutUiEvent() {
+        sealed class Workout : Navigate() {
+            data class Edit(val id: String?) : ManageWorkoutUiEvent()
 
-            data class Execute(val id: String?): ManageWorkoutUiEvent()
+            data class Execute(val id: String?) : ManageWorkoutUiEvent()
         }
 
         sealed class Exercise : Navigate() {
@@ -13,14 +13,14 @@ sealed class ManageWorkoutUiEvent {
 
             data object Replace : Exercise()
 
-            data class Detail(val id: String): Exercise()
+            data class Detail(val id: String) : Exercise()
         }
 
-        sealed class History: Navigate() {
-            data class Detail(val workoutHistoryId: String): History()
+        sealed class History : Navigate() {
+            data class Detail(val workoutHistoryId: String) : History()
         }
 
-        data object Back: Navigate()
+        data object Back : Navigate()
     }
 
     data class ScrollToExercise(val index: Int) : ManageWorkoutUiEvent()

@@ -1,13 +1,13 @@
 package com.tomtruyen.feature.exercises.manage
 
+import androidx.compose.runtime.Immutable
 import com.tomtruyen.core.validation.TextValidator
 import com.tomtruyen.core.validation.ValidationResult
 import com.tomtruyen.core.validation.rules.RequiredRule
-import com.tomtruyen.feature.exercises.manage.model.ManageExerciseMode
-import androidx.compose.runtime.Immutable
 import com.tomtruyen.data.models.ui.CategoryUiModel
 import com.tomtruyen.data.models.ui.EquipmentUiModel
 import com.tomtruyen.data.models.ui.ExerciseUiModel
+import com.tomtruyen.feature.exercises.manage.model.ManageExerciseMode
 
 @Immutable
 data class ManageExerciseUiState(

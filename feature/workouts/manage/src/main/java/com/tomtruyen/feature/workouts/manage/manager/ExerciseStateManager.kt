@@ -12,12 +12,12 @@ class ExerciseStateManager(
     private val updateState: ((ManageWorkoutUiState) -> ManageWorkoutUiState) -> Unit,
     private val updateStateAndGet: ((ManageWorkoutUiState) -> ManageWorkoutUiState) -> ManageWorkoutUiState,
     private val triggerEvent: (ManageWorkoutUiEvent) -> Job,
-): StateManager<ManageWorkoutUiAction.Exercise> {
+) : StateManager<ManageWorkoutUiAction.Exercise> {
     private fun updateExerciseNotes(id: String, notes: String) = updateState {
         it.copy(
             workout = it.workout.copy(
                 exercises = it.workout.exercises.map { exercise ->
-                    if(exercise.id == id) {
+                    if (exercise.id == id) {
                         return@map exercise.copy(
                             notes = notes
                         )
@@ -93,7 +93,7 @@ class ExerciseStateManager(
     }
 
     override fun onAction(action: ManageWorkoutUiAction.Exercise) {
-        when(action) {
+        when (action) {
             is ManageWorkoutUiAction.Exercise.OnNotesChanged -> updateExerciseNotes(
                 id = action.id,
                 notes = action.notes

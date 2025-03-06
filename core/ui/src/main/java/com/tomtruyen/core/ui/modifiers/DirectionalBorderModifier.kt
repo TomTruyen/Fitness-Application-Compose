@@ -41,18 +41,21 @@ fun Modifier.directionalBorder(
             end = Offset(size.width, strokeCenter),
             strokeWidth = strokeWidth
         )
+
         BorderSide.BOTTOM -> drawLine(
             color = color,
             start = Offset(0f, size.height - strokeCenter),
             end = Offset(size.width, size.height - strokeCenter),
             strokeWidth = strokeWidth
         )
+
         BorderSide.LEFT -> drawLine(
             color = color,
             start = Offset(strokeCenter, 0f),
             end = Offset(strokeCenter, size.height),
             strokeWidth = strokeWidth
         )
+
         BorderSide.RIGHT -> drawLine(
             color = color,
             start = Offset(size.width - strokeCenter, 0f),

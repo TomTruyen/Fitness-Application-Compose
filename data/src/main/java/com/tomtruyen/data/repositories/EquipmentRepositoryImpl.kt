@@ -7,7 +7,7 @@ import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
 
-class EquipmentRepositoryImpl: EquipmentRepository() {
+class EquipmentRepositoryImpl : EquipmentRepository() {
     private val dao = database.equipmentDao()
 
     @OptIn(ExperimentalCoroutinesApi::class)

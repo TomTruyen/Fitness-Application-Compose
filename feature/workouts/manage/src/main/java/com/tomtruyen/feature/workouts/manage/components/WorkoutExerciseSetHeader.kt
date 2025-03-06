@@ -19,10 +19,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.common.models.ExerciseType
+import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.feature.workouts.manage.R
-import com.tomtruyen.core.common.models.ManageWorkoutMode
 
 @Composable
 fun WorkoutExerciseSetHeader(

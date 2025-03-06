@@ -54,7 +54,7 @@ fun WorkoutExerciseHeader(
                 fontWeight = FontWeight.Bold
             ),
             modifier = Modifier
-                .alpha(if(isPressed) 0.5f else 1f)
+                .alpha(if (isPressed) 0.5f else 1f)
                 .pointerInput(Unit) {
                     detectTapGestures(
                         onPress = {
@@ -69,7 +69,7 @@ fun WorkoutExerciseHeader(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        if(!mode.isView) {
+        if (!mode.isView) {
             IconButton(
                 onClick = onActionClick,
             ) {

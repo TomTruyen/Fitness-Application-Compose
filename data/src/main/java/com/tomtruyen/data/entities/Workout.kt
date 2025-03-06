@@ -26,7 +26,8 @@ data class Workout(
     val unit: String = UnitType.KG.value, // KG or LBS
     @SerialName(KEY_CREATED_AT)
     @Serializable(with = SupabaseDateTimeSerializer::class)
-    val createdAt: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
+    val createdAt: LocalDateTime = Clock.System.now()
+        .toLocalDateTime(TimeZone.currentSystemDefault()),
     @SerialName(KEY_USER_ID)
     val userId: String? = null,
 ) : BaseEntity {

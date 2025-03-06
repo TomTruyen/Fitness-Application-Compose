@@ -1,12 +1,12 @@
 package com.tomtruyen.feature.workouts.manage
 
 import com.tomtruyen.core.common.base.BaseViewModel
+import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.common.utils.StopwatchTimer
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
-import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.feature.workouts.manage.manager.ExerciseStateManager
 import com.tomtruyen.feature.workouts.manage.manager.SetStateManager
 import com.tomtruyen.feature.workouts.manage.manager.SheetStateManager
@@ -95,7 +95,7 @@ class ManageWorkoutViewModel(
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     private fun observeActiveWorkout() = vmScope.launch {
-        if(!uiState.value.mode.isExecute) return@launch
+        if (!uiState.value.mode.isExecute) return@launch
 
         uiState.mapLatest {
             it.workout
@@ -185,13 +185,14 @@ class ManageWorkoutViewModel(
     }
 
     override fun onAction(action: ManageWorkoutUiAction) {
-        when(action) {
-            is ManageWorkoutUiAction.Workout -> when(action) {
+        when (action) {
+            is ManageWorkoutUiAction.Workout -> when (action) {
                 ManageWorkoutUiAction.Workout.Save -> save()
                 ManageWorkoutUiAction.Workout.Delete -> delete()
                 ManageWorkoutUiAction.Workout.Discard -> discard()
                 else -> workoutStateManager.onAction(action)
             }
+
             is ManageWorkoutUiAction.Exercise -> exerciseStateManager.onAction(action)
             is ManageWorkoutUiAction.Set -> setStateManager.onAction(action)
             is ManageWorkoutUiAction.Sheet -> sheetStateManager.onAction(action)
