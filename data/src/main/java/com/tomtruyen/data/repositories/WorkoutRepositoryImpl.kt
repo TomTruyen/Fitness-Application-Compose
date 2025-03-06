@@ -13,6 +13,7 @@ import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
+import java.util.UUID
 
 class WorkoutRepositoryImpl: WorkoutRepository() {
     private val dao = database.workoutDao()
@@ -149,12 +150,27 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
             id = Workout.ACTIVE_WORKOUT_ID
         )
 
+        // Exercises and Sets require a composed UUID since:
+        // 1. They can't have their old id, since then that object will update causing it to no longer be connected to the original workout (if any)
+        // 2. They can't have just some random id, since we don't want to update its id on every save as that causes too much rendering and database changes
         val exercises = workout.exercises.mapIndexed { index, exercise ->
-            val workoutExercise = exercise.toEntity(workoutEntity.id, index)
+            val workoutExercise = exercise.toEntity(workoutEntity.id, index).let { newExercise ->
+                if(newExercise.id.startsWith(Workout.ACTIVE_WORKOUT_ID)) return@let newExercise
+
+                newExercise.copy(
+                    id = "${Workout.ACTIVE_WORKOUT_ID}_${UUID.randomUUID()}"
+                )
+            }
 
             sets.addAll(
                 exercise.sets.mapIndexed { setIndex, set ->
-                    set.toEntity(exercise.id, setIndex)
+                    set.toEntity(workoutExercise.id, setIndex).let { newSet ->
+                        if(newSet.id.startsWith(Workout.ACTIVE_WORKOUT_ID)) return@let newSet
+
+                        newSet.copy(
+                            id = "${Workout.ACTIVE_WORKOUT_ID}_${UUID.randomUUID()}"
+                        )
+                    }
                 }
             )
 
