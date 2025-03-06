@@ -245,7 +245,9 @@ private fun ExercisesScreenLayout(
 
                         itemsIndexed(state.exercises) { index, exercise ->
                             Column(
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .animateItem()
                             ) {
                                 // Add Text with First Letter of Exercise Name when it changes
                                 val currentFirstLetter =

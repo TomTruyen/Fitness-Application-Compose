@@ -111,6 +111,8 @@ private fun WorkoutHistoryScreenLayout(
                         .fillMaxSize()
                         .padding(vertical = Dimens.Normal),
                 ) {
+                    // TODO: Use .animateItem() on the item that we add in here
+
                     itemsIndexed(
                         items = state.histories.sortedByDescending { history ->
                             history.createdAt
