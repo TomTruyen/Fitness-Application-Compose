@@ -43,7 +43,7 @@ data class WorkoutUiModel(
             exercise.sets.filter(WorkoutExerciseSetUiModel::completed).size
         }
 
-    fun toEntity(userId: String) = Workout(
+    fun toEntity(userId: String? = null) = Workout(
         id = id,
         name = name,
         unit = unit.value,

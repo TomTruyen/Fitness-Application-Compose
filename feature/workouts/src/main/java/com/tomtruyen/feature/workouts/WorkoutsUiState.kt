@@ -6,6 +6,8 @@ import com.tomtruyen.data.models.ui.WorkoutUiModel
 @Immutable
 data class WorkoutsUiState(
     val workouts: List<WorkoutUiModel> = emptyList(),
+    val activeWorkout: WorkoutUiModel? = null,
+
     val selectedWorkoutId: String? = null,
 
     val showSheet: Boolean = false,

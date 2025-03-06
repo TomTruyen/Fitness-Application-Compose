@@ -200,7 +200,7 @@ private fun ManageWorkoutScreenLayout(
         if (state.workout.exercises != state.initialWorkout.exercises) {
             confirmationDialogVisible = true
         } else {
-            navController.popBackStack()
+            onAction(ManageWorkoutUiAction.Workout.Discard)
         }
     }
 
@@ -263,7 +263,7 @@ private fun ManageWorkoutScreenLayout(
                         contentPadding = PaddingValues(0.dp),
                         minButtonSize = 36.dp,
                         onClick = {
-                            onAction(ManageWorkoutUiAction.Workout.OnSave)
+                            onAction(ManageWorkoutUiAction.Workout.Save)
                         }
                     )
                 }
@@ -325,7 +325,9 @@ private fun ManageWorkoutScreenLayout(
                     title = CommonR.string.title_unsaved_changes,
                     message = CommonR.string.message_unsaved_changes,
                     onConfirm = {
-                        navController.popBackStack()
+                        onAction(
+                            ManageWorkoutUiAction.Workout.Discard
+                        )
                         confirmationDialogVisible = false
                     },
                     onDismiss = {

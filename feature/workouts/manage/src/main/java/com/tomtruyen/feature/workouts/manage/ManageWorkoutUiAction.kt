@@ -6,9 +6,11 @@ sealed class ManageWorkoutUiAction {
     sealed class Workout: ManageWorkoutUiAction() {
         data class OnNameChanged(val name: String): Workout()
 
-        data object OnSave: Workout()
+        data object Save: Workout()
 
-        data object OnDelete: Workout()
+        data object Delete: Workout()
+
+        data object Discard: Workout()
     }
 
     sealed class Exercise: ManageWorkoutUiAction() {

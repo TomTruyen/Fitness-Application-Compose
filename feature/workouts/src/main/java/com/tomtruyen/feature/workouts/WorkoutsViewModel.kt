@@ -1,6 +1,7 @@
 package com.tomtruyen.feature.workouts
 
 import com.tomtruyen.core.common.base.BaseViewModel
+import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.feature.workouts.manager.SheetStateManager
@@ -44,7 +45,16 @@ class WorkoutsViewModel(
         workoutRepository.findWorkoutsAsync()
             .distinctUntilChanged()
             .collectLatest { workouts ->
-                updateState { it.copy(workouts = workouts) }
+                updateState {
+                    it.copy(
+                        workouts = workouts.filter { workout ->
+                            workout.id != Workout.ACTIVE_WORKOUT_ID
+                        },
+                        activeWorkout = workouts.find { workout ->
+                            workout.id == Workout.ACTIVE_WORKOUT_ID
+                        }
+                    )
+                }
             }
     }
 
@@ -59,6 +69,10 @@ class WorkoutsViewModel(
 
     private fun delete(id: String) = launchLoading {
         workoutRepository.deleteWorkout(id)
+    }
+
+    private fun discardActiveWorkout() = launchLoading {
+        workoutRepository.deleteActiveWorkout()
     }
 
     override fun onAction(action: WorkoutsUiAction) {
@@ -90,6 +104,12 @@ class WorkoutsViewModel(
             )
 
             WorkoutsUiAction.Delete -> uiState.value.selectedWorkoutId?.let(::delete)
+
+            WorkoutsUiAction.ActiveWorkout.Resume -> triggerEvent(
+                WorkoutsUiEvent.Navigate.Execute(Workout.ACTIVE_WORKOUT_ID)
+            )
+
+            WorkoutsUiAction.ActiveWorkout.Discard -> discardActiveWorkout()
 
             is WorkoutsUiAction.Sheet.Show,
             WorkoutsUiAction.Sheet.Dismiss -> sheetStateManager.onAction(action)

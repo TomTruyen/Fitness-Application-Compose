@@ -1,12 +1,16 @@
 package com.tomtruyen.feature.workouts
 
-import com.tomtruyen.data.models.ui.WorkoutUiModel
-
 sealed class WorkoutsUiAction {
     sealed class Sheet: WorkoutsUiAction() {
         data class Show(val id: String): Sheet()
 
         data object Dismiss: Sheet()
+    }
+
+    sealed class ActiveWorkout: WorkoutsUiAction() {
+        data object Resume: ActiveWorkout()
+
+        data object Discard: ActiveWorkout()
     }
 
     data object OnCreateClicked : WorkoutsUiAction()

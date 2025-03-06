@@ -33,6 +33,8 @@ data class Workout(
     companion object {
         const val TABLE_NAME = "Workout"
 
+        const val ACTIVE_WORKOUT_ID = "active"
+
         const val KEY_ID = "id"
         const val KEY_NAME = "name"
         const val KEY_UNIT = "unit"

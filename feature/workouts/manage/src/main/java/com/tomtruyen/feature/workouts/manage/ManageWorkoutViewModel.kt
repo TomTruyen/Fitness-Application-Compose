@@ -11,9 +11,13 @@ import com.tomtruyen.feature.workouts.manage.manager.ExerciseStateManager
 import com.tomtruyen.feature.workouts.manage.manager.SetStateManager
 import com.tomtruyen.feature.workouts.manage.manager.SheetStateManager
 import com.tomtruyen.feature.workouts.manage.manager.WorkoutStateManager
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 
 class ManageWorkoutViewModel(
@@ -59,6 +63,8 @@ class ManageWorkoutViewModel(
     init {
         observeWorkout()
 
+        observeActiveWorkout()
+
         observeLoading()
         observeSettings()
 
@@ -85,6 +91,19 @@ class ManageWorkoutViewModel(
         if (!uiState.value.mode.isExecute) return
 
         timer.stop()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
+    private fun observeActiveWorkout() = vmScope.launch {
+        if(!uiState.value.mode.isExecute) return@launch
+
+        uiState.mapLatest {
+            it.workout
+        }.distinctUntilChanged()
+            .debounce(200) // Debounce as to not spam the Database
+            .collectLatest { workout ->
+                workoutRepository.saveActiveWorkout(workout)
+            }
     }
 
     private fun observeWorkout() = vmScope.launch {
@@ -160,11 +179,17 @@ class ManageWorkoutViewModel(
         }
     }
 
+    private fun discard() = vmScope.launch {
+        workoutRepository.deleteActiveWorkout()
+        triggerEvent(ManageWorkoutUiEvent.Navigate.Back)
+    }
+
     override fun onAction(action: ManageWorkoutUiAction) {
         when(action) {
             is ManageWorkoutUiAction.Workout -> when(action) {
-                ManageWorkoutUiAction.Workout.OnSave -> save()
-                ManageWorkoutUiAction.Workout.OnDelete -> delete()
+                ManageWorkoutUiAction.Workout.Save -> save()
+                ManageWorkoutUiAction.Workout.Delete -> delete()
+                ManageWorkoutUiAction.Workout.Discard -> discard()
                 else -> workoutStateManager.onAction(action)
             }
             is ManageWorkoutUiAction.Exercise -> exerciseStateManager.onAction(action)

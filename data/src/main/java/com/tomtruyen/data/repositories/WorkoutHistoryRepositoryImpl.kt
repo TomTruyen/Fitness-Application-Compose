@@ -3,6 +3,7 @@ package com.tomtruyen.data.repositories
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.entities.WorkoutHistory
 import com.tomtruyen.data.entities.WorkoutHistoryExercise
 import com.tomtruyen.data.entities.WorkoutHistoryExerciseSet
@@ -24,6 +25,7 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
     private val exerciseDao = database.exerciseDao()
     private val categoryDao = database.categoryDao()
     private val equipmentDao = database.equipmentDao()
+    private val workoutDao = database.workoutDao()
 
     private fun calculatePageStart(page: Int): Int {
         return (page - 1).coerceAtLeast(0) * WorkoutHistory.PAGE_SIZE
@@ -160,6 +162,8 @@ class WorkoutHistoryRepositoryImpl: WorkoutHistoryRepository() {
             dao.save(workoutHistory)
             workoutHistoryExerciseDao.saveAll(exercises)
             workoutHistoryExerciseSetDao.saveAll(sets)
+
+            workoutDao.deleteById(Workout.ACTIVE_WORKOUT_ID)
         }
 
         return workoutHistory.id

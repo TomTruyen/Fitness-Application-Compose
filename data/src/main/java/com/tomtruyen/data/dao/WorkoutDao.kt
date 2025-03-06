@@ -26,9 +26,6 @@ interface WorkoutDao {
     @Query("SELECT * FROM ${Workout.TABLE_NAME} WHERE id = :id")
     suspend fun findById(id: String): WorkoutWithExercises?
 
-    @Query("DELETE FROM ${Workout.TABLE_NAME}")
-    suspend fun deleteAll(): Int
-
     @Query("DELETE FROM ${Workout.TABLE_NAME} WHERE id NOT IN (:ids)")
     suspend fun deleteAllWorkoutsExcept(ids: List<String>): Int
 

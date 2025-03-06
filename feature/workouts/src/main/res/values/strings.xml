@@ -10,4 +10,6 @@
     <string name="label_quick_start">Quick Start</string>
     <string name="label_workouts">Workouts</string>
     <string name="content_description_create_workout">Create workout</string>
+    <string name="button_resume">Resume</string>
+    <string name="button_discard">Discard</string>
 </resources>

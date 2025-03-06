@@ -1,8 +1,11 @@
 package com.tomtruyen.feature.workouts
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,15 +13,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -26,10 +35,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.designsystem.Dimens
+import com.tomtruyen.core.designsystem.theme.textButtonContentColor
 import com.tomtruyen.core.ui.BottomSheetList
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.LoadingContainer
+import com.tomtruyen.core.ui.modifiers.BorderSide
+import com.tomtruyen.core.ui.modifiers.directionalBorder
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.feature.workouts.components.WorkoutListItem
 import com.tomtruyen.feature.workouts.remember.rememberWorkoutActions
@@ -115,6 +127,46 @@ private fun WorkoutOverviewScreenLayout(
                 }
             }
         },
+        bottomBar = {
+            AnimatedVisibility(
+                visible = state.activeWorkout != null
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .directionalBorder(
+                            side = BorderSide.TOP
+                        )
+                        .padding(
+                            start = Dimens.Normal,
+                            end = Dimens.Normal,
+                            top = Dimens.Small
+                        ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Buttons.Text(
+                        modifier = Modifier.weight(1f),
+                        text = stringResource(id = R.string.button_resume),
+                        icon = Icons.Default.PlayArrow,
+                        onClick = {
+                            onAction(WorkoutsUiAction.ActiveWorkout.Resume)
+                        }
+                    )
+
+                    Buttons.Text(
+                        modifier = Modifier.weight(1f),
+                        text = stringResource(id = R.string.button_discard),
+                        icon = Icons.Default.Close,
+                        colors = ButtonDefaults.textButtonColors(
+                            contentColor = MaterialTheme.colorScheme.error
+                        ),
+                        onClick = {
+                            onAction(WorkoutsUiAction.ActiveWorkout.Discard)
+                        }
+                    )
+                }
+            }
+        }
     ) {
         LoadingContainer(
             loading = state.loading,

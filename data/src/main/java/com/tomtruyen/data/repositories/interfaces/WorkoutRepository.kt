@@ -28,4 +28,8 @@ abstract class WorkoutRepository : BaseRepository() {
     )
 
     abstract suspend fun deleteWorkout(workoutId: String)
+
+    abstract suspend fun saveActiveWorkout(workout: WorkoutUiModel)
+
+    abstract suspend fun deleteActiveWorkout()
 }

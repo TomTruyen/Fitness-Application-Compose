@@ -85,7 +85,7 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
 
                     cacheTransaction {
                         // Clear Table
-                        dao.deleteAll()
+                        dao.deleteAllWorkoutsExcept(listOf(Workout.ACTIVE_WORKOUT_ID))
 
                         // Add the Entity
                         dao.saveAll(workouts)
@@ -110,7 +110,7 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
         val workoutEntity = workout.toEntity(userId)
 
         val exercises = workout.exercises.mapIndexed { index, exercise ->
-            val workoutExercise = exercise.toEntity(workout.id, index)
+            val workoutExercise = exercise.toEntity(workoutEntity.id, index)
 
             sets.addAll(
                 exercise.sets.mapIndexed { setIndex, set ->
@@ -140,5 +140,44 @@ class WorkoutRepositoryImpl: WorkoutRepository() {
         }
 
         dao.deleteById(workoutId)
+    }
+
+    override suspend fun saveActiveWorkout(workout: WorkoutUiModel) {
+        val sets = mutableListOf<WorkoutExerciseSet>()
+
+        val workoutEntity = workout.toEntity().copy(
+            id = Workout.ACTIVE_WORKOUT_ID
+        )
+
+        val exercises = workout.exercises.mapIndexed { index, exercise ->
+            val workoutExercise = exercise.toEntity(workoutEntity.id, index)
+
+            sets.addAll(
+                exercise.sets.mapIndexed { setIndex, set ->
+                    set.toEntity(exercise.id, setIndex)
+                }
+            )
+
+            workoutExercise
+        }
+
+        transaction {
+            // Delete Active Workout from Dao
+            // This is to cleanup dangling exercises and sets
+            // Since we use a Transaction this won't have an impact on UI
+            // It will be a little more demanding in the Background, but that is fine
+            dao.deleteById(workoutEntity.id)
+
+            dao.save(workoutEntity)
+
+            workoutExerciseDao.saveAll(exercises)
+            workoutExerciseSetDao.saveAll(sets)
+        }
+    }
+
+    override suspend fun deleteActiveWorkout() {
+        transaction {
+            dao.deleteById(Workout.ACTIVE_WORKOUT_ID)
+        }
     }
 }

@@ -89,7 +89,7 @@ fun rememberWorkoutActions(
                 icon = Icons.Default.Close,
                 onClick = {
                     onAction(
-                        ManageWorkoutUiAction.Workout.OnDelete
+                        ManageWorkoutUiAction.Workout.Delete
                     )
                 },
                 color = errorColor
