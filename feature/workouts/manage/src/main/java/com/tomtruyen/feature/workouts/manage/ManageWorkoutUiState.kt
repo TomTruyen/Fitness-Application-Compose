@@ -7,6 +7,9 @@ import com.tomtruyen.core.common.models.ManageWorkoutMode
 
 @Immutable
 data class ManageWorkoutUiState(
+    // Used for Execute without ID to help us determine if we should allow the editing of workout.name
+    val workoutId: String?,
+
     val mode: ManageWorkoutMode = ManageWorkoutMode.CREATE,
     val initialWorkout: WorkoutUiModel = WorkoutUiModel(),
     val workout: WorkoutUiModel = WorkoutUiModel(),

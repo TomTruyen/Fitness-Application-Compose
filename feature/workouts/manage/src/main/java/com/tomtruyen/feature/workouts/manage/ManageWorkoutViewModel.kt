@@ -25,6 +25,7 @@ class ManageWorkoutViewModel(
     private val settingsRepository: SettingsRepository
 ) : BaseViewModel<ManageWorkoutUiState, ManageWorkoutUiAction, ManageWorkoutUiEvent>(
     initialState = ManageWorkoutUiState(
+        workoutId = id,
         mode = mode
     )
 ) {

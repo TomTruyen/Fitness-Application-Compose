@@ -6,7 +6,7 @@ sealed class WorkoutsUiEvent {
 
         data class Edit(val id: String): Navigate()
 
-        data class Execute(val id: String): Navigate()
+        data class Execute(val id: String?): Navigate()
 
         data class Detail(val id: String): Navigate()
     }

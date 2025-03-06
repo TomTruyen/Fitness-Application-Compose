@@ -1,5 +1,7 @@
 package com.tomtruyen.feature.workouts
 
+import com.tomtruyen.data.models.ui.WorkoutUiModel
+
 sealed class WorkoutsUiAction {
     sealed class Sheet: WorkoutsUiAction() {
         data class Show(val id: String): Sheet()
@@ -12,6 +14,8 @@ sealed class WorkoutsUiAction {
     data class OnDetailClicked(val id: String) : WorkoutsUiAction()
 
     data class Execute(val id: String) : WorkoutsUiAction()
+
+    data object ExecuteEmpty: WorkoutsUiAction()
 
     data object Edit: WorkoutsUiAction()
 

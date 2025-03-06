@@ -211,7 +211,7 @@ private fun ManageWorkoutScreenLayout(
         topBar = {
             Toolbar(
                 title = {
-                    if (state.mode.isExecute || state.mode.isView) {
+                    if (state.mode.isView || (state.mode.isExecute && state.workoutId != null)) {
                         ToolbarTitle(title = state.workout.name)
                     } else {
                         TextFields.Default(

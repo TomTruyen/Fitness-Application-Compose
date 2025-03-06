@@ -1,8 +1,11 @@
 package com.tomtruyen.feature.workouts
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -22,7 +25,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.common.models.ManageWorkoutMode
+import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.BottomSheetList
+import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.feature.workouts.components.WorkoutListItem
@@ -124,8 +130,33 @@ private fun WorkoutOverviewScreenLayout(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
+                        .padding(Dimens.Normal)
                         .animateContentSize(),
+                    verticalArrangement = Arrangement.spacedBy(Dimens.Small)
                 ) {
+                    item {
+                        Label(
+                            label = stringResource(R.string.label_quick_start)
+                        )
+                    }
+
+                    item {
+                        Buttons.Default(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(id = R.string.button_start_empty_workout),
+                            onClick = {
+                                onAction(WorkoutsUiAction.ExecuteEmpty)
+                            }
+                        )
+                    }
+
+                    item {
+                        Label(
+                            modifier = Modifier.padding(top = Dimens.Normal),
+                            label = stringResource(R.string.label_workouts)
+                        )
+                    }
+
                     items(state.workouts) { workout ->
                         WorkoutListItem(
                             workout = workout,

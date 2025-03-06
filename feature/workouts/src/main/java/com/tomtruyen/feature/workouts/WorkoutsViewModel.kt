@@ -79,6 +79,10 @@ class WorkoutsViewModel(
                 WorkoutsUiEvent.Navigate.Execute(action.id)
             )
 
+            WorkoutsUiAction.ExecuteEmpty -> triggerEvent(
+                WorkoutsUiEvent.Navigate.Execute(null)
+            )
+
             is WorkoutsUiAction.OnDetailClicked -> triggerEvent(
                 WorkoutsUiEvent.Navigate.Detail(
                     action.id

@@ -17,7 +17,7 @@ fun Label(
 ) {
     Text(
         text = label,
-        style = MaterialTheme.typography.labelMedium.copy(
+        style = MaterialTheme.typography.labelLarge.copy(
             color = MaterialTheme.colorScheme.secondaryTextColor
         ),
         modifier = modifier

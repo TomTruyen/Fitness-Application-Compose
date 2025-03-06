@@ -34,8 +34,7 @@ fun WorkoutListItem(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier
-            .padding(Dimens.Normal),
+        modifier = modifier,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
