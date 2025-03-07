@@ -28,6 +28,7 @@ data class WorkoutExerciseSetUiModel(
         reps = reps,
         weight = weight,
         time = time,
+        completed = completed,
         sortOrder = index,
         workoutExerciseId = workoutExerciseId
     )
@@ -52,6 +53,7 @@ data class WorkoutExerciseSetUiModel(
             reps = entity.reps,
             weight = entity.weight,
             time = entity.time,
+            completed = entity.completed,
             sortOrder = entity.sortOrder
         )
     }

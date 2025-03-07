@@ -3,6 +3,8 @@ package com.tomtruyen.feature.workouts.manage
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.common.utils.StopwatchTimer
+import com.tomtruyen.data.entities.Workout
+import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
@@ -99,8 +101,7 @@ class ManageWorkoutViewModel(
 
         uiState.mapLatest {
             it.workout
-        }.distinctUntilChanged()
-            .debounce(200) // Debounce as to not spam the Database
+        }.distinctUntilChanged().debounce(200) // Debounce as to not spam the Database
             .collectLatest { workout ->
                 workoutRepository.saveActiveWorkout(workout)
             }
@@ -109,7 +110,15 @@ class ManageWorkoutViewModel(
     private fun observeWorkout() = vmScope.launch {
         if (uiState.value.mode.isCreate || id == null) return@launch
 
-        workoutRepository.findWorkoutByIdAsync(id)
+        val workoutId = if(uiState.value.mode.isExecute && id != Workout.ACTIVE_WORKOUT_ID) {
+            val workout = workoutRepository.findWorkoutById(id) ?: WorkoutUiModel()
+
+            workoutRepository.saveActiveWorkout(workout)
+
+            Workout.ACTIVE_WORKOUT_ID
+        } else id
+
+        workoutRepository.findWorkoutByIdAsync(workoutId)
             .filterNotNull()
             .distinctUntilChanged()
             .collectLatest { workout ->

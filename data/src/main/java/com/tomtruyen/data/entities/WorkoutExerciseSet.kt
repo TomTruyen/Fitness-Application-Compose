@@ -5,6 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import java.util.UUID
 
 @Serializable
@@ -37,6 +38,8 @@ data class WorkoutExerciseSet(
     val time: Int? = null,
     @SerialName(KEY_SORT_ORDER)
     val sortOrder: Int = 0,
+    @Transient
+    val completed: Boolean = false,
 ) : BaseEntity {
     companion object {
         const val TABLE_NAME = "WorkoutExerciseSet"
