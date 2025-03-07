@@ -158,7 +158,7 @@ class ManageWorkoutViewModel(
             }
     }
 
-    private fun fetchLatestSetsForExercises(workout: WorkoutUiModel) = vmScope.launch {
+    private fun fetchLatestSetsForExercises(workout: WorkoutUiModel) = launchLoading {
         val sets = workoutRepository.getPreviousSetsForExercises(workout)
 
         updateState {
