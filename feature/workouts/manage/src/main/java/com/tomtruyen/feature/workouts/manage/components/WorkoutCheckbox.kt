@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.FitnessApplicationTheme
+import com.tomtruyen.core.designsystem.theme.FynixTheme
 import com.tomtruyen.core.designsystem.theme.SuccessGreen
 
 @Composable
@@ -54,7 +54,7 @@ fun WorkoutCheckbox(
 @Preview
 @Composable
 fun WorkoutCheckboxPreview() {
-    FitnessApplicationTheme {
+    FynixTheme {
         WorkoutCheckbox(
             checked = false,
             onClick = {}

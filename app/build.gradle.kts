@@ -114,4 +114,7 @@ dependencies {
 
     // Debug Only
     debugImplementation(libs.squareup.leakcanary)
+
+    // Splashscreen
+    implementation(libs.androidx.splashscreen)
 }

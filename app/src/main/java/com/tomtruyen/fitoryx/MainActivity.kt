@@ -2,6 +2,8 @@ package com.tomtruyen.fitoryx
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -14,6 +16,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.splashscreen.SplashScreenViewProvider
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,7 +27,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.tomtruyen.core.common.models.GlobalAppState
-import com.tomtruyen.core.designsystem.theme.FitnessApplicationTheme
+import com.tomtruyen.core.designsystem.theme.FynixTheme
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.feature.auth.login.LoginScreen
 import com.tomtruyen.feature.auth.register.RegisterScreen
@@ -40,6 +45,9 @@ import com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel
 import com.tomtruyen.fitoryx.navigation.MainBottomNavigation
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.screenScopedViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -47,14 +55,20 @@ import org.koin.core.parameter.parametersOf
 class MainActivity : ComponentActivity() {
     private val userRepository by inject<UserRepository>()
 
+    private var hasCheckedLoggedIn: Boolean = false
+
     @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
+
         super.onCreate(savedInstanceState)
+
+        splashScreen.setKeepOnScreenCondition { !hasCheckedLoggedIn }
 
         enableEdgeToEdge()
 
         setContent {
-            FitnessApplicationTheme {
+            FynixTheme {
                 val navController = rememberNavController()
 
                 var isBottomBarVisible by GlobalAppState.isBottomBarVisible
@@ -107,6 +121,12 @@ class MainActivity : ComponentActivity() {
                                             }
                                         }
                                     }
+
+                                    // Waits for MainLooper before dismissing the splashscreen
+                                    // Ensures that enough time for navigation
+                                    Handler(Looper.getMainLooper()).postDelayed({
+                                        hasCheckedLoggedIn = true
+                                    }, 50L)
                                 }
 
                                 LoginScreen(navController)

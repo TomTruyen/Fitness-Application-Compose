@@ -45,7 +45,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun FitnessApplicationTheme(
+fun FynixTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {

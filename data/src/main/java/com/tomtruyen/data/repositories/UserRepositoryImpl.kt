@@ -57,7 +57,11 @@ class UserRepositoryImpl(
         auth.signOut()
     }
 
-    override fun isLoggedIn() = auth.currentUserOrNull() != null
+    override suspend fun isLoggedIn(): Boolean {
+        auth.awaitInitialization()
+
+        return auth.currentUserOrNull() != null
+    }
 
     override fun getUser() = auth.currentUserOrNull()
 

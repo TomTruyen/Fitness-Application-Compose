@@ -12,6 +12,6 @@ abstract class UserRepository : BaseRepository() {
     abstract suspend fun loginWithGoogle(idToken: String)
     abstract suspend fun logout()
     protected abstract suspend fun onAuthenticated()
-    abstract fun isLoggedIn(): Boolean
+    abstract suspend fun isLoggedIn(): Boolean
     abstract fun getUser(): UserInfo?
 }

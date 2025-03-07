@@ -1,4 +1,4 @@
-package com.tomtruyen.fitnessapplication.providers
+package com.tomtruyen.Fynix.providers
 
 import com.tomtruyen.core.common.providers.CredentialProvider
 
