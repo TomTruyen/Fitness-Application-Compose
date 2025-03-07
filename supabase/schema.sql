@@ -77,6 +77,7 @@ WITH RankedSets AS (
         whes.time,
         whes.sort_order,
         whes.created_at,
+        whe.type AS exercise_type,
         ROW_NUMBER() OVER (PARTITION BY whe.exercise_id, whes.sort_order ORDER BY whes.created_at DESC) AS rn -- Partition to get a combined "hash key" using exercise_id and sort_order
     FROM "public"."WorkoutHistoryExerciseSet" whes
     JOIN "public"."WorkoutHistoryExercise" whe ON whe.id = whes.workout_history_exercise_id
@@ -86,7 +87,13 @@ WITH RankedSets AS (
 )
 SELECT id, exercise_id, reps, weight, time, sort_order, created_at
 FROM RankedSets
-WHERE rn = 1;
+WHERE rn = 1
+AND (
+    -- For exercises of type "Time", ensure time is not null
+    (exercise_type = 'Time' AND time IS NOT NULL)
+    -- For exercises of type "Weight", ensure both weight and reps are not null
+    OR (exercise_type = 'Weight' AND weight IS NOT NULL AND reps IS NOT NULL)
+);
 $$;
 
 
