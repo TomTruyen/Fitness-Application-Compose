@@ -42,8 +42,6 @@ data class WorkoutHistoryExerciseSet(
     val time: Int? = null,
     @SerialName(KEY_SORT_ORDER)
     val sortOrder: Int = 0,
-    @SerialName(KEY_EXERCISE_ID)
-    val exerciseId: String? = null,
     @SerialName(KEY_CREATED_AT)
     @Serializable(with = SupabaseDateTimeSerializer::class)
     val createdAt: LocalDateTime = Clock.System.now()
@@ -58,7 +56,6 @@ data class WorkoutHistoryExerciseSet(
         const val KEY_WEIGHT = "weight"
         const val KEY_TIME = "time"
         const val KEY_SORT_ORDER = "sort_order"
-        const val KEY_EXERCISE_ID = "exercise_id"
         const val KEY_CREATED_AT = "created_at"
     }
 }

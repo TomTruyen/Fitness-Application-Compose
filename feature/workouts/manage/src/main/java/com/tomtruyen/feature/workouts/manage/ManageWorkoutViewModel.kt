@@ -110,25 +110,34 @@ class ManageWorkoutViewModel(
     private fun observeWorkout() = vmScope.launch {
         if (uiState.value.mode.isCreate || id == null) return@launch
 
-        val workoutId = if(uiState.value.mode.isExecute && id != Workout.ACTIVE_WORKOUT_ID) {
-            val workout = workoutRepository.findWorkoutById(id) ?: WorkoutUiModel()
+        when(uiState.value.mode) {
+            ManageWorkoutMode.EXECUTE -> {
+                if(id != Workout.ACTIVE_WORKOUT_ID) {
+                    val workout = workoutRepository.findWorkoutById(id) ?: WorkoutUiModel()
 
-            workoutRepository.saveActiveWorkout(workout)
+                    workoutRepository.saveActiveWorkout(workout)
+                }
 
-            Workout.ACTIVE_WORKOUT_ID
-        } else id
-
-        workoutRepository.findWorkoutByIdAsync(workoutId)
-            .filterNotNull()
-            .distinctUntilChanged()
-            .collectLatest { workout ->
-                updateState {
-                    it.copy(
-                        initialWorkout = workout,
-                        workout = workout
-                    )
+                workoutRepository.findWorkoutById(Workout.ACTIVE_WORKOUT_ID)?.let { workout ->
+                    updateState {
+                        it.copy(
+                            workout = workout,
+                            initialWorkout = workout
+                        )
+                    }
                 }
             }
+            else -> {
+                workoutRepository.findWorkoutByIdAsync(id)
+                    .filterNotNull()
+                    .distinctUntilChanged()
+                    .collectLatest { workout ->
+                        updateState {
+                            it.copy(workout = workout)
+                        }
+                    }
+            }
+        }
     }
 
     private fun observeLoading() = vmScope.launch {

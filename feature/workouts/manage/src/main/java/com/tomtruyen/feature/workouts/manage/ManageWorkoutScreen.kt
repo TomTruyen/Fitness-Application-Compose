@@ -100,7 +100,11 @@ fun ManageWorkoutScreen(
 
                 is ManageWorkoutUiEvent.Navigate.History.Detail -> navController.navigate(
                     Screen.History.Detail(event.workoutHistoryId)
-                )
+                ) {
+                    popUpTo<Screen.Workout.Overview> {
+                        inclusive = false
+                    }
+                }
 
                 is ManageWorkoutUiEvent.Navigate.Workout.Edit -> navController.navigate(
                     Screen.Workout.Manage(event.id, ManageWorkoutMode.EDIT),

@@ -35,14 +35,12 @@ data class WorkoutExerciseSetUiModel(
 
     fun toWorkoutHistorySetEntity(
         workoutHistoryExerciseId: String,
-        exerciseId: String?,
         index: Int
     ) = WorkoutHistoryExerciseSet(
         reps = reps,
         weight = weight,
         time = time,
         sortOrder = index,
-        exerciseId = exerciseId,
         createdAt = createdAt,
         workoutHistoryExerciseId = workoutHistoryExerciseId
     )

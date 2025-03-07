@@ -155,7 +155,6 @@ class WorkoutHistoryRepositoryImpl : WorkoutHistoryRepository() {
                     .mapIndexed { setIndex, set ->
                         set.toWorkoutHistorySetEntity(
                             workoutHistoryExercise.id,
-                            exercise.exerciseId,
                             setIndex
                         )
                     }
