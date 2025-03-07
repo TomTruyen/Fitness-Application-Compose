@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Fitness Application</string>
+    <!--  Fynix – “Fit” + “Phoenix” (rebirth, endurance) <> It can also be pronounced as Phoenix which is cool  -->
+    <string name="app_name">Fynix</string>
 
     <!-- Bottom Navigation -->
     <string name="workouts">Workouts</string>
