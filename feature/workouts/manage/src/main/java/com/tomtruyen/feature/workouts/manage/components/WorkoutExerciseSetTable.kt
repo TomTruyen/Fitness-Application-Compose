@@ -1,5 +1,6 @@
 package com.tomtruyen.feature.workouts.manage.components
 
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -7,12 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.LighterSuccessGreen
+import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 
@@ -21,6 +24,7 @@ fun WorkoutExerciseSetTable(
     workoutExerciseId: String,
     exerciseType: ExerciseType,
     sets: List<WorkoutExerciseSetUiModel>,
+    previousSets: List<PreviousExerciseSet>?,
     unit: UnitType,
     mode: ManageWorkoutMode,
     onAction: (ManageWorkoutUiAction) -> Unit,
@@ -42,6 +46,10 @@ fun WorkoutExerciseSetTable(
         )
 
         sets.forEachIndexed { setIndex, set ->
+            val previousSet = remember(setIndex, previousSets) {
+                previousSets?.find { it.sortOrder == setIndex }
+            }
+
             WorkoutExerciseSetRow(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -60,6 +68,7 @@ fun WorkoutExerciseSetTable(
                 exerciseType = exerciseType,
                 setIndex = setIndex,
                 set = set,
+                previousSet = previousSet,
                 mode = mode,
                 onAction = onAction,
                 onSetClick = onSetClick

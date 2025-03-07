@@ -1,6 +1,7 @@
 package com.tomtruyen.data.repositories.interfaces
 
 import com.tomtruyen.data.entities.Workout
+import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.BaseRepository
 import kotlinx.coroutines.flow.Flow
@@ -32,4 +33,6 @@ abstract class WorkoutRepository : BaseRepository() {
     abstract suspend fun saveActiveWorkout(workout: WorkoutUiModel)
 
     abstract suspend fun deleteActiveWorkout()
+
+    abstract suspend fun getPreviousSetsForExercises(workout: WorkoutUiModel): Map<String, List<PreviousExerciseSet>>
 }

@@ -1,5 +1,6 @@
 package com.tomtruyen.feature.workouts.manage.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,7 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import com.tomtruyen.core.common.extensions.format
 import com.tomtruyen.core.common.extensions.tryIntString
 import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.common.models.ManageWorkoutMode
@@ -44,6 +44,7 @@ import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.placeholder
 import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.dialogs.RestAlertDialog
+import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.feature.workouts.manage.remember.rememberSetHasBeenCompleted
@@ -57,7 +58,7 @@ fun WorkoutExerciseSetRow(
     workoutExerciseId: String,
     setIndex: Int,
     set: WorkoutExerciseSetUiModel,
-    lastPerformedSet: WorkoutExerciseSetUiModel? = null,
+    previousSet: PreviousExerciseSet?,
     mode: ManageWorkoutMode,
     onAction: (ManageWorkoutUiAction) -> Unit,
     onSetClick: (id: String, setIndex: Int) -> Unit
@@ -132,7 +133,7 @@ fun WorkoutExerciseSetRow(
 
             if (mode.isExecute) {
                 PreviousSet(
-                    lastPerformedSet = lastPerformedSet,
+                    previousSet = previousSet,
                     type = exerciseType,
                     modifier = Modifier.weight(1f)
                 )
@@ -204,7 +205,7 @@ fun WorkoutExerciseSetRow(
 
 @Composable
 private fun PreviousSet(
-    lastPerformedSet: WorkoutExerciseSetUiModel?,
+    previousSet: PreviousExerciseSet?,
     type: ExerciseType,
     modifier: Modifier = Modifier
 ) {
@@ -214,20 +215,24 @@ private fun PreviousSet(
      * If there is no known last performed set: Display "-"
      */
     Text(
-        text = lastPerformedSet?.let { set ->
+        text = previousSet?.let { set ->
             when (type) {
                 ExerciseType.WEIGHT -> {
-                    val weight = set.weight?.format()
+                    if(set.reps == null && set.weight == null) return@let null
 
-                    "${set.reps}x${weight}"
+                    "${set.reps ?: 0}x${set.weight?.tryIntString() ?: 0}"
                 }
 
                 ExerciseType.TIME -> {
+                    if(set.time == null) return@let null
+
                     TimeUtils.formatSeconds(set.time?.toLong() ?: 0L)
                 }
             }
         } ?: "-",
-        style = MaterialTheme.typography.bodyMedium,
+        style = MaterialTheme.typography.bodyMedium.copy(
+            color = MaterialTheme.colorScheme.placeholder
+        ),
         textAlign = TextAlign.Center,
         modifier = modifier,
     )
@@ -274,7 +279,8 @@ private fun RowScope.WeightSet(
             imeAction = ImeAction.Next
         ),
         textStyle = MaterialTheme.typography.bodyMedium.copy(
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.W500
         ),
         modifier = Modifier.weight(1f)
     )
@@ -302,7 +308,8 @@ private fun RowScope.WeightSet(
             keyboardType = KeyboardType.Number
         ),
         textStyle = MaterialTheme.typography.bodyMedium.copy(
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.W500
         ),
         modifier = Modifier.weight(1f)
     )
@@ -333,7 +340,8 @@ private fun RowScope.TimeSet(
                 MaterialTheme.colorScheme.placeholder
             } else {
                 LocalTextStyle.current.color
-            }
+            },
+            fontWeight = FontWeight.W500
         ),
         modifier = Modifier
             .weight(1f)

@@ -1,5 +1,6 @@
 package com.tomtruyen.feature.workouts.manage
 
+import android.util.Log
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.common.utils.StopwatchTimer
@@ -125,6 +126,8 @@ class ManageWorkoutViewModel(
                             initialWorkout = workout
                         )
                     }
+
+                    fetchLatestSetsForExercises(workout)
                 }
             }
             else -> {
@@ -153,6 +156,16 @@ class ManageWorkoutViewModel(
             .collectLatest { settings ->
                 updateState { it.copy(settings = settings) }
             }
+    }
+
+    private fun fetchLatestSetsForExercises(workout: WorkoutUiModel) = vmScope.launch {
+        val sets = workoutRepository.getPreviousSetsForExercises(workout)
+
+        updateState {
+            it.copy(
+                previousExerciseSets = sets
+            )
+        }
     }
 
     private fun finishWorkout(userId: String) = launchLoading {

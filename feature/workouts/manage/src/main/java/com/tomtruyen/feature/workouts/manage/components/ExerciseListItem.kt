@@ -15,6 +15,7 @@ import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.TextFields
+import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.feature.workouts.manage.R
@@ -22,6 +23,7 @@ import com.tomtruyen.feature.workouts.manage.R
 @Composable
 fun ExerciseListItem(
     exercise: WorkoutExerciseUiModel,
+    previousSets: List<PreviousExerciseSet>?,
     unit: UnitType,
     mode: ManageWorkoutMode,
     onAction: (ManageWorkoutUiAction) -> Unit,
@@ -82,6 +84,7 @@ fun ExerciseListItem(
             workoutExerciseId = exercise.id,
             exerciseType = exercise.type,
             sets = exercise.sets,
+            previousSets = previousSets,
             unit = unit,
             mode = mode,
             onSetClick = { id, setIndex ->

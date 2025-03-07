@@ -7,12 +7,17 @@ import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.entities.WorkoutExercise
 import com.tomtruyen.data.entities.WorkoutExerciseSet
 import com.tomtruyen.data.models.network.WorkoutNetworkModel
+import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import java.util.UUID
 
 class WorkoutRepositoryImpl : WorkoutRepository() {
@@ -196,5 +201,20 @@ class WorkoutRepositoryImpl : WorkoutRepository() {
         transaction {
             dao.deleteById(Workout.ACTIVE_WORKOUT_ID)
         }
+    }
+
+    override suspend fun getPreviousSetsForExercises(workout: WorkoutUiModel): Map<String, List<PreviousExerciseSet>> {
+        val exerciseIds = workout.exercises.map { JsonPrimitive(it.exerciseId) }.distinct()
+
+        val result = supabase.postgrest.rpc(
+            function = PreviousExerciseSet.RPC_FUNCTION,
+            parameters = JsonObject(
+                mapOf(
+                    PreviousExerciseSet.EXERCISE_ID_PARAM to JsonArray(exerciseIds)
+                )
+            )
+        )
+
+        return result.decodeList<PreviousExerciseSet>().groupBy { it.exerciseId }
     }
 }

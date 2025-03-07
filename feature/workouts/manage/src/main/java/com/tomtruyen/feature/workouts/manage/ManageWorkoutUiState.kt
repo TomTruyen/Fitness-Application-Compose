@@ -2,6 +2,7 @@ package com.tomtruyen.feature.workouts.manage
 
 import androidx.compose.runtime.Immutable
 import com.tomtruyen.core.common.models.ManageWorkoutMode
+import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.SettingsUiModel
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 
@@ -15,6 +16,9 @@ data class ManageWorkoutUiState(
     val workout: WorkoutUiModel = WorkoutUiModel(),
     val settings: SettingsUiModel = SettingsUiModel(),
     val duration: Long = 0L,
+
+    val previousExerciseSets: Map<String, List<PreviousExerciseSet>> = emptyMap(),
+
     val loading: Boolean = false,
 
     // BottomSheet states
