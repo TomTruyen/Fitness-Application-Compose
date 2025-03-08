@@ -16,6 +16,7 @@ import com.tomtruyen.data.worker.WorkoutSyncWorker
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.serialization.json.JsonArray
@@ -128,6 +129,8 @@ class WorkoutRepositoryImpl : WorkoutRepository() {
         }
 
         transaction {
+            dao.deleteById(workoutEntity.id)
+
             dao.save(workoutEntity)
             workoutExerciseDao.saveAll(exercises)
             workoutExerciseSetDao.saveAll(sets)
@@ -232,6 +235,26 @@ class WorkoutRepositoryImpl : WorkoutRepository() {
             }
         }
 
+        // Delete "Dangling" Exercises and Sets
+        val exerciseIds = exercises.map { it.id }
+        if(exerciseIds.isNotEmpty()) {
+            supabase.from(WorkoutExercise.TABLE_NAME).delete {
+                filter {
+                    filterNot(WorkoutExercise.KEY_ID, FilterOperator.IN, "(${exerciseIds.joinToString(",")})")
+                }
+            }
+        }
+
+        val setIds = sets.map { it.id }
+        if(setIds.isNotEmpty()) {
+            supabase.from(WorkoutExerciseSet.TABLE_NAME).delete {
+                filter {
+                    filterNot(WorkoutExerciseSet.KEY_ID, FilterOperator.IN, "(${setIds.joinToString(",")})")
+                }
+            }
+        }
+
+        // Insert new values
         supabase.from(Workout.TABLE_NAME).upsert(workout)
         supabase.from(WorkoutExercise.TABLE_NAME).upsert(exercises)
         supabase.from(WorkoutExerciseSet.TABLE_NAME).upsert(sets)
