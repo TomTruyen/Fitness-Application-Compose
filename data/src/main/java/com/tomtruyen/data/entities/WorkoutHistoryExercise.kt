@@ -8,6 +8,7 @@ import androidx.room.Relation
 import com.tomtruyen.core.common.models.ExerciseType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import java.util.UUID
 
 @Serializable
@@ -55,8 +56,10 @@ data class WorkoutHistoryExercise(
     @SerialName(KEY_CATEGORY)
     val category: String? = null,
     @SerialName(KEY_EQUIPMENT)
-    val equipment: String? = null
-) : BaseEntity {
+    val equipment: String? = null,
+    @Transient
+    override val synced: Boolean = true,
+) : BaseEntity, SyncEntity {
     companion object {
         const val TABLE_NAME = "WorkoutHistoryExercise"
 

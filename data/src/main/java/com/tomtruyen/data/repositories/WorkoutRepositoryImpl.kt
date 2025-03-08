@@ -236,29 +236,24 @@ class WorkoutRepositoryImpl : WorkoutRepository() {
         }
 
         // Delete "Dangling" Exercises and Sets
-        val exerciseIds = exercises.map { it.id }
-        if(exerciseIds.isNotEmpty()) {
-            supabase.from(WorkoutExercise.TABLE_NAME).delete {
-                filter {
-                    filterNot(WorkoutExercise.KEY_ID, FilterOperator.IN, "(${exerciseIds.joinToString(",")})")
-                }
-            }
-        }
+        deleteSupabaseDangling(
+            table = WorkoutExercise.TABLE_NAME,
+            key = WorkoutExercise.KEY_ID,
+            entitiesToKeep = exercises
+        )
 
-        val setIds = sets.map { it.id }
-        if(setIds.isNotEmpty()) {
-            supabase.from(WorkoutExerciseSet.TABLE_NAME).delete {
-                filter {
-                    filterNot(WorkoutExerciseSet.KEY_ID, FilterOperator.IN, "(${setIds.joinToString(",")})")
-                }
-            }
-        }
+        deleteSupabaseDangling(
+            table = WorkoutExerciseSet.TABLE_NAME,
+            key = WorkoutExerciseSet.KEY_ID,
+            entitiesToKeep = sets
+        )
 
         // Insert new values
         supabase.from(Workout.TABLE_NAME).upsert(workout)
         supabase.from(WorkoutExercise.TABLE_NAME).upsert(exercises)
         supabase.from(WorkoutExerciseSet.TABLE_NAME).upsert(sets)
 
+        // Update the local items to be "synced"
         transaction {
             dao.save(workout)
             workoutExerciseDao.saveAll(exercises)

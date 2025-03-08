@@ -13,9 +13,12 @@ import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.data.models.ui.WorkoutHistoryUiModel
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.interfaces.HistoryRepository
+import com.tomtruyen.data.worker.HistorySyncWorker
+import com.tomtruyen.data.worker.SyncWorker
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
+import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
 
@@ -140,32 +143,24 @@ class HistoryRepositoryImpl : HistoryRepository() {
         workout: WorkoutUiModel,
         duration: Long
     ): String {
-        val sets = mutableListOf<WorkoutHistoryExerciseSet>()
-
         val workoutHistory = workout.toWorkoutHistoryEntity(userId, duration)
 
+        val sets = mutableListOf<WorkoutHistoryExerciseSet>()
         val exercises = workout.exercises.filter { exercise ->
             exercise.sets.count(WorkoutExerciseSetUiModel::completed) > 0
         }.mapIndexed { index, exercise ->
-            val workoutHistoryExercise =
-                exercise.toWorkoutHistoryExerciseEntity(workoutHistory.id, index)
-
-            sets.addAll(
-                exercise.sets.filter(WorkoutExerciseSetUiModel::completed)
-                    .mapIndexed { setIndex, set ->
-                        set.toWorkoutHistorySetEntity(
-                            workoutHistoryExercise.id,
-                            setIndex
-                        )
-                    }
-            )
-
-            workoutHistoryExercise
+            exercise.toWorkoutHistoryExerciseEntity(workoutHistory.id, index).also { workoutHistoryExercise ->
+                sets.addAll(
+                    exercise.sets.filter(WorkoutExerciseSetUiModel::completed)
+                        .mapIndexed { setIndex, set ->
+                            set.toWorkoutHistorySetEntity(
+                                workoutHistoryExercise.id,
+                                setIndex
+                            )
+                        }
+                )
+            }
         }
-
-        supabase.from(WorkoutHistory.TABLE_NAME).upsert(workoutHistory)
-        supabase.from(WorkoutHistoryExercise.TABLE_NAME).upsert(exercises)
-        supabase.from(WorkoutHistoryExerciseSet.TABLE_NAME).upsert(sets)
 
         transaction {
             dao.save(workoutHistory)
@@ -175,12 +170,50 @@ class HistoryRepositoryImpl : HistoryRepository() {
             workoutDao.deleteById(Workout.ACTIVE_WORKOUT_ID)
         }
 
+        SyncWorker.schedule<HistorySyncWorker>()
+
         return workoutHistory.id
     }
 
     override suspend fun sync(item: WorkoutHistoryWithExercises) {
-        // TODO: Handle Syncing to Supabase (upsert)
-        // TODO: Also update the object in Room to have "synced" = true
-        // TODO: Handle the Synced on each object correctly -> Default true. When we insert we MUST set them to false
+        val workout = item.workoutHistory.copy(synced = true)
+
+        val exercises = item.exercises.map {
+            it.workoutHistoryExercise.copy(
+                synced = true
+            )
+        }
+
+        val sets = item.exercises.flatMap { exercise ->
+            exercise.sets.map {
+                it.copy(synced = true)
+            }
+        }
+
+        // This won't really do much unless if we support "editing" in the future, but we might so lets just add it
+        // Delete "Dangling" Exercises and Sets
+        deleteSupabaseDangling(
+            table = WorkoutHistoryExercise.TABLE_NAME,
+            key = WorkoutHistoryExercise.KEY_ID,
+            entitiesToKeep = exercises
+        )
+
+        deleteSupabaseDangling(
+            table = WorkoutHistoryExerciseSet.TABLE_NAME,
+            key = WorkoutHistoryExerciseSet.KEY_ID,
+            entitiesToKeep = sets
+        )
+
+        // Insert new values
+        supabase.from(WorkoutHistory.TABLE_NAME).upsert(workout)
+        supabase.from(WorkoutHistoryExercise.TABLE_NAME).upsert(exercises)
+        supabase.from(WorkoutHistoryExerciseSet.TABLE_NAME).upsert(sets)
+
+        // Update the local items to be "synced"
+        transaction {
+            dao.save(workout)
+            workoutHistoryExerciseDao.saveAll(exercises)
+            workoutHistoryExerciseSetDao.saveAll(sets)
+        }
     }
 }

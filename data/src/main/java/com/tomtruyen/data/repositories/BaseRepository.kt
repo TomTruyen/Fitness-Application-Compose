@@ -5,8 +5,11 @@ import android.util.Log
 import androidx.room.withTransaction
 import com.tomtruyen.data.AppDatabase
 import com.tomtruyen.data.dao.CacheTTLDao
+import com.tomtruyen.data.entities.BaseEntity
 import com.tomtruyen.data.entities.CacheTTL
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -57,6 +60,25 @@ abstract class BaseRepository(
         Log.i(TAG, "Cache is not expired. Skipping Supabase fetch for $cacheKey")
 
         return null
+    }
+
+    /**
+     * Deletes any entities that are not in the list.
+     *
+     * This can be used to remove items that have a Foreign Key that we deleted locally,
+     * without requiring us to delete the parent entity to CASCADE it.
+     * This manually checks and deletes the dangling items
+     */
+    suspend fun deleteSupabaseDangling(table: String, key: String, entitiesToKeep: List<BaseEntity>) {
+        val ids = entitiesToKeep.map { it.id }
+
+        if(ids.isEmpty()) return
+
+        supabase.from(table).delete {
+            filter {
+                filterNot(key, FilterOperator.IN, "(${ids.joinToString(",")})")
+            }
+        }
     }
 
     companion object {

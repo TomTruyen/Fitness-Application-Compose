@@ -29,9 +29,9 @@ data class WorkoutExerciseSetUiModel(
         weight = weight,
         time = time,
         completed = completed,
-        synced = false,
         sortOrder = index,
-        workoutExerciseId = workoutExerciseId
+        workoutExerciseId = workoutExerciseId,
+        synced = false
     )
 
     fun toWorkoutHistorySetEntity(
@@ -43,7 +43,8 @@ data class WorkoutExerciseSetUiModel(
         time = time,
         sortOrder = index,
         createdAt = createdAt,
-        workoutHistoryExerciseId = workoutHistoryExerciseId
+        workoutHistoryExerciseId = workoutHistoryExerciseId,
+        synced = false
     )
 
     companion object {

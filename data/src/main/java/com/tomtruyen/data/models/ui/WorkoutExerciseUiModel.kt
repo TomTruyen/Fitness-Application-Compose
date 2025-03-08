@@ -53,7 +53,8 @@ data class WorkoutExerciseUiModel(
             exerciseId = exerciseId,
             workoutHistoryId = workoutHistoryId,
             category = category?.name,
-            equipment = equipment?.name
+            equipment = equipment?.name,
+            synced = false
         )
 
     companion object {

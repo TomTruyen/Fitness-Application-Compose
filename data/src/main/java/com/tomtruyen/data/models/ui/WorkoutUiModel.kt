@@ -55,7 +55,8 @@ data class WorkoutUiModel(
         name = name,
         unit = unit.value,
         userId = userId,
-        duration = duration
+        duration = duration,
+        synced = false,
     )
 
     companion object {

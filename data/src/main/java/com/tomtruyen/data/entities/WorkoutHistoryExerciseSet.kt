@@ -10,6 +10,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import java.util.UUID
 
 @Serializable
@@ -46,7 +47,9 @@ data class WorkoutHistoryExerciseSet(
     @Serializable(with = SupabaseDateTimeSerializer::class)
     val createdAt: LocalDateTime = Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault()),
-) : BaseEntity {
+    @Transient
+    override val synced: Boolean = true,
+) : BaseEntity, SyncEntity {
     companion object {
         const val TABLE_NAME = "WorkoutHistoryExerciseSet"
 

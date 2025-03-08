@@ -37,7 +37,9 @@ data class WorkoutHistory(
     val userId: String? = null,
     @Transient
     val page: Int = INITIAL_PAGE,
-) : BaseEntity {
+    @Transient
+    override val synced: Boolean = true,
+) : BaseEntity, SyncEntity {
     companion object {
         const val TABLE_NAME = "WorkoutHistory"
 
