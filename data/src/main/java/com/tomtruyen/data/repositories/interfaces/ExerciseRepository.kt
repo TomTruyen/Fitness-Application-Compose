@@ -9,7 +9,7 @@ import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.repositories.BaseRepository
 import kotlinx.coroutines.flow.Flow
 
-abstract class ExerciseRepository : SyncRepository<ExerciseWithCategoryAndEquipment>() {
+abstract class ExerciseRepository : SyncRepository<Exercise>() {
     override val cacheKey: String
         get() = Exercise.TABLE_NAME
 

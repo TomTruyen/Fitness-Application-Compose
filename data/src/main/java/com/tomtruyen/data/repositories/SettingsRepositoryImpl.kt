@@ -48,8 +48,6 @@ class SettingsRepositoryImpl : SettingsRepository() {
     override suspend fun sync(item: Settings) {
         supabase.from(Settings.TABLE_NAME).upsert(item)
 
-        transaction {
-            dao.save(item.copy(synced = true))
-        }
+        dao.save(item.copy(synced = true))
     }
 }

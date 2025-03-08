@@ -8,6 +8,7 @@ import androidx.room.Relation
 import com.tomtruyen.core.common.models.ExerciseType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import java.util.UUID
 
 @Serializable
@@ -53,8 +54,10 @@ data class Exercise(
     @SerialName(KEY_STEPS)
     val steps: List<String>? = emptyList(),
     @SerialName(KEY_USER_ID)
-    val userId: String? = null
-) : BaseEntity {
+    val userId: String? = null,
+    @Transient
+    override val synced: Boolean = true
+) : BaseEntity, SyncEntity {
     companion object {
         const val TABLE_NAME = "Exercise"
 

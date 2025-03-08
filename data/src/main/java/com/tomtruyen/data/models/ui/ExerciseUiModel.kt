@@ -45,7 +45,8 @@ data class ExerciseUiModel(
                 categoryId = if (category != CategoryUiModel.DEFAULT) {
                     category?.id
                 } else null,
-                userId = userId
+                userId = userId,
+                synced = false
             ),
             category = category?.toEntity(),
             equipment = equipment?.toEntity()

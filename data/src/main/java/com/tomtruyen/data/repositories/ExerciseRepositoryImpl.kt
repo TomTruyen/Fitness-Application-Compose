@@ -8,6 +8,8 @@ import com.tomtruyen.data.models.ExerciseFilter
 import com.tomtruyen.data.models.network.ExerciseNetworkModel
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
+import com.tomtruyen.data.worker.ExerciseSyncWorker
+import com.tomtruyen.data.worker.SyncWorker
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -81,11 +83,9 @@ class ExerciseRepositoryImpl : ExerciseRepository() {
     ) {
         val newExercise = exercise.toEntity(userId).exercise
 
-        supabase.from(Exercise.TABLE_NAME).upsert(newExercise)
+        dao.save(newExercise)
 
-        cacheTransaction {
-            dao.save(newExercise)
-        }
+        SyncWorker.schedule<ExerciseSyncWorker>()
     }
 
     override suspend fun deleteExercise(
@@ -104,9 +104,9 @@ class ExerciseRepositoryImpl : ExerciseRepository() {
         }
     }
 
-    override suspend fun sync(item: ExerciseWithCategoryAndEquipment) {
-        // TODO: Handle Syncing to Supabase (upsert)
-        // TODO: Also update the object in Room to have "synced" = true
-        // TODO: Handle the Synced on each object correctly -> Default true. When we insert we MUST set them to false
+    override suspend fun sync(item: Exercise) {
+        supabase.from(Exercise.TABLE_NAME).upsert(item)
+
+        dao.save(item.copy(synced = true))
     }
 }
