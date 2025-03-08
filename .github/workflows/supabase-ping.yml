@@ -1,5 +1,4 @@
 name: Supabase KeepAlive Ping
-description:
 
 on:
   schedule:
