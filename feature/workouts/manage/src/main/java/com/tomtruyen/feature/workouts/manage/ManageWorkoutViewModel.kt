@@ -107,37 +107,44 @@ class ManageWorkoutViewModel(
             }
     }
 
-    private fun observeWorkout() = vmScope.launch {
-        if (uiState.value.mode.isCreate || id == null) return@launch
+    private fun observeWorkout() = with(uiState.value) {
+        vmScope.launch {
+            if (mode.isCreate || id == null) return@launch
 
-        when(uiState.value.mode) {
-            ManageWorkoutMode.EXECUTE -> {
-                if(id != Workout.ACTIVE_WORKOUT_ID) {
-                    val workout = workoutRepository.findWorkoutById(id) ?: WorkoutUiModel()
-
-                    workoutRepository.saveActiveWorkout(workout)
+            when(mode) {
+                ManageWorkoutMode.VIEW -> {
+                    workoutRepository.findWorkoutByIdAsync(id)
+                        .filterNotNull()
+                        .distinctUntilChanged()
+                        .collectLatest { workout ->
+                            updateState {
+                                it.copy(workout = workout)
+                            }
+                        }
                 }
 
-                workoutRepository.findWorkoutById(Workout.ACTIVE_WORKOUT_ID)?.let { workout ->
-                    updateState {
-                        it.copy(
-                            workout = workout,
-                            initialWorkout = workout
-                        )
-                    }
+                else -> {
+                    val workoutId = if(mode.isExecute && id != Workout.ACTIVE_WORKOUT_ID) {
+                        val workout = workoutRepository.findWorkoutById(id) ?: WorkoutUiModel()
 
-                    fetchLatestSetsForExercises(workout)
-                }
-            }
-            else -> {
-                workoutRepository.findWorkoutByIdAsync(id)
-                    .filterNotNull()
-                    .distinctUntilChanged()
-                    .collectLatest { workout ->
+                        workoutRepository.saveActiveWorkout(workout)
+
+                        Workout.ACTIVE_WORKOUT_ID
+                    } else id
+
+                    workoutRepository.findWorkoutById(workoutId)?.let { workout ->
                         updateState {
-                            it.copy(workout = workout)
+                            it.copy(
+                                workout = workout,
+                                initialWorkout = workout
+                            )
+                        }
+
+                        if(mode.isExecute) {
+                            fetchLatestSetsForExercises(workout)
                         }
                     }
+                }
             }
         }
     }
