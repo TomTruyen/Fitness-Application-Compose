@@ -14,19 +14,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Navigate to script directory
-        run: cd scripts/supabase/ping
-
-      - name: Set up Python virtual environment
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt
-
-      - name: Run the Python script
+      - name: Setup and run script
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
+          cd scripts/supabase/ping
+          python -m venv venv
           source venv/bin/activate
+          pip install -r requirements.txt
           python main.py
