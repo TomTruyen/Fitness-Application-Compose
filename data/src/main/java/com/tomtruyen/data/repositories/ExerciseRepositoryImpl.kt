@@ -3,6 +3,7 @@ package com.tomtruyen.data.repositories
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.models.ExerciseFilter
 import com.tomtruyen.data.models.network.ExerciseNetworkModel
 import com.tomtruyen.data.models.ui.ExerciseUiModel
@@ -13,7 +14,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
 
 class ExerciseRepositoryImpl : ExerciseRepository() {
-    private val dao = database.exerciseDao()
     private val categoryDao = database.categoryDao()
     private val equipmentDao = database.equipmentDao()
 
@@ -102,5 +102,11 @@ class ExerciseRepositoryImpl : ExerciseRepository() {
         transaction {
             dao.deleteById(exerciseId)
         }
+    }
+
+    override suspend fun sync(item: ExerciseWithCategoryAndEquipment) {
+        // TODO: Handle Syncing to Supabase (upsert)
+        // TODO: Also update the object in Room to have "synced" = true
+        // TODO: Handle the Synced on each object correctly -> Default true. When we insert we MUST set them to false
     }
 }

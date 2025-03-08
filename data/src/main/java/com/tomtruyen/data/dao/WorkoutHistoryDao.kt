@@ -9,20 +9,20 @@ import com.tomtruyen.data.entities.WorkoutHistoryWithExercises
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface WorkoutHistoryDao {
+abstract class WorkoutHistoryDao: SyncDao<WorkoutHistoryWithExercises>(WorkoutHistory.TABLE_NAME) {
     @Transaction
     @Query("SELECT * FROM ${WorkoutHistory.TABLE_NAME} ORDER BY createdAt DESC LIMIT :limit OFFSET :offset")
-    fun findHistoriesAsync(
+    abstract fun findHistoriesAsync(
         offset: Int,
         limit: Int = WorkoutHistory.PAGE_SIZE
     ): Flow<List<WorkoutHistoryWithExercises>>
 
     @Upsert
-    suspend fun save(workoutHistory: WorkoutHistory): Long
+    abstract fun save(workoutHistory: WorkoutHistory): Long
 
     @Upsert
-    suspend fun saveAll(workoutHistories: List<WorkoutHistory>): List<Long>
+    abstract fun saveAll(workoutHistories: List<WorkoutHistory>): List<Long>
 
     @Query("DELETE FROM ${WorkoutHistory.TABLE_NAME}")
-    suspend fun deleteAll(): Int
+    abstract fun deleteAll(): Int
 }

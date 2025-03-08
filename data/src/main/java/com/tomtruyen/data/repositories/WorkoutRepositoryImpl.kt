@@ -6,6 +6,7 @@ import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.entities.WorkoutExercise
 import com.tomtruyen.data.entities.WorkoutExerciseSet
+import com.tomtruyen.data.entities.WorkoutWithExercises
 import com.tomtruyen.data.models.network.WorkoutNetworkModel
 import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.WorkoutUiModel
@@ -21,7 +22,6 @@ import kotlinx.serialization.json.JsonPrimitive
 import java.util.UUID
 
 class WorkoutRepositoryImpl : WorkoutRepository() {
-    private val dao = database.workoutDao()
     private val workoutExerciseDao = database.workoutExerciseDao()
     private val workoutExerciseSetDao = database.workoutExerciseSetDao()
     private val exerciseDao = database.exerciseDao()
@@ -216,5 +216,11 @@ class WorkoutRepositoryImpl : WorkoutRepository() {
         )
 
         return result.decodeList<PreviousExerciseSet>().groupBy { it.exerciseId }
+    }
+
+    override suspend fun sync(item: WorkoutWithExercises) {
+        // TODO: Handle Syncing to Supabase (upsert)
+        // TODO: Also update the object in Room to have "synced" = true
+        // TODO: Handle the Synced on each object correctly -> Default true. When we insert we MUST set them to false
     }
 }

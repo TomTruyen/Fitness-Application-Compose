@@ -20,7 +20,8 @@ data class SettingsUiModel(
         unit = unit.value,
         rest = rest,
         restEnabled = restEnabled,
-        restVibrationEnabled = restVibrationEnabled
+        restVibrationEnabled = restVibrationEnabled,
+        synced = false
     )
 
     companion object {

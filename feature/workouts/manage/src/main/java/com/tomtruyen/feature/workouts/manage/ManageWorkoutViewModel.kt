@@ -1,6 +1,5 @@
 package com.tomtruyen.feature.workouts.manage
 
-import android.util.Log
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.common.utils.StopwatchTimer
@@ -8,7 +7,7 @@ import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
-import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
+import com.tomtruyen.data.repositories.interfaces.HistoryRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.feature.workouts.manage.manager.ExerciseStateManager
 import com.tomtruyen.feature.workouts.manage.manager.SetStateManager
@@ -28,7 +27,7 @@ class ManageWorkoutViewModel(
     mode: ManageWorkoutMode,
     private val userRepository: UserRepository,
     private val workoutRepository: WorkoutRepository,
-    private val historyRepository: WorkoutHistoryRepository,
+    private val historyRepository: HistoryRepository,
     private val settingsRepository: SettingsRepository
 ) : BaseViewModel<ManageWorkoutUiState, ManageWorkoutUiAction, ManageWorkoutUiEvent>(
     initialState = ManageWorkoutUiState(

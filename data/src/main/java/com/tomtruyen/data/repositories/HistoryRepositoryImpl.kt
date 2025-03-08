@@ -7,19 +7,19 @@ import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.entities.WorkoutHistory
 import com.tomtruyen.data.entities.WorkoutHistoryExercise
 import com.tomtruyen.data.entities.WorkoutHistoryExerciseSet
+import com.tomtruyen.data.entities.WorkoutHistoryWithExercises
 import com.tomtruyen.data.models.network.WorkoutHistoryNetworkModel
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.data.models.ui.WorkoutHistoryUiModel
 import com.tomtruyen.data.models.ui.WorkoutUiModel
-import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
+import com.tomtruyen.data.repositories.interfaces.HistoryRepository
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
 
-class WorkoutHistoryRepositoryImpl : WorkoutHistoryRepository() {
-    private val dao = database.workoutHistoryDao()
+class HistoryRepositoryImpl : HistoryRepository() {
     private val workoutHistoryExerciseDao = database.workoutHistoryExerciseDao()
     private val workoutHistoryExerciseSetDao = database.workoutHistoryExerciseSetDao()
     private val exerciseDao = database.exerciseDao()
@@ -176,5 +176,11 @@ class WorkoutHistoryRepositoryImpl : WorkoutHistoryRepository() {
         }
 
         return workoutHistory.id
+    }
+
+    override suspend fun sync(item: WorkoutHistoryWithExercises) {
+        // TODO: Handle Syncing to Supabase (upsert)
+        // TODO: Also update the object in Room to have "synced" = true
+        // TODO: Handle the Synced on each object correctly -> Default true. When we insert we MUST set them to false
     }
 }

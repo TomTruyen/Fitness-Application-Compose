@@ -6,7 +6,7 @@ import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
-import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
+import com.tomtruyen.data.repositories.interfaces.HistoryRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.feature.auth.login.LoginViewModel
 import com.tomtruyen.feature.auth.register.RegisterViewModel
@@ -38,7 +38,7 @@ val viewModelModule = module {
             mode = mode,
             userRepository = get<UserRepository>(),
             workoutRepository = get<WorkoutRepository>(),
-            historyRepository = get<WorkoutHistoryRepository>(),
+            historyRepository = get<HistoryRepository>(),
             settingsRepository = get<SettingsRepository>(),
         )
     }
@@ -76,7 +76,7 @@ val viewModelModule = module {
     viewModel { (id: String) ->
         WorkoutHistoryDetailViewModel(
             id = id,
-            historyRepository = get<WorkoutHistoryRepository>()
+            historyRepository = get<HistoryRepository>()
         )
     }
 }

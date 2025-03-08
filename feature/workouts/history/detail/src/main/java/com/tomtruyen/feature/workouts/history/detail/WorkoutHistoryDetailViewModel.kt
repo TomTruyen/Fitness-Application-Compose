@@ -1,13 +1,13 @@
 package com.tomtruyen.feature.workouts.history.detail
 
 import com.tomtruyen.core.common.base.BaseViewModel
-import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
+import com.tomtruyen.data.repositories.interfaces.HistoryRepository
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class WorkoutHistoryDetailViewModel(
     private val id: String,
-    private val historyRepository: WorkoutHistoryRepository
+    private val historyRepository: HistoryRepository
 ) : BaseViewModel<WorkoutHistoryDetailUiState, WorkoutHistoryDetailUiAction, WorkoutHistoryDetailUiEvent>(
     initialState = WorkoutHistoryDetailUiState()
 ) {

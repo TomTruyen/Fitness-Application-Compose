@@ -13,7 +13,7 @@ import com.tomtruyen.data.models.ExerciseFilter
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class ExerciseDao {
+abstract class ExerciseDao: SyncDao<ExerciseWithCategoryAndEquipment>(Exercise.TABLE_NAME) {
     @Upsert
     abstract suspend fun save(exercise: Exercise): Long
 

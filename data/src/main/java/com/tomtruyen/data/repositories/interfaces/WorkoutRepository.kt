@@ -1,14 +1,18 @@
 package com.tomtruyen.data.repositories.interfaces
 
+import com.tomtruyen.data.dao.SyncDao
 import com.tomtruyen.data.entities.Workout
+import com.tomtruyen.data.entities.WorkoutWithExercises
 import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.BaseRepository
 import kotlinx.coroutines.flow.Flow
 
-abstract class WorkoutRepository : BaseRepository() {
+abstract class WorkoutRepository : SyncRepository<WorkoutWithExercises>() {
     override val cacheKey: String
         get() = Workout.TABLE_NAME
+
+    override val dao = database.workoutDao()
 
     abstract fun findWorkoutsAsync(): Flow<List<WorkoutUiModel>>
 

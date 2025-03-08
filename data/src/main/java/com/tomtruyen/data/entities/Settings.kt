@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 import com.tomtruyen.core.common.models.UnitType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import java.util.UUID
 
 @Serializable
@@ -23,7 +24,9 @@ data class Settings(
     val restVibrationEnabled: Boolean = true,
     @SerialName(KEY_USER_ID)
     val userId: String? = null,
-) : BaseEntity {
+    @Transient
+    override val synced: Boolean = true,
+) : BaseEntity, SyncEntity {
     companion object {
         const val TABLE_NAME = "Settings"
 

@@ -3,7 +3,7 @@ package com.tomtruyen.feature.workouts.history
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.data.entities.WorkoutHistory
 import com.tomtruyen.data.repositories.interfaces.UserRepository
-import com.tomtruyen.data.repositories.interfaces.WorkoutHistoryRepository
+import com.tomtruyen.data.repositories.interfaces.HistoryRepository
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class WorkoutHistoryViewModel(
     private val userRepository: UserRepository,
-    private val historyRepository: WorkoutHistoryRepository
+    private val historyRepository: HistoryRepository
 ) : BaseViewModel<WorkoutHistoryUiState, WorkoutHistoryUiAction, WorkoutHistoryUiEvent>(
     initialState = WorkoutHistoryUiState()
 ) {

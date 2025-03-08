@@ -17,12 +17,11 @@ abstract class BaseRepository(
 ) : KoinComponent {
     abstract val cacheKey: String
 
-    internal val supabase: SupabaseClient by inject(SupabaseClient::class.java)
-
     val context: Context by inject(Context::class.java)
 
-    internal val database: AppDatabase by inject(AppDatabase::class.java)
+    protected val database: AppDatabase by inject(AppDatabase::class.java)
     protected val cacheDao: CacheTTLDao by inject(CacheTTLDao::class.java)
+    internal val supabase: SupabaseClient by inject(SupabaseClient::class.java)
 
     protected val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
