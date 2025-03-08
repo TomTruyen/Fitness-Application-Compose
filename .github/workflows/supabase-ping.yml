@@ -6,7 +6,7 @@ on:
   workflow_dispatch: # Allows manual trigger
 
 jobs:
-  run-script:
+  ping-supabase:
     runs-on: ubuntu-latest
 
     steps:
