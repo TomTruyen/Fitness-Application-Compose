@@ -1,5 +1,6 @@
 package com.tomtruyen.feature.workouts
 
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -123,7 +124,11 @@ private fun WorkoutOverviewScreenLayout(
 
     val lazyListState = rememberLazyListState()
     val reorderableLazyListState = rememberReorderableLazyListState(lazyListState) { from, to ->
-        onAction(WorkoutsUiAction.Reorder(from.index, to.index))
+        // This will crash if we don't account for any items that we add that are not reorderable.
+        // This is a dynamic way of doing it so we don't need to hardcode the amount
+        val offset = lazyListState.layoutInfo.totalItemsCount - state.workouts.size
+
+        onAction(WorkoutsUiAction.Reorder(from.index - offset, to.index - offset))
     }
 
     Scaffold(
@@ -171,28 +176,28 @@ private fun WorkoutOverviewScreenLayout(
                         .animateContentSize(),
                     verticalArrangement = Arrangement.spacedBy(Dimens.Small)
                 ) {
-//                    item {
-//                        Label(
-//                            label = stringResource(R.string.label_quick_start)
-//                        )
-//                    }
-//
-//                    item {
-//                        Buttons.Default(
-//                            modifier = Modifier.fillMaxWidth(),
-//                            text = stringResource(id = R.string.button_start_empty_workout),
-//                            onClick = {
-//                                onAction(WorkoutsUiAction.ExecuteEmpty)
-//                            }
-//                        )
-//                    }
-//
-//                    item {
-//                        Label(
-//                            modifier = Modifier.padding(top = Dimens.Normal),
-//                            label = stringResource(R.string.label_workouts)
-//                        )
-//                    }
+                    item {
+                        Label(
+                            label = stringResource(R.string.label_quick_start)
+                        )
+                    }
+
+                    item {
+                        Buttons.Default(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(id = R.string.button_start_empty_workout),
+                            onClick = {
+                                onAction(WorkoutsUiAction.ExecuteEmpty)
+                            }
+                        )
+                    }
+
+                    item {
+                        Label(
+                            modifier = Modifier.padding(top = Dimens.Normal),
+                            label = stringResource(R.string.label_workouts)
+                        )
+                    }
 
                     items(
                         state.workouts,
