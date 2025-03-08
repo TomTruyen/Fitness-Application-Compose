@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.common.models.UnitType
@@ -35,7 +36,9 @@ import com.tomtruyen.core.common.providers.BuildConfigFieldProvider
 import com.tomtruyen.core.common.utils.EmailUtils
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
+import com.tomtruyen.core.designsystem.theme.secondaryLabelColor
 import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.dialogs.RestAlertDialog
 import com.tomtruyen.core.ui.dialogs.UnitAlertDialog
@@ -123,16 +126,15 @@ private fun ProfileScreenLayout(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
+                        .verticalScroll(rememberScrollState()),
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.label_units),
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontWeight = FontWeight.W500
-                        ),
-                        modifier = Modifier
-                            .padding(horizontal = Dimens.Normal)
-                            .padding(top = Dimens.Normal, bottom = Dimens.Tiny)
+                    Label(
+                       label = stringResource(id = R.string.label_units),
+                        modifier = Modifier.padding(
+                            start = 12.dp,
+                            end = 12.dp,
+                            bottom = Dimens.Tiny
+                        )
                     )
 
                     ListItem(
@@ -143,16 +145,16 @@ private fun ProfileScreenLayout(
                         }
                     )
 
-                    HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
+                    HorizontalDivider()
 
-                    Text(
-                        text = stringResource(id = R.string.label_rest_timer),
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontWeight = FontWeight.W500
-                        ),
-                        modifier = Modifier
-                            .padding(horizontal = Dimens.Normal)
-                            .padding(top = Dimens.Normal, bottom = Dimens.Tiny)
+                    Label(
+                        label = stringResource(id = R.string.label_rest_timer),
+                        modifier = Modifier.padding(
+                            start = 12.dp,
+                            end = 12.dp,
+                            top = Dimens.Normal,
+                            bottom = Dimens.Tiny
+                        )
                     )
 
                     ListItem(
@@ -177,16 +179,16 @@ private fun ProfileScreenLayout(
                         onAction(ProfileUiAction.OnRestVibrationEnabledChanged(it))
                     }
 
-                    HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
+                    HorizontalDivider()
 
-                    Text(
-                        text = stringResource(id = R.string.label_contact_and_support),
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontWeight = FontWeight.W500
-                        ),
-                        modifier = Modifier
-                            .padding(horizontal = Dimens.Normal)
-                            .padding(top = Dimens.Normal, bottom = Dimens.Tiny)
+                    Label(
+                        label = stringResource(id = R.string.label_contact_and_support),
+                        modifier = Modifier.padding(
+                            start = 12.dp,
+                            end = 12.dp,
+                            top = Dimens.Normal,
+                            bottom = Dimens.Tiny
+                        )
                     )
 
                     ListItem(
@@ -199,7 +201,7 @@ private fun ProfileScreenLayout(
                         }
                     )
 
-                    HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
+                    HorizontalDivider()
 
                     Spacer(modifier = Modifier.weight(1f))
 
@@ -211,7 +213,7 @@ private fun ProfileScreenLayout(
                             .padding(Dimens.Normal)
                     )
 
-                    HorizontalDivider(color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
+                    HorizontalDivider()
 
                     Text(
                         text = stringResource(
@@ -220,11 +222,11 @@ private fun ProfileScreenLayout(
                             buildConfigFieldProvider.versionCode
                         ),
                         style = MaterialTheme.typography.bodySmall.copy(
-                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                            color = MaterialTheme.colorScheme.secondaryLabelColor
                         ),
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                            .padding(bottom = Dimens.Normal, top = Dimens.Small)
+                            .padding(top = Dimens.Small)
                             .padding(horizontal = Dimens.Normal)
                     )
                 }
