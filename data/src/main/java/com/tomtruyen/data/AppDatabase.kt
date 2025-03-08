@@ -3,7 +3,7 @@ package com.tomtruyen.data
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.tomtruyen.data.dao.CacheTTLDao
+import com.tomtruyen.data.dao.SyncCacheDao
 import com.tomtruyen.data.dao.CategoryDao
 import com.tomtruyen.data.dao.EquipmentDao
 import com.tomtruyen.data.dao.ExerciseDao
@@ -14,7 +14,7 @@ import com.tomtruyen.data.dao.WorkoutExerciseSetDao
 import com.tomtruyen.data.dao.WorkoutHistoryDao
 import com.tomtruyen.data.dao.WorkoutHistoryExerciseDao
 import com.tomtruyen.data.dao.WorkoutHistoryExerciseSetDao
-import com.tomtruyen.data.entities.CacheTTL
+import com.tomtruyen.data.entities.SyncCache
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.entities.Exercise
@@ -38,7 +38,7 @@ import com.tomtruyen.data.entities.WorkoutHistoryExerciseSet
         WorkoutHistoryExercise::class,
         WorkoutHistoryExerciseSet::class,
         Settings::class,
-        CacheTTL::class,
+        SyncCache::class,
     ],
     version = 1,
     exportSchema = false
@@ -55,5 +55,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun workoutHistoryExerciseDao(): WorkoutHistoryExerciseDao
     abstract fun workoutHistoryExerciseSetDao(): WorkoutHistoryExerciseSetDao
     abstract fun settingsDao(): SettingsDao
-    abstract fun cacheTTLDao(): CacheTTLDao
+    abstract fun cacheTTLDao(): SyncCacheDao
 }

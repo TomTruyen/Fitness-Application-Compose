@@ -4,17 +4,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 // This class is used to manage the cache time-to-live of Supabase data to reduce reads
-@Entity(tableName = CacheTTL.TABLE_NAME)
-data class CacheTTL(
+@Entity(tableName = SyncCache.TABLE_NAME)
+data class SyncCache(
     @PrimaryKey override val id: String, // The key = the Supabase collection name
-    val ttl: Long = DEFAULT_TTL
 ) : BaseEntity {
-    val isExpired: Boolean
-        get() = System.currentTimeMillis() > ttl
-
     companion object {
-        const val TABLE_NAME = "cache_ttl"
-
-        val DEFAULT_TTL = System.currentTimeMillis() + 60 * 60 * 1000L // 1 hour
+        const val TABLE_NAME = "SyncCache"
     }
 }

@@ -12,5 +12,5 @@ abstract class SettingsDao: SyncDao<Settings>(Settings.TABLE_NAME) {
     abstract fun findSettings(): Flow<Settings?>
 
     @Upsert
-    abstract fun save(settings: Settings)
+    abstract suspend fun save(settings: Settings)
 }

@@ -4,9 +4,9 @@ import android.content.Context
 import android.util.Log
 import androidx.room.withTransaction
 import com.tomtruyen.data.AppDatabase
-import com.tomtruyen.data.dao.CacheTTLDao
+import com.tomtruyen.data.dao.SyncCacheDao
 import com.tomtruyen.data.entities.BaseEntity
-import com.tomtruyen.data.entities.CacheTTL
+import com.tomtruyen.data.entities.SyncCache
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.filter.FilterOperation
@@ -24,7 +24,7 @@ abstract class BaseRepository(
     val context: Context by inject(Context::class.java)
 
     protected val database: AppDatabase by inject(AppDatabase::class.java)
-    protected val cacheDao: CacheTTLDao by inject(CacheTTLDao::class.java)
+    protected val cacheDao: SyncCacheDao by inject(SyncCacheDao::class.java)
     internal val supabase: SupabaseClient by inject(SupabaseClient::class.java)
 
     protected val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -39,7 +39,7 @@ abstract class BaseRepository(
     ) = transaction {
         block()
 
-        cacheDao.save(CacheTTL(pageCacheKey ?: cacheKey))
+        cacheDao.save(SyncCache(pageCacheKey ?: cacheKey))
     }
 
     protected suspend fun <T> fetch(
@@ -51,9 +51,11 @@ abstract class BaseRepository(
 
         Log.i(TAG, "Fetching data for $cacheKey from Supabase... (Checking Cache first)")
 
-        val isCacheExpired = cacheDao.findById(cacheKey)?.isExpired ?: true
+        // Synced means that we fetched it, after that we just use Workers to sync in background
+        // We want to go offline first for almost everything
+        val isSynced = cacheDao.findById(cacheKey) != null
 
-        if (isCacheExpired || refresh) {
+        if (!isSynced || refresh) {
             Log.i(TAG, "Cache is expired or refresh is true, fetching $cacheKey from Supabase")
 
             return block()

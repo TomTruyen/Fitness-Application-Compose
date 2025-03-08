@@ -18,11 +18,11 @@ abstract class WorkoutHistoryDao: SyncDao<WorkoutHistoryWithExercises>(WorkoutHi
     ): Flow<List<WorkoutHistoryWithExercises>>
 
     @Upsert
-    abstract fun save(workoutHistory: WorkoutHistory): Long
+    abstract suspend fun save(workoutHistory: WorkoutHistory): Long
 
     @Upsert
-    abstract fun saveAll(workoutHistories: List<WorkoutHistory>): List<Long>
+    abstract suspend fun saveAll(workoutHistories: List<WorkoutHistory>): List<Long>
 
-    @Query("DELETE FROM ${WorkoutHistory.TABLE_NAME}")
-    abstract fun deleteAll(): Int
+    @Query("DELETE FROM ${WorkoutHistory.TABLE_NAME} WHERE synced = :synced")
+    abstract suspend fun deleteAll(synced: Boolean = true): Int
 }

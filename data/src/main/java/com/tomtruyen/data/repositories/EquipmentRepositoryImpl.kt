@@ -16,13 +16,15 @@ class EquipmentRepositoryImpl : EquipmentRepository() {
     }
 
     override suspend fun getEquipment() {
-        supabase.from(Equipment.TABLE_NAME)
-            .select()
-            .decodeList<Equipment>()
-            .let { equipment ->
-                cacheTransaction {
-                    dao.saveAll(equipment)
+        fetch {
+            supabase.from(Equipment.TABLE_NAME)
+                .select()
+                .decodeList<Equipment>()
+                .let { equipment ->
+                    cacheTransaction {
+                        dao.saveAll(equipment)
+                    }
                 }
-            }
+        }
     }
 }

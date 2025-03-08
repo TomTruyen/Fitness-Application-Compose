@@ -66,6 +66,8 @@ class ExerciseRepositoryImpl : ExerciseRepository() {
                     }
 
                     cacheTransaction {
+                        dao.deleteAll()
+
                         // Add Referenced Items (Relations)
                         categoryDao.saveAll(categories)
                         equipmentDao.saveAll(equipment)

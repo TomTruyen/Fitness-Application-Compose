@@ -26,8 +26,11 @@ abstract class WorkoutDao: SyncDao<WorkoutWithExercises>(Workout.TABLE_NAME) {
     @Query("SELECT * FROM ${Workout.TABLE_NAME} WHERE id = :id")
     abstract suspend fun findById(id: String): WorkoutWithExercises?
 
-    @Query("DELETE FROM ${Workout.TABLE_NAME} WHERE id NOT IN (:ids)")
-    abstract suspend fun deleteAllWorkoutsExcept(ids: List<String>): Int
+    @Query("DELETE FROM ${Workout.TABLE_NAME} WHERE id NOT IN (:ids) AND synced = :synced")
+    abstract suspend fun deleteAllWorkoutsExcept(
+        ids: List<String>,
+        synced: Boolean = true
+    ): Int
 
     @Upsert
     abstract suspend fun save(workout: Workout): Long

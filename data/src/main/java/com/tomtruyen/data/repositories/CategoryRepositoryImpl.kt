@@ -16,13 +16,15 @@ class CategoryRepositoryImpl : CategoryRepository() {
     }
 
     override suspend fun getCategories() {
-        supabase.from(Category.TABLE_NAME)
-            .select()
-            .decodeList<Category>()
-            .let { categories ->
-                cacheTransaction {
-                    dao.saveAll(categories)
+        fetch {
+            supabase.from(Category.TABLE_NAME)
+                .select()
+                .decodeList<Category>()
+                .let { categories ->
+                    cacheTransaction {
+                        dao.saveAll(categories)
+                    }
                 }
-            }
+        }
     }
 }
