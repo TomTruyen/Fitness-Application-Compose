@@ -1,4 +1,4 @@
-name: GitHub Actions Pipeline
+name: Test, build and artifact
 
 on:
   push:
