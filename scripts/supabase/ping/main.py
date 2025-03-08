@@ -120,6 +120,7 @@ def main():
             logging.warning("Failed databases:")
             for db_name in failed_databases:
                 logging.warning(f"- {db_name}")
+                raise Exception("Some database actions failed.") 
 
     if detailed_status_report and status_report:
         logging.info("\nDetailed Status Report:")
