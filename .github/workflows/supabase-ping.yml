@@ -1,0 +1,32 @@
+name: Supabase KeepAlive Ping
+description:
+
+on:
+  schedule:
+    - cron: '0 0 * * 3,0' # Runs every Wednesday and Sunday at midnight UTC
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Navigate to script directory
+        run: cd scripts/supabase/ping
+
+      - name: Set up Python virtual environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Run the Python script
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          source venv/bin/activate
+          python main.py

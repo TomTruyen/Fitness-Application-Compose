@@ -1,0 +1,8 @@
+[
+  {
+    "name": "Fynix Database",
+    "supabase_url": "SUPABASE_URL",
+    "supabase_key_env": "SUPABASE_KEY",
+    "table_name": "KeepAlive"
+  }
+]
