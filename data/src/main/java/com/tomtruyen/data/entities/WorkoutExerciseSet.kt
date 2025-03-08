@@ -40,7 +40,9 @@ data class WorkoutExerciseSet(
     val sortOrder: Int = 0,
     @Transient
     val completed: Boolean = false,
-) : BaseEntity {
+    @Transient
+    override val synced: Boolean = false
+) : BaseEntity, SyncEntity {
     companion object {
         const val TABLE_NAME = "WorkoutExerciseSet"
 

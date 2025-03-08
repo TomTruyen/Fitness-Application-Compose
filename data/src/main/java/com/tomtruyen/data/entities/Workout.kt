@@ -12,6 +12,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import java.util.UUID
 
 @Serializable
@@ -30,7 +31,9 @@ data class Workout(
         .toLocalDateTime(TimeZone.currentSystemDefault()),
     @SerialName(KEY_USER_ID)
     val userId: String? = null,
-) : BaseEntity {
+    @Transient
+    override val synced: Boolean = false
+) : BaseEntity, SyncEntity {
     companion object {
         const val TABLE_NAME = "Workout"
 

@@ -40,6 +40,7 @@ data class WorkoutExerciseUiModel(
         workoutId = workoutId,
         notes = notes,
         sortOrder = index,
+        synced = false
     )
 
     fun toWorkoutHistoryExerciseEntity(workoutHistoryId: String, index: Int) =

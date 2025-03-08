@@ -29,6 +29,7 @@ data class WorkoutExerciseSetUiModel(
         weight = weight,
         time = time,
         completed = completed,
+        synced = false,
         sortOrder = index,
         workoutExerciseId = workoutExerciseId
     )

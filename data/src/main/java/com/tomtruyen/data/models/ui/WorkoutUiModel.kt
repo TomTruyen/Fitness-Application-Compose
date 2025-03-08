@@ -48,6 +48,7 @@ data class WorkoutUiModel(
         name = name,
         unit = unit.value,
         userId = userId,
+        synced = false
     )
 
     fun toWorkoutHistoryEntity(userId: String, duration: Long) = WorkoutHistory(

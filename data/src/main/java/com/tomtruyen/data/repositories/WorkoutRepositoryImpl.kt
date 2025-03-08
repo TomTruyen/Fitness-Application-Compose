@@ -11,6 +11,8 @@ import com.tomtruyen.data.models.network.WorkoutNetworkModel
 import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
+import com.tomtruyen.data.worker.SyncWorker
+import com.tomtruyen.data.worker.WorkoutSyncWorker
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
@@ -112,31 +114,26 @@ class WorkoutRepositoryImpl : WorkoutRepository() {
         userId: String,
         workout: WorkoutUiModel,
     ) {
-        val sets = mutableListOf<WorkoutExerciseSet>()
-
         val workoutEntity = workout.toEntity(userId)
 
+        val sets = mutableListOf<WorkoutExerciseSet>()
         val exercises = workout.exercises.mapIndexed { index, exercise ->
-            val workoutExercise = exercise.toEntity(workoutEntity.id, index)
-
-            sets.addAll(
-                exercise.sets.mapIndexed { setIndex, set ->
-                    set.toEntity(exercise.id, setIndex)
-                }
-            )
-
-            workoutExercise
+            exercise.toEntity(workoutEntity.id, index).also { workoutExercise ->
+                sets.addAll(
+                    exercise.sets.mapIndexed { setIndex, set ->
+                        set.toEntity(workoutExercise.id, setIndex)
+                    }
+                )
+            }
         }
-
-        supabase.from(Workout.TABLE_NAME).upsert(workoutEntity)
-        supabase.from(WorkoutExercise.TABLE_NAME).upsert(exercises)
-        supabase.from(WorkoutExerciseSet.TABLE_NAME).upsert(sets)
 
         transaction {
             dao.save(workoutEntity)
             workoutExerciseDao.saveAll(exercises)
             workoutExerciseSetDao.saveAll(sets)
         }
+
+        SyncWorker.schedule<WorkoutSyncWorker>()
     }
 
     override suspend fun deleteWorkout(workoutId: String) {
@@ -149,38 +146,40 @@ class WorkoutRepositoryImpl : WorkoutRepository() {
         dao.deleteById(workoutId)
     }
 
+    // Each item should have "synced = true" since we don't want the SyncWorker to sync them to the backend
     override suspend fun saveActiveWorkout(workout: WorkoutUiModel) {
         val sets = mutableListOf<WorkoutExerciseSet>()
 
         val workoutEntity = workout.toEntity().copy(
-            id = Workout.ACTIVE_WORKOUT_ID
+            id = Workout.ACTIVE_WORKOUT_ID,
+            synced = true
         )
 
         // Exercises and Sets require a composed UUID since:
         // 1. They can't have their old id, since then that object will update causing it to no longer be connected to the original workout (if any)
         // 2. They can't have just some random id, since we don't want to update its id on every save as that causes too much rendering and database changes
         val exercises = workout.exercises.mapIndexed { index, exercise ->
-            val workoutExercise = exercise.toEntity(workoutEntity.id, index).let { newExercise ->
+            exercise.toEntity(workoutEntity.id, index).let { newExercise ->
                 if (newExercise.id.startsWith(Workout.ACTIVE_WORKOUT_ID)) return@let newExercise
 
                 newExercise.copy(
-                    id = "${Workout.ACTIVE_WORKOUT_ID}_${UUID.randomUUID()}"
+                    id = "${Workout.ACTIVE_WORKOUT_ID}_${UUID.randomUUID()}",
+                    synced = true
+                )
+            }.also { workoutExercise ->
+                sets.addAll(
+                    exercise.sets.mapIndexed { setIndex, set ->
+                        set.toEntity(workoutExercise.id, setIndex).let { newSet ->
+                            if (newSet.id.startsWith(Workout.ACTIVE_WORKOUT_ID)) return@let newSet
+
+                            newSet.copy(
+                                id = "${Workout.ACTIVE_WORKOUT_ID}_${UUID.randomUUID()}",
+                                synced = true
+                            )
+                        }
+                    }
                 )
             }
-
-            sets.addAll(
-                exercise.sets.mapIndexed { setIndex, set ->
-                    set.toEntity(workoutExercise.id, setIndex).let { newSet ->
-                        if (newSet.id.startsWith(Workout.ACTIVE_WORKOUT_ID)) return@let newSet
-
-                        newSet.copy(
-                            id = "${Workout.ACTIVE_WORKOUT_ID}_${UUID.randomUUID()}"
-                        )
-                    }
-                }
-            )
-
-            workoutExercise
         }
 
         transaction {
@@ -219,8 +218,28 @@ class WorkoutRepositoryImpl : WorkoutRepository() {
     }
 
     override suspend fun sync(item: WorkoutWithExercises) {
-        // TODO: Handle Syncing to Supabase (upsert)
-        // TODO: Also update the object in Room to have "synced" = true
-        // TODO: Handle the Synced on each object correctly -> Default true. When we insert we MUST set them to false
+        val workout = item.workout.copy(synced = true)
+
+        val exercises = item.exercises.map {
+            it.workoutExercise.copy(
+                synced = true
+            )
+        }
+
+        val sets = item.exercises.flatMap { exercise ->
+            exercise.sets.map {
+                it.copy(synced = true)
+            }
+        }
+
+        supabase.from(Workout.TABLE_NAME).upsert(workout)
+        supabase.from(WorkoutExercise.TABLE_NAME).upsert(exercises)
+        supabase.from(WorkoutExerciseSet.TABLE_NAME).upsert(sets)
+
+        transaction {
+            dao.save(workout)
+            workoutExerciseDao.saveAll(exercises)
+            workoutExerciseSetDao.saveAll(sets)
+        }
     }
 }
