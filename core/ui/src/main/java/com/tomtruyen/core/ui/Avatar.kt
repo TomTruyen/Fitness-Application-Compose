@@ -1,7 +1,9 @@
 package com.tomtruyen.core.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.tomtruyen.core.common.R
 import com.tomtruyen.core.common.utils.ImageLoader
+import com.tomtruyen.core.designsystem.Dimens
 import org.koin.compose.koinInject
 
 @Composable
@@ -30,15 +33,18 @@ fun Avatar(
     val context = LocalContext.current
     val imageLoader: ImageLoader = koinInject()
 
-    AsyncImage(
-        model = imageLoader.load(context, imageUrl),
-        fallback = painterResource(R.drawable.ic_fallback),
-        contentDescription = contentDescription,
-        contentScale = ContentScale.Fit,
-        modifier = modifier
-            .size(size)
+    Box(
+        modifier = modifier.size(size)
             .aspectRatio(1f)
             .clip(CircleShape)
             .background(backgroundColor)
-    )
+            .padding(Dimens.Tiny)
+    ) {
+        AsyncImage(
+            model = imageLoader.load(context, imageUrl),
+            fallback = painterResource(R.drawable.ic_fallback),
+            contentDescription = contentDescription,
+            contentScale = ContentScale.Fit,
+        )
+    }
 }
