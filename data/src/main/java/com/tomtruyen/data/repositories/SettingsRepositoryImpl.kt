@@ -24,7 +24,6 @@ class SettingsRepositoryImpl : SettingsRepository() {
 
         dao.save(newSettings)
 
-        Log.d("@@@", "Syncing to Background")
         SyncWorker.schedule<SettingsSyncWorker>()
     }
 

@@ -22,19 +22,21 @@ internal abstract class SyncWorker<T>(
     abstract val repository: SyncRepository<T>
 
     override suspend fun doWork(): Result {
-        Log.d("@@@", "Trying to Sync")
+        Log.i(TAG, "Starting Sync Task")
 
         val items = repository.findSyncItems()
 
         items.forEach { item ->
             try {
+                Log.i(TAG, "Syncing Item: $item")
                 repository.sync(item)
             } catch (e: Exception) {
-                Log.e(TAG, e.message, e)
+                Log.e(TAG, "Syncing of $item failed. Retrying...", e)
                 return Result.retry()
             }
         }
 
+        Log.i(TAG, "Syncing Finished")
         return Result.success()
     }
 
@@ -42,8 +44,6 @@ internal abstract class SyncWorker<T>(
         private const val TAG = "SyncWorker"
 
         inline fun <reified T: SyncWorker<*>> schedule(context: Context = get(Context::class.java)) {
-            Log.d("@@@", "Syncing with SyncWorker: ${T::class}")
-
             val request = OneTimeWorkRequestBuilder<T>()
                 .setConstraints(
                     Constraints.Builder()
@@ -51,8 +51,7 @@ internal abstract class SyncWorker<T>(
                         .build()
                 ).build()
 
-            Log.d("@@@", "Enqueue Sync Worker")
-
+            Log.i(TAG, "Sync Scheduled with ${T::class.simpleName}")
             WorkManager.getInstance(context).enqueue(request)
         }
     }
