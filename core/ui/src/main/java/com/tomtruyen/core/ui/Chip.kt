@@ -6,6 +6,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.tomtruyen.core.designsystem.theme.borderColor
+import com.tomtruyen.core.designsystem.theme.secondaryLabelColor
 
 
 @Composable
@@ -29,6 +31,7 @@ fun Chip(
         colors = FilterChipDefaults.filterChipColors(
             selectedContainerColor = MaterialTheme.colorScheme.tertiary,
             selectedLabelColor = MaterialTheme.colorScheme.onTertiary,
+            labelColor = MaterialTheme.colorScheme.secondaryLabelColor
         )
     )
 }

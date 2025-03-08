@@ -67,7 +67,8 @@ fun Toolbar(
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background,
-            titleContentColor = MaterialTheme.colorScheme.onBackground
+            titleContentColor = MaterialTheme.colorScheme.onBackground,
+            actionIconContentColor = MaterialTheme.colorScheme.onBackground
         ),
         actions = actions,
         windowInsets = WindowInsets(
@@ -82,6 +83,5 @@ fun ToolbarTitle(title: String) {
     Text(
         text = title,
         fontWeight = FontWeight.W500,
-        color = ChineseBlack
     )
 }

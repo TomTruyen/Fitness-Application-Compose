@@ -68,10 +68,7 @@ class MainActivity : ComponentActivity() {
 
         splashScreen.setKeepOnScreenCondition { !hasCheckedLoggedIn }
 
-        enableEdgeToEdge(
-            // TODO: Change this to use "Auto" as soon as we have a Dark Mode theme with a dark background
-            statusBarStyle = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
-        )
+        enableEdgeToEdge()
 
         setContent {
             KoinAndroidContext {

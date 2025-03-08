@@ -61,7 +61,7 @@ object Buttons {
         enabled: Boolean = true,
         shape: Shape = MaterialTheme.shapes.small,
         colors: ButtonColors = ButtonDefaults.textButtonColors(
-            contentColor = MaterialTheme.colorScheme.textButtonContentColor
+            contentColor = MaterialTheme.colorScheme.onSurface
         ),
         onClick: () -> Unit,
     ) {

@@ -4,25 +4,26 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 
 private val DarkColorScheme = lightColorScheme(
-    primary = ChineseBlack,
-    onPrimary = White,
-    secondary = Cultured,
-    onSecondary = ChineseBlack,
-    tertiary = ChineseBlack,
-    onTertiary = White,
-    background = White,
-    onBackground = ChineseBlack,
-    primaryContainer = ChineseBlack,
-    onPrimaryContainer = White,
+    primary = Cultured,
+    onPrimary = ChineseBlack,
+    secondary = ChineseBlack,
+    onSecondary = Cultured,
+    tertiary = Cultured,
+    onTertiary = ChineseBlack,
+    background = ChineseBlack,
+    onBackground = White,
+    primaryContainer = Cultured,
+    onPrimaryContainer = ChineseBlack,
     errorContainer = LighterRed,
     onErrorContainer = White,
-    surface = LavenderMist,
-    onSurface = ChineseBlack,
+    surface = DarkGray,
+    onSurface = Cultured,
     error = LighterRed,
-    outlineVariant = LavenderMist, // Divider
+    outlineVariant = DarkGray, // Divider
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -31,7 +32,7 @@ private val LightColorScheme = lightColorScheme(
     secondary = Cultured,
     onSecondary = ChineseBlack,
     tertiary = ChineseBlack,
-    onTertiary = ChineseBlack,
+    onTertiary = Cultured,
     background = White,
     onBackground = ChineseBlack,
     primaryContainer = ChineseBlack,

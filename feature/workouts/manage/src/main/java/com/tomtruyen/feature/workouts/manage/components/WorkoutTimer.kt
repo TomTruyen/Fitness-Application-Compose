@@ -35,12 +35,14 @@ fun WorkoutTimer(
         Icon(
             imageVector = Icons.Outlined.Timer,
             contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
             text = time,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(start = Dimens.Small)
+            modifier = Modifier.padding(start = Dimens.Small),
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }

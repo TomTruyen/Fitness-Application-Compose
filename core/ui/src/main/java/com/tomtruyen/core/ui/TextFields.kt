@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.LavenderMist
+import com.tomtruyen.core.designsystem.theme.borderColor
 
 
 object TextFields {
@@ -54,7 +56,9 @@ object TextFields {
         withLabel: Boolean = false,
         onClick: (() -> Unit)? = null,
         padding: PaddingValues = PaddingValues(Dimens.Normal),
-        textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+        textStyle: TextStyle = MaterialTheme.typography.bodyMedium.copy(
+            color = MaterialTheme.colorScheme.primary
+        ),
         trailingIcon: (@Composable () -> Unit)? = null,
         keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
         containerColor: Color = Color.Transparent,
@@ -95,6 +99,7 @@ object TextFields {
                 singleLine = singleLine,
                 visualTransformation = if (!obscureText || obscureTextVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 textStyle = textStyle,
+                cursorBrush = SolidColor(textStyle.color),
                 keyboardOptions = keyboardOptions,
                 keyboardActions = KeyboardActions(
                     onDone = {
@@ -108,7 +113,7 @@ object TextFields {
                             Modifier.border(
                                 width = 1.dp,
                                 color = if (error.isNullOrBlank()) {
-                                    LavenderMist
+                                    MaterialTheme.colorScheme.borderColor
                                 } else {
                                     MaterialTheme.colorScheme.error
                                 },

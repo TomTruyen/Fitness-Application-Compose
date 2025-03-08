@@ -13,19 +13,19 @@ private val isDarkTheme: Boolean
 // Custom Colors
 val ColorScheme.placeholder: Color
     @Composable
-    get() = BlueGrey
+    get() = if(isDarkTheme) ChineseSilver else BlueGrey
 
 val ColorScheme.textFieldIcon
     @Composable
-    get() = BlueGrey
+    get() = if(isDarkTheme) ChineseSilver else BlueGrey
 
 val ColorScheme.textButtonContentColor: Color
     @Composable
-    get() = BlueGrey
+    get() = if(isDarkTheme) ChineseSilver else BlueGrey
 
 val ColorScheme.secondaryTextColor: Color
     @Composable
-    get() = BlueGrey
+    get() = if(isDarkTheme) ChineseSilver else BlueGrey
 
 val ColorScheme.navigationItemContentColorActive: Color
     @Composable
@@ -37,4 +37,16 @@ val ColorScheme.navigationItemContentColorInactive: Color
 
 val ColorScheme.navigationItemBackgroundColorActive: Color
     @Composable
-    get() = ChineseBlack
+    get() = if(isDarkTheme) Cultured else ChineseBlack
+
+val ColorScheme.secondaryLabelColor: Color
+    @Composable
+    get() = if(isDarkTheme) ChineseSilver else DarkGray
+
+val ColorScheme.borderColor: Color
+    @Composable
+    get() = if(isDarkTheme) DarkGray else LavenderMist
+
+val ColorScheme.success: Color
+    @Composable
+    get() = if(isDarkTheme) DarkerSuccessGreen else LighterSuccessGreen

@@ -39,10 +39,6 @@ fun SwitchListItem(title: String, checked: Boolean, onCheckedChange: (Boolean) -
             onCheckedChange = {
                 onCheckedChange(it)
             },
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = Color.White,
-                uncheckedTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-            )
         )
     }
 }

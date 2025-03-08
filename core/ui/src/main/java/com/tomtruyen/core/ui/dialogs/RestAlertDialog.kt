@@ -99,9 +99,6 @@ fun RestAlertDialog(
             Buttons.Text(
                 text = stringResource(id = android.R.string.cancel),
                 onClick = onDismiss,
-                colors = ButtonDefaults.textButtonColors(
-                    contentColor = MaterialTheme.colorScheme.onSurface
-                )
             )
         },
         containerColor = MaterialTheme.colorScheme.background,

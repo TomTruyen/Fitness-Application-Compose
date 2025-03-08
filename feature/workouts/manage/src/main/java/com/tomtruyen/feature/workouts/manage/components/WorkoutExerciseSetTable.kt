@@ -15,6 +15,7 @@ import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.LighterSuccessGreen
+import com.tomtruyen.core.designsystem.theme.success
 import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
@@ -55,7 +56,7 @@ fun WorkoutExerciseSetTable(
                     .fillMaxWidth()
                     .background(
                         color = when {
-                            set.completed -> LighterSuccessGreen
+                            set.completed -> MaterialTheme.colorScheme.success
                             setIndex % 2 == 0 -> MaterialTheme.colorScheme.background
                             else -> MaterialTheme.colorScheme.surface
                         }

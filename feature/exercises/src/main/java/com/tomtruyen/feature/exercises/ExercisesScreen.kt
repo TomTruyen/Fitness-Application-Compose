@@ -142,7 +142,7 @@ private fun ExercisesScreenLayout(
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.Search,
-                                contentDescription = stringResource(id = R.string.content_description_search)
+                                contentDescription = stringResource(id = R.string.content_description_search),
                             )
                         }
 

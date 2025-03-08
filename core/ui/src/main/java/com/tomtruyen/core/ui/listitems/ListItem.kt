@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.Dimens
+import com.tomtruyen.core.designsystem.theme.secondaryLabelColor
 
 @Composable
 fun ListItem(
@@ -57,7 +58,7 @@ fun ListItem(
                 text = message,
                 style = MaterialTheme.typography.bodySmall.copy(
                     fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-                    color = MaterialTheme.typography.bodySmall.color.copy(0.5f)
+                    color = MaterialTheme.colorScheme.secondaryLabelColor
                 )
             )
         }
