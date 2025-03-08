@@ -49,18 +49,18 @@ abstract class BaseRepository(
     ): T? {
         val cacheKey = pageCacheKey ?: cacheKey
 
-        Log.i(TAG, "Fetching data for $cacheKey from Supabase... (Checking Cache first)")
+        Log.i(TAG, "Checking cache for $cacheKey")
 
         // Synced means that we fetched it, after that we just use Workers to sync in background
         // We want to go offline first for almost everything
         val isSynced = cacheDao.findById(cacheKey) != null
 
         if (!isSynced || refresh) {
-            Log.i(TAG, "Cache is expired or refresh is true, fetching $cacheKey from Supabase")
+            Log.i(TAG, "SyncCache entry does not exist or forcefully refreshing, fetching $cacheKey from Supabase")
 
             return block()
         }
-        Log.i(TAG, "Cache is not expired. Skipping Supabase fetch for $cacheKey")
+        Log.i(TAG, "SyncCache entry exists. Skipping Supabase fetch for $cacheKey")
 
         return null
     }
