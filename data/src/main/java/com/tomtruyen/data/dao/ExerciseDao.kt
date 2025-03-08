@@ -14,9 +14,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class ExerciseDao: SyncDao<Exercise>(Exercise.TABLE_NAME) {
-    @Query("DELETE FROM ${Exercise.TABLE_NAME} WHERE synced = :synced")
-    abstract suspend fun deleteAll(synced: Boolean = true)
-
     @Upsert
     abstract suspend fun save(exercise: Exercise): Long
 
