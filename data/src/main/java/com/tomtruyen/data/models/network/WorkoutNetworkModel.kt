@@ -18,16 +18,19 @@ data class WorkoutNetworkModel(
     @SerialName(Workout.KEY_CREATED_AT)
     @Serializable(with = SupabaseDateTimeSerializer::class)
     val createdAt: LocalDateTime,
+    @SerialName(Workout.KEY_SORT_ORDER)
+    val sortOrder: Int,
     @SerialName(Workout.KEY_USER_ID)
     val userId: String,
     @SerialName(WorkoutExercise.TABLE_NAME)
-    val exercises: List<WorkoutExerciseNetworkModel>
+    val exercises: List<WorkoutExerciseNetworkModel>,
 ) {
     fun toEntity() = Workout(
         id = id,
         name = name,
         unit = unit,
         createdAt = createdAt,
-        userId = userId
+        userId = userId,
+        sortOrder = sortOrder
     )
 }

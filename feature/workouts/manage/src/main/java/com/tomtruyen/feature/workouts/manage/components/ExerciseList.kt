@@ -47,7 +47,8 @@ fun ExerciseList(
 
         items(
             state.workout.exercises,
-            key = { it.id }) { exercise ->
+            key = { it.id }
+        ) { exercise ->
             ReorderableItem(
                 state = reorderableLazyListState,
                 key = exercise.id,

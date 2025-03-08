@@ -38,5 +38,7 @@ abstract class WorkoutRepository : SyncRepository<WorkoutWithExercises>() {
 
     abstract suspend fun deleteActiveWorkout()
 
+    abstract suspend fun reorderWorkouts(workouts: List<WorkoutUiModel>)
+
     abstract suspend fun getPreviousSetsForExercises(workout: WorkoutUiModel): Map<String, List<PreviousExerciseSet>>
 }

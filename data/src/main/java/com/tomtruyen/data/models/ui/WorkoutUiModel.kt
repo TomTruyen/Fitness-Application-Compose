@@ -16,6 +16,8 @@ data class WorkoutUiModel(
     val name: String = "",
     val unit: UnitType = UnitType.KG,
     val exercises: List<WorkoutExerciseUiModel> = emptyList(),
+    val sortOrder: Int = 0,
+    val userId: String? = null,
 ) {
     private val weightExercises: List<WorkoutExerciseUiModel>
         get() = exercises.filter {
@@ -47,7 +49,8 @@ data class WorkoutUiModel(
         id = id,
         name = name,
         unit = unit.value,
-        userId = userId,
+        userId = userId ?: this.userId,
+        sortOrder = sortOrder,
         synced = false
     )
 
@@ -65,7 +68,9 @@ data class WorkoutUiModel(
             name = entity.workout.name,
             unit = UnitType.fromValue(entity.workout.unit),
             exercises = entity.exercises.map(WorkoutExerciseUiModel::fromEntity)
-                .sortedBy { it.sortOrder }
+                .sortedBy { it.sortOrder },
+            sortOrder = entity.workout.sortOrder,
+            userId = entity.workout.userId
         )
     }
 }

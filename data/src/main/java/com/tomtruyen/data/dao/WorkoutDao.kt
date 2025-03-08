@@ -11,11 +11,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 abstract class WorkoutDao: SyncDao<WorkoutWithExercises>(Workout.TABLE_NAME) {
     @Transaction
-    @Query("SELECT * FROM ${Workout.TABLE_NAME} ORDER BY createdAt DESC")
+    @Query("SELECT * FROM ${Workout.TABLE_NAME} ORDER BY sortOrder ASC, createdAt DESC")
     abstract fun findWorkoutsAsync(): Flow<List<WorkoutWithExercises>>
 
     @Transaction
-    @Query("SELECT * FROM ${Workout.TABLE_NAME} ORDER BY createdAt DESC")
+    @Query("SELECT * FROM ${Workout.TABLE_NAME} ORDER BY sortOrder ASC, createdAt DESC")
     abstract suspend fun findWorkouts(): List<WorkoutWithExercises>
 
     @Transaction

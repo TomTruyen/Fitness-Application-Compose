@@ -15,4 +15,7 @@ dependencies {
 
     implementation(project(":data"))
     implementation(project(":navigation"))
+
+    // Reorderable (Drag & Drop) Lazy Column
+    implementation(libs.reorderable)
 }

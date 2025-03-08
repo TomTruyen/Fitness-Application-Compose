@@ -206,6 +206,14 @@ class WorkoutRepositoryImpl : WorkoutRepository() {
         }
     }
 
+    override suspend fun reorderWorkouts(workouts: List<WorkoutUiModel>) {
+        val items = workouts.map(WorkoutUiModel::toEntity)
+
+        dao.saveAll(items)
+
+        supabase.from(Workout.TABLE_NAME).upsert(items)
+    }
+
     override suspend fun getPreviousSetsForExercises(workout: WorkoutUiModel): Map<String, List<PreviousExerciseSet>> {
         val exerciseIds = workout.exercises.map { JsonPrimitive(it.exerciseId) }.distinct()
 

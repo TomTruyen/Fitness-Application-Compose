@@ -1,5 +1,6 @@
 package com.tomtruyen.feature.workouts
 
+import android.util.Log
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.repositories.interfaces.UserRepository
@@ -50,7 +51,11 @@ class WorkoutsViewModel(
 
     private fun observeWorkouts() = vmScope.launch {
         workoutRepository.findWorkoutsAsync()
-            .distinctUntilChanged()
+            .distinctUntilChanged { old, new ->
+                // Ignore changes on sortOrder to avoid flickering when reordering
+                // We manually set the reorder changes in the `reorderWorkouts` function
+                old.map { it.copy(sortOrder = 0) } == new.map { it.copy(sortOrder = 0) }
+            }
             .collectLatest { workouts ->
                 updateState {
                     it.copy(
@@ -83,8 +88,32 @@ class WorkoutsViewModel(
         onAction(WorkoutsUiAction.Dialog.Discard.Dismiss)
     }
 
+    private fun reorderWorkouts(from: Int, to: Int) = vmScope.launch {
+        val workouts = uiState.value.workouts.toMutableList().apply {
+            val workout = removeAt(from)
+            add(to, workout)
+        }.mapIndexed { index, workout ->
+            workout.copy(
+                sortOrder = index,
+            )
+        }
+
+        updateState {
+            it.copy(
+                workouts = workouts
+            )
+        }
+
+        workoutRepository.reorderWorkouts(workouts)
+    }
+
     override fun onAction(action: WorkoutsUiAction) {
         when (action) {
+            is WorkoutsUiAction.Reorder -> reorderWorkouts(
+                from = action.from,
+                to = action.to
+            )
+
             WorkoutsUiAction.Refresh -> fetchWorkouts(true)
 
             WorkoutsUiAction.OnCreateClicked -> triggerEvent(

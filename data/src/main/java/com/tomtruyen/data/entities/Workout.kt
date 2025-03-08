@@ -31,6 +31,8 @@ data class Workout(
         .toLocalDateTime(TimeZone.currentSystemDefault()),
     @SerialName(KEY_USER_ID)
     val userId: String? = null,
+    @SerialName(KEY_SORT_ORDER)
+    val sortOrder: Int = 0,
     @Transient
     override val synced: Boolean = false
 ) : BaseEntity, SyncEntity {
@@ -44,6 +46,7 @@ data class Workout(
         const val KEY_UNIT = "unit"
         const val KEY_CREATED_AT = "created_at"
         const val KEY_USER_ID = "user_id"
+        const val KEY_SORT_ORDER = "sort_order"
     }
 }
 

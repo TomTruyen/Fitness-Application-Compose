@@ -1,12 +1,14 @@
 package com.tomtruyen.feature.workouts
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,8 +20,12 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -37,6 +43,8 @@ import com.tomtruyen.feature.workouts.remember.rememberWorkoutActions
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
+import sh.calvin.reorderable.ReorderableItem
+import sh.calvin.reorderable.rememberReorderableLazyListState
 
 @Composable
 fun WorkoutsScreen(
@@ -109,7 +117,14 @@ private fun WorkoutOverviewScreenLayout(
     state: WorkoutsUiState,
     onAction: (WorkoutsUiAction) -> Unit
 ) {
+    val haptic = LocalHapticFeedback.current
+
     val refreshState = rememberPullToRefreshState()
+
+    val lazyListState = rememberLazyListState()
+    val reorderableLazyListState = rememberReorderableLazyListState(lazyListState) { from, to ->
+        onAction(WorkoutsUiAction.Reorder(from.index, to.index))
+    }
 
     Scaffold(
         snackbarHost = snackbarHost,
@@ -149,43 +164,60 @@ private fun WorkoutOverviewScreenLayout(
                 state = refreshState,
             ) {
                 LazyColumn(
+                    state = lazyListState,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(Dimens.Normal)
                         .animateContentSize(),
                     verticalArrangement = Arrangement.spacedBy(Dimens.Small)
                 ) {
-                    item {
-                        Label(
-                            label = stringResource(R.string.label_quick_start)
-                        )
-                    }
+//                    item {
+//                        Label(
+//                            label = stringResource(R.string.label_quick_start)
+//                        )
+//                    }
+//
+//                    item {
+//                        Buttons.Default(
+//                            modifier = Modifier.fillMaxWidth(),
+//                            text = stringResource(id = R.string.button_start_empty_workout),
+//                            onClick = {
+//                                onAction(WorkoutsUiAction.ExecuteEmpty)
+//                            }
+//                        )
+//                    }
+//
+//                    item {
+//                        Label(
+//                            modifier = Modifier.padding(top = Dimens.Normal),
+//                            label = stringResource(R.string.label_workouts)
+//                        )
+//                    }
 
-                    item {
-                        Buttons.Default(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = stringResource(id = R.string.button_start_empty_workout),
-                            onClick = {
-                                onAction(WorkoutsUiAction.ExecuteEmpty)
-                            }
-                        )
-                    }
+                    items(
+                        state.workouts,
+                        key = { it.id }
+                    ) { workout ->
+                        ReorderableItem(
+                            state = reorderableLazyListState,
+                            key = workout.id
+                        ) { isDragging ->
+                            val alpha by animateFloatAsState(if (isDragging) 0.25f else 1f, label = "")
 
-                    item {
-                        Label(
-                            modifier = Modifier.padding(top = Dimens.Normal),
-                            label = stringResource(R.string.label_workouts)
-                        )
-                    }
-
-                    items(state.workouts) { workout ->
-                        WorkoutListItem(
-                            workout = workout,
-                            onAction = onAction,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .animateItem()
-                        )
+                            WorkoutListItem(
+                                workout = workout,
+                                onAction = onAction,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .longPressDraggableHandle(
+                                        onDragStarted = {
+                                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                        },
+                                    )
+                                    .alpha(alpha)
+                                    .animateItem()
+                            )
+                        }
                     }
                 }
             }

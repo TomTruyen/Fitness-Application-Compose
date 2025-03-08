@@ -34,4 +34,6 @@ sealed class WorkoutsUiAction {
     data object Delete : WorkoutsUiAction()
 
     data object Refresh : WorkoutsUiAction()
+
+    data class Reorder(val from: Int, val to: Int): WorkoutsUiAction()
 }
