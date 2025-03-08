@@ -177,13 +177,18 @@ class ManageWorkoutViewModel(
     private fun finishWorkout(userId: String) = launchLoading {
         stopTimer()
 
-        val workoutHistoryId = historyRepository.saveWorkoutHistory(
-            userId = userId,
-            workout = uiState.value.workout,
-            duration = timer.time.value
-        )
+        with(uiState.value) {
+            val workoutHistoryId = historyRepository.saveWorkoutHistory(
+                userId = userId,
+                workout = workout.copy(
+                    unit = settings.unit,
+                    name = workout.name.ifBlank { "Workout" }
+                ),
+                duration = timer.time.value
+            )
 
-        triggerEvent(ManageWorkoutUiEvent.Navigate.History.Detail(workoutHistoryId))
+            triggerEvent(ManageWorkoutUiEvent.Navigate.History.Detail(workoutHistoryId))
+        }
     }
 
     private fun saveWorkout(userId: String) = launchLoading {

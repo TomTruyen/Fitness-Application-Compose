@@ -9,6 +9,7 @@ import com.tomtruyen.data.entities.BaseEntity
 import com.tomtruyen.data.entities.CacheTTL
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.filter.FilterOperation
 import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -69,14 +70,22 @@ abstract class BaseRepository(
      * without requiring us to delete the parent entity to CASCADE it.
      * This manually checks and deletes the dangling items
      */
-    suspend fun deleteSupabaseDangling(table: String, key: String, entitiesToKeep: List<BaseEntity>) {
+    suspend fun deleteSupabaseDangling(
+        table: String,
+        key: String,
+        entitiesToKeep: List<BaseEntity>,
+        foreignKeyConstraint: FilterOperation
+    ) {
         val ids = entitiesToKeep.map { it.id }
 
         if(ids.isEmpty()) return
 
         supabase.from(table).delete {
             filter {
-                filterNot(key, FilterOperator.IN, "(${ids.joinToString(",")})")
+                and {
+                    filterNot(key, FilterOperator.IN, "(${ids.joinToString(",")})")
+                    filter(foreignKeyConstraint)
+                }
             }
         }
     }

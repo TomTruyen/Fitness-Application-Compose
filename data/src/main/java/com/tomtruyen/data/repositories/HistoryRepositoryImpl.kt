@@ -18,6 +18,7 @@ import com.tomtruyen.data.worker.SyncWorker
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
+import io.github.jan.supabase.postgrest.query.filter.FilterOperation
 import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
@@ -195,13 +196,23 @@ class HistoryRepositoryImpl : HistoryRepository() {
         deleteSupabaseDangling(
             table = WorkoutHistoryExercise.TABLE_NAME,
             key = WorkoutHistoryExercise.KEY_ID,
-            entitiesToKeep = exercises
+            entitiesToKeep = exercises,
+            foreignKeyConstraint = FilterOperation(
+                column = WorkoutHistoryExercise.KEY_WORKOUT_HISTORY_ID,
+                operator = FilterOperator.EQ,
+                value = workout.id
+            )
         )
 
         deleteSupabaseDangling(
             table = WorkoutHistoryExerciseSet.TABLE_NAME,
             key = WorkoutHistoryExerciseSet.KEY_ID,
-            entitiesToKeep = sets
+            entitiesToKeep = sets,
+            foreignKeyConstraint = FilterOperation(
+                column = WorkoutHistoryExerciseSet.KEY_WORKOUT_HISTORY_EXERCISE_ID,
+                operator = FilterOperator.IN,
+                value = "(${sets.joinToString(",") { it.workoutHistoryExerciseId }})"
+            )
         )
 
         // Insert new values
