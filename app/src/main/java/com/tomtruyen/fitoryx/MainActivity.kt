@@ -1,10 +1,12 @@
 package com.tomtruyen.fitoryx
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.animateContentSize
@@ -66,7 +68,10 @@ class MainActivity : ComponentActivity() {
 
         splashScreen.setKeepOnScreenCondition { !hasCheckedLoggedIn }
 
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            // TODO: Change this to use "Auto" as soon as we have a Dark Mode theme with a dark background
+            statusBarStyle = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
+        )
 
         setContent {
             KoinAndroidContext {
