@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 class ProfileViewModel(
     private val userRepository: UserRepository,
     private val settingsRepository: SettingsRepository,
-    private val themePreferences: ThemePreferencesDatastore,
     private val koinReloadProvider: KoinReloadProvider,
 ) : BaseViewModel<ProfileUiState, ProfileUiAction, ProfileUiEvent>(
     initialState = ProfileUiState()
@@ -88,7 +87,7 @@ class ProfileViewModel(
     }
 
     private fun updateThemeMode(mode: ThemePreferencesDatastore.Mode) = vmScope.launch {
-        themePreferences.setTheme(mode)
+        ThemePreferencesDatastore.setTheme(mode)
     }
 
     override fun onAction(action: ProfileUiAction) {

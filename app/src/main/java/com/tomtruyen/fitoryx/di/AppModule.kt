@@ -6,7 +6,6 @@ import com.tomtruyen.core.common.providers.CredentialProvider
 import com.tomtruyen.core.common.providers.KoinReloadProvider
 import com.tomtruyen.core.common.utils.ImageLoader
 import com.tomtruyen.Fynix.providers.CredentialProviderImpl
-import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 import com.tomtruyen.fitoryx.BuildConfig
 import com.tomtruyen.fitoryx.providers.BuildConfigFieldProviderImpl
 import com.tomtruyen.fitoryx.providers.KoinReloadProviderImpl
@@ -66,11 +65,5 @@ val appModule = module {
 
     single<KoinReloadProvider> {
         KoinReloadProviderImpl()
-    }
-
-    single<ThemePreferencesDatastore> {
-        ThemePreferencesDatastore(
-            context = get<Context>()
-        )
     }
 }

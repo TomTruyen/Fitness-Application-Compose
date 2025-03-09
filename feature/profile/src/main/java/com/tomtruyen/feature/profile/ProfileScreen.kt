@@ -106,13 +106,12 @@ private fun ProfileScreenLayout(
     onAction: (ProfileUiAction) -> Unit
 ) {
     val buildConfigFieldProvider = koinInject<BuildConfigFieldProvider>()
-    val themePreferences = koinInject<ThemePreferencesDatastore>()
 
     val context = LocalContext.current
 
     val refreshState = rememberPullToRefreshState()
 
-    val themeMode by themePreferences.themeMode.collectAsState(ThemePreferencesDatastore.Mode.SYSTEM)
+    val themeMode by ThemePreferencesDatastore.themeMode.collectAsState(ThemePreferencesDatastore.Mode.SYSTEM)
 
     var unitDialogVisible by remember { mutableStateOf(false) }
     var restDialogVisible by remember { mutableStateOf(false) }

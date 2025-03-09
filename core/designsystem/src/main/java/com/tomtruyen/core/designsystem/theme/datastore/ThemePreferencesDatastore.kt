@@ -5,10 +5,15 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.map
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class ThemePreferencesDatastore(
-    private val context: Context,
-) {
+object ThemePreferencesDatastore: KoinComponent {
+    private const val DATASTORE_NAME = "theme_preferences"
+    private const val KEY_THEME = "theme"
+
+    private val context by inject<Context>()
+
     private val Context.dataStore by preferencesDataStore(name = DATASTORE_NAME)
 
     private val theme = stringPreferencesKey(KEY_THEME)
@@ -29,13 +34,13 @@ class ThemePreferencesDatastore(
         }
     }
 
-    val themeMode = context.dataStore.data.map {
-        Mode.fromValue(it[theme]) ?: Mode.SYSTEM
+    suspend fun clear() {
+        context.dataStore.edit {
+            it.clear()
+        }
     }
 
-    companion object {
-        private const val DATASTORE_NAME = "theme_preferences"
-
-        private const val KEY_THEME = "theme"
+    val themeMode = context.dataStore.data.map {
+        Mode.fromValue(it[theme]) ?: Mode.SYSTEM
     }
 }

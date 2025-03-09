@@ -7,14 +7,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
-import org.koin.compose.koinInject
 
 // Convenience
 private val isDarkTheme: Boolean
     @Composable
     get() {
-        val themePreferences = koinInject<ThemePreferencesDatastore>()
-        val themeMode by themePreferences.themeMode.collectAsState(ThemePreferencesDatastore.Mode.SYSTEM)
+        val themeMode by ThemePreferencesDatastore.themeMode.collectAsState(ThemePreferencesDatastore.Mode.SYSTEM)
 
         return when(themeMode) {
             ThemePreferencesDatastore.Mode.DARK -> true
@@ -50,7 +48,7 @@ val ColorScheme.navigationItemContentColorInactive: Color
 
 val ColorScheme.navigationItemBackgroundColorActive: Color
     @Composable
-    get() = if(isDarkTheme) Cultured else ChineseBlack
+    get() = if(isDarkTheme) LavenderMist else ChineseBlack
 
 val ColorScheme.secondaryLabelColor: Color
     @Composable

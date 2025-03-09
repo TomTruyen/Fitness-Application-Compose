@@ -28,7 +28,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.tomtruyen.core.common.models.GlobalAppState
 import com.tomtruyen.core.designsystem.theme.FynixTheme
-import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.feature.auth.login.LoginScreen
 import com.tomtruyen.feature.auth.register.RegisterScreen

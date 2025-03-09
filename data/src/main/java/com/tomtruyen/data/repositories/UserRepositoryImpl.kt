@@ -1,6 +1,7 @@
 package com.tomtruyen.data.repositories
 
 import com.tomtruyen.core.common.utils.GoogleSignInHelper
+import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
@@ -52,6 +53,7 @@ class UserRepositoryImpl(
         scope.launch {
             database.clearAllTables()
             GoogleSignInHelper.signOut(context)
+            ThemePreferencesDatastore.clear()
         }
 
         auth.signOut()
