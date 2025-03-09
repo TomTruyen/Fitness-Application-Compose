@@ -2,6 +2,9 @@ package com.tomtruyen.feature.exercises
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -54,11 +57,14 @@ import com.tomtruyen.core.ui.toolbars.SearchToolbar
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.navigation.NavArguments
 import com.tomtruyen.navigation.Screen
+import com.tomtruyen.navigation.SharedTransitionKey
 import kotlinx.coroutines.flow.collectLatest
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun ExercisesScreen(
+fun SharedTransitionScope.ExercisesScreen(
     navController: NavController,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: ExercisesViewModel
 ) {
     val context = LocalContext.current
@@ -88,16 +94,18 @@ fun ExercisesScreen(
 
     ExercisesScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
+        animatedVisibilityScope = animatedVisibilityScope,
         navController = navController,
         state = state,
         onAction = viewModel::onAction
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
-private fun ExercisesScreenLayout(
+private fun SharedTransitionScope.ExercisesScreenLayout(
     snackbarHost: @Composable () -> Unit,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     navController: NavController,
     state: ExercisesUiState,
     onAction: (ExercisesUiAction) -> Unit
@@ -283,6 +291,12 @@ private fun ExercisesScreenLayout(
 
 
                                 ListItem(
+                                    modifier = Modifier.sharedBounds(
+                                        sharedContentState = rememberSharedContentState(
+                                            key = SharedTransitionKey.Exercise(exercise.id)
+                                        ),
+                                        animatedVisibilityScope = animatedVisibilityScope
+                                    ),
                                     title = exercise.displayName,
                                     message = exercise.category?.name.orEmpty(),
                                     selected = state.selectedExercises.contains(exercise),

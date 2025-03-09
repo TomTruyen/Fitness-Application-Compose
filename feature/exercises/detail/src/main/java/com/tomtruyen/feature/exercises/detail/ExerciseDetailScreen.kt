@@ -1,5 +1,8 @@
 package com.tomtruyen.feature.exercises.detail
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,16 +48,19 @@ import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.feature.exercises.detail.remember.rememberExerciseActions
 import com.tomtruyen.navigation.Screen
+import com.tomtruyen.navigation.SharedTransitionKey
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
 import com.tomtruyen.core.common.R as CommonR
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun ExerciseDetailScreen(
+fun SharedTransitionScope.ExerciseDetailScreen(
     id: String,
     navController: NavController,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: ExerciseDetailViewModel = koinViewModel(
         parameters = { parametersOf(id) }
     ),
@@ -79,6 +85,7 @@ fun ExerciseDetailScreen(
 
     ExerciseDetailScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
+        animatedVisibilityScope = animatedVisibilityScope,
         navController = navController,
         state = state,
         imageLoader = imageLoader,
@@ -96,9 +103,11 @@ fun ExerciseDetailScreen(
     )
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun ExerciseDetailScreenLayout(
+private fun SharedTransitionScope.ExerciseDetailScreenLayout(
     snackbarHost: @Composable () -> Unit,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     navController: NavController,
     state: ExerciseDetailUiState,
     imageLoader: ImageLoader,
@@ -108,6 +117,12 @@ private fun ExerciseDetailScreenLayout(
 
     Scaffold(
         snackbarHost = snackbarHost,
+        modifier = Modifier.sharedBounds(
+            sharedContentState = rememberSharedContentState(
+                key = SharedTransitionKey.Exercise(state.exercise.id)
+            ),
+            animatedVisibilityScope = animatedVisibilityScope
+        ),
         topBar = {
             Toolbar(
                 title = state.exercise?.name.orEmpty(),

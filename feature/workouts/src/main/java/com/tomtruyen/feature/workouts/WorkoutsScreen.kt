@@ -1,6 +1,9 @@
 package com.tomtruyen.feature.workouts
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -44,14 +47,17 @@ import com.tomtruyen.feature.workouts.components.ActiveWorkoutBar
 import com.tomtruyen.feature.workouts.components.WorkoutListItem
 import com.tomtruyen.feature.workouts.remember.rememberWorkoutActions
 import com.tomtruyen.navigation.Screen
+import com.tomtruyen.navigation.SharedTransitionKey
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun WorkoutsScreen(
+fun SharedTransitionScope.WorkoutsScreen(
     navController: NavController,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: WorkoutsViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
@@ -82,6 +88,7 @@ fun WorkoutsScreen(
 
     WorkoutOverviewScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
+        animatedVisibilityScope = animatedVisibilityScope,
         navController = navController,
         state = state,
         onAction = viewModel::onAction
@@ -110,10 +117,11 @@ fun WorkoutsScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
-private fun WorkoutOverviewScreenLayout(
+private fun SharedTransitionScope.WorkoutOverviewScreenLayout(
     snackbarHost: @Composable () -> Unit,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     navController: NavController,
     state: WorkoutsUiState,
     onAction: (WorkoutsUiAction) -> Unit
@@ -225,6 +233,12 @@ private fun WorkoutOverviewScreenLayout(
                                     )
                                     .alpha(alpha)
                                     .animateItem()
+                                    .sharedBounds(
+                                        sharedContentState = rememberSharedContentState(
+                                            key = SharedTransitionKey.Workout(workout.id)
+                                        ),
+                                        animatedVisibilityScope = animatedVisibilityScope
+                                    )
                             )
                         }
                     }

@@ -1,6 +1,9 @@
 package com.tomtruyen.feature.workouts.manage
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -48,13 +51,16 @@ import com.tomtruyen.feature.workouts.manage.remember.rememberSetActions
 import com.tomtruyen.feature.workouts.manage.remember.rememberWorkoutActions
 import com.tomtruyen.navigation.NavArguments
 import com.tomtruyen.navigation.Screen
+import com.tomtruyen.navigation.SharedTransitionKey
 import kotlinx.coroutines.flow.collectLatest
 import java.util.concurrent.TimeUnit
 import com.tomtruyen.core.common.R as CommonR
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun ManageWorkoutScreen(
+fun SharedTransitionScope.ManageWorkoutScreen(
     navController: NavController,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: ManageWorkoutViewModel
 ) {
     val context = LocalContext.current
@@ -144,6 +150,7 @@ fun ManageWorkoutScreen(
 
     ManageWorkoutScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
+        animatedVisibilityScope = animatedVisibilityScope,
         navController = navController,
         state = state,
         lazyListState = lazyListState,
@@ -177,9 +184,11 @@ fun ManageWorkoutScreen(
     )
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun ManageWorkoutScreenLayout(
+private fun SharedTransitionScope.ManageWorkoutScreenLayout(
     snackbarHost: @Composable () -> Unit,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     navController: NavController,
     state: ManageWorkoutUiState,
     lazyListState: LazyListState,
@@ -206,6 +215,12 @@ private fun ManageWorkoutScreenLayout(
 
     Scaffold(
         snackbarHost = snackbarHost,
+        modifier = Modifier.sharedBounds(
+            sharedContentState = rememberSharedContentState(
+                key = SharedTransitionKey.Workout(state.workout.id)
+            ),
+            animatedVisibilityScope = animatedVisibilityScope
+        ),
         topBar = {
             Toolbar(
                 title = {

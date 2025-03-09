@@ -6,6 +6,8 @@ import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -56,6 +58,7 @@ class MainActivity : ComponentActivity() {
 
     private var hasCheckedLoggedIn: Boolean = false
 
+    @OptIn(ExperimentalSharedTransitionApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
 
@@ -101,132 +104,141 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     ) {
-                        NavHost(
-                            modifier = Modifier
-                                .padding(it)
-                                .consumeWindowInsets(it),
-                            navController = navController,
-                            startDestination = Screen.Auth.Graph
-                        ) {
-                            navigation<Screen.Auth.Graph>(
-                                startDestination = Screen.Auth.Login
+                        SharedTransitionLayout {
+                            NavHost(
+                                modifier = Modifier
+                                    .padding(it)
+                                    .consumeWindowInsets(it),
+                                navController = navController,
+                                startDestination = Screen.Auth.Graph
                             ) {
-                                composable<Screen.Auth.Login> {
-                                    LaunchedEffect(Unit) {
-                                        if (userRepository.isLoggedIn()) {
-                                            navController.navigate(Screen.Workout.Graph) {
-                                                popUpTo(Screen.Auth.Graph) {
-                                                    inclusive = true
+                                navigation<Screen.Auth.Graph>(
+                                    startDestination = Screen.Auth.Login
+                                ) {
+                                    composable<Screen.Auth.Login> {
+                                        LaunchedEffect(Unit) {
+                                            if (userRepository.isLoggedIn()) {
+                                                navController.navigate(Screen.Workout.Graph) {
+                                                    popUpTo(Screen.Auth.Graph) {
+                                                        inclusive = true
+                                                    }
                                                 }
                                             }
+
+                                            // Waits for MainLooper before dismissing the splashscreen
+                                            // Ensures that enough time for navigation
+                                            Handler(Looper.getMainLooper()).postDelayed({
+                                                hasCheckedLoggedIn = true
+                                            }, 50L)
                                         }
 
-                                        // Waits for MainLooper before dismissing the splashscreen
-                                        // Ensures that enough time for navigation
-                                        Handler(Looper.getMainLooper()).postDelayed({
-                                            hasCheckedLoggedIn = true
-                                        }, 50L)
+                                        LoginScreen(navController)
                                     }
 
-                                    LoginScreen(navController)
+                                    composable<Screen.Auth.Register> {
+                                        RegisterScreen(navController)
+                                    }
                                 }
 
-                                composable<Screen.Auth.Register> {
-                                    RegisterScreen(navController)
-                                }
-                            }
-
-                            composable<Screen.Profile> {
-                                ProfileScreen(navController)
-                            }
-
-                            navigation<Screen.Workout.Graph>(
-                                startDestination = Screen.Workout.Overview
-                            ) {
-                                composable<Screen.Workout.Overview> {
-                                    WorkoutsScreen(navController)
+                                composable<Screen.Profile> {
+                                    ProfileScreen(navController)
                                 }
 
-                                composable<Screen.Workout.Manage> { backStackEntry ->
-                                    val args = backStackEntry.toRoute<Screen.Workout.Manage>()
-
-                                    val viewModel = koinViewModel<ManageWorkoutViewModel>(
-                                        viewModelStoreOwner = backStackEntry,
-                                        parameters = { parametersOf(args.id, args.mode) }
-                                    )
-
-                                    ManageWorkoutScreen(
-                                        navController = navController,
-                                        viewModel = viewModel
-                                    )
-                                }
-                            }
-
-                            navigation<Screen.Exercise.Graph>(
-                                startDestination = Screen.Exercise.Overview()
-                            ) {
-                                composable<Screen.Exercise.Overview> { backStackEntry ->
-                                    val args = backStackEntry.toRoute<Screen.Exercise.Overview>()
-
-                                    val viewModel =
-                                        screenScopedViewModel<Screen.Exercise.Overview, ExercisesViewModel>(
+                                navigation<Screen.Workout.Graph>(
+                                    startDestination = Screen.Workout.Overview
+                                ) {
+                                    composable<Screen.Workout.Overview> {
+                                        WorkoutsScreen(
                                             navController = navController,
-                                            backStackEntry = backStackEntry,
-                                            parameters = { parametersOf(args.mode) }
+                                            animatedVisibilityScope = this
+                                        )
+                                    }
+
+                                    composable<Screen.Workout.Manage> { backStackEntry ->
+                                        val args = backStackEntry.toRoute<Screen.Workout.Manage>()
+
+                                        val viewModel = koinViewModel<ManageWorkoutViewModel>(
+                                            viewModelStoreOwner = backStackEntry,
+                                            parameters = { parametersOf(args.id, args.mode) }
                                         )
 
-                                    ExercisesScreen(
-                                        navController = navController,
-                                        viewModel = viewModel
-                                    )
-                                }
-
-                                composable<Screen.Exercise.Detail> { backStackEntry ->
-                                    val args = backStackEntry.toRoute<Screen.Exercise.Detail>()
-
-                                    ExerciseDetailScreen(
-                                        id = args.id,
-                                        navController = navController
-                                    )
-                                }
-
-                                composable<Screen.Exercise.Manage> { backStackEntry ->
-                                    val args = backStackEntry.toRoute<Screen.Exercise.Manage>()
-
-                                    ManageExerciseScreen(
-                                        id = args.id,
-                                        navController = navController
-                                    )
-                                }
-
-                                composable<Screen.Exercise.Filter> { backStackEntry ->
-                                    val viewModel =
-                                        screenScopedViewModel<Screen.Exercise.Overview, ExercisesViewModel>(
+                                        ManageWorkoutScreen(
                                             navController = navController,
-                                            backStackEntry = backStackEntry,
+                                            animatedVisibilityScope = this,
+                                            viewModel = viewModel
                                         )
-
-                                    ExercisesFilterScreen(
-                                        navController = navController,
-                                        viewModel = viewModel
-                                    )
-                                }
-                            }
-
-                            navigation<Screen.History.Graph>(
-                                startDestination = Screen.History.Overview
-                            ) {
-                                composable<Screen.History.Overview> {
-                                    WorkoutHistoryScreen(navController)
+                                    }
                                 }
 
-                                composable<Screen.History.Detail> { backStackEntry ->
-                                    val args = backStackEntry.toRoute<Screen.History.Detail>()
+                                navigation<Screen.Exercise.Graph>(
+                                    startDestination = Screen.Exercise.Overview()
+                                ) {
+                                    composable<Screen.Exercise.Overview> { backStackEntry ->
+                                        val args =
+                                            backStackEntry.toRoute<Screen.Exercise.Overview>()
 
-                                    WorkoutHistoryDetailScreen(
-                                        id = args.id,
-                                        navController = navController
-                                    )
+                                        val viewModel =
+                                            screenScopedViewModel<Screen.Exercise.Overview, ExercisesViewModel>(
+                                                navController = navController,
+                                                backStackEntry = backStackEntry,
+                                                parameters = { parametersOf(args.mode) }
+                                            )
+
+                                        ExercisesScreen(
+                                            navController = navController,
+                                            animatedVisibilityScope = this,
+                                            viewModel = viewModel
+                                        )
+                                    }
+
+                                    composable<Screen.Exercise.Detail> { backStackEntry ->
+                                        val args = backStackEntry.toRoute<Screen.Exercise.Detail>()
+
+                                        ExerciseDetailScreen(
+                                            id = args.id,
+                                            animatedVisibilityScope = this,
+                                            navController = navController
+                                        )
+                                    }
+
+                                    composable<Screen.Exercise.Manage> { backStackEntry ->
+                                        val args = backStackEntry.toRoute<Screen.Exercise.Manage>()
+
+                                        ManageExerciseScreen(
+                                            id = args.id,
+                                            navController = navController
+                                        )
+                                    }
+
+                                    composable<Screen.Exercise.Filter> { backStackEntry ->
+                                        val viewModel =
+                                            screenScopedViewModel<Screen.Exercise.Overview, ExercisesViewModel>(
+                                                navController = navController,
+                                                backStackEntry = backStackEntry,
+                                            )
+
+                                        ExercisesFilterScreen(
+                                            navController = navController,
+                                            viewModel = viewModel
+                                        )
+                                    }
+                                }
+
+                                navigation<Screen.History.Graph>(
+                                    startDestination = Screen.History.Overview
+                                ) {
+                                    composable<Screen.History.Overview> {
+                                        WorkoutHistoryScreen(navController)
+                                    }
+
+                                    composable<Screen.History.Detail> { backStackEntry ->
+                                        val args = backStackEntry.toRoute<Screen.History.Detail>()
+
+                                        WorkoutHistoryDetailScreen(
+                                            id = args.id,
+                                            navController = navController
+                                        )
+                                    }
                                 }
                             }
                         }

@@ -5,7 +5,7 @@ import com.tomtruyen.data.models.ui.ExerciseUiModel
 
 @Immutable
 data class ExerciseDetailUiState(
-    val exercise: ExerciseUiModel? = null,
+    val exercise: ExerciseUiModel = ExerciseUiModel(),
 
     val showSheet: Boolean = false,
     val loading: Boolean = false,

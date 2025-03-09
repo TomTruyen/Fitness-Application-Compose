@@ -32,10 +32,11 @@ fun ListItem(
     selected: Boolean = false,
     showChevron: Boolean = true,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     prefix: (@Composable () -> Unit)? = null
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
             .padding(Dimens.Normal),
