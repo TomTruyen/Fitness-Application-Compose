@@ -4,4 +4,6 @@
 
     <string name="title_delete_exercise">Delete exercise</string>
     <string name="message_delete_exercise">Are you sure you want to delete this exercise? This action can\'t be undone.</string>
+    <string name="action_edit_exercise">Edit Exercise</string>
+    <string name="action_delete_exercise">Delete Exercise</string>
 </resources>

@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -37,10 +38,12 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.tomtruyen.core.common.utils.ImageLoader
 import com.tomtruyen.core.designsystem.Dimens
+import com.tomtruyen.core.ui.BottomSheetList
 import com.tomtruyen.core.ui.Chip
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
+import com.tomtruyen.feature.exercises.detail.remember.rememberExerciseActions
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -81,6 +84,16 @@ fun ExerciseDetailScreen(
         imageLoader = imageLoader,
         onAction = viewModel::onAction
     )
+
+    BottomSheetList(
+        items = rememberExerciseActions(
+            onAction = viewModel::onAction
+        ),
+        visible = state.showSheet,
+        onDismiss = {
+            viewModel.onAction(ExerciseDetailUiAction.Sheet.Dismiss)
+        }
+    )
 }
 
 @Composable
@@ -92,7 +105,6 @@ private fun ExerciseDetailScreenLayout(
     onAction: (ExerciseDetailUiAction) -> Unit
 ) {
     val context = LocalContext.current
-    var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     Scaffold(
         snackbarHost = snackbarHost,
@@ -104,23 +116,12 @@ private fun ExerciseDetailScreenLayout(
                 if (state.exercise?.userId != null) {
                     IconButton(
                         onClick = {
-                            onAction(ExerciseDetailUiAction.Edit)
+                            onAction(ExerciseDetailUiAction.Sheet.Show)
                         }
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.Edit,
-                            contentDescription = stringResource(id = CommonR.string.content_description_edit)
-                        )
-                    }
-
-                    IconButton(
-                        onClick = {
-                            confirmationDialogVisible = true
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Delete,
-                            contentDescription = stringResource(id = CommonR.string.content_description_delete)
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = null
                         )
                     }
                 }
@@ -212,21 +213,6 @@ private fun ExerciseDetailScreenLayout(
                         }
                     }
                 }
-            }
-
-            if (confirmationDialogVisible) {
-                ConfirmationDialog(
-                    title = R.string.title_delete_exercise,
-                    message = R.string.message_delete_exercise,
-                    onConfirm = {
-                        onAction(ExerciseDetailUiAction.Delete)
-                        confirmationDialogVisible = false
-                    },
-                    onDismiss = {
-                        confirmationDialogVisible = false
-                    },
-                    confirmText = CommonR.string.button_delete,
-                )
             }
         }
     }

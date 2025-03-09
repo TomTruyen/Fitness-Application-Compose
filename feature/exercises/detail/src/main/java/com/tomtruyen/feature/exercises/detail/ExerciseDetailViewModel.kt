@@ -46,10 +46,23 @@ class ExerciseDetailViewModel(
         triggerEvent(ExerciseDetailUiEvent.NavigateBack)
     }
 
+    private fun showSheet(show: Boolean) = updateState {
+        it.copy(
+            showSheet = show
+        )
+    }
+
     override fun onAction(action: ExerciseDetailUiAction) {
         when (action) {
-            is ExerciseDetailUiAction.Edit -> triggerEvent(ExerciseDetailUiEvent.NavigateToEdit(id))
+            is ExerciseDetailUiAction.Edit -> triggerEvent(
+                ExerciseDetailUiEvent.NavigateToEdit(id)
+            )
+
             is ExerciseDetailUiAction.Delete -> delete()
+
+            ExerciseDetailUiAction.Sheet.Show -> showSheet(true)
+
+            ExerciseDetailUiAction.Sheet.Dismiss -> showSheet(false)
         }
     }
 }

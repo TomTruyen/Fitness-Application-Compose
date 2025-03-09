@@ -4,4 +4,10 @@ sealed class ExerciseDetailUiAction {
     data object Edit : ExerciseDetailUiAction()
 
     data object Delete : ExerciseDetailUiAction()
+
+    sealed class Sheet: ExerciseDetailUiAction() {
+        data object Show: Sheet()
+
+        data object Dismiss: Sheet()
+    }
 }

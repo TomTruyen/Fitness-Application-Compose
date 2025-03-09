@@ -7,5 +7,6 @@ import com.tomtruyen.data.models.ui.ExerciseUiModel
 data class ExerciseDetailUiState(
     val exercise: ExerciseUiModel? = null,
 
+    val showSheet: Boolean = false,
     val loading: Boolean = false,
 )
