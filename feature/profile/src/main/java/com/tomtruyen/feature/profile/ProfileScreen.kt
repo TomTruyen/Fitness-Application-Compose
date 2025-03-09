@@ -41,17 +41,16 @@ import com.tomtruyen.core.ui.BottomSheetList
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.LoadingContainer
-import com.tomtruyen.core.ui.dialogs.RestAlertDialog
 import com.tomtruyen.core.ui.listitems.ListItem
 import com.tomtruyen.core.ui.listitems.SwitchListItem
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 import com.tomtruyen.core.ui.wheeltimepicker.WheelTimerPickerSheet
+import com.tomtruyen.core.ui.wheeltimepicker.core.TimeComponent
 import com.tomtruyen.feature.profile.remember.rememberThemeModeActions
 import com.tomtruyen.feature.profile.remember.rememberUnitActions
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.datetime.LocalTime
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -111,6 +110,7 @@ fun ProfileScreen(
     WheelTimerPickerSheet(
         seconds = state.settings.rest,
         visible = state.showRestTimeSheet,
+        components = listOf(TimeComponent.MINUTE, TimeComponent.SECOND),
         onSubmit = {
             viewModel.onAction(ProfileUiAction.OnRestChanged(it))
         },

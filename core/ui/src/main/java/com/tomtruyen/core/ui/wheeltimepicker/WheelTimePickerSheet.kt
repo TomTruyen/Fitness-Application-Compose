@@ -19,6 +19,8 @@ import androidx.compose.ui.res.stringResource
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.R
+import com.tomtruyen.core.ui.wheeltimepicker.core.TimeComponent
+import com.tomtruyen.core.ui.wheeltimepicker.core.WheelPickerDefaults
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalTime
 
@@ -26,12 +28,14 @@ import kotlinx.datetime.LocalTime
 fun WheelTimerPickerSheet(
     seconds: Int,
     visible: Boolean,
+    components: List<TimeComponent>,
     onSubmit: (Int) -> Unit,
     onDismiss: () -> Unit
 ) {
     WheelTimerPickerSheet(
         initial = LocalTime.fromSecondOfDay(seconds),
         visible = visible,
+        components = components,
         onSubmit = {
             onSubmit(it.toSecondOfDay())
         },
@@ -44,6 +48,7 @@ fun WheelTimerPickerSheet(
 fun WheelTimerPickerSheet(
     initial: LocalTime,
     visible: Boolean,
+    components: List<TimeComponent>,
     onSubmit: (LocalTime) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -68,6 +73,9 @@ fun WheelTimerPickerSheet(
                 WheelTimePicker(
                     modifier = Modifier.fillMaxWidth(),
                     startTime = initial,
+                    selectorProperties = WheelPickerDefaults.selectorProperties(
+                        components = components
+                    ),
                     onSnappedTime = {
                         selectedTime = it
                     }

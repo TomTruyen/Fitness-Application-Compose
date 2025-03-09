@@ -141,11 +141,17 @@ object WheelPickerDefaults {
     shape: Shape = MaterialTheme.shapes.small,
     color: Color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
     border: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+    components: List<TimeComponent> = listOf(
+      TimeComponent.HOUR,
+      TimeComponent.MINUTE,
+      TimeComponent.SECOND
+    )
   ): SelectorProperties = DefaultSelectorProperties(
     enabled = enabled,
     shape = shape,
     color = color,
-    border = border
+    border = border,
+    components = components,
   )
 }
 
@@ -161,14 +167,18 @@ interface SelectorProperties {
 
   @Composable
   fun border(): State<BorderStroke?>
+
+  @Composable
+  fun components(): State<List<TimeComponent>>
 }
 
 @Immutable
-internal class DefaultSelectorProperties(
+internal data class DefaultSelectorProperties(
   private val enabled: Boolean,
   private val shape: Shape,
   private val color: Color,
-  private val border: BorderStroke?
+  private val border: BorderStroke?,
+  private val components: List<TimeComponent>
 ) : SelectorProperties {
 
   @Composable
@@ -189,6 +199,11 @@ internal class DefaultSelectorProperties(
   @Composable
   override fun border(): State<BorderStroke?> {
     return rememberUpdatedState(border)
+  }
+
+  @Composable
+  override fun components(): State<List<TimeComponent>> {
+    return rememberUpdatedState(components)
   }
 }
 

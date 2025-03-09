@@ -44,6 +44,8 @@ import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.placeholder
 import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.dialogs.RestAlertDialog
+import com.tomtruyen.core.ui.wheeltimepicker.WheelTimerPickerSheet
+import com.tomtruyen.core.ui.wheeltimepicker.core.TimeComponent
 import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
@@ -324,7 +326,7 @@ private fun RowScope.TimeSet(
     completed: Boolean,
     onTimeChanged: (Int) -> Unit
 ) {
-    var timeDialogVisible by remember { mutableStateOf(false) }
+    var timeSheetVisible by remember { mutableStateOf(false) }
 
     val hasBeenCompleted = rememberSetHasBeenCompleted(completed)
 
@@ -351,22 +353,20 @@ private fun RowScope.TimeSet(
             .clickable(
                 enabled = !mode.isView
             ) {
-                timeDialogVisible = true
+                timeSheetVisible = true
             }
             .padding(Dimens.Small)
     )
 
-    if (timeDialogVisible) {
-        RestAlertDialog(
-            onDismiss = {
-                timeDialogVisible = false
-            },
-            onConfirm = { newTime, _ ->
-                onTimeChanged(newTime)
-                timeDialogVisible = false
-            },
-            rest = time ?: 0,
-            type = RestAlertType.SET_TIME
-        )
-    }
+    WheelTimerPickerSheet(
+        seconds = time ?: 0,
+        visible = timeSheetVisible,
+        components = listOf(TimeComponent.HOUR, TimeComponent.MINUTE, TimeComponent.SECOND),
+        onSubmit = {
+            onTimeChanged(it)
+        },
+        onDismiss = {
+            timeSheetVisible = false
+        }
+    )
 }
