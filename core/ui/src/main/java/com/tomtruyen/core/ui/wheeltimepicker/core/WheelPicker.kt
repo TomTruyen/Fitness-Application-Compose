@@ -139,7 +139,7 @@ object WheelPickerDefaults {
   fun selectorProperties(
     enabled: Boolean = true,
     shape: Shape = MaterialTheme.shapes.small,
-    color: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+    color: Color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
     border: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
   ): SelectorProperties = DefaultSelectorProperties(
     enabled = enabled,
