@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.platform.LocalFocusManager
 import com.tomtruyen.core.common.models.FilterOption
 import com.tomtruyen.core.designsystem.Dimens
 
@@ -48,6 +49,7 @@ fun SelectSheet(
     error: String? = null,
     onOptionSelected: (String) -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
     var visible by remember { mutableStateOf(false) }
 
     val trailingRotation by animateFloatAsState(
@@ -86,6 +88,7 @@ fun SelectSheet(
             )
         },
         onClick = {
+            focusManager.clearFocus()
             visible = true
         },
         padding = PaddingValues(Dimens.Normal),

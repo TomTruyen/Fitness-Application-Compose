@@ -34,8 +34,6 @@ fun WorkoutExerciseHeader(
     onActionClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var isPressed by remember { mutableStateOf(false) }
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
@@ -54,14 +52,10 @@ fun WorkoutExerciseHeader(
                 fontWeight = FontWeight.Bold
             ),
             modifier = Modifier
-                .alpha(if (isPressed) 0.5f else 1f)
                 .pointerInput(Unit) {
                     detectTapGestures(
-                        onPress = {
-                            isPressed = true
-                            tryAwaitRelease()
+                        onTap = {
                             onTitleClick()
-                            isPressed = false
                         }
                     )
                 }

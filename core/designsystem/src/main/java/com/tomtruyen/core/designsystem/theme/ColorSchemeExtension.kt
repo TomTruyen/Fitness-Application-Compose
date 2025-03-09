@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.Color
 import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 
 // Convenience
-private val isDarkTheme: Boolean
+val isDarkTheme: Boolean
     @Composable
     get() {
         val themeMode by ThemePreferencesDatastore.themeMode.collectAsState(ThemePreferencesDatastore.Mode.SYSTEM)

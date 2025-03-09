@@ -20,6 +20,7 @@ import coil.compose.AsyncImage
 import com.tomtruyen.core.common.R
 import com.tomtruyen.core.common.utils.ImageLoader
 import com.tomtruyen.core.designsystem.Dimens
+import com.tomtruyen.core.designsystem.theme.isDarkTheme
 import org.koin.compose.koinInject
 
 @Composable
@@ -42,7 +43,7 @@ fun Avatar(
     ) {
         AsyncImage(
             model = imageLoader.load(context, imageUrl),
-            fallback = painterResource(R.drawable.ic_fallback),
+            fallback = painterResource(id = if(isDarkTheme) R.drawable.ic_fallback_dark_mode else R.drawable.ic_fallback),
             contentDescription = contentDescription,
             contentScale = ContentScale.Fit,
         )
