@@ -10,4 +10,5 @@
     <string name="search">Search</string>
     <string name="title_rest_timer">Rest timer</string>
     <string name="label_rest_timer_enabled">Rest timer enabled</string>
+    <string name="button_confirm">Confirm</string>
 </resources>

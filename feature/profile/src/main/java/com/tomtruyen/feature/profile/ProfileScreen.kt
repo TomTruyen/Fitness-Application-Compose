@@ -51,6 +51,7 @@ import com.tomtruyen.feature.profile.remember.rememberThemeModeActions
 import com.tomtruyen.feature.profile.remember.rememberUnitActions
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.datetime.LocalTime
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -108,7 +109,11 @@ fun ProfileScreen(
     )
 
     WheelTimerPickerSheet(
+        seconds = state.settings.rest,
         visible = state.showRestTimeSheet,
+        onSubmit = {
+            viewModel.onAction(ProfileUiAction.OnRestChanged(it))
+        },
         onDismiss = {
             viewModel.onAction(ProfileUiAction.Sheet.RestTime.Dismiss)
         }
