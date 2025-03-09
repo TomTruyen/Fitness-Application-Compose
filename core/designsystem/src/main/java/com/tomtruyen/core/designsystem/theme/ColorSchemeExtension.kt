@@ -48,7 +48,7 @@ val ColorScheme.navigationItemContentColorInactive: Color
 
 val ColorScheme.navigationItemBackgroundColorActive: Color
     @Composable
-    get() = if(isDarkTheme) LavenderMist else ChineseBlack
+    get() = if(isDarkTheme) MauiMist else ChineseBlack
 
 val ColorScheme.secondaryLabelColor: Color
     @Composable
@@ -56,7 +56,7 @@ val ColorScheme.secondaryLabelColor: Color
 
 val ColorScheme.borderColor: Color
     @Composable
-    get() = if(isDarkTheme) DarkGray else LavenderMist
+    get() = if(isDarkTheme) DarkGray else MauiMist
 
 val ColorScheme.success: Color
     @Composable

@@ -5,9 +5,9 @@ import androidx.compose.ui.graphics.Color
 // Main Colors
 val ChineseBlack = Color(0xFF111111)
 val ChineseSilver = Color(0xFFCACACA)
+val MauiMist = Color(0xFFeff3f5)
 val DarkGray = Color(0xFF2E2E2E)
 val BlueGrey = Color(0xFF64748B)
-val LavenderMist = Color(0xFFE6E6FA)
 val Cultured = Color(0xFFF6F6F6)
 
 // Error Colors

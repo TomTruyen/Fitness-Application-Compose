@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 
 private val DarkColorScheme = lightColorScheme(
-    primary = LavenderMist,
+    primary = MauiMist,
     onPrimary = ChineseBlack,
     secondary = ChineseBlack,
     onSecondary = Cultured,
@@ -41,10 +41,10 @@ private val LightColorScheme = lightColorScheme(
     onPrimaryContainer = White,
     errorContainer = LighterRed,
     onErrorContainer = White,
-    surface = LavenderMist,
+    surface = MauiMist,
     onSurface = ChineseBlack,
     error = LighterRed,
-    outlineVariant = LavenderMist, // Divider
+    outlineVariant = MauiMist, // Divider
 )
 
 @Composable
