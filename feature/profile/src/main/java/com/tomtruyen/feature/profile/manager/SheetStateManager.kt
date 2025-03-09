@@ -13,6 +13,12 @@ class SheetStateManager(
         )
     }
 
+    private fun showRestTimeSheet(show: Boolean) = updateState {
+        it.copy(
+            showRestTimeSheet = show
+        )
+    }
+
     private fun showThemeModeSheet(show: Boolean) = updateState {
         it.copy(
             showThemeModeSheet = show
@@ -28,6 +34,10 @@ class SheetStateManager(
             ProfileUiAction.Sheet.WeightUnit.Show -> showWeightUnitSheet(true)
 
             ProfileUiAction.Sheet.WeightUnit.Dismiss -> showWeightUnitSheet(false)
+
+            ProfileUiAction.Sheet.RestTime.Show -> showRestTimeSheet(true)
+
+            ProfileUiAction.Sheet.RestTime.Dismiss -> showRestTimeSheet(false)
         }
     }
 }

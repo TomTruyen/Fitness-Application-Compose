@@ -15,4 +15,6 @@ dependencies {
 
     // Images
     implementation(libs.coil.kt.compose)
+
+    implementation(libs.kotlinx.datetime)
 }

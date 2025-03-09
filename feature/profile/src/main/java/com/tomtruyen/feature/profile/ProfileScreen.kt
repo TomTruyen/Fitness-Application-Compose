@@ -46,6 +46,7 @@ import com.tomtruyen.core.ui.listitems.ListItem
 import com.tomtruyen.core.ui.listitems.SwitchListItem
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
+import com.tomtruyen.core.ui.wheeltimepicker.WheelTimerPickerSheet
 import com.tomtruyen.feature.profile.remember.rememberThemeModeActions
 import com.tomtruyen.feature.profile.remember.rememberUnitActions
 import com.tomtruyen.navigation.Screen
@@ -105,6 +106,13 @@ fun ProfileScreen(
             viewModel.onAction(ProfileUiAction.Sheet.WeightUnit.Dismiss)
         }
     )
+
+    WheelTimerPickerSheet(
+        visible = state.showRestTimeSheet,
+        onDismiss = {
+            viewModel.onAction(ProfileUiAction.Sheet.RestTime.Dismiss)
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -122,8 +130,6 @@ private fun ProfileScreenLayout(
     val refreshState = rememberPullToRefreshState()
 
     val themeMode by ThemePreferencesDatastore.themeMode.collectAsState(ThemePreferencesDatastore.Mode.SYSTEM)
-
-    var restDialogVisible by remember { mutableStateOf(false) }
 
     val emailLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
@@ -186,7 +192,7 @@ private fun ProfileScreenLayout(
                         title = stringResource(id = R.string.label_default_rest_timer),
                         message = TimeUtils.formatSeconds(state.settings.rest.toLong()),
                         onClick = {
-                            restDialogVisible = true
+                            onAction(ProfileUiAction.Sheet.RestTime.Show)
                         }
                     )
 
@@ -275,19 +281,6 @@ private fun ProfileScreenLayout(
                             .padding(horizontal = Dimens.Normal)
                     )
                 }
-            }
-
-            if (restDialogVisible) {
-                RestAlertDialog(
-                    onDismiss = {
-                        restDialogVisible = false
-                    },
-                    onConfirm = { rest, _ ->
-                        onAction(ProfileUiAction.OnRestChanged(rest))
-                        restDialogVisible = false
-                    },
-                    rest = state.settings.rest
-                )
             }
         }
     }

@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import com.tomtruyen.core.ui.wheeltimepicker.WheelTimePicker
 import kotlin.math.abs
 
 @Composable
@@ -37,54 +38,56 @@ fun RestTimePicker(
         mutableIntStateOf(value % 60)
     }
 
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        NumberPicker(
-            modifier = Modifier
-                .weight(1f)
-                .animateContentSize(),
-            label = {
-                "${if (leadingZero && abs(it) < 10) "0" else ""}$it"
-            },
-            value = minutes,
-            onValueChange = {
-                val totalSeconds = it * 60 + seconds
-                onValueChange(totalSeconds)
-            },
-            dividersColor = dividersColor,
-            textStyle = textStyle,
-            list = minutesRange.toList()
-        )
+    WheelTimePicker()
 
-        minutesDivider?.invoke()
-
-        Text(
-            text = ":",
-            style = textStyle.copy(
-                fontWeight = FontWeight.W500,
-                fontSize = textStyle.fontSize.times(1.5f)
-            ),
-        )
-
-        NumberPicker(
-            modifier = Modifier
-                .weight(1f)
-                .animateContentSize(),
-            label = {
-                "${if (leadingZero && abs(it) < 10) "0" else ""}$it"
-            },
-            value = seconds,
-            onValueChange = {
-                val totalSeconds = minutes * 60 + it
-                onValueChange(totalSeconds)
-            },
-            dividersColor = dividersColor,
-            textStyle = textStyle,
-            list = secondsRange.toList()
-        )
-
-        secondsDivider?.invoke()
-    }
+//    Row(
+//        modifier = modifier,
+//        verticalAlignment = Alignment.CenterVertically,
+//    ) {
+//        NumberPicker(
+//            modifier = Modifier
+//                .weight(1f)
+//                .animateContentSize(),
+//            label = {
+//                "${if (leadingZero && abs(it) < 10) "0" else ""}$it"
+//            },
+//            value = minutes,
+//            onValueChange = {
+//                val totalSeconds = it * 60 + seconds
+//                onValueChange(totalSeconds)
+//            },
+//            dividersColor = dividersColor,
+//            textStyle = textStyle,
+//            list = minutesRange.toList()
+//        )
+//
+//        minutesDivider?.invoke()
+//
+//        Text(
+//            text = ":",
+//            style = textStyle.copy(
+//                fontWeight = FontWeight.W500,
+//                fontSize = textStyle.fontSize.times(1.5f)
+//            ),
+//        )
+//
+//        NumberPicker(
+//            modifier = Modifier
+//                .weight(1f)
+//                .animateContentSize(),
+//            label = {
+//                "${if (leadingZero && abs(it) < 10) "0" else ""}$it"
+//            },
+//            value = seconds,
+//            onValueChange = {
+//                val totalSeconds = minutes * 60 + it
+//                onValueChange(totalSeconds)
+//            },
+//            dividersColor = dividersColor,
+//            textStyle = textStyle,
+//            list = secondsRange.toList()
+//        )
+//
+//        secondsDivider?.invoke()
+//    }
 }

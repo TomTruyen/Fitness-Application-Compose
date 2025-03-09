@@ -25,6 +25,12 @@ sealed class ProfileUiAction {
             data object Dismiss: WeightUnit()
         }
 
+        sealed class RestTime: Sheet() {
+            data object Show: RestTime()
+
+            data object Dismiss: RestTime()
+        }
+
         sealed class ThemeMode: Sheet() {
             data object Show: ThemeMode()
 
