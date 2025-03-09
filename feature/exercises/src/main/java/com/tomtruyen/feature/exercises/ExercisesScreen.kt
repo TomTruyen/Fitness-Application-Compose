@@ -1,11 +1,13 @@
 package com.tomtruyen.feature.exercises
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -108,44 +110,23 @@ private fun ExercisesScreenLayout(
     Scaffold(
         snackbarHost = snackbarHost,
         topBar = {
-            if (state.searching) {
-                SearchToolbar(
-                    value = state.search,
-                    onValueChange = { query ->
-                        onAction(ExercisesUiAction.Filter.OnSearchQueryChanged(query))
-                    },
-                    onClose = {
-                        onAction(ExercisesUiAction.Filter.OnSearchQueryChanged(""))
-                        onAction(ExercisesUiAction.Filter.ToggleSearch)
-                    }
-                ) {
-                    IconButton(
-                        onClick = {
-                            onAction(ExercisesUiAction.OnFilterClicked)
+            AnimatedContent(
+                targetState = state.searching,
+                transitionSpec = {
+                    fadeIn() togetherWith fadeOut()
+                }
+            ) { searching ->
+                if (searching) {
+                    SearchToolbar(
+                        value = state.search,
+                        onValueChange = { query ->
+                            onAction(ExercisesUiAction.Filter.OnSearchQueryChanged(query))
+                        },
+                        onClose = {
+                            onAction(ExercisesUiAction.Filter.OnSearchQueryChanged(""))
+                            onAction(ExercisesUiAction.Filter.ToggleSearch)
                         }
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.FilterList,
-                            contentDescription = stringResource(id = R.string.content_description_filter)
-                        )
-                    }
-                }
-            } else {
-                Toolbar(
-                    title = stringResource(id = R.string.title_exercises),
-                    navController = navController,
-                    actions = {
-                        IconButton(
-                            onClick = {
-                                onAction(ExercisesUiAction.Filter.ToggleSearch)
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Search,
-                                contentDescription = stringResource(id = R.string.content_description_search),
-                            )
-                        }
-
                         IconButton(
                             onClick = {
                                 onAction(ExercisesUiAction.OnFilterClicked)
@@ -156,19 +137,47 @@ private fun ExercisesScreenLayout(
                                 contentDescription = stringResource(id = R.string.content_description_filter)
                             )
                         }
-
-                        IconButton(
-                            onClick = {
-                                onAction(ExercisesUiAction.OnAddClicked)
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Add,
-                                contentDescription = stringResource(id = R.string.content_description_create_exercise)
-                            )
-                        }
                     }
-                )
+                } else {
+                    Toolbar(
+                        title = stringResource(id = R.string.title_exercises),
+                        navController = navController,
+                        actions = {
+                            IconButton(
+                                onClick = {
+                                    onAction(ExercisesUiAction.Filter.ToggleSearch)
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Search,
+                                    contentDescription = stringResource(id = R.string.content_description_search),
+                                )
+                            }
+
+                            IconButton(
+                                onClick = {
+                                    onAction(ExercisesUiAction.OnFilterClicked)
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.FilterList,
+                                    contentDescription = stringResource(id = R.string.content_description_filter)
+                                )
+                            }
+
+                            IconButton(
+                                onClick = {
+                                    onAction(ExercisesUiAction.OnAddClicked)
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Add,
+                                    contentDescription = stringResource(id = R.string.content_description_create_exercise)
+                                )
+                            }
+                        }
+                    )
+                }
             }
         },
         floatingActionButton = {
