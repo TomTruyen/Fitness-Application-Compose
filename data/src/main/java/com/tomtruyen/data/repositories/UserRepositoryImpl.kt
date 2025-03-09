@@ -53,7 +53,6 @@ class UserRepositoryImpl(
         scope.launch {
             database.clearAllTables()
             GoogleSignInHelper.signOut(context)
-            ThemePreferencesDatastore.clear()
         }
 
         auth.signOut()
