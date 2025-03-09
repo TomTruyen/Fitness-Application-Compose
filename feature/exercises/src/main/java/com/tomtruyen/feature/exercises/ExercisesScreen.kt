@@ -118,6 +118,12 @@ private fun SharedTransitionScope.ExercisesScreenLayout(
 
     Scaffold(
         snackbarHost = snackbarHost,
+        modifier = Modifier.sharedBounds(
+            sharedContentState = rememberSharedContentState(
+                key = SharedTransitionKey.Exercise.KEY_WORKOUT_ADD_EXERCISE
+            ),
+            animatedVisibilityScope = animatedVisibilityScope,
+        ),
         topBar = {
             AnimatedContent(
                 targetState = state.searching,

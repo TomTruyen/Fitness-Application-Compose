@@ -304,6 +304,7 @@ private fun SharedTransitionScope.ManageWorkoutScreenLayout(
 
                 ExerciseList(
                     modifier = Modifier.weight(1f),
+                    animatedVisibilityScope = animatedVisibilityScope,
                     state = state,
                     lazyListState = lazyListState,
                     onAction = onAction,

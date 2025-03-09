@@ -1,6 +1,9 @@
 package com.tomtruyen.feature.workouts.manage.components
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,12 +25,15 @@ import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiState
 import com.tomtruyen.feature.workouts.manage.R
+import com.tomtruyen.navigation.SharedTransitionKey
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun ExerciseList(
+fun SharedTransitionScope.ExerciseList(
     modifier: Modifier = Modifier,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     state: ManageWorkoutUiState,
     lazyListState: LazyListState,
     listHeader: LazyListScope.() -> Unit = {},
@@ -89,6 +95,12 @@ fun ExerciseList(
                         .padding(
                             horizontal = Dimens.Normal,
                             vertical = Dimens.Small
+                        )
+                        .sharedBounds(
+                            sharedContentState = rememberSharedContentState(
+                                key = SharedTransitionKey.Exercise.KEY_WORKOUT_ADD_EXERCISE
+                            ),
+                            animatedVisibilityScope = animatedVisibilityScope
                         ),
                 ) {
                     onAction(ManageWorkoutUiAction.Exercise.OnAddClicked)
