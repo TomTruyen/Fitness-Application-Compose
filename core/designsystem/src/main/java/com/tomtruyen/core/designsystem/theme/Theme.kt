@@ -24,6 +24,7 @@ private val DarkColorScheme = lightColorScheme(
     onErrorContainer = White,
     surface = DarkGray,
     onSurface = Cultured,
+    surfaceContainerHigh = MauiMist, // PullRefresh Indicator
     error = LighterRed,
     outlineVariant = DarkGray, // Divider
 )
@@ -43,6 +44,7 @@ private val LightColorScheme = lightColorScheme(
     onErrorContainer = White,
     surface = MauiMist,
     onSurface = ChineseBlack,
+    surfaceContainerHigh = MauiMist, // PullRefresh Indicator
     error = LighterRed,
     outlineVariant = MauiMist, // Divider
 )
