@@ -44,6 +44,7 @@ internal fun DefaultWheelTimePicker(
 
   val hours = rememberHours(timeFormatter)
   val minutes = rememberMinutes(timeFormatter)
+  val seconds = rememberSeconds(timeFormatter)
 
   var snappedTime by remember { mutableStateOf(LocalTime(startTime.hour, startTime.minute)) }
 
@@ -152,6 +153,62 @@ internal fun DefaultWheelTimePicker(
           return@WheelTextPicker minutes.find { it.value == snappedTime.minute }?.index
         }
       )
+
+      //Colon
+      TimeSeparator(
+        modifier = Modifier.align(Alignment.CenterVertically).width(0.dp),
+        textStyle = textStyle.copy(color = textColor),
+      )
+
+      //Second
+      WheelTextPicker(
+        modifier = Modifier.weight(1f),
+        size = DpSize(
+          width = itemWidth,
+          height = size.height
+        ),
+        texts = seconds.map { it.text },
+        rowCount = rowCount,
+        style = textStyle,
+        color = textColor,
+        startIndex = seconds.find { it.value == startTime.second }?.index ?: 0,
+        selectorProperties = WheelPickerDefaults.selectorProperties(
+          enabled = false
+        ),
+        onScrollFinished = { snappedIndex ->
+
+          val newSecond = seconds.find { it.index == snappedIndex }?.value
+
+          val newMinute = minutes.find { it.value == snappedTime.minute }?.value
+
+          val newHour = hours.find { it.value == snappedTime.hour }?.value
+
+          newSecond?.let {
+            newMinute?.let {
+              newHour?.let {
+                val newTime = snappedTime.withSecond(newSecond).withMinute(newMinute).withHour(newHour)
+
+                if (!newTime.isBefore(minTime) && !newTime.isAfter(maxTime)) {
+                  snappedTime = newTime
+                }
+
+                val newIndex = seconds.find { it.value == snappedTime.second }?.index
+
+                newIndex?.let {
+                  onSnappedTime(
+                    SnappedTime.Second(
+                      localTime = snappedTime,
+                      index = newIndex
+                    ),
+                  )?.let { return@WheelTextPicker it }
+                }
+              }
+            }
+          }
+
+          return@WheelTextPicker seconds.find { it.value == snappedTime.second }?.index
+        }
+      )
     }
   }
 }
@@ -223,61 +280,13 @@ private data class Hour(
   val index: Int
 )
 
-private data class AmPmHour(
+private data class Minute(
   val text: String,
   val value: Int,
   val index: Int
 )
 
-internal fun localTimeToAmPmHour(localTime: LocalTime): Int {
-  if (
-    isBetween(
-      localTime,
-      LocalTime(0, 0),
-      LocalTime(0, 59)
-    )
-  ) {
-    return localTime.hour + 12
-  }
-
-  if (
-    isBetween(
-      localTime,
-      LocalTime(1, 0),
-      LocalTime(11, 59)
-    )
-  ) {
-    return localTime.hour
-  }
-
-  if (
-    isBetween(
-      localTime,
-      LocalTime(12, 0),
-      LocalTime(12, 59)
-    )
-  ) {
-    return localTime.hour
-  }
-
-  if (
-    isBetween(
-      localTime,
-      LocalTime(13, 0),
-      LocalTime(23, 59)
-    )
-  ) {
-    return localTime.hour - 12
-  }
-
-  return localTime.hour
-}
-
-private fun isBetween(localTime: LocalTime, startTime: LocalTime, endTime: LocalTime): Boolean {
-  return localTime in startTime..endTime
-}
-
-private data class Minute(
+private data class Second(
   val text: String,
   val value: Int,
   val index: Int
@@ -299,6 +308,17 @@ private fun rememberMinutes(timeFormatter: TimeFormatter) = remember(timeFormatt
   (0..59).map {
     Minute(
       text = timeFormatter.formatMinute(it),
+      value = it,
+      index = it
+    )
+  }
+}
+
+@Composable
+private fun rememberSeconds(timeFormatter: TimeFormatter) = remember(timeFormatter) {
+  (0..59).map {
+    Second(
+      text = timeFormatter.formatSeconds(it),
       value = it,
       index = it
     )
