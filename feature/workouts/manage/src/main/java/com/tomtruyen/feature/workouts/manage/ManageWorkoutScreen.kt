@@ -201,7 +201,7 @@ private fun ManageWorkoutScreenLayout(
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     val onNavigateUp: () -> Unit = {
-        if (state.workout.exercises != state.initialWorkout.exercises) {
+        if (!state.mode.isView && state.workout.exercises != state.initialWorkout.exercises) {
             confirmationDialogVisible = true
         } else {
             onAction(ManageWorkoutUiAction.Workout.Discard)
