@@ -19,6 +19,7 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +38,7 @@ import com.tomtruyen.core.common.utils.EmailUtils
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.secondaryLabelColor
+import com.tomtruyen.core.ui.BottomSheetList
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.LoadingContainer
@@ -45,6 +47,8 @@ import com.tomtruyen.core.ui.dialogs.UnitAlertDialog
 import com.tomtruyen.core.ui.listitems.ListItem
 import com.tomtruyen.core.ui.listitems.SwitchListItem
 import com.tomtruyen.core.ui.toolbars.Toolbar
+import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
+import com.tomtruyen.feature.profile.remember.rememberThemeModeActions
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -81,6 +85,16 @@ fun ProfileScreen(
         state = state,
         onAction = viewModel::onAction
     )
+
+    BottomSheetList(
+        items = rememberThemeModeActions(
+            onAction = viewModel::onAction
+        ),
+        visible = state.showThemeModeSheet,
+        onDismiss = {
+            viewModel.onAction(ProfileUiAction.Sheet.ThemeMode.Dismiss)
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -91,11 +105,14 @@ private fun ProfileScreenLayout(
     state: ProfileUiState,
     onAction: (ProfileUiAction) -> Unit
 ) {
+    val buildConfigFieldProvider = koinInject<BuildConfigFieldProvider>()
+    val themePreferences = koinInject<ThemePreferencesDatastore>()
+
     val context = LocalContext.current
 
     val refreshState = rememberPullToRefreshState()
 
-    val buildConfigFieldProvider = koinInject<BuildConfigFieldProvider>()
+    val themeMode by themePreferences.themeMode.collectAsState(ThemePreferencesDatastore.Mode.SYSTEM)
 
     var unitDialogVisible by remember { mutableStateOf(false) }
     var restDialogVisible by remember { mutableStateOf(false) }
@@ -178,6 +195,26 @@ private fun ProfileScreenLayout(
                     ) {
                         onAction(ProfileUiAction.OnRestVibrationEnabledChanged(it))
                     }
+
+                    HorizontalDivider()
+
+                    Label(
+                        label = stringResource(id = R.string.label_appearance),
+                        modifier = Modifier.padding(
+                            start = 12.dp,
+                            end = 12.dp,
+                            top = Dimens.Normal,
+                            bottom = Dimens.Tiny
+                        )
+                    )
+
+                    ListItem(
+                        title = stringResource(id = R.string.label_theme_mode),
+                        message = themeMode.value,
+                        onClick = {
+                            onAction(ProfileUiAction.Sheet.ThemeMode.Show)
+                        }
+                    )
 
                     HorizontalDivider()
 

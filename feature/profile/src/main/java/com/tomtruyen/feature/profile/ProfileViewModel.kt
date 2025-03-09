@@ -2,6 +2,7 @@ package com.tomtruyen.feature.profile
 
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.providers.KoinReloadProvider
+import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import kotlinx.coroutines.flow.collectLatest
@@ -12,6 +13,7 @@ import kotlinx.coroutines.launch
 class ProfileViewModel(
     private val userRepository: UserRepository,
     private val settingsRepository: SettingsRepository,
+    private val themePreferences: ThemePreferencesDatastore,
     private val koinReloadProvider: KoinReloadProvider,
 ) : BaseViewModel<ProfileUiState, ProfileUiAction, ProfileUiEvent>(
     initialState = ProfileUiState()
@@ -79,6 +81,16 @@ class ProfileViewModel(
         triggerEvent(ProfileUiEvent.Logout)
     }
 
+    private fun showThemeModeSheet(show: Boolean) = updateState {
+        it.copy(
+            showThemeModeSheet = show
+        )
+    }
+
+    private fun updateThemeMode(mode: ThemePreferencesDatastore.Mode) = vmScope.launch {
+        themePreferences.setTheme(mode)
+    }
+
     override fun onAction(action: ProfileUiAction) {
         when (action) {
             is ProfileUiAction.OnUnitChanged -> updateState {
@@ -100,6 +112,12 @@ class ProfileViewModel(
             is ProfileUiAction.Refresh -> fetchSettings(refresh = true)
 
             is ProfileUiAction.Logout -> logout()
+
+            is ProfileUiAction.OnThemeModeChanged -> updateThemeMode(action.mode)
+
+            ProfileUiAction.Sheet.ThemeMode.Show -> showThemeModeSheet(true)
+
+            ProfileUiAction.Sheet.ThemeMode.Dismiss -> showThemeModeSheet(false)
         }
     }
 

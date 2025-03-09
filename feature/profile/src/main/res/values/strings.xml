@@ -14,5 +14,7 @@
     <string name="label_units">Units</string>
 
     <string name="button_logout">Logout</string>
+    <string name="label_appearance">Appearance</string>
+    <string name="label_theme_mode">Theme Mode</string>
 
 </resources>

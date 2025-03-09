@@ -4,8 +4,13 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
+import org.koin.compose.koinInject
 
 private val DarkColorScheme = lightColorScheme(
     primary = Cultured,
@@ -47,11 +52,14 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun FynixTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        darkTheme -> DarkColorScheme
+    val themePreferences = koinInject<ThemePreferencesDatastore>()
+    val themeMode by themePreferences.themeMode.collectAsState(ThemePreferencesDatastore.Mode.SYSTEM)
+
+    val colorScheme = when(themeMode) {
+        ThemePreferencesDatastore.Mode.DARK -> DarkColorScheme
+        ThemePreferencesDatastore.Mode.SYSTEM if isSystemInDarkTheme() -> DarkColorScheme
         else -> LightColorScheme
     }
 

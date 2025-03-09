@@ -1,26 +1,24 @@
 package com.tomtruyen.fitoryx
 
-import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.splashscreen.SplashScreenViewProvider
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -30,6 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.tomtruyen.core.common.models.GlobalAppState
 import com.tomtruyen.core.designsystem.theme.FynixTheme
+import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.feature.auth.login.LoginScreen
 import com.tomtruyen.feature.auth.register.RegisterScreen
@@ -47,9 +46,7 @@ import com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel
 import com.tomtruyen.fitoryx.navigation.MainBottomNavigation
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.screenScopedViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.mapLatest
 import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.KoinAndroidContext
 import org.koin.androidx.compose.koinViewModel
@@ -60,7 +57,6 @@ class MainActivity : ComponentActivity() {
 
     private var hasCheckedLoggedIn: Boolean = false
 
-    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
 

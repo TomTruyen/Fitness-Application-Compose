@@ -3,12 +3,25 @@ package com.tomtruyen.core.designsystem.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
+import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
+import org.koin.compose.koinInject
 
 // Convenience
 private val isDarkTheme: Boolean
     @Composable
-    get() = isSystemInDarkTheme()
+    get() {
+        val themePreferences = koinInject<ThemePreferencesDatastore>()
+        val themeMode by themePreferences.themeMode.collectAsState(ThemePreferencesDatastore.Mode.SYSTEM)
+
+        return when(themeMode) {
+            ThemePreferencesDatastore.Mode.DARK -> true
+            ThemePreferencesDatastore.Mode.LIGHT -> false
+            ThemePreferencesDatastore.Mode.SYSTEM -> isSystemInDarkTheme()
+        }
+    }
 
 // Custom Colors
 val ColorScheme.placeholder: Color
