@@ -63,20 +63,6 @@ fun ManageWorkoutScreen(
 
     val lazyListState = rememberLazyListState()
 
-    val exerciseActions = rememberExerciseActions(
-        onAction = viewModel::onAction
-    )
-
-    val setActions = rememberSetActions(
-        selectedExerciseId = state.selectedExerciseId,
-        selectedSetIndex = state.selectedSetIndex,
-        onAction = viewModel::onAction
-    )
-
-    val workoutActions = rememberWorkoutActions(
-        onAction = viewModel::onAction
-    )
-
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
@@ -165,19 +151,27 @@ fun ManageWorkoutScreen(
     )
 
     BottomSheetList(
-        items = workoutActions,
+        items = rememberWorkoutActions(
+            onAction = viewModel::onAction
+        ),
         visible = state.showWorkoutMoreActions,
         onDismiss = { viewModel.onAction(ManageWorkoutUiAction.Sheet.Workout.Dismiss) },
     )
 
     BottomSheetList(
-        items = exerciseActions,
+        items = rememberExerciseActions(
+            onAction = viewModel::onAction
+        ),
         visible = state.showExerciseMoreActions,
         onDismiss = { viewModel.onAction(ManageWorkoutUiAction.Sheet.Exercise.Dismiss) },
     )
 
     BottomSheetList(
-        items = setActions,
+        items = rememberSetActions(
+            selectedExerciseId = state.selectedExerciseId,
+            selectedSetIndex = state.selectedSetIndex,
+            onAction = viewModel::onAction
+        ),
         visible = state.showSetMoreActions,
         onDismiss = { viewModel.onAction(ManageWorkoutUiAction.Sheet.Set.Dismiss) },
     )

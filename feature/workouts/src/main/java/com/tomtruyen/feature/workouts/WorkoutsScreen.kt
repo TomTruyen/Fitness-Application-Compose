@@ -58,10 +58,6 @@ fun WorkoutsScreen(
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val workoutActions = rememberWorkoutActions(
-        onAction = viewModel::onAction
-    )
-
     LaunchedEffect(viewModel, context) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
@@ -92,7 +88,9 @@ fun WorkoutsScreen(
     )
 
     BottomSheetList(
-        items = workoutActions,
+        items = rememberWorkoutActions(
+            onAction = viewModel::onAction
+        ),
         visible = state.showSheet,
         onDismiss = { viewModel.onAction(WorkoutsUiAction.Sheet.Dismiss) }
     )
