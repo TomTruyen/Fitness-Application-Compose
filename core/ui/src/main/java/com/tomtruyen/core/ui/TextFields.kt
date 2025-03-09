@@ -2,6 +2,7 @@ package com.tomtruyen.core.ui
 
 import android.util.Log
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -21,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -38,9 +42,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.borderColor
+import kotlinx.coroutines.launch
 
 
 object TextFields {
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun Default(
         modifier: Modifier = Modifier,
@@ -66,6 +72,8 @@ object TextFields {
         shape: Shape = MaterialTheme.shapes.small,
     ) {
         val focusManager = LocalFocusManager.current
+        val bringIntoViewRequester = remember { BringIntoViewRequester() }
+        val coroutineScope = rememberCoroutineScope()
 
         var obscureTextVisible by rememberSaveable { mutableStateOf(false) }
 
@@ -129,6 +137,14 @@ object TextFields {
                         enabled = onClick != null
                     ) {
                         onClick?.invoke()
+                    }
+                    .bringIntoViewRequester(bringIntoViewRequester)
+                    .onFocusChanged { focusState ->
+                        if (focusState.isFocused) {
+                            coroutineScope.launch {
+                                bringIntoViewRequester.bringIntoView()
+                            }
+                        }
                     }
                     .animateContentSize(),
             ) { innerTextField ->
