@@ -84,7 +84,8 @@ fun WorkoutExerciseSetRow(
     SwipeToDismissBox(
         state = dismissState,
         enableDismissFromStartToEnd = false,
-        gesturesEnabled = !mode.isView,
+//        gesturesEnabled = !mode.isView,
+        gesturesEnabled = false, // Disabled it for now as I don't like it that much
         backgroundContent = {
             Row(
                 modifier = Modifier
