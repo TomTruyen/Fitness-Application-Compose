@@ -7,18 +7,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.secondaryTextColor
 
 @Composable
 fun Label(
     label: String,
+    textAlign: TextAlign = TextAlign.Start,
     modifier: Modifier = Modifier
 ) {
     Text(
         text = label,
         style = MaterialTheme.typography.labelLarge.copy(
-            color = MaterialTheme.colorScheme.secondaryTextColor
+            color = MaterialTheme.colorScheme.secondaryTextColor,
+            textAlign = textAlign,
         ),
         modifier = modifier
             .fillMaxWidth()

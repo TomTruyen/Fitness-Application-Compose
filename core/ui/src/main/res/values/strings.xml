@@ -11,4 +11,7 @@
     <string name="title_rest_timer">Rest timer</string>
     <string name="label_rest_timer_enabled">Rest timer enabled</string>
     <string name="button_confirm">Confirm</string>
+    <string name="label_time_picker_hour">Hour</string>
+    <string name="label_time_picker_minute">Min</string>
+    <string name="label_time_picker_second">Sec</string>
 </resources>
