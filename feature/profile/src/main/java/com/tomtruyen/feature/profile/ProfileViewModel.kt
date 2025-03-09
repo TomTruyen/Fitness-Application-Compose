@@ -5,6 +5,7 @@ import com.tomtruyen.core.common.providers.KoinReloadProvider
 import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
+import com.tomtruyen.feature.profile.manager.SheetStateManager
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -17,6 +18,12 @@ class ProfileViewModel(
 ) : BaseViewModel<ProfileUiState, ProfileUiAction, ProfileUiEvent>(
     initialState = ProfileUiState()
 ) {
+    private val sheetStateManager by lazy {
+        SheetStateManager(
+            updateState = ::updateState
+        )
+    }
+
     init {
         fetchSettings()
 
@@ -80,12 +87,6 @@ class ProfileViewModel(
         triggerEvent(ProfileUiEvent.Logout)
     }
 
-    private fun showThemeModeSheet(show: Boolean) = updateState {
-        it.copy(
-            showThemeModeSheet = show
-        )
-    }
-
     private fun updateThemeMode(mode: ThemePreferencesDatastore.Mode) = vmScope.launch {
         ThemePreferencesDatastore.setTheme(mode)
     }
@@ -114,9 +115,7 @@ class ProfileViewModel(
 
             is ProfileUiAction.OnThemeModeChanged -> updateThemeMode(action.mode)
 
-            ProfileUiAction.Sheet.ThemeMode.Show -> showThemeModeSheet(true)
-
-            ProfileUiAction.Sheet.ThemeMode.Dismiss -> showThemeModeSheet(false)
+            is ProfileUiAction.Sheet -> sheetStateManager.onAction(action)
         }
     }
 

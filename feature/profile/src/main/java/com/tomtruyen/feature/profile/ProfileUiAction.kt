@@ -19,6 +19,12 @@ sealed class ProfileUiAction {
     data class OnThemeModeChanged(val mode: ThemePreferencesDatastore.Mode): ProfileUiAction()
 
     sealed class Sheet: ProfileUiAction() {
+        sealed class WeightUnit: Sheet() {
+            data object Show: WeightUnit()
+
+            data object Dismiss: WeightUnit()
+        }
+
         sealed class ThemeMode: Sheet() {
             data object Show: ThemeMode()
 

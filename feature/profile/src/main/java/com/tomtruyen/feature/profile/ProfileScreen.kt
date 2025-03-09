@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -43,12 +42,12 @@ import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.dialogs.RestAlertDialog
-import com.tomtruyen.core.ui.dialogs.UnitAlertDialog
 import com.tomtruyen.core.ui.listitems.ListItem
 import com.tomtruyen.core.ui.listitems.SwitchListItem
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 import com.tomtruyen.feature.profile.remember.rememberThemeModeActions
+import com.tomtruyen.feature.profile.remember.rememberUnitActions
 import com.tomtruyen.navigation.Screen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -95,6 +94,17 @@ fun ProfileScreen(
             viewModel.onAction(ProfileUiAction.Sheet.ThemeMode.Dismiss)
         }
     )
+
+    BottomSheetList(
+        items = rememberUnitActions(
+            onAction = viewModel::onAction,
+        ),
+        selectedIndex = UnitType.entries.indexOf(state.settings.unit),
+        visible = state.showWeightUnitSheet,
+        onDismiss = {
+            viewModel.onAction(ProfileUiAction.Sheet.WeightUnit.Dismiss)
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -113,7 +123,6 @@ private fun ProfileScreenLayout(
 
     val themeMode by ThemePreferencesDatastore.themeMode.collectAsState(ThemePreferencesDatastore.Mode.SYSTEM)
 
-    var unitDialogVisible by remember { mutableStateOf(false) }
     var restDialogVisible by remember { mutableStateOf(false) }
 
     val emailLauncher =
@@ -157,7 +166,7 @@ private fun ProfileScreenLayout(
                         title = stringResource(id = R.string.label_weight_unit),
                         message = state.settings.unit.value,
                         onClick = {
-                            unitDialogVisible = true
+                            onAction(ProfileUiAction.Sheet.WeightUnit.Show)
                         }
                     )
 
@@ -266,20 +275,6 @@ private fun ProfileScreenLayout(
                             .padding(horizontal = Dimens.Normal)
                     )
                 }
-            }
-
-            if (unitDialogVisible) {
-                UnitAlertDialog(
-                    units = UnitType.entries,
-                    onDismiss = {
-                        unitDialogVisible = false
-                    },
-                    onConfirm = { unit ->
-                        onAction(ProfileUiAction.OnUnitChanged(unit))
-                        unitDialogVisible = false
-                    },
-                    unit = state.settings.unit
-                )
             }
 
             if (restDialogVisible) {
