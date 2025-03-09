@@ -1,5 +1,6 @@
 package com.tomtruyen.core.designsystem.theme
 
+import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
@@ -65,3 +66,7 @@ val ColorScheme.success: Color
 val ColorScheme.selectedListItem: Color
     @Composable
     get() = if(isDarkTheme) LavenderMist else BlueGrey
+
+val ColorScheme.fallbackImageBackground: Color
+    @Composable
+    get() = if(isDarkTheme) ChineseSilver else ChineseBlack
