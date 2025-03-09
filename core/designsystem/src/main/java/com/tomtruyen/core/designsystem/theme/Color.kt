@@ -9,6 +9,7 @@ val MauiMist = Color(0xFFeff3f5)
 val DarkGray = Color(0xFF2E2E2E)
 val BlueGrey = Color(0xFF64748B)
 val Cultured = Color(0xFFF6F6F6)
+val LavenderMist = Color(0xFFE6E6FA)
 
 // Error Colors
 val LighterRed = Color(0xFFFF5555)

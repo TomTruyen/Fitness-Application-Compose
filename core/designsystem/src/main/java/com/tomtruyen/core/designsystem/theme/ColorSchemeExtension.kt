@@ -61,3 +61,7 @@ val ColorScheme.borderColor: Color
 val ColorScheme.success: Color
     @Composable
     get() = if(isDarkTheme) DarkerSuccessGreen else LighterSuccessGreen
+
+val ColorScheme.selectedListItem: Color
+    @Composable
+    get() = if(isDarkTheme) LavenderMist else BlueGrey

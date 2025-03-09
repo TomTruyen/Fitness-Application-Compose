@@ -45,6 +45,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.common.models.FilterOption
 import com.tomtruyen.core.designsystem.Dimens
+import com.tomtruyen.core.designsystem.theme.selectedListItem
 import com.tomtruyen.core.ui.Avatar
 import com.tomtruyen.core.ui.Chip
 import com.tomtruyen.core.ui.LoadingContainer
@@ -292,7 +293,12 @@ private fun ExercisesScreenLayout(
                                     prefix = {
                                         Avatar(
                                             imageUrl = exercise.imageUrl,
-                                            contentDescription = exercise.displayName
+                                            contentDescription = exercise.displayName,
+                                            backgroundColor = if(state.selectedExercises.contains(exercise)) {
+                                                MaterialTheme.colorScheme.selectedListItem
+                                            } else {
+                                                MaterialTheme.colorScheme.surface
+                                            }
                                         )
                                     }
                                 )
