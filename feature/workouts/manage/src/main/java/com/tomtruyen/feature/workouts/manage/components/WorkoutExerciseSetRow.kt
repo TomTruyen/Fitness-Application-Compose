@@ -1,6 +1,5 @@
 package com.tomtruyen.feature.workouts.manage.components
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,12 +37,10 @@ import androidx.compose.ui.text.style.TextAlign
 import com.tomtruyen.core.common.extensions.tryIntString
 import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.common.models.ManageWorkoutMode
-import com.tomtruyen.core.common.models.RestAlertType
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.placeholder
 import com.tomtruyen.core.ui.TextFields
-import com.tomtruyen.core.ui.dialogs.RestAlertDialog
 import com.tomtruyen.core.ui.wheeltimepicker.WheelTimerPickerSheet
 import com.tomtruyen.core.ui.wheeltimepicker.core.TimeComponent
 import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
