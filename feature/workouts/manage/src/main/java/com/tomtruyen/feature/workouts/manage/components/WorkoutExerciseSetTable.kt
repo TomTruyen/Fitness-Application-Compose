@@ -19,6 +19,7 @@ import com.tomtruyen.core.designsystem.theme.success
 import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
+import kotlin.rem
 
 @Composable
 fun WorkoutExerciseSetTable(
@@ -32,6 +33,10 @@ fun WorkoutExerciseSetTable(
     onSetClick: (id: String, setIndex: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val successBackgroundColor = MaterialTheme.colorScheme.success
+    val evenIndexBackgroundColor = MaterialTheme.colorScheme.background
+    val oddIndexBackgroundColor = MaterialTheme.colorScheme.surface
+
     Column(
         modifier = modifier.animateContentSize(),
     ) {
@@ -51,15 +56,19 @@ fun WorkoutExerciseSetTable(
                 previousSets?.find { it.sortOrder == setIndex }
             }
 
+            val backgroundColor = remember(set.completed, setIndex) {
+                when {
+                    set.completed -> successBackgroundColor
+                    setIndex % 2 == 0 -> evenIndexBackgroundColor
+                    else -> oddIndexBackgroundColor
+                }
+            }
+
             WorkoutExerciseSetRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        color = when {
-                            set.completed -> MaterialTheme.colorScheme.success
-                            setIndex % 2 == 0 -> MaterialTheme.colorScheme.background
-                            else -> MaterialTheme.colorScheme.surface
-                        }
+                        color = backgroundColor
                     )
                     .padding(
                         horizontal = Dimens.Normal,
