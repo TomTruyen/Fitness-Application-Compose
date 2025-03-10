@@ -182,8 +182,6 @@ fun WorkoutExerciseSetRow(
                         )
                     }
                 )
-
-                else -> Unit
             }
 
             if (mode.isExecute) {

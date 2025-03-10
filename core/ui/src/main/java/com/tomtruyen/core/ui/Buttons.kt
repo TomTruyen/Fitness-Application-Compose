@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.Dimens
@@ -37,8 +38,13 @@ object Buttons {
         contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
         onClick: () -> Unit,
     ) {
+        val focusManager = LocalFocusManager.current
+
         Button(
-            onClick = onClick,
+            onClick = {
+                focusManager.clearFocus()
+                onClick()
+            },
             enabled = enabled,
             shape = shape,
             modifier = modifier.defaultMinSize(
@@ -65,8 +71,13 @@ object Buttons {
         ),
         onClick: () -> Unit,
     ) {
+        val focusManager = LocalFocusManager.current
+
         TextButton(
-            onClick = onClick,
+            onClick = {
+                focusManager.clearFocus()
+                onClick()
+            },
             enabled = enabled,
             shape = shape,
             colors = colors,
@@ -85,37 +96,6 @@ object Buttons {
             Text(
                 modifier = Modifier.padding(vertical = Dimens.Tiny),
                 text = text
-            )
-        }
-    }
-
-    @Composable
-    fun Icon(
-        icon: ImageVector,
-        modifier: Modifier = Modifier,
-        enabled: Boolean = true,
-        shape: Shape = MaterialTheme.shapes.small,
-        colors: ButtonColors = ButtonDefaults.textButtonColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-        ),
-        onClick: () -> Unit,
-    ) {
-        TextButton(
-            onClick = onClick,
-            enabled = enabled,
-            shape = shape,
-            colors = colors,
-            modifier = modifier.defaultMinSize(
-                minWidth = Dimens.MinButtonHeight,
-                minHeight = Dimens.MinButtonHeight,
-            ),
-        ) {
-            Icon(
-                modifier = Modifier
-                    .padding(vertical = Dimens.Tiny),
-                imageVector = icon,
-                contentDescription = null
             )
         }
     }

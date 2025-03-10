@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -28,6 +29,8 @@ fun WorkoutCheckbox(
     size: Dp = 24.dp,
     iconSize: Dp = 16.dp
 ) {
+    val focusManager = LocalFocusManager.current
+
     Box(
         modifier = modifier
             .size(size)
@@ -39,7 +42,10 @@ fun WorkoutCheckbox(
                     Color.LightGray
                 },
             )
-            .clickable(onClick = onClick),
+            .clickable {
+                focusManager.clearFocus()
+                onClick()
+            },
         contentAlignment = Alignment.Center,
     ) {
         Icon(
