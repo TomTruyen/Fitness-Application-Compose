@@ -30,6 +30,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -66,6 +68,7 @@ object TextFields {
         textStyle: TextStyle = MaterialTheme.typography.bodyMedium.copy(
             color = MaterialTheme.colorScheme.primary
         ),
+        focusRequester: FocusRequester = remember { FocusRequester() },
         trailingIcon: (@Composable () -> Unit)? = null,
         keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
         containerColor: Color = Color.Transparent,
@@ -138,6 +141,7 @@ object TextFields {
                     ) {
                         onClick?.invoke()
                     }
+                    .focusRequester(focusRequester)
                     .bringIntoViewRequester(bringIntoViewRequester)
                     .onFocusChanged { focusState ->
                         if (focusState.isFocused) {
