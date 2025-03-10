@@ -3,7 +3,9 @@ package com.tomtruyen.feature.exercises.detail
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -15,8 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,11 +26,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -44,7 +42,6 @@ import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.BottomSheetList
 import com.tomtruyen.core.ui.Chip
 import com.tomtruyen.core.ui.LoadingContainer
-import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.feature.exercises.detail.remember.rememberExerciseActions
 import com.tomtruyen.navigation.Screen
@@ -53,7 +50,6 @@ import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
-import com.tomtruyen.core.common.R as CommonR
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -125,10 +121,10 @@ private fun SharedTransitionScope.ExerciseDetailScreenLayout(
         ),
         topBar = {
             Toolbar(
-                title = state.exercise?.name.orEmpty(),
+                title = state.exercise.name,
                 navController = navController
             ) {
-                if (state.exercise?.userId != null) {
+                if (state.exercise.userId != null) {
                     IconButton(
                         onClick = {
                             onAction(ExerciseDetailUiAction.Sheet.Show)
@@ -150,19 +146,25 @@ private fun SharedTransitionScope.ExerciseDetailScreenLayout(
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
             ) {
-                if (state.exercise?.imageDetailUrl != null || state.exercise?.imageUrl != null) {
+                if (state.exercise.imageDetailUrl != null || state.exercise.imageUrl != null) {
                     item {
-                        AsyncImage(
-                            model = imageLoader.load(
-                                context = context,
-                                url = state.exercise.imageDetailUrl ?: state.exercise.imageUrl
-                            ),
-                            contentDescription = state.exercise.name,
-                            contentScale = ContentScale.Fit,
+                        Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .aspectRatio(16f / 9f)
-                        )
+                                .background(Color.White),
+                        ) {
+                            AsyncImage(
+                                model = imageLoader.load(
+                                    context = context,
+                                    url = state.exercise.imageDetailUrl ?: state.exercise.imageUrl
+                                ),
+                                contentDescription = state.exercise.name,
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .aspectRatio(16f / 9f)
+                            )
+                        }
                     }
                 }
 
@@ -174,9 +176,9 @@ private fun SharedTransitionScope.ExerciseDetailScreenLayout(
                     ) {
                         itemsIndexed(
                             arrayOf(
-                                state.exercise?.category?.name,
-                                state.exercise?.equipment?.name,
-                                state.exercise?.type?.value
+                                state.exercise.category?.name,
+                                state.exercise.equipment?.name,
+                                state.exercise.type.value
                             ).filter { value -> !value.isNullOrBlank() }
                         ) { index, filter ->
                             Chip(
@@ -190,7 +192,7 @@ private fun SharedTransitionScope.ExerciseDetailScreenLayout(
                     }
                 }
 
-                if (state.exercise?.steps?.isNotEmpty() == true) {
+                if (state.exercise.steps.isNotEmpty()) {
                     item {
                         Text(
                             text = stringResource(id = R.string.label_exercise_detail_steps_title),
