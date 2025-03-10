@@ -2,11 +2,11 @@ package com.tomtruyen.core.common.utils
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import com.tomtruyen.core.common.R
 import com.tomtruyen.core.common.providers.BuildConfigFieldProvider
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import androidx.core.net.toUri
 
 object EmailUtils : KoinComponent {
     private val buildConfigFieldProvider: BuildConfigFieldProvider by inject()
@@ -35,11 +35,11 @@ object EmailUtils : KoinComponent {
     fun getEmailIntent(context: Context): Intent {
         val subject =
             context.getString(R.string.support_email_subject, buildConfigFieldProvider.versionName)
-        val recipient = "tom.truyen@gmail.com"
+        val recipient = "contact@tomtruyen.dev"
         val deviceInfo = getDeviceInfo(context)
 
         val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-            data = Uri.parse("mailto:")
+            data = "mailto:".toUri()
             putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
             putExtra(Intent.EXTRA_SUBJECT, subject)
             putExtra(Intent.EXTRA_TEXT, deviceInfo)
