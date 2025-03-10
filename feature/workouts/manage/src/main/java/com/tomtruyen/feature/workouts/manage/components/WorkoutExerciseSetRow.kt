@@ -1,26 +1,20 @@
 package com.tomtruyen.feature.workouts.manage.components
 
-import androidx.compose.foundation.background
+import android.util.Log
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +35,9 @@ import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.placeholder
 import com.tomtruyen.core.ui.TextFields
+import com.tomtruyen.core.ui.swipereveal.SwipeToRevealAction
+import com.tomtruyen.core.ui.swipereveal.SwipeToRevealBox
+import com.tomtruyen.core.ui.swipereveal.rememberSwipeToRevealState
 import com.tomtruyen.core.ui.wheeltimepicker.WheelTimerPickerSheet
 import com.tomtruyen.core.ui.wheeltimepicker.core.TimeComponent
 import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
@@ -62,55 +59,6 @@ fun WorkoutExerciseSetRow(
     onAction: (ManageWorkoutUiAction) -> Unit,
     onSetClick: (id: String, setIndex: Int) -> Unit
 ) {
-    val dismissState = rememberSwipeToDismissBoxState(
-        confirmValueChange = {
-            when (it) {
-                SwipeToDismissBoxValue.EndToStart -> {
-                    onAction(
-                        ManageWorkoutUiAction.Set.Delete(
-                            exerciseId = workoutExerciseId,
-                            setIndex = setIndex
-                        )
-                    )
-                }
-
-                else -> Unit
-            }
-
-            return@rememberSwipeToDismissBoxState false
-        }
-    )
-
-    SwipeToDismissBox(
-        state = dismissState,
-        enableDismissFromStartToEnd = false,
-//        gesturesEnabled = !mode.isView,
-        gesturesEnabled = false, // Disabled it for now as I don't like it that much
-        backgroundContent = {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.error)
-                    .padding(end = Dimens.Normal),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(Dimens.Tiny, Alignment.End)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = stringResource(id = CommonR.string.button_delete),
-                    tint = MaterialTheme.colorScheme.onError,
-                )
-
-                Text(
-                    text = stringResource(id = CommonR.string.button_delete),
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = MaterialTheme.colorScheme.onError,
-                        fontWeight = FontWeight.W500
-                    ),
-                )
-            }
-        }
-    ) {
         Row(
             modifier = modifier,
             verticalAlignment = Alignment.CenterVertically,
@@ -196,7 +144,6 @@ fun WorkoutExerciseSetRow(
                         )
                     },
                 )
-            }
         }
     }
 }
