@@ -269,13 +269,15 @@ private fun RowScope.WeightSet(
         placeholder = initialReps?.toString() ?: "-",
         value = inputReps.value,
         onValueChange = { newReps ->
-            // Check if value can be cast to int, if not don't update the value
-            if (newReps.isNotEmpty() && newReps.toIntOrNull() == null) return@Default
+            val reps = newReps.replace(",", ".").trim()
 
-            onRepsChanged(newReps)
+            // Check if value can be cast to int, if not don't update the value
+            if (reps.isNotEmpty() && reps.toIntOrNull() == null) return@Default
+
+            onRepsChanged(reps)
         },
         keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.NumberPassword,
+            keyboardType = KeyboardType.Number,
             imeAction = ImeAction.Next
         ),
         textStyle = MaterialTheme.typography.bodyMedium.copy(
@@ -295,15 +297,15 @@ private fun RowScope.WeightSet(
         placeholder = initialWeight?.tryIntString() ?: "-",
         value = inputWeight.value,
         onValueChange = { newWeight ->
-            val filteredWeight = newWeight.replace(",", ".")
+            val weight = newWeight.replace(",", ".").trim()
 
             // Check if the number can be cast to double, if not don't update the value
-            if (filteredWeight.isNotEmpty() && filteredWeight.toDoubleOrNull() == null) return@Default
+            if (weight.isNotEmpty() && weight.toDoubleOrNull() == null) return@Default
 
             // Must be set like this, otherwise we can't set the decimal separator
-            inputWeight.value = filteredWeight
+            inputWeight.value = weight
 
-            onWeightChanged(filteredWeight)
+            onWeightChanged(weight)
         },
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Number
