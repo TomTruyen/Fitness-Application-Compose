@@ -69,7 +69,7 @@ fun MainBottomNavigation(
             BottomNavigation.items.forEach { item ->
                 val selected by remember(backstackEntry) {
                     mutableStateOf(
-                        backstackEntry?.destination?.hasRoute(item.screen::class) ?: false
+                        backstackEntry?.destination?.hasRoute(item.screen::class) == true
                     )
                 }
 
@@ -112,7 +112,11 @@ fun BottomBarItem(
         ),
         shape = FloatingActionButtonDefaults.shape,
         onClick = {
-            navController.navigate(item.screen)
+            if(selected) return@Card
+
+            navController.navigate(item.screen) {
+                launchSingleTop = true
+            }
         },
         colors = CardDefaults.cardColors(
             contentColor = animatedContentColor,
