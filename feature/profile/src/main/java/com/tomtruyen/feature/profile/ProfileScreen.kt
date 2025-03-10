@@ -44,6 +44,11 @@ import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 import com.tomtruyen.core.ui.wheeltimepicker.WheelTimerPickerSheet
 import com.tomtruyen.core.ui.wheeltimepicker.core.TimeComponent
+import com.tomtruyen.feature.profile.components.AppearanceSection
+import com.tomtruyen.feature.profile.components.BuildInfoSection
+import com.tomtruyen.feature.profile.components.ContactSection
+import com.tomtruyen.feature.profile.components.RestTimerSection
+import com.tomtruyen.feature.profile.components.UnitSection
 import com.tomtruyen.feature.profile.remember.rememberThemeModeActions
 import com.tomtruyen.feature.profile.remember.rememberUnitActions
 import com.tomtruyen.navigation.Screen
@@ -125,16 +130,7 @@ private fun ProfileScreenLayout(
     state: ProfileUiState,
     onAction: (ProfileUiAction) -> Unit
 ) {
-    val buildConfigFieldProvider = koinInject<BuildConfigFieldProvider>()
-
-    val context = LocalContext.current
-
     val refreshState = rememberPullToRefreshState()
-
-    val themeMode by ThemePreferencesDatastore.themeMode.collectAsState(ThemePreferencesDatastore.Mode.SYSTEM)
-
-    val emailLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
     Scaffold(
         snackbarHost = snackbarHost,
@@ -161,98 +157,33 @@ private fun ProfileScreenLayout(
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState()),
                 ) {
-                    Label(
-                       label = stringResource(id = R.string.label_units),
-                        modifier = Modifier.padding(
-                            start = 12.dp,
-                            end = 12.dp,
-                            bottom = Dimens.Tiny
-                        )
-                    )
-
-                    ListItem(
-                        title = stringResource(id = R.string.label_weight_unit),
-                        message = state.settings.unit.value,
-                        onClick = {
+                    UnitSection(
+                        unit = state.settings.unit,
+                        onShowUnitSheet = {
                             onAction(ProfileUiAction.Sheet.WeightUnit.Show)
                         }
                     )
 
                     HorizontalDivider()
 
-                    Label(
-                        label = stringResource(id = R.string.label_rest_timer),
-                        modifier = Modifier.padding(
-                            start = 12.dp,
-                            end = 12.dp,
-                            top = Dimens.Normal,
-                            bottom = Dimens.Tiny
-                        )
+                    RestTimerSection(
+                        restTime = state.settings.rest,
+                        restEnabled = state.settings.restEnabled,
+                        restVibrateEnabled = state.settings.restVibrationEnabled,
+                        onAction = onAction
                     )
-
-                    ListItem(
-                        title = stringResource(id = R.string.label_default_rest_timer),
-                        message = TimeUtils.formatSeconds(state.settings.rest.toLong()),
-                        onClick = {
-                            onAction(ProfileUiAction.Sheet.RestTime.Show)
-                        }
-                    )
-
-                    SwitchListItem(
-                        title = stringResource(id = R.string.label_rest_timer_enabled),
-                        checked = state.settings.restEnabled
-                    ) {
-                        onAction(ProfileUiAction.OnRestEnabledChanged(it))
-                    }
-
-                    SwitchListItem(
-                        title = stringResource(id = R.string.label_vibrate_upon_finish),
-                        checked = state.settings.restVibrationEnabled
-                    ) {
-                        onAction(ProfileUiAction.OnRestVibrationEnabledChanged(it))
-                    }
 
                     HorizontalDivider()
 
-                    Label(
-                        label = stringResource(id = R.string.label_appearance),
-                        modifier = Modifier.padding(
-                            start = 12.dp,
-                            end = 12.dp,
-                            top = Dimens.Normal,
-                            bottom = Dimens.Tiny
-                        )
-                    )
-
-                    ListItem(
-                        title = stringResource(id = R.string.label_theme_mode),
-                        message = themeMode.value,
-                        onClick = {
+                    AppearanceSection(
+                        onShowThemeSheet = {
                             onAction(ProfileUiAction.Sheet.ThemeMode.Show)
                         }
                     )
 
                     HorizontalDivider()
 
-                    Label(
-                        label = stringResource(id = R.string.label_contact_and_support),
-                        modifier = Modifier.padding(
-                            start = 12.dp,
-                            end = 12.dp,
-                            top = Dimens.Normal,
-                            bottom = Dimens.Tiny
-                        )
-                    )
-
-                    ListItem(
-                        title = stringResource(id = R.string.label_report_an_issue),
-                        message = stringResource(id = R.string.label_message_report_an_issue),
-                        onClick = {
-                            emailLauncher.launch(
-                                EmailUtils.getEmailIntent(context)
-                            )
-                        }
-                    )
+                    ContactSection()
 
                     HorizontalDivider()
 
@@ -268,20 +199,7 @@ private fun ProfileScreenLayout(
 
                     HorizontalDivider()
 
-                    Text(
-                        text = stringResource(
-                            id = R.string.label_version_and_build,
-                            buildConfigFieldProvider.versionName,
-                            buildConfigFieldProvider.versionCode
-                        ),
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            color = MaterialTheme.colorScheme.secondaryLabelColor
-                        ),
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(top = Dimens.Small)
-                            .padding(horizontal = Dimens.Normal)
-                    )
+                    BuildInfoSection()
                 }
             }
         }
