@@ -142,9 +142,8 @@ class HistoryRepositoryImpl : HistoryRepository() {
     override suspend fun saveWorkoutHistory(
         userId: String,
         workout: WorkoutUiModel,
-        duration: Long
     ): String {
-        val workoutHistory = workout.toWorkoutHistoryEntity(userId, duration)
+        val workoutHistory = workout.toWorkoutHistoryEntity(userId)
 
         val sets = mutableListOf<WorkoutHistoryExerciseSet>()
         val exercises = workout.exercises.filter { exercise ->

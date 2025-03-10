@@ -34,7 +34,9 @@ data class Workout(
     @SerialName(KEY_SORT_ORDER)
     val sortOrder: Int = 0,
     @Transient
-    override val synced: Boolean = false
+    override val synced: Boolean = false,
+    @Transient
+    val duration: Long = 0L,
 ) : BaseEntity, SyncEntity {
     companion object {
         const val TABLE_NAME = "Workout"

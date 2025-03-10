@@ -194,9 +194,9 @@ private fun SharedTransitionScope.ManageWorkoutScreenLayout(
     lazyListState: LazyListState,
     onAction: (ManageWorkoutUiAction) -> Unit,
 ) {
-    val workoutDuration = remember(state.duration) {
+    val workoutDuration = remember(state.workout.duration) {
         TimeUtils.formatSeconds(
-            seconds = state.duration,
+            seconds = state.workout.duration,
             alwaysShow = listOf(TimeUnit.HOURS, TimeUnit.MINUTES, TimeUnit.SECONDS)
         )
     }

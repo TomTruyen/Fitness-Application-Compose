@@ -15,7 +15,6 @@ data class ManageWorkoutUiState(
     val initialWorkout: WorkoutUiModel = WorkoutUiModel(),
     val workout: WorkoutUiModel = WorkoutUiModel(),
     val settings: SettingsUiModel = SettingsUiModel(),
-    val duration: Long = 0L,
 
     val previousExerciseSets: Map<String, List<PreviousExerciseSet>> = emptyMap(),
 

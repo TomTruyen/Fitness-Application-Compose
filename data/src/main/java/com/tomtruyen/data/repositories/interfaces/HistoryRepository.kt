@@ -25,6 +25,5 @@ abstract class HistoryRepository : SyncRepository<WorkoutHistoryWithExercises>()
     abstract suspend fun saveWorkoutHistory(
         userId: String,
         workout: WorkoutUiModel,
-        duration: Long,
     ): String
 }

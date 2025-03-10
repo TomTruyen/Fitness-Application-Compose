@@ -82,7 +82,9 @@ class ManageWorkoutViewModel(
             timer.time.collectLatest { duration ->
                 updateState {
                     it.copy(
-                        duration = duration
+                        workout = it.workout.copy(
+                            duration = duration
+                        )
                     )
                 }
             }
@@ -184,7 +186,6 @@ class ManageWorkoutViewModel(
                     unit = settings.unit,
                     name = workout.name.ifBlank { "Workout" }
                 ),
-                duration = timer.time.value
             )
 
             triggerEvent(ManageWorkoutUiEvent.Navigate.History.Detail(workoutHistoryId))
