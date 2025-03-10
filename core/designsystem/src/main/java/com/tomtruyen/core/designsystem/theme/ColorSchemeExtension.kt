@@ -1,13 +1,27 @@
 package com.tomtruyen.core.designsystem.theme
 
-import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
+
+@Composable
+fun rememberDarkMode(): Boolean {
+    val themeMode by ThemePreferencesDatastore.themeMode.collectAsState(ThemePreferencesDatastore.Mode.SYSTEM)
+    val isSystemInDarkTheme = isSystemInDarkTheme()
+
+    return remember(themeMode) {
+        when (themeMode) {
+            ThemePreferencesDatastore.Mode.DARK -> true
+            ThemePreferencesDatastore.Mode.LIGHT -> false
+            ThemePreferencesDatastore.Mode.SYSTEM -> isSystemInDarkTheme
+        }
+    }
+}
 
 // Convenience
 val isDarkTheme: Boolean

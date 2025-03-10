@@ -1,9 +1,11 @@
 package com.tomtruyen.fitoryx
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -27,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.tomtruyen.core.common.models.GlobalAppState
 import com.tomtruyen.core.designsystem.theme.FynixTheme
+import com.tomtruyen.core.designsystem.theme.rememberDarkMode
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.feature.auth.login.LoginScreen
 import com.tomtruyen.feature.auth.register.RegisterScreen
@@ -44,7 +47,6 @@ import com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel
 import com.tomtruyen.fitoryx.navigation.MainBottomNavigation
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.screenScopedViewModel
-import kotlinx.coroutines.flow.mapLatest
 import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.KoinAndroidContext
 import org.koin.androidx.compose.koinViewModel
@@ -63,10 +65,20 @@ class MainActivity : ComponentActivity() {
 
         splashScreen.setKeepOnScreenCondition { !hasCheckedLoggedIn }
 
-        enableEdgeToEdge()
-
         setContent {
             KoinAndroidContext {
+                val isDarkTheme = rememberDarkMode()
+
+                LaunchedEffect(isDarkTheme) {
+                    enableEdgeToEdge(
+                        statusBarStyle = if(isDarkTheme) {
+                            SystemBarStyle.dark(Color.TRANSPARENT)
+                        } else {
+                            SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
+                        }
+                    )
+                }
+
                 FynixTheme {
                     val navController = rememberNavController()
 
