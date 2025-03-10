@@ -65,7 +65,7 @@ val ColorScheme.success: Color
 
 val ColorScheme.selectedListItem: Color
     @Composable
-    get() = if(isDarkTheme) LavenderMist else BlueGrey
+    get() = if(isDarkTheme) LavenderMist else DarkGray
 
 val ColorScheme.fallbackImageBackground: Color
     @Composable
