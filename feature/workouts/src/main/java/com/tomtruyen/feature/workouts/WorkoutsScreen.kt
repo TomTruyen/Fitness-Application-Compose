@@ -180,7 +180,7 @@ private fun SharedTransitionScope.WorkoutOverviewScreenLayout(
                     state = lazyListState,
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(Dimens.Normal)
+                        .padding(horizontal = Dimens.Normal)
                         .animateContentSize(),
                     verticalArrangement = Arrangement.spacedBy(Dimens.Small)
                 ) {
@@ -216,6 +216,7 @@ private fun SharedTransitionScope.WorkoutOverviewScreenLayout(
                         key = { it.id }
                     ) { workout ->
                         ReorderableItem(
+                            modifier = Modifier.padding(vertical = Dimens.Tiny),
                             state = reorderableLazyListState,
                             key = workout.id
                         ) { isDragging ->
