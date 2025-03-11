@@ -57,7 +57,7 @@ fun MainBottomNavigation(
 
     NavigationBar(
         modifier = Modifier.height(height),
-        containerColor = Color.Transparent,
+        containerColor = MaterialTheme.colorScheme.background,
     ) {
         Row(
             modifier = Modifier
@@ -98,7 +98,7 @@ fun BottomBarItem(
     )
 
     val animatedContainerColor by animateColorAsState(
-        targetValue = if (selected) MaterialTheme.colorScheme.navigationItemBackgroundColorActive.value else Color.Transparent,
+        targetValue = if (selected) MaterialTheme.colorScheme.navigationItemBackgroundColorActive.value else MaterialTheme.colorScheme.background,
         animationSpec = animationSpec,
         label = ""
     )
