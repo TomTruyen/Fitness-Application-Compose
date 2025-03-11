@@ -58,7 +58,7 @@ data class WorkoutExerciseUiModel(
         )
 
     companion object {
-        fun createFromExerciseModel(model: ExerciseUiModel) = WorkoutExerciseUiModel(
+        fun createFromExerciseModel(model: ExerciseUiModel, setCount: Int) = WorkoutExerciseUiModel(
             exerciseId = model.id,
             name = model.name,
             imageUrl = model.imageUrl,
@@ -69,7 +69,7 @@ data class WorkoutExerciseUiModel(
             sortOrder = 0,
             category = model.category,
             equipment = model.equipment,
-            sets = listOf(WorkoutExerciseSetUiModel())
+            sets = List(setCount) { WorkoutExerciseSetUiModel() }
         )
 
         fun fromEntity(entity: WorkoutExerciseWithSets) = WorkoutExerciseUiModel(

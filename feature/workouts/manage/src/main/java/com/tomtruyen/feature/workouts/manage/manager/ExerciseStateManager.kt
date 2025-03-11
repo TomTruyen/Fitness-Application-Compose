@@ -53,9 +53,14 @@ class ExerciseStateManager(
 
                         if (index == -1) return@apply
 
+                        val setCount = this[index].sets.size
+
                         set(
                             index = index,
-                            element = createWorkoutExercise(exercise)
+                            element = createWorkoutExercise(
+                                exercise = exercise,
+                                setCount = setCount
+                            )
                         )
                     }
                 )
@@ -86,9 +91,10 @@ class ExerciseStateManager(
         )
     }
 
-    private fun createWorkoutExercise(exercise: ExerciseUiModel): WorkoutExerciseUiModel {
+    private fun createWorkoutExercise(exercise: ExerciseUiModel, setCount: Int = 1): WorkoutExerciseUiModel {
         return WorkoutExerciseUiModel.createFromExerciseModel(
-            model = exercise
+            model = exercise,
+            setCount = setCount
         )
     }
 
