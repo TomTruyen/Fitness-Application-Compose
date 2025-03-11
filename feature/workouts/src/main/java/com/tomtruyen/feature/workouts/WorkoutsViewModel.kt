@@ -32,7 +32,9 @@ class WorkoutsViewModel(
     init {
         fetchWorkouts()
 
+        observeActiveWorkout()
         observeWorkouts()
+
         observeLoading()
         observeRefreshing()
     }
@@ -49,6 +51,18 @@ class WorkoutsViewModel(
         }
     }
 
+    private fun observeActiveWorkout() = vmScope.launch {
+        workoutRepository.findWorkoutByIdAsync(Workout.ACTIVE_WORKOUT_ID)
+            .distinctUntilChanged()
+            .collectLatest { activeWorkout ->
+                updateState {
+                    it.copy(
+                        activeWorkout = activeWorkout
+                    )
+                }
+            }
+    }
+
     private fun observeWorkouts() = vmScope.launch {
         workoutRepository.findWorkoutsAsync()
             .distinctUntilChanged { old, new ->
@@ -61,9 +75,6 @@ class WorkoutsViewModel(
                     it.copy(
                         workouts = workouts.filter { workout ->
                             workout.id != Workout.ACTIVE_WORKOUT_ID
-                        },
-                        activeWorkout = workouts.find { workout ->
-                            workout.id == Workout.ACTIVE_WORKOUT_ID
                         }
                     )
                 }
