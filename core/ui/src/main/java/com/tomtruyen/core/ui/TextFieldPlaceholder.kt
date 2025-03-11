@@ -25,7 +25,7 @@ fun TextFieldPlaceholder(
         Text(
             text = placeholder,
             style = textStyle.copy(
-                color = MaterialTheme.colorScheme.placeholder
+                color = MaterialTheme.colorScheme.placeholder.value
             ),
             textAlign = textStyle.textAlign,
             modifier = Modifier.fillMaxWidth()

@@ -25,7 +25,7 @@ fun ColumnScope.BuildInfoSection() {
             buildConfigFieldProvider.versionCode
         ),
         style = MaterialTheme.typography.bodySmall.copy(
-            color = MaterialTheme.colorScheme.secondaryLabelColor
+            color = MaterialTheme.colorScheme.secondaryLabelColor.value
         ),
         modifier = Modifier
             .align(Alignment.CenterHorizontally)

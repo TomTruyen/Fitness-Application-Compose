@@ -71,7 +71,7 @@ private fun RowScope.WorkoutStatisticsItem(
         Text(
             text = name,
             style = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.secondaryLabelColor
+                color = MaterialTheme.colorScheme.secondaryLabelColor.value
             ),
         )
 

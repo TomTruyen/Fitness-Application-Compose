@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.textButtonContentColor
 
 object Buttons {
     @Composable

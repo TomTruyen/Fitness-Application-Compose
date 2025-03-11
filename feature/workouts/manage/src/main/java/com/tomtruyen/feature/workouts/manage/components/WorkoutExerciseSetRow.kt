@@ -176,7 +176,7 @@ private fun PreviousSet(
             }
         } ?: "-",
         style = MaterialTheme.typography.bodyMedium.copy(
-            color = MaterialTheme.colorScheme.placeholder
+            color = MaterialTheme.colorScheme.placeholder.value
         ),
         textAlign = TextAlign.Center,
         modifier = modifier,
@@ -286,7 +286,7 @@ private fun RowScope.TimeSet(
         textAlign = TextAlign.Center,
         style = LocalTextStyle.current.copy(
             color = if (!mode.isView && !hasBeenCompleted && (inputTime == null || (mode.isExecute && !completed))) {
-                MaterialTheme.colorScheme.placeholder
+                MaterialTheme.colorScheme.placeholder.value
             } else {
                 LocalTextStyle.current.color
             },

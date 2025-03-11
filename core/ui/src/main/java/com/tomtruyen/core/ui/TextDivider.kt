@@ -18,7 +18,7 @@ fun TextDivider(
     text: String,
     modifier: Modifier = Modifier,
     dividerColor: Color = MaterialTheme.colorScheme.outlineVariant,
-    textColor: Color = MaterialTheme.colorScheme.secondaryTextColor
+    textColor: Color = MaterialTheme.colorScheme.secondaryTextColor.value
 ) {
     Row(
         modifier = modifier,

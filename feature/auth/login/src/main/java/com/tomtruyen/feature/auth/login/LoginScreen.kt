@@ -122,7 +122,7 @@ private fun LoginScreenLayout(
                     Text(
                         text = stringResource(id = R.string.subtitle_login),
                         style = MaterialTheme.typography.titleMedium.copy(
-                            color = MaterialTheme.colorScheme.secondaryTextColor,
+                            color = MaterialTheme.colorScheme.secondaryTextColor.value,
                             fontWeight = FontWeight.Normal
                         ),
                     )

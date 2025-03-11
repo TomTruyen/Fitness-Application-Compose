@@ -119,7 +119,7 @@ private fun RegisterScreenLayout(
                     Text(
                         text = stringResource(id = R.string.subtitle_register),
                         style = MaterialTheme.typography.titleMedium.copy(
-                            color = MaterialTheme.colorScheme.secondaryTextColor,
+                            color = MaterialTheme.colorScheme.secondaryTextColor.value,
                             fontWeight = FontWeight.Normal
                         ),
                     )

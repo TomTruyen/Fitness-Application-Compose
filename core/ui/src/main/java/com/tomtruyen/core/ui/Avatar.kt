@@ -50,7 +50,7 @@ fun Avatar(
             contentScale = ContentScale.Fit,
             colorFilter = if(imageUrl == null) {
                 ColorFilter.tint(
-                    color = MaterialTheme.colorScheme.fallbackImageBackground
+                    color = MaterialTheme.colorScheme.fallbackImageBackground.value
                 )
             } else null
         )

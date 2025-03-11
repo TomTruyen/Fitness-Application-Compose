@@ -125,7 +125,7 @@ object TextFields {
                             Modifier.border(
                                 width = 1.dp,
                                 color = if (error.isNullOrBlank()) {
-                                    MaterialTheme.colorScheme.borderColor
+                                    MaterialTheme.colorScheme.borderColor.value
                                 } else {
                                     MaterialTheme.colorScheme.error
                                 },

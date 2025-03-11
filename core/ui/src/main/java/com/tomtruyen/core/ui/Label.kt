@@ -20,7 +20,7 @@ fun Label(
     Text(
         text = label,
         style = MaterialTheme.typography.labelLarge.copy(
-            color = MaterialTheme.colorScheme.secondaryTextColor,
+            color = MaterialTheme.colorScheme.secondaryTextColor.value,
             textAlign = textAlign,
         ),
         modifier = modifier

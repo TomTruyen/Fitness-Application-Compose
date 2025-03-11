@@ -29,7 +29,7 @@ fun PasswordEyeToggle(
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
-            tint = MaterialTheme.colorScheme.textFieldIcon
+            tint = MaterialTheme.colorScheme.textFieldIcon.value
         )
     }
 }

@@ -55,14 +55,14 @@ fun ListItem(
                 text = title,
                 style = MaterialTheme.typography.bodyMedium.copy(
                     fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-                    color = if(selected) MaterialTheme.colorScheme.selectedListItem else MaterialTheme.typography.bodyMedium.color
+                    color = if(selected) MaterialTheme.colorScheme.selectedListItem.value else MaterialTheme.typography.bodyMedium.color
                 )
             )
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodySmall.copy(
                     fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-                    color = if(selected) MaterialTheme.colorScheme.selectedListItem else MaterialTheme.colorScheme.secondaryLabelColor,
+                    color = if(selected) MaterialTheme.colorScheme.selectedListItem.value else MaterialTheme.colorScheme.secondaryLabelColor.value
                 )
             )
         }

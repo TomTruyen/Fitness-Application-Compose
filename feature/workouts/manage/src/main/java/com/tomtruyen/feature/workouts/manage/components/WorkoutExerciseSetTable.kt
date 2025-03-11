@@ -63,9 +63,9 @@ fun WorkoutExerciseSetTable(
                 previousSets?.find { it.sortOrder == setIndex }
             }
 
-            val backgroundColor = remember(set.completed, setIndex) {
+            val backgroundColor = remember(set.completed, setIndex, successBackgroundColor.value) {
                 when {
-                    set.completed -> successBackgroundColor
+                    set.completed -> successBackgroundColor.value
                     setIndex % 2 == 0 -> evenIndexBackgroundColor
                     else -> oddIndexBackgroundColor
                 }

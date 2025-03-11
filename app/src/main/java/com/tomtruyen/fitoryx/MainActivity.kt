@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             KoinAndroidContext {
-                val isDarkTheme = rememberDarkMode()
+                val isDarkTheme by rememberDarkMode()
 
                 LaunchedEffect(isDarkTheme) {
                     enableEdgeToEdge(

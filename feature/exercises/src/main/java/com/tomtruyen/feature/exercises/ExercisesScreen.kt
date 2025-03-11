@@ -315,7 +315,7 @@ private fun SharedTransitionScope.ExercisesScreenLayout(
                                             imageUrl = exercise.imageUrl,
                                             contentDescription = exercise.displayName,
                                             backgroundColor = if(state.selectedExercises.contains(exercise)) {
-                                                MaterialTheme.colorScheme.selectedListItem
+                                                MaterialTheme.colorScheme.selectedListItem.value
                                             } else {
                                                 MaterialTheme.colorScheme.surface
                                             }

@@ -31,7 +31,7 @@ fun Chip(
         colors = FilterChipDefaults.filterChipColors(
             selectedContainerColor = MaterialTheme.colorScheme.tertiary,
             selectedLabelColor = MaterialTheme.colorScheme.onTertiary,
-            labelColor = MaterialTheme.colorScheme.secondaryLabelColor
+            labelColor = MaterialTheme.colorScheme.secondaryLabelColor.value
         )
     )
 }

@@ -1,57 +1,68 @@
 package com.tomtruyen.core.designsystem.theme
 
+import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 
 @Composable
-fun rememberDarkMode(): Boolean {
+fun rememberDarkMode(): State<Boolean> {
     val themeMode by ThemePreferencesDatastore.themeMode.collectAsState(ThemePreferencesDatastore.Mode.SYSTEM)
     val isSystemInDarkTheme = isSystemInDarkTheme()
 
     return remember(themeMode) {
-        when (themeMode) {
-            ThemePreferencesDatastore.Mode.DARK -> true
-            ThemePreferencesDatastore.Mode.LIGHT -> false
-            ThemePreferencesDatastore.Mode.SYSTEM -> isSystemInDarkTheme
-        }
+        mutableStateOf(
+            when (themeMode) {
+                ThemePreferencesDatastore.Mode.DARK -> true
+                ThemePreferencesDatastore.Mode.LIGHT -> false
+                ThemePreferencesDatastore.Mode.SYSTEM -> isSystemInDarkTheme
+            }
+        )
     }
 }
 
-// Convenience
-val isDarkTheme: Boolean
-    @Composable
-    get() {
-        val themeMode by ThemePreferencesDatastore.themeMode.collectAsState(ThemePreferencesDatastore.Mode.SYSTEM)
+@Composable
+fun rememberColorSchemeState(
+    lightColor: Color,
+    darkColor: Color
+): State<Color> {
+    val isDarkMode by rememberDarkMode()
 
-        return when(themeMode) {
-            ThemePreferencesDatastore.Mode.DARK -> true
-            ThemePreferencesDatastore.Mode.LIGHT -> false
-            ThemePreferencesDatastore.Mode.SYSTEM -> isSystemInDarkTheme()
-        }
+    return remember(isDarkMode) {
+        mutableStateOf(if (isDarkMode) darkColor else lightColor)
     }
+}
 
 // Custom Colors
-val ColorScheme.placeholder: Color
+val ColorScheme.placeholder: State<Color>
     @Composable
-    get() = if(isDarkTheme) ChineseSilver else BlueGrey
+    get() = rememberColorSchemeState(
+        lightColor = BlueGrey,
+        darkColor = ChineseSilver
+    )
 
-val ColorScheme.textFieldIcon
+val ColorScheme.textFieldIcon: State<Color>
     @Composable
-    get() = if(isDarkTheme) ChineseSilver else BlueGrey
+    get() = rememberColorSchemeState(
+        lightColor = BlueGrey,
+        darkColor = ChineseSilver
+    )
 
-val ColorScheme.textButtonContentColor: Color
-    @Composable
-    get() = if(isDarkTheme) ChineseSilver else BlueGrey
 
-val ColorScheme.secondaryTextColor: Color
+val ColorScheme.secondaryTextColor: State<Color>
     @Composable
-    get() = if(isDarkTheme) ChineseSilver else BlueGrey
+    get() = rememberColorSchemeState(
+        lightColor = BlueGrey,
+        darkColor = ChineseSilver
+    )
 
 val ColorScheme.navigationItemContentColorActive: Color
     @Composable
@@ -61,26 +72,44 @@ val ColorScheme.navigationItemContentColorInactive: Color
     @Composable
     get() = ChineseSilver
 
-val ColorScheme.navigationItemBackgroundColorActive: Color
+val ColorScheme.navigationItemBackgroundColorActive: State<Color>
     @Composable
-    get() = if(isDarkTheme) MauiMist else ChineseBlack
+    get() = rememberColorSchemeState(
+        lightColor = ChineseBlack,
+        darkColor = MauiMist
+    )
 
-val ColorScheme.secondaryLabelColor: Color
+val ColorScheme.secondaryLabelColor: State<Color>
     @Composable
-    get() = if(isDarkTheme) ChineseSilver else DarkGray
+    get() = rememberColorSchemeState(
+        lightColor = DarkGray,
+        darkColor = ChineseSilver
+    )
 
-val ColorScheme.borderColor: Color
+val ColorScheme.borderColor: State<Color>
     @Composable
-    get() = if(isDarkTheme) DarkGray else MauiMist
+    get() = rememberColorSchemeState(
+        lightColor = MauiMist,
+        darkColor = DarkGray
+    )
 
-val ColorScheme.success: Color
+val ColorScheme.success: State<Color>
     @Composable
-    get() = if(isDarkTheme) DarkerSuccessGreen else LighterSuccessGreen
+    get() = rememberColorSchemeState(
+        lightColor = LighterSuccessGreen,
+        darkColor = DarkerSuccessGreen
+    )
 
-val ColorScheme.selectedListItem: Color
+val ColorScheme.selectedListItem: State<Color>
     @Composable
-    get() = if(isDarkTheme) LavenderMist else DarkGray
+    get() = rememberColorSchemeState(
+        lightColor = DarkGray,
+        darkColor = LavenderMist
+    )
 
-val ColorScheme.fallbackImageBackground: Color
+val ColorScheme.fallbackImageBackground: State<Color>
     @Composable
-    get() = if(isDarkTheme) ChineseSilver else ChineseBlack
+    get() = rememberColorSchemeState(
+        lightColor = ChineseBlack,
+        darkColor = ChineseSilver
+    )

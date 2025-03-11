@@ -98,7 +98,7 @@ fun BottomBarItem(
     )
 
     val animatedContainerColor by animateColorAsState(
-        targetValue = if (selected) MaterialTheme.colorScheme.navigationItemBackgroundColorActive else Color.Transparent,
+        targetValue = if (selected) MaterialTheme.colorScheme.navigationItemBackgroundColorActive.value else Color.Transparent,
         animationSpec = animationSpec,
         label = ""
     )
