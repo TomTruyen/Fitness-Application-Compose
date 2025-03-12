@@ -5,6 +5,7 @@ import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.common.utils.StopwatchTimer
 import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.models.ui.WorkoutUiModel
+import com.tomtruyen.data.models.ui.copyFromActiveWorkout
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.HistoryRepository
@@ -176,17 +177,26 @@ class ManageWorkoutViewModel(
         }
     }
 
-    private fun finishWorkout(userId: String) = launchLoading {
+    private fun finishWorkout(userId: String, updateExistingWorkout: Boolean) = launchLoading {
         stopTimer()
 
         with(uiState.value) {
+            val workout = workout.copy(
+                unit = settings.unit,
+                name = workout.name.ifBlank { "Workout" }
+            )
+
             val workoutHistoryId = historyRepository.saveWorkoutHistory(
                 userId = userId,
-                workout = workout.copy(
-                    unit = settings.unit,
-                    name = workout.name.ifBlank { "Workout" }
-                ),
+                workout = workout,
             )
+
+            if(updateExistingWorkout && workoutId != null) {
+                workoutRepository.saveWorkout(
+                    userId = userId,
+                    workout = workout.copyFromActiveWorkout(workoutId)
+                )
+            }
 
             triggerEvent(ManageWorkoutUiEvent.Navigate.History.Detail(workoutHistoryId))
         }
@@ -206,11 +216,11 @@ class ManageWorkoutViewModel(
         }
     }
 
-    private fun save() {
+    private fun save(updateExistingWorkout: Boolean) {
         val userId = userRepository.getUser()?.id ?: return
 
         when (uiState.value.mode) {
-            ManageWorkoutMode.EXECUTE -> finishWorkout(userId)
+            ManageWorkoutMode.EXECUTE -> finishWorkout(userId, updateExistingWorkout)
             else -> saveWorkout(userId)
         }
     }
@@ -230,7 +240,7 @@ class ManageWorkoutViewModel(
     override fun onAction(action: ManageWorkoutUiAction) {
         when (action) {
             is ManageWorkoutUiAction.Workout -> when (action) {
-                ManageWorkoutUiAction.Workout.Save -> save()
+                is ManageWorkoutUiAction.Workout.Save -> save(action.updateExistingWorkout)
                 ManageWorkoutUiAction.Workout.Delete -> delete()
                 ManageWorkoutUiAction.Workout.Discard -> discard()
                 else -> workoutStateManager.onAction(action)

@@ -27,6 +27,10 @@ class SheetStateManager(
         it.copy(showSetMoreActions = show)
     }
 
+    private fun showSaveSheet(show: Boolean) = updateState {
+        it.copy(showSaveSheet = show)
+    }
+
     override fun onAction(action: ManageWorkoutUiAction.Sheet) {
 
 
@@ -49,6 +53,10 @@ class SheetStateManager(
             }
 
             ManageWorkoutUiAction.Sheet.Set.Dismiss -> showSetSheet(false)
+
+            ManageWorkoutUiAction.Sheet.Save.Show -> showSaveSheet(true)
+
+            ManageWorkoutUiAction.Sheet.Save.Dismiss -> showSaveSheet(false)
         }
     }
 }

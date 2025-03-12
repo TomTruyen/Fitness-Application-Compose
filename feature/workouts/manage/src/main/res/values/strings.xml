@@ -18,4 +18,8 @@
     <string name="action_delete_workout">Delete Workout</string>
     <string name="title_start_workout">Start workout</string>
     <string name="label_exercises">Exercises</string>
+    <string name="button_update_workout">Update Workout</string>
+    <string name="button_keep_original_workout">Keep Original Workout</string>
+    <string name="label_update_x">"Update \"%s\" "</string>
+    <string name="description_update_workout">Do you want to overwrite "%s" with this workout?</string>
 </resources>

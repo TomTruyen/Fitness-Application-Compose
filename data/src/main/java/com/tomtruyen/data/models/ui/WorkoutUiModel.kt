@@ -175,3 +175,26 @@ fun WorkoutUiModel.copyWithSetCompleted(id: String, setIndex: Int) = copy(
         } else exercise
     }
 )
+
+fun WorkoutUiModel.copyFromActiveWorkout(id: String) = copy(
+    id = id,
+    exercises = exercises.map { exercise ->
+        val exerciseId = if(exercise.id.startsWith(Workout.ACTIVE_WORKOUT_ID)) {
+            UUID.randomUUID().toString()
+        } else exercise.id
+
+        exercise.copy(
+            id = exerciseId,
+            sets = exercise.sets.map { set ->
+                val setId = if(set.id.startsWith(Workout.ACTIVE_WORKOUT_ID)) {
+                    UUID.randomUUID().toString()
+                } else set.id
+
+                set.copy(
+                    id = setId,
+                    exerciseId = exerciseId
+                )
+            }
+        )
+    }
+)

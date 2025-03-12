@@ -44,6 +44,7 @@ import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.ui.toolbars.ToolbarTitle
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.feature.workouts.manage.components.ExerciseList
+import com.tomtruyen.feature.workouts.manage.components.WorkoutSaveSheet
 import com.tomtruyen.feature.workouts.manage.components.WorkoutStatistics
 import com.tomtruyen.feature.workouts.manage.components.WorkoutTimer
 import com.tomtruyen.feature.workouts.manage.remember.rememberExerciseActions
@@ -182,6 +183,13 @@ fun SharedTransitionScope.ManageWorkoutScreen(
         visible = state.showSetMoreActions,
         onDismiss = { viewModel.onAction(ManageWorkoutUiAction.Sheet.Set.Dismiss) },
     )
+
+    WorkoutSaveSheet(
+        visible = state.showSaveSheet,
+        onAction = viewModel::onAction,
+        workoutName = state.workout.name.ifBlank { "Workout" },
+        onDismiss = { viewModel.onAction(ManageWorkoutUiAction.Sheet.Save.Dismiss) }
+    )
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -284,7 +292,11 @@ private fun SharedTransitionScope.ManageWorkoutScreenLayout(
                         contentPadding = PaddingValues(0.dp),
                         minButtonSize = 36.dp,
                         onClick = {
-                            onAction(ManageWorkoutUiAction.Workout.Save)
+                            if(state.shouldShowSaveSheet) {
+                                onAction(ManageWorkoutUiAction.Sheet.Save.Show)
+                            } else {
+                                onAction(ManageWorkoutUiAction.Workout.Save())
+                            }
                         }
                     )
                 }

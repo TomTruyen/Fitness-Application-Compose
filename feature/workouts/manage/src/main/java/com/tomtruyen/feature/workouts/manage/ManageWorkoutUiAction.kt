@@ -6,7 +6,7 @@ sealed class ManageWorkoutUiAction {
     sealed class Workout : ManageWorkoutUiAction() {
         data class OnNameChanged(val name: String) : Workout()
 
-        data object Save : Workout()
+        data class Save(val updateExistingWorkout: Boolean = false) : Workout()
 
         data object Delete : Workout()
 
@@ -64,6 +64,12 @@ sealed class ManageWorkoutUiAction {
             data class Show(val exerciseId: String? = null, val setIndex: Int? = null) : Set()
 
             data object Dismiss : Set()
+        }
+
+        sealed class Save: Sheet() {
+            data object Show: Save()
+
+            data object Dismiss: Save()
         }
     }
 
