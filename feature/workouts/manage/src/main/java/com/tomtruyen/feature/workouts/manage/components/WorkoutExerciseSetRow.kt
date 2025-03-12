@@ -284,11 +284,11 @@ private fun RowScope.TimeSet(
     Text(
         text = TimeUtils.formatSeconds(inputTime ?: initialTime ?: 0L),
         textAlign = TextAlign.Center,
-        style = LocalTextStyle.current.copy(
+        style = MaterialTheme.typography.bodyMedium.copy(
             color = if (!mode.isView && !hasBeenCompleted && (inputTime == null || (mode.isExecute && !completed))) {
                 MaterialTheme.colorScheme.placeholder.value
             } else {
-                LocalTextStyle.current.color
+                MaterialTheme.typography.bodyMedium.color
             },
             fontWeight = FontWeight.W500
         ),
