@@ -204,10 +204,18 @@ private fun SharedTransitionScope.ManageWorkoutScreenLayout(
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     val onNavigateUp: () -> Unit = {
-        if (!state.mode.isView && state.workout.exercises != state.initialWorkout.exercises) {
-            confirmationDialogVisible = true
-        } else {
-            onAction(ManageWorkoutUiAction.Workout.Discard)
+        when(state.mode) {
+            ManageWorkoutMode.EXECUTE,
+            ManageWorkoutMode.VIEW -> onAction(ManageWorkoutUiAction.Navigate.Back)
+
+            ManageWorkoutMode.CREATE,
+            ManageWorkoutMode.EDIT -> {
+                if(state.workout.exercises != state.initialWorkout.exercises) {
+                    confirmationDialogVisible = true
+                } else {
+                    onAction(ManageWorkoutUiAction.Navigate.Back)
+                }
+            }
         }
     }
 
@@ -307,6 +315,9 @@ private fun SharedTransitionScope.ManageWorkoutScreenLayout(
                     animatedVisibilityScope = animatedVisibilityScope,
                     state = state,
                     lazyListState = lazyListState,
+                    onDiscard = {
+                        confirmationDialogVisible = true
+                    },
                     onAction = onAction,
                     listHeader = {
                         // Items that will be prepended to the top of the list

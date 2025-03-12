@@ -251,6 +251,10 @@ class ManageWorkoutViewModel(
             ManageWorkoutUiAction.Navigate.Workout.Execute -> triggerEvent(
                 ManageWorkoutUiEvent.Navigate.Workout.Execute(id)
             )
+
+            ManageWorkoutUiAction.Navigate.Back -> triggerEvent(
+                ManageWorkoutUiEvent.Navigate.Back
+            )
         }
     }
 }

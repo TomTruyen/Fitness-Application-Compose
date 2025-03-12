@@ -1,6 +1,5 @@
 package com.tomtruyen.feature.workouts.manage.components
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -12,6 +11,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -28,6 +29,7 @@ import com.tomtruyen.feature.workouts.manage.R
 import com.tomtruyen.navigation.SharedTransitionKey
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
+import com.tomtruyen.core.common.R as CommonR
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -37,6 +39,7 @@ fun SharedTransitionScope.ExerciseList(
     state: ManageWorkoutUiState,
     lazyListState: LazyListState,
     listHeader: LazyListScope.() -> Unit = {},
+    onDiscard: () -> Unit,
     onAction: (ManageWorkoutUiAction) -> Unit,
 ) {
     val haptic = LocalHapticFeedback.current
@@ -105,6 +108,19 @@ fun SharedTransitionScope.ExerciseList(
                 ) {
                     onAction(ManageWorkoutUiAction.Exercise.OnAddClicked)
                 }
+            }
+        }
+
+        if(state.mode.isExecute) {
+            item {
+                Buttons.Text(
+                    text = stringResource(id = CommonR.string.button_discard),
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error
+                    ),
+                    onClick = onDiscard
+                )
             }
         }
     }

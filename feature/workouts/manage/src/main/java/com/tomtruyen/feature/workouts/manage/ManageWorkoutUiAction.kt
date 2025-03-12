@@ -77,5 +77,7 @@ sealed class ManageWorkoutUiAction {
         sealed class Exercise : Navigate() {
             data class Detail(val id: String) : ManageWorkoutUiAction()
         }
+
+        data object Back: Navigate()
     }
 }
