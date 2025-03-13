@@ -6,8 +6,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.Dimens
+import com.tomtruyen.core.designsystem.theme.datastore.ThemeMode
 import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.listitems.ListItem
@@ -17,7 +17,7 @@ import com.tomtruyen.feature.profile.R
 fun AppearanceSection(
     onShowThemeSheet: () -> Unit,
 ) {
-    val themeMode by ThemePreferencesDatastore.themeMode.collectAsState(ThemePreferencesDatastore.Mode.SYSTEM)
+    val themeMode by ThemePreferencesDatastore.themeMode.collectAsState(ThemeMode.SYSTEM)
 
     Label(
         label = stringResource(id = R.string.label_appearance),

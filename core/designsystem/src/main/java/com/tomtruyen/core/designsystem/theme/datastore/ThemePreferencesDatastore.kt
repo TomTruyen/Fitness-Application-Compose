@@ -20,17 +20,7 @@ object ThemePreferencesDatastore: KoinComponent {
 
     private val theme = stringPreferencesKey(KEY_THEME)
 
-    enum class Mode(val value: String) {
-        DARK("Dark"),
-        LIGHT("Light"),
-        SYSTEM("System");
-
-        companion object {
-            fun fromValue(value: String?) = Mode.entries.find { it.value == value }
-        }
-    }
-
-    suspend fun setTheme(mode: Mode) {
+    suspend fun setTheme(mode: ThemeMode) {
         context.dataStore.edit {
             it[theme] = mode.value
         }
@@ -43,6 +33,16 @@ object ThemePreferencesDatastore: KoinComponent {
     }
 
     val themeMode = context.dataStore.data.map {
-        Mode.fromValue(it[theme]) ?: Mode.SYSTEM
+        ThemeMode.fromValue(it[theme]) ?: ThemeMode.SYSTEM
+    }
+}
+
+enum class ThemeMode(val value: String) {
+    DARK("Dark"),
+    LIGHT("Light"),
+    SYSTEM("System");
+
+    companion object {
+        fun fromValue(value: String?) = ThemeMode.entries.find { it.value == value }
     }
 }

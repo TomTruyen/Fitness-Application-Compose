@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import com.tomtruyen.core.designsystem.theme.datastore.ThemeMode
 import com.tomtruyen.core.ui.BottomSheetItem
 import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 import com.tomtruyen.feature.profile.ProfileUiAction
@@ -20,13 +21,13 @@ fun rememberThemeModeActions(
     onAction: (ProfileUiAction) -> Unit
 ): List<BottomSheetItem> {
     return remember {
-        ThemePreferencesDatastore.Mode.entries.map { mode ->
+        ThemeMode.entries.map { mode ->
             BottomSheetItem(
                 title = mode.value,
                 icon = when(mode) {
-                    ThemePreferencesDatastore.Mode.DARK -> Icons.Default.DarkMode
-                    ThemePreferencesDatastore.Mode.LIGHT -> Icons.Default.LightMode
-                    ThemePreferencesDatastore.Mode.SYSTEM -> Icons.Default.Android
+                    ThemeMode.DARK -> Icons.Default.DarkMode
+                    ThemeMode.LIGHT -> Icons.Default.LightMode
+                    ThemeMode.SYSTEM -> Icons.Default.Android
                 },
                 onClick = {
                     onAction(ProfileUiAction.OnThemeModeChanged(mode))

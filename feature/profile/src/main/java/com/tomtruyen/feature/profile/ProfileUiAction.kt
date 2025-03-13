@@ -1,6 +1,7 @@
 package com.tomtruyen.feature.profile
 
 import com.tomtruyen.core.common.models.UnitType
+import com.tomtruyen.core.designsystem.theme.datastore.ThemeMode
 import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 
 sealed class ProfileUiAction {
@@ -16,7 +17,7 @@ sealed class ProfileUiAction {
 
     data object Logout : ProfileUiAction()
 
-    data class OnThemeModeChanged(val mode: ThemePreferencesDatastore.Mode): ProfileUiAction()
+    data class OnThemeModeChanged(val mode: ThemeMode): ProfileUiAction()
 
     sealed class Sheet: ProfileUiAction() {
         sealed class WeightUnit: Sheet() {

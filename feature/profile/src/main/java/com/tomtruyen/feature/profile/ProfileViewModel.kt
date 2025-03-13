@@ -2,6 +2,7 @@ package com.tomtruyen.feature.profile
 
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.providers.KoinReloadProvider
+import com.tomtruyen.core.designsystem.theme.datastore.ThemeMode
 import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
@@ -87,7 +88,7 @@ class ProfileViewModel(
         triggerEvent(ProfileUiEvent.Logout)
     }
 
-    private fun updateThemeMode(mode: ThemePreferencesDatastore.Mode) = vmScope.launch {
+    private fun updateThemeMode(mode: ThemeMode) = vmScope.launch {
         ThemePreferencesDatastore.setTheme(mode)
     }
 

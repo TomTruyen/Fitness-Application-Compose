@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color.Companion.White
+import com.tomtruyen.core.designsystem.theme.datastore.ThemeMode
 import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 
 private val DarkColorScheme = lightColorScheme(
@@ -53,11 +54,11 @@ private val LightColorScheme = lightColorScheme(
 fun FynixTheme(
     content: @Composable () -> Unit
 ) {
-    val themeMode by ThemePreferencesDatastore.themeMode.collectAsState(ThemePreferencesDatastore.Mode.SYSTEM)
+    val themeMode by ThemePreferencesDatastore.themeMode.collectAsState(ThemeMode.SYSTEM)
 
     val colorScheme = when(themeMode) {
-        ThemePreferencesDatastore.Mode.DARK -> DarkColorScheme
-        ThemePreferencesDatastore.Mode.SYSTEM if isSystemInDarkTheme() -> DarkColorScheme
+        ThemeMode.DARK -> DarkColorScheme
+        ThemeMode.SYSTEM if isSystemInDarkTheme() -> DarkColorScheme
         else -> LightColorScheme
     }
 

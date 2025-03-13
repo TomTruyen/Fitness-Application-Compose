@@ -11,19 +11,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import com.tomtruyen.core.designsystem.theme.datastore.ThemeMode
 import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
 
 @Composable
 fun rememberDarkMode(): State<Boolean> {
-    val themeMode by ThemePreferencesDatastore.themeMode.collectAsState(ThemePreferencesDatastore.Mode.SYSTEM)
+    val themeMode by ThemePreferencesDatastore.themeMode.collectAsState(ThemeMode.SYSTEM)
     val isSystemInDarkTheme = isSystemInDarkTheme()
 
     return remember(themeMode) {
         mutableStateOf(
             when (themeMode) {
-                ThemePreferencesDatastore.Mode.DARK -> true
-                ThemePreferencesDatastore.Mode.LIGHT -> false
-                ThemePreferencesDatastore.Mode.SYSTEM -> isSystemInDarkTheme
+                ThemeMode.DARK -> true
+                ThemeMode.LIGHT -> false
+                ThemeMode.SYSTEM -> isSystemInDarkTheme
             }
         )
     }
