@@ -40,6 +40,7 @@ import com.tomtruyen.core.ui.swipereveal.SwipeToRevealBox
 import com.tomtruyen.core.ui.swipereveal.rememberSwipeToRevealState
 import com.tomtruyen.core.ui.wheeltimepicker.WheelTimerPickerSheet
 import com.tomtruyen.core.ui.wheeltimepicker.core.TimeComponent
+import com.tomtruyen.data.entities.ChangeType
 import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
@@ -94,6 +95,7 @@ fun WorkoutExerciseSetRow(
                 ExerciseType.WEIGHT -> WeightSet(
                     weight = set.weight,
                     reps = set.reps,
+                    changeRecord = set.changeRecord,
                     mode = mode,
                     completed = set.completed,
                     onRepsChanged = { reps ->
@@ -118,6 +120,7 @@ fun WorkoutExerciseSetRow(
 
                 ExerciseType.TIME -> TimeSet(
                     time = set.time,
+                    changeRecord = set.changeRecord,
                     mode = mode,
                     completed = set.completed,
                     onTimeChanged = { time ->
@@ -188,23 +191,26 @@ private fun PreviousSet(
 private fun RowScope.WeightSet(
     weight: Double?,
     reps: Int?,
+    changeRecord: List<ChangeType>,
     mode: ManageWorkoutMode,
     completed: Boolean,
     onRepsChanged: (String) -> Unit,
     onWeightChanged: (String) -> Unit
 ) {
-    val hasBeenCompleted = rememberSetHasBeenCompleted(completed)
-
     val (inputReps, initialReps) = rememberSetInputValue(
         currentValue = reps,
-        hasBeenCompleted = hasBeenCompleted,
         mode = mode,
+        wasChanged =  {
+            changeRecord.contains(ChangeType.REP) || completed
+        },
     )
 
     val (inputWeight, initialWeight) = rememberSetInputValue(
         currentValue = weight,
-        hasBeenCompleted = hasBeenCompleted,
-        mode = mode
+        mode = mode,
+        wasChanged = {
+            changeRecord.contains(ChangeType.WEIGHT) || completed
+        },
     )
 
     TextFields.Default(
@@ -267,10 +273,12 @@ private fun RowScope.WeightSet(
 @Composable
 private fun RowScope.TimeSet(
     time: Int?,
+    changeRecord: List<ChangeType>,
     mode: ManageWorkoutMode,
     completed: Boolean,
     onTimeChanged: (Int) -> Unit
 ) {
+    // TODO: Implement ChagneType logic
     var timeSheetVisible by remember { mutableStateOf(false) }
 
     val hasBeenCompleted = rememberSetHasBeenCompleted(completed)

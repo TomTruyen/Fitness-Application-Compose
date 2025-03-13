@@ -41,7 +41,9 @@ data class WorkoutExerciseSet(
     @Transient
     val completed: Boolean = false,
     @Transient
-    override val synced: Boolean = false
+    val changeRecord: List<ChangeType> = emptyList(),
+    @Transient
+    override val synced: Boolean = false,
 ) : BaseEntity, SyncEntity {
     companion object {
         const val TABLE_NAME = "WorkoutExerciseSet"
@@ -53,4 +55,13 @@ data class WorkoutExerciseSet(
         const val KEY_TIME = "time"
         const val KEY_SORT_ORDER = "sort_order"
     }
+}
+
+// Used to determine if an input has changed in value in the UI
+// Also present here to store for ActiveWorkout
+@Serializable
+enum class ChangeType {
+    REP,
+    WEIGHT,
+    TIME;
 }

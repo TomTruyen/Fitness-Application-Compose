@@ -1,6 +1,8 @@
 package com.tomtruyen.data.models.ui
 
 import androidx.compose.runtime.Immutable
+import com.tomtruyen.data.entities.ChangeType
+import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.entities.WorkoutExerciseSet
 import com.tomtruyen.data.entities.WorkoutHistoryExerciseSet
 import kotlinx.datetime.Clock
@@ -19,9 +21,10 @@ data class WorkoutExerciseSetUiModel(
     val time: Int? = null,
     val sortOrder: Int = 0,
     val exerciseId: String? = null,
-    val completed: Boolean = false
+    val completed: Boolean = false,
+    val changeRecord: List<ChangeType> = emptyList(),
 ) {
-    fun toEntity(workoutExerciseId: String, index: Int) = WorkoutExerciseSet(
+    fun toEntity(workoutExerciseId: String, index: Int, withChangeRecord: Boolean = false) = WorkoutExerciseSet(
         id = id,
         reps = reps,
         weight = weight,
@@ -29,7 +32,8 @@ data class WorkoutExerciseSetUiModel(
         completed = completed,
         sortOrder = index,
         workoutExerciseId = workoutExerciseId,
-        synced = false
+        synced = false,
+        changeRecord = if(withChangeRecord) changeRecord else emptyList()
     )
 
     fun toWorkoutHistorySetEntity(
@@ -51,7 +55,8 @@ data class WorkoutExerciseSetUiModel(
             weight = entity.weight,
             time = entity.time,
             completed = entity.completed,
-            sortOrder = entity.sortOrder
+            sortOrder = entity.sortOrder,
+            changeRecord = entity.changeRecord
         )
     }
 }

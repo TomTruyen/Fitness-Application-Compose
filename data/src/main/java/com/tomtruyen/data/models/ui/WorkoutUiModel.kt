@@ -3,6 +3,7 @@ package com.tomtruyen.data.models.ui
 import androidx.compose.runtime.Immutable
 import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.common.models.UnitType
+import com.tomtruyen.data.entities.ChangeType
 import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.entities.WorkoutHistory
 import com.tomtruyen.data.entities.WorkoutWithExercises
@@ -90,6 +91,9 @@ fun WorkoutUiModel.copyWithRepsChanged(
                 sets = exercise.sets.mapIndexed { sIndex, set ->
                     if (sIndex == setIndex) set.copy(
                         reps = reps?.toIntOrNull(),
+                        changeRecord = set.changeRecord.toMutableList().apply {
+                            if(!set.changeRecord.contains(ChangeType.REP)) add(ChangeType.REP)
+                        }
                     ) else set
                 }
             )
@@ -108,6 +112,9 @@ fun WorkoutUiModel.copyWithWeightChanged(
                 sets = exercise.sets.mapIndexed { sIndex, set ->
                     if (sIndex == setIndex) set.copy(
                         weight = weight?.toDoubleOrNull(),
+                        changeRecord = set.changeRecord.toMutableList().apply {
+                            if(!set.changeRecord.contains(ChangeType.WEIGHT)) add(ChangeType.WEIGHT)
+                        }
                     ) else set
                 }
             )
@@ -126,6 +133,9 @@ fun WorkoutUiModel.copyWithTimeChanged(
                 sets = exercise.sets.mapIndexed { sIndex, set ->
                     if (sIndex == setIndex) set.copy(
                         time = time ?: 0,
+                        changeRecord = set.changeRecord.toMutableList().apply {
+                            if(!set.changeRecord.contains(ChangeType.TIME)) add(ChangeType.TIME)
+                        }
                     ) else set
                 }
             )
@@ -167,8 +177,8 @@ fun WorkoutUiModel.copyWithSetCompleted(id: String, setIndex: Int) = copy(
                         completed = !this[setIndex].completed,
                         reps = if (exercise.type == ExerciseType.WEIGHT && this[setIndex].reps == null) 0 else this[setIndex].reps,
                         weight = if (exercise.type == ExerciseType.WEIGHT && this[setIndex].weight == null) 0.0 else this[setIndex].weight,
-                        time = if (exercise.type == ExerciseType.TIME && this[setIndex].time == null) 0 else this[setIndex].time
-
+                        time = if (exercise.type == ExerciseType.TIME && this[setIndex].time == null) 0 else this[setIndex].time,
+                        changeRecord = ChangeType.entries
                     )
                 }
             )

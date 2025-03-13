@@ -35,7 +35,7 @@ class SetStateManager(
             workout = it.workout.copyWithRepsChanged(
                 id = id,
                 setIndex = setIndex,
-                reps = reps
+                reps = reps,
             )
         )
     }

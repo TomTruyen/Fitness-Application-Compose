@@ -173,7 +173,7 @@ class WorkoutRepositoryImpl : WorkoutRepository() {
             }.also { workoutExercise ->
                 sets.addAll(
                     exercise.sets.mapIndexed { setIndex, set ->
-                        set.toEntity(workoutExercise.id, setIndex).let { newSet ->
+                        set.toEntity(workoutExercise.id, setIndex, withChangeRecord = true).let { newSet ->
                             if (newSet.id.startsWith(Workout.ACTIVE_WORKOUT_ID)) return@let newSet
 
                             newSet.copy(

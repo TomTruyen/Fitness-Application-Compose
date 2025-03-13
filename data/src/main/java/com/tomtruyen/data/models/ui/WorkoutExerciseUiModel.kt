@@ -74,8 +74,8 @@ data class WorkoutExerciseUiModel(
 
         fun fromEntity(entity: WorkoutExerciseWithSets) = WorkoutExerciseUiModel(
             id = entity.workoutExercise.id,
-            exerciseId = entity.workoutExercise.exerciseId.orEmpty(),
-            name = entity.exercise.exercise.name.orEmpty(),
+            exerciseId = entity.workoutExercise.exerciseId,
+            name = entity.exercise.exercise.name,
             imageUrl = entity.exercise.exercise.imageUrl,
             imageDetailUrl = entity.exercise.exercise.imageDetailUrl,
             type = ExerciseType.fromValue(entity.exercise.exercise.type),

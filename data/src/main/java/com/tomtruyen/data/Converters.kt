@@ -1,8 +1,10 @@
 package com.tomtruyen.data
 
 import androidx.room.TypeConverter
+import com.tomtruyen.data.entities.ChangeType
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.json.Json
+import kotlin.collections.List
 
 class Converters {
     @TypeConverter
@@ -23,5 +25,15 @@ class Converters {
     @TypeConverter
     fun fromStringToLocalDateTime(dateTime: String): LocalDateTime {
         return LocalDateTime.parse(dateTime)
+    }
+
+    @TypeConverter
+    fun fromListChangeTypeToString(changeTypes: List<ChangeType>): String {
+        return Json.encodeToString(changeTypes)
+    }
+
+    @TypeConverter
+    fun fromStringToListChangeType(changeTypes: String): List<ChangeType> {
+        return Json.decodeFromString(changeTypes)
     }
 }
