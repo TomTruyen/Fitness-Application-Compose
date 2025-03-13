@@ -51,6 +51,7 @@ import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.selectedListItem
 import com.tomtruyen.core.ui.Avatar
 import com.tomtruyen.core.ui.Chip
+import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.listitems.ListItem
 import com.tomtruyen.core.ui.toolbars.SearchToolbar
@@ -283,11 +284,8 @@ private fun SharedTransitionScope.ExercisesScreenLayout(
                                 if (currentFirstLetter != previousFirstLetter) {
                                     currentLetter = currentFirstLetter
 
-                                    Text(
-                                        text = currentLetter.toString(),
-                                        style = MaterialTheme.typography.bodyMedium.copy(
-                                            fontWeight = FontWeight.W500
-                                        ),
+                                    Label(
+                                        label = currentLetter.toString(),
                                         modifier = Modifier.padding(
                                             horizontal = 20.dp,
                                             vertical = Dimens.Small

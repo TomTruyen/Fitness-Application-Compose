@@ -19,8 +19,8 @@ fun UnitSection(
     Label(
         label = stringResource(id = R.string.label_units),
         modifier = Modifier.padding(
-            start = 12.dp,
-            end = 12.dp,
+            start = Dimens.Normal,
+            end = Dimens.Normal,
             bottom = Dimens.Tiny
         )
     )

@@ -2,7 +2,7 @@ package com.tomtruyen.navigation
 
 const val KEY_WORKOUT = "Workout"
 const val KEY_EXERCISE = "Exercise"
-const val KEY_START_WORKOUT = "Workout_Start"
+const val KEY_HISTORY = "History"
 
 sealed class SharedTransitionKey {
     abstract val key: String
@@ -19,5 +19,10 @@ sealed class SharedTransitionKey {
         companion object {
             const val KEY_WORKOUT_ADD_EXERCISE = "Workout_Add_Exercise"
         }
+    }
+
+    data class History(val id: String): SharedTransitionKey() {
+        override val key: String
+            get() = "${KEY_HISTORY}_${id}"
     }
 }

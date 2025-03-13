@@ -3,16 +3,18 @@ package com.tomtruyen.feature.workouts.history.detail
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.data.repositories.interfaces.HistoryRepository
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
 class WorkoutHistoryDetailViewModel(
-    private val id: String,
+    id: String,
     private val historyRepository: HistoryRepository
 ) : BaseViewModel<WorkoutHistoryDetailUiState, WorkoutHistoryDetailUiAction, WorkoutHistoryDetailUiEvent>(
     initialState = WorkoutHistoryDetailUiState()
 ) {
     init {
-        // TODO: Fetch the actual history from Room
+        observeHistory(id)
 
         observeLoading()
     }
@@ -21,6 +23,19 @@ class WorkoutHistoryDetailViewModel(
         loading.collectLatest { loading ->
             updateState { it.copy(loading = loading) }
         }
+    }
+
+    private fun observeHistory(id: String) = vmScope.launch {
+        historyRepository.findHistoryByIdAsync(id)
+            .filterNotNull()
+            .distinctUntilChanged()
+            .collectLatest { history ->
+                updateState {
+                    it.copy(
+                        history = history
+                    )
+                }
+            }
     }
 
     override fun onAction(action: WorkoutHistoryDetailUiAction) {

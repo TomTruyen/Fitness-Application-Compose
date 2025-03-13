@@ -11,6 +11,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 abstract class WorkoutHistoryDao: SyncDao<WorkoutHistoryWithExercises>(WorkoutHistory.TABLE_NAME) {
     @Transaction
+    @Query("SELECT * FROM ${WorkoutHistory.TABLE_NAME} WHERE id = :id")
+    abstract fun findHistoryByIdAsync(id: String): Flow<WorkoutHistoryWithExercises?>
+
+    @Transaction
     @Query("SELECT * FROM ${WorkoutHistory.TABLE_NAME} ORDER BY createdAt DESC LIMIT :limit OFFSET :offset")
     abstract fun findHistoriesAsync(
         offset: Int,

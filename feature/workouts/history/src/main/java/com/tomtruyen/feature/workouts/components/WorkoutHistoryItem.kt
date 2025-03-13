@@ -1,6 +1,5 @@
 package com.tomtruyen.feature.workouts.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,13 +7,9 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +32,7 @@ import com.tomtruyen.core.ui.Avatar
 import com.tomtruyen.core.ui.Label
 import com.tomtruyen.data.models.ui.WorkoutHistoryExerciseUiModel
 import com.tomtruyen.data.models.ui.WorkoutHistoryUiModel
+import com.tomtruyen.feature.workouts.history.WorkoutHistoryUiAction
 import kotlinx.datetime.LocalDateTime
 
 const val VISIBLE_EXERCISE_COUNT = 3
@@ -44,6 +40,7 @@ const val VISIBLE_EXERCISE_COUNT = 3
 @Composable
 fun WorkoutHistoryItem(
     history: WorkoutHistoryUiModel,
+    onAction: (WorkoutHistoryUiAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val visibleExercises = remember(history.exercises) {
@@ -61,7 +58,7 @@ fun WorkoutHistoryItem(
         ),
         elevation = CardDefaults.cardElevation(0.dp),
         onClick = {
-            // TODO: Handle detail Click
+            onAction(WorkoutHistoryUiAction.Navigate.Detail(history.id))
         }
     ) {
         Column(
@@ -74,9 +71,7 @@ fun WorkoutHistoryItem(
             Header(
                 workoutName = history.name,
                 date = history.createdAt,
-            ) {
-                // TODO: Implement Sheet Opening Logic for actions
-            }
+            )
 
             Statistics(
                 duration = history.duration,
@@ -116,43 +111,29 @@ fun WorkoutHistoryItem(
 private fun Header(
     workoutName: String,
     date: LocalDateTime,
-    onClick: () -> Unit,
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(1f)
+            .padding(horizontal = Dimens.Normal),
+        horizontalAlignment = Alignment.Start
     ) {
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = Dimens.Normal),
-            horizontalAlignment = Alignment.Start
-        ) {
-            Text(
-                text = workoutName,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    fontWeight = FontWeight.W500
-                ),
-            )
+        Text(
+            text = workoutName,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.bodyLarge.copy(
+                fontWeight = FontWeight.W500
+            ),
+        )
 
-            Label(
-                label = date.toRelativeTimeString(),
-                style = MaterialTheme.typography.labelMedium.copy(
-                    color = MaterialTheme.colorScheme.secondaryTextColor.value,
-                )
+        Label(
+            label = date.toRelativeTimeString(),
+            style = MaterialTheme.typography.labelMedium.copy(
+                color = MaterialTheme.colorScheme.secondaryTextColor.value,
             )
-        }
-
-        IconButton(
-            onClick = onClick,
-        ) {
-            Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = null,
-            )
-        }
+        )
     }
 }
 

@@ -14,6 +14,8 @@ abstract class HistoryRepository : SyncRepository<WorkoutHistoryWithExercises>()
 
     override val dao = database.workoutHistoryDao()
 
+    abstract fun findHistoryByIdAsync(id: String): Flow<WorkoutHistoryUiModel?>
+
     abstract fun findHistoriesAsync(page: Int): Flow<List<WorkoutHistoryUiModel>>
 
     abstract suspend fun getWorkoutHistoryPaginated(

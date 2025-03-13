@@ -1,5 +1,8 @@
 package com.tomtruyen.feature.workouts.history
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,15 +36,19 @@ import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.feature.workouts.components.WorkoutHistoryItem
+import com.tomtruyen.navigation.Screen
+import com.tomtruyen.navigation.SharedTransitionKey
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun WorkoutHistoryScreen(
+fun SharedTransitionScope.WorkoutHistoryScreen(
     navController: NavController,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: WorkoutHistoryViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
@@ -50,22 +57,28 @@ fun WorkoutHistoryScreen(
 
     LaunchedEffect(context, viewModel) {
         viewModel.eventFlow.collectLatest { event ->
-            // TODO: Implement Events
+            when(event) {
+                is WorkoutHistoryUiEvent.Navigate.Detail -> navController.navigate(
+                    Screen.History.Detail(event.id)
+                )
+            }
         }
     }
 
     WorkoutHistoryScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
+        animatedVisibilityScope = animatedVisibilityScope,
         navController = navController,
         state = state,
         onAction = viewModel::onAction
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, FlowPreview::class)
+@OptIn(ExperimentalMaterial3Api::class, FlowPreview::class, ExperimentalSharedTransitionApi::class)
 @Composable
-private fun WorkoutHistoryScreenLayout(
+private fun SharedTransitionScope.WorkoutHistoryScreenLayout(
     snackbarHost: @Composable () -> Unit,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     navController: NavController,
     state: WorkoutHistoryUiState,
     onAction: (WorkoutHistoryUiAction) -> Unit,
@@ -119,7 +132,8 @@ private fun WorkoutHistoryScreenLayout(
                 ) {
                     item {
                         Label(
-                            label = stringResource(R.string.label_workouts)
+                            label = stringResource(R.string.label_workouts),
+                            modifier = Modifier.padding(start = Dimens.Tiny)
                         )
                     }
 
@@ -132,8 +146,15 @@ private fun WorkoutHistoryScreenLayout(
                             modifier = Modifier
                                 .padding(vertical = Dimens.Tiny)
                                 .fillMaxWidth()
-                                .animateItem(),
-                            history = history
+                                .animateItem()
+                                .sharedBounds(
+                                    sharedContentState = rememberSharedContentState(
+                                        key = SharedTransitionKey.History(history.id)
+                                    ),
+                                    animatedVisibilityScope = animatedVisibilityScope
+                                ),
+                            history = history,
+                            onAction = onAction
                         )
                     }
                 }

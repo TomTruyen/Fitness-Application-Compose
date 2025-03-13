@@ -93,6 +93,10 @@ class WorkoutHistoryViewModel(
             is WorkoutHistoryUiAction.LoadMore -> fetchWorkoutHistory(
                 page = action.page + 1
             )
+
+            is WorkoutHistoryUiAction.Navigate.Detail -> triggerEvent(
+                WorkoutHistoryUiEvent.Navigate.Detail(action.id)
+            )
         }
     }
 }

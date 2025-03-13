@@ -186,7 +186,8 @@ private fun SharedTransitionScope.WorkoutOverviewScreenLayout(
                 ) {
                     item {
                         Label(
-                            label = stringResource(R.string.label_quick_start)
+                            label = stringResource(R.string.label_quick_start),
+                            modifier = Modifier.padding(start = Dimens.Tiny)
                         )
                     }
 
@@ -206,7 +207,10 @@ private fun SharedTransitionScope.WorkoutOverviewScreenLayout(
 
                     item {
                         Label(
-                            modifier = Modifier.padding(top = Dimens.Normal),
+                            modifier = Modifier.padding(
+                                top = Dimens.Normal,
+                                start = Dimens.Tiny
+                            ),
                             label = stringResource(R.string.label_workouts)
                         )
                     }

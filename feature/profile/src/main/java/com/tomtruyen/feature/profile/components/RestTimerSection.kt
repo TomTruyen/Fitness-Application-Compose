@@ -23,8 +23,8 @@ fun RestTimerSection(
     Label(
         label = stringResource(id = R.string.label_rest_timer),
         modifier = Modifier.padding(
-            start = 12.dp,
-            end = 12.dp,
+            start = Dimens.Normal,
+            end = Dimens.Normal,
             top = Dimens.Normal,
             bottom = Dimens.Tiny
         )

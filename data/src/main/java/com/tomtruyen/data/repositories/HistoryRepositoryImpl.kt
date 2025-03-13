@@ -21,6 +21,7 @@ import io.github.jan.supabase.postgrest.query.Order
 import io.github.jan.supabase.postgrest.query.filter.FilterOperation
 import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapLatest
 
 class HistoryRepositoryImpl : HistoryRepository() {
@@ -33,6 +34,11 @@ class HistoryRepositoryImpl : HistoryRepository() {
 
     private fun calculatePageStart(page: Int): Int {
         return (page - 1).coerceAtLeast(0) * WorkoutHistory.PAGE_SIZE
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun findHistoryByIdAsync(id: String) = dao.findHistoryByIdAsync(id).mapLatest { history ->
+        history?.let(WorkoutHistoryUiModel::fromEntity)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

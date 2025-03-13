@@ -237,7 +237,10 @@ class MainActivity : ComponentActivity() {
                                     startDestination = Screen.History.Overview
                                 ) {
                                     composable<Screen.History.Overview> {
-                                        WorkoutHistoryScreen(navController)
+                                        WorkoutHistoryScreen(
+                                            navController = navController,
+                                            animatedVisibilityScope = this
+                                        )
                                     }
 
                                     composable<Screen.History.Detail> { backStackEntry ->
@@ -245,7 +248,8 @@ class MainActivity : ComponentActivity() {
 
                                         WorkoutHistoryDetailScreen(
                                             id = args.id,
-                                            navController = navController
+                                            navController = navController,
+                                            animatedVisibilityScope = this
                                         )
                                     }
                                 }

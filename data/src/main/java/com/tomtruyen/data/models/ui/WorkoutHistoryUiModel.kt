@@ -19,7 +19,7 @@ data class WorkoutHistoryUiModel(
     val duration: Long = 0L,
     val createdAt: LocalDateTime = Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault()),
-    val page: Int,
+    val page: Int = 0,
     val exercises: List<WorkoutHistoryExerciseUiModel> = emptyList()
 ) {
     val volume: Double
