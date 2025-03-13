@@ -1,5 +1,6 @@
 package com.tomtruyen.fitoryx.di
 
+import com.tomtruyen.fitoryx.MainViewModel
 import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
@@ -24,6 +25,8 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val viewModelModule = module {
+    viewModelOf(::MainViewModel)
+
     viewModelOf(::LoginViewModel)
 
     viewModelOf(::RegisterViewModel)

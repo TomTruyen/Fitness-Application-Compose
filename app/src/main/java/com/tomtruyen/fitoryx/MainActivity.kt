@@ -2,8 +2,6 @@ package com.tomtruyen.fitoryx
 
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -27,10 +25,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.tomtruyen.fitoryx.MainViewModel
 import com.tomtruyen.core.common.models.GlobalAppState
 import com.tomtruyen.core.designsystem.theme.FynixTheme
 import com.tomtruyen.core.designsystem.theme.rememberDarkMode
-import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.feature.auth.login.LoginScreen
 import com.tomtruyen.feature.auth.register.RegisterScreen
 import com.tomtruyen.feature.exercises.ExercisesScreen
@@ -47,15 +45,13 @@ import com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel
 import com.tomtruyen.fitoryx.navigation.MainBottomNavigation
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.screenScopedViewModel
-import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.KoinAndroidContext
 import org.koin.androidx.compose.koinViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class MainActivity : ComponentActivity() {
-    private val userRepository by inject<UserRepository>()
-
-    private var hasCheckedLoggedIn: Boolean = false
+    private val viewModel: MainViewModel by viewModel()
 
     @OptIn(ExperimentalSharedTransitionApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +59,7 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
-        splashScreen.setKeepOnScreenCondition { !hasCheckedLoggedIn }
+        splashScreen.setKeepOnScreenCondition { !viewModel.hasCheckedLoggedIn.get() }
 
         setContent {
             KoinAndroidContext {
@@ -92,7 +88,7 @@ class MainActivity : ComponentActivity() {
                             Screen.Exercise.Overview(),
                             Screen.History.Overview,
                             Screen.Profile
-                        ).any { backStackEntry?.destination?.hasRoute(it::class) ?: false }
+                        ).any { backStackEntry?.destination?.hasRoute(it::class) == true }
 
                         val isViewMode =
                             if (backStackEntry?.destination?.hasRoute<Screen.Exercise.Overview>() == true) {
@@ -126,19 +122,13 @@ class MainActivity : ComponentActivity() {
                                 ) {
                                     composable<Screen.Auth.Login> {
                                         LaunchedEffect(Unit) {
-                                            if (userRepository.isLoggedIn()) {
+                                            if(viewModel.isLoggedIn()) {
                                                 navController.navigate(Screen.Workout.Graph) {
                                                     popUpTo(Screen.Auth.Graph) {
                                                         inclusive = true
                                                     }
                                                 }
                                             }
-
-                                            // Waits for MainLooper before dismissing the splashscreen
-                                            // Ensures that enough time for navigation
-                                            Handler(Looper.getMainLooper()).postDelayed({
-                                                hasCheckedLoggedIn = true
-                                            }, 50L)
                                         }
 
                                         LoginScreen(navController)

@@ -1,4 +1,4 @@
-package com.tomtruyen.Fynix.providers
+package com.tomtruyen.fitoryx.providers
 
 import com.tomtruyen.core.common.providers.CredentialProvider
 
