@@ -1,32 +1,28 @@
 package com.tomtruyen.feature.workouts.manage.remember
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import com.tomtruyen.core.common.extensions.tryIntString
 import com.tomtruyen.core.common.models.ManageWorkoutMode
 
 @Composable
-fun <T> rememberSetInputValue(
-    currentValue: T?,
+fun <T, R> rememberSetInputValue(
+    value: T?,
     mode: ManageWorkoutMode,
-    wasChanged: () -> Boolean,
-    transform: (T?) -> String = {
-        when (it) {
-            is Double? -> it?.tryIntString()
-            else -> it.toString()
-        }.orEmpty()
-    }
-): Pair<MutableState<String>, T?> {
-    val initial = remember { currentValue }
+    didChange: () -> Boolean,
+    defaultValue: R,
+    transform: (T?) -> R
+): Pair<MutableState<R>, T?> {
+    val initial = remember { value }
 
-    val value = remember(currentValue, mode, wasChanged) {
+    val value = remember(value, mode, didChange) {
         mutableStateOf(
-            if(!mode.isExecute || wasChanged()) {
-                transform(currentValue)
+            if(!mode.isExecute || didChange()) {
+                transform(value)
             } else {
-                ""
+                defaultValue
             }
         )
     }

@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,7 +20,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -35,18 +31,13 @@ import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.placeholder
 import com.tomtruyen.core.ui.TextFields
-import com.tomtruyen.core.ui.swipereveal.SwipeToRevealAction
-import com.tomtruyen.core.ui.swipereveal.SwipeToRevealBox
-import com.tomtruyen.core.ui.swipereveal.rememberSwipeToRevealState
 import com.tomtruyen.core.ui.wheeltimepicker.WheelTimerPickerSheet
 import com.tomtruyen.core.ui.wheeltimepicker.core.TimeComponent
 import com.tomtruyen.data.entities.ChangeType
 import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
-import com.tomtruyen.feature.workouts.manage.remember.rememberSetHasBeenCompleted
 import com.tomtruyen.feature.workouts.manage.remember.rememberSetInputValue
-import com.tomtruyen.core.common.R as CommonR
 
 @Composable
 fun WorkoutExerciseSetRow(
@@ -197,20 +188,24 @@ private fun RowScope.WeightSet(
     onRepsChanged: (String) -> Unit,
     onWeightChanged: (String) -> Unit
 ) {
-    val (inputReps, initialReps) = rememberSetInputValue(
-        currentValue = reps,
+    val (inputReps, initialReps) = rememberSetInputValue<Int?, String>(
+        value = reps,
+        defaultValue = "",
         mode = mode,
-        wasChanged =  {
+        didChange =  {
             changeRecord.contains(ChangeType.REP) || completed
         },
+        transform = { it?.toString().orEmpty() }
     )
 
-    val (inputWeight, initialWeight) = rememberSetInputValue(
-        currentValue = weight,
+    val (inputWeight, initialWeight) = rememberSetInputValue<Double?, String>(
+        value = weight,
+        defaultValue = "",
         mode = mode,
-        wasChanged = {
+        didChange = {
             changeRecord.contains(ChangeType.WEIGHT) || completed
         },
+        transform = { it?.tryIntString().orEmpty() }
     )
 
     TextFields.Default(
@@ -278,25 +273,26 @@ private fun RowScope.TimeSet(
     completed: Boolean,
     onTimeChanged: (Int) -> Unit
 ) {
-    // TODO: Implement ChagneType logic
     var timeSheetVisible by remember { mutableStateOf(false) }
 
-    val hasBeenCompleted = rememberSetHasBeenCompleted(completed)
-
-    val initialTime = remember { time?.toLong() }
-
-    val inputTime by remember(time) {
-        mutableStateOf(time?.toLong())
-    }
+    val (inputTime, _) = rememberSetInputValue<Long?, String>(
+        value = time?.toLong(),
+        defaultValue = TimeUtils.formatSeconds(time?.toLong() ?: 0L),
+        mode = mode,
+        didChange = {
+            changeRecord.contains(ChangeType.TIME) || completed
+        },
+        transform = { TimeUtils.formatSeconds(it ?: 0L) },
+    )
 
     Text(
-        text = TimeUtils.formatSeconds(inputTime ?: initialTime ?: 0L),
+        text = inputTime.value,
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.bodyMedium.copy(
-            color = if (!mode.isView && !hasBeenCompleted && (inputTime == null || (mode.isExecute && !completed))) {
-                MaterialTheme.colorScheme.placeholder.value
-            } else {
+            color = if (!mode.isExecute || changeRecord.contains(ChangeType.TIME) || completed) {
                 MaterialTheme.typography.bodyMedium.color
+            } else {
+                MaterialTheme.colorScheme.placeholder.value
             },
             fontWeight = FontWeight.W500
         ),
