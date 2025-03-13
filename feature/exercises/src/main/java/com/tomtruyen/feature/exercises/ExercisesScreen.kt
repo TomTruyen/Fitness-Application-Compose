@@ -286,7 +286,7 @@ private fun SharedTransitionScope.ExercisesScreenLayout(
                                     Text(
                                         text = currentLetter.toString(),
                                         style = MaterialTheme.typography.bodyMedium.copy(
-                                            fontWeight = FontWeight.Bold
+                                            fontWeight = FontWeight.W500
                                         ),
                                         modifier = Modifier.padding(
                                             horizontal = 20.dp,

@@ -22,6 +22,15 @@ data class WorkoutHistoryUiModel(
     val page: Int,
     val exercises: List<WorkoutHistoryExerciseUiModel> = emptyList()
 ) {
+    val volume: Double
+        get() = exercises.sumOf { exercise ->
+            exercise.sets.sumOf { set ->
+                val reps = set.reps ?: 0
+                val weight = set.weight ?: 0.0
+                reps * weight
+            }
+        }
+
     companion object {
         fun fromEntity(entity: WorkoutHistoryWithExercises) = WorkoutHistoryUiModel(
             id = entity.workoutHistory.id,

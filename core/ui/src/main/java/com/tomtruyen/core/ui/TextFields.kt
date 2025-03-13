@@ -100,7 +100,10 @@ object TextFields {
             verticalArrangement = Arrangement.spacedBy(Dimens.Tiny)
         ) {
             if (withLabel) {
-                Label(placeholder)
+                Label(
+                    modifier = Modifier.padding(start = Dimens.Tiny),
+                    label = placeholder
+                )
             }
 
             BasicTextField(

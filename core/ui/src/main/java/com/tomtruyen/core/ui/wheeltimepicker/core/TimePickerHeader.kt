@@ -28,8 +28,7 @@ fun TimePickerHeader(
         if (components.contains(TimeComponent.HOUR)) {
             Label(
                 modifier = Modifier
-                    .weight(1f)
-                    .offset(x = -(2.dp)),
+                    .weight(1f),
                 label = stringResource(id = R.string.label_time_picker_hour).uppercase(),
                 textAlign = TextAlign.Center
             )
@@ -47,8 +46,7 @@ fun TimePickerHeader(
         if (components.contains(TimeComponent.MINUTE)) {
             Label(
                 modifier = Modifier
-                    .weight(1f)
-                    .offset(x = -(2.dp)),
+                    .weight(1f),
                 label = stringResource(id = R.string.label_time_picker_minute).uppercase(),
                 textAlign = TextAlign.Center
             )
@@ -66,8 +64,7 @@ fun TimePickerHeader(
         if (components.contains(TimeComponent.SECOND)) {
             Label(
                 modifier = Modifier
-                    .weight(1f)
-                    .offset(x = -(2.dp)),
+                    .weight(1f),
                 label = stringResource(id = R.string.label_time_picker_second).uppercase(),
                 textAlign = TextAlign.Center
             )

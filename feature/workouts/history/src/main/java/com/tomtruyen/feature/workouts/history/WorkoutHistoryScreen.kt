@@ -1,6 +1,8 @@
 package com.tomtruyen.feature.workouts.history
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,8 +29,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.designsystem.Dimens
+import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.toolbars.Toolbar
+import com.tomtruyen.feature.workouts.components.WorkoutHistoryItem
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -109,31 +113,28 @@ private fun WorkoutHistoryScreenLayout(
                     state = listState,
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(vertical = Dimens.Normal),
+                        .padding(horizontal = Dimens.Normal)
+                        .animateContentSize(),
+                    verticalArrangement = Arrangement.spacedBy(Dimens.Small)
                 ) {
-                    // TODO: Use .animateItem() on the item that we add in here
+                    item {
+                        Label(
+                            label = stringResource(R.string.label_workouts)
+                        )
+                    }
 
                     itemsIndexed(
                         items = state.histories.sortedByDescending { history ->
                             history.createdAt
                         }
                     ) { index, history ->
-                        Box(
+                        WorkoutHistoryItem(
                             modifier = Modifier
+                                .padding(vertical = Dimens.Tiny)
                                 .fillMaxWidth()
-                                .height(300.dp)
-                                .background(
-                                    color = if (index % 2 == 0) {
-                                        Color.Green
-                                    } else {
-                                        Color.Red
-                                    }
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(text = "${index} - ${history.createdAt}")
-                        }
-
+                                .animateItem(),
+                            history = history
+                        )
                     }
                 }
             }

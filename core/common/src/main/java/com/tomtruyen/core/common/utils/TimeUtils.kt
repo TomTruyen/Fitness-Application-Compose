@@ -46,8 +46,15 @@ object TimeUtils {
         return "0".repeat(LEADING_ZERO_WIDTH - str.length) + str
     }
 
-    fun formatDate(dateMillis: Long): String = SimpleDateFormat(
-        "dd MMM yyyy HH:mm",
-        Locale.getDefault()
-    ).format(dateMillis)
+    fun formatDuration(duration: Long): String {
+        val hours = TimeUnit.SECONDS.toHours(duration)
+        val minutes = TimeUnit.SECONDS.toMinutes(duration) % 60
+        val seconds = duration % 60
+
+        return when {
+            hours > 0 -> "${hours}h ${minutes}min"
+            minutes > 0 -> "${minutes}min"
+            else -> "${seconds}sec"
+        }
+    }
 }

@@ -49,7 +49,7 @@ fun WorkoutExerciseHeader(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.bodyLarge.copy(
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.W500
             ),
             modifier = Modifier
                 .pointerInput(Unit) {

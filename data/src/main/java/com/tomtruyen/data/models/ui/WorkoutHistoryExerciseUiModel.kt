@@ -20,6 +20,16 @@ data class WorkoutHistoryExerciseUiModel(
     val equipment: String? = null,
     val sets: List<WorkoutHistoryExerciseSetUiModel> = emptyList()
 ) {
+    val displayName: String
+        get() = buildString {
+            append(name)
+
+            val equipmentName = equipment.orEmpty()
+            if (equipmentName.isNotBlank()) {
+                append(" ($equipmentName)")
+            }
+        }
+
     companion object {
         fun fromEntity(entity: WorkoutHistoryExerciseWithSets) = WorkoutHistoryExerciseUiModel(
             id = entity.workoutHistoryExercise.id,
