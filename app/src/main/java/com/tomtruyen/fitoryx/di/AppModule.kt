@@ -1,6 +1,7 @@
 package com.tomtruyen.fitoryx.di
 
 import android.content.Context
+import com.tomtruyen.core.common.ThemePreferences
 import com.tomtruyen.core.common.providers.BuildConfigFieldProvider
 import com.tomtruyen.core.common.providers.CredentialProvider
 import com.tomtruyen.core.common.providers.KoinReloadProvider
@@ -65,5 +66,11 @@ val appModule = module {
 
     single<KoinReloadProvider> {
         KoinReloadProviderImpl()
+    }
+
+    single<ThemePreferences> {
+        ThemePreferences(
+            context = get<Context>()
+        )
     }
 }

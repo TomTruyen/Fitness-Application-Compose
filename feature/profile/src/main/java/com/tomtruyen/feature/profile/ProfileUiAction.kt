@@ -1,8 +1,7 @@
 package com.tomtruyen.feature.profile
 
 import com.tomtruyen.core.common.models.UnitType
-import com.tomtruyen.core.designsystem.theme.datastore.ThemeMode
-import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
+import com.tomtruyen.core.common.ThemeMode
 
 sealed class ProfileUiAction {
     data class OnUnitChanged(val value: UnitType) : ProfileUiAction()

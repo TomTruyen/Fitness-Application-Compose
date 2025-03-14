@@ -18,8 +18,6 @@ fun LoadingContainer(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    val isBottomBarVisible by GlobalAppState.isBottomBarVisible
-
     Box(
         modifier = modifier
             .padding(scaffoldPadding)

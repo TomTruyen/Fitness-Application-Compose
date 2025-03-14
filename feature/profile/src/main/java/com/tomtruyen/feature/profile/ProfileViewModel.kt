@@ -2,8 +2,8 @@ package com.tomtruyen.feature.profile
 
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.providers.KoinReloadProvider
-import com.tomtruyen.core.designsystem.theme.datastore.ThemeMode
-import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
+import com.tomtruyen.core.common.ThemeMode
+import com.tomtruyen.core.common.ThemePreferences
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.feature.profile.manager.SheetStateManager
@@ -16,6 +16,7 @@ class ProfileViewModel(
     private val userRepository: UserRepository,
     private val settingsRepository: SettingsRepository,
     private val koinReloadProvider: KoinReloadProvider,
+    private val themePreferences: ThemePreferences,
 ) : BaseViewModel<ProfileUiState, ProfileUiAction, ProfileUiEvent>(
     initialState = ProfileUiState()
 ) {
@@ -89,7 +90,7 @@ class ProfileViewModel(
     }
 
     private fun updateThemeMode(mode: ThemeMode) = vmScope.launch {
-        ThemePreferencesDatastore.setTheme(mode)
+        themePreferences.setTheme(mode)
     }
 
     override fun onAction(action: ProfileUiAction) {

@@ -1,14 +1,17 @@
 package com.tomtruyen.core.designsystem.theme
 
+import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color.Companion.White
-import com.tomtruyen.core.designsystem.theme.datastore.ThemeMode
-import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.tomtruyen.core.common.ThemeMode
+import com.tomtruyen.core.common.models.GlobalAppState
 
 private val DarkColorScheme = lightColorScheme(
     primary = MauiMist,
@@ -54,12 +57,17 @@ private val LightColorScheme = lightColorScheme(
 fun FynixTheme(
     content: @Composable () -> Unit
 ) {
-    val themeMode by ThemePreferencesDatastore.themeMode.collectAsState(ThemeMode.SYSTEM)
+    val theme by GlobalAppState.theme
+    val systemDarkMode = isSystemInDarkTheme()
 
-    val colorScheme = when(themeMode) {
-        ThemeMode.DARK -> DarkColorScheme
-        ThemeMode.SYSTEM if isSystemInDarkTheme() -> DarkColorScheme
-        else -> LightColorScheme
+    val colorScheme by remember(theme, systemDarkMode) {
+        mutableStateOf(
+            when(theme) {
+                ThemeMode.DARK -> DarkColorScheme
+                ThemeMode.SYSTEM if systemDarkMode -> DarkColorScheme
+                else -> LightColorScheme
+            }
+        )
     }
 
     MaterialTheme(
@@ -68,3 +76,4 @@ fun FynixTheme(
         content = content
     )
 }
+

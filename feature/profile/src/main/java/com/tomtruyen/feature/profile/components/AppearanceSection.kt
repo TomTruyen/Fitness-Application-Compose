@@ -2,13 +2,11 @@ package com.tomtruyen.feature.profile.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.datastore.ThemeMode
-import com.tomtruyen.core.designsystem.theme.datastore.ThemePreferencesDatastore
+import com.tomtruyen.core.common.models.GlobalAppState
 import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.listitems.ListItem
 import com.tomtruyen.feature.profile.R
@@ -17,7 +15,7 @@ import com.tomtruyen.feature.profile.R
 fun AppearanceSection(
     onShowThemeSheet: () -> Unit,
 ) {
-    val themeMode by ThemePreferencesDatastore.themeMode.collectAsState(ThemeMode.SYSTEM)
+    val theme by GlobalAppState.theme
 
     Label(
         label = stringResource(id = R.string.label_appearance),
@@ -31,7 +29,7 @@ fun AppearanceSection(
 
     ListItem(
         title = stringResource(id = R.string.label_theme_mode),
-        message = themeMode.value,
+        message = theme.value,
         onClick = onShowThemeSheet
     )
 }

@@ -8,10 +8,8 @@ android {
 }
 
 dependencies {
-    // Datastore
-    implementation(libs.androidx.datastore.preferences)
+    implementation(project(":core:common"))
 
     implementation(libs.androidx.ui.text.google.fonts)
-
 }
 
