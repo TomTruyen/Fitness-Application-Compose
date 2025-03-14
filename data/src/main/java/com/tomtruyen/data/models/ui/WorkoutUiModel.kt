@@ -202,7 +202,8 @@ fun WorkoutUiModel.copyFromActiveWorkout(id: String) = copy(
 
                 set.copy(
                     id = setId,
-                    exerciseId = exerciseId
+                    exerciseId = exerciseId,
+                    completed = false
                 )
             }
         )
