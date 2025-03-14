@@ -1,11 +1,13 @@
 package com.tomtruyen.feature.workouts.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MoreVert
@@ -58,7 +60,11 @@ fun WorkoutHistoryItem(
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.background
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(0.dp),
         onClick = {
@@ -86,10 +92,7 @@ fun WorkoutHistoryItem(
                 unit = history.unit
             )
 
-            HorizontalDivider(
-                modifier = Modifier.padding(vertical = Dimens.Small),
-                color = MaterialTheme.colorScheme.secondaryTextColor.value.copy(alpha = 0.1f),
-            )
+            Spacer(modifier = Modifier.height(Dimens.Normal))
 
             visibleExercises.forEach { exercise ->
                 ExerciseItem(exercise)
@@ -225,7 +228,6 @@ private fun ExerciseItem(
         Avatar(
             imageUrl = exercise.imageUrl,
             contentDescription = exercise.displayName,
-            backgroundColor = MaterialTheme.colorScheme.background
         )
 
         Text(
