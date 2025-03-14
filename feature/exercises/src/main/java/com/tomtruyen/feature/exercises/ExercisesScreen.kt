@@ -21,11 +21,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.FilterList
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.FilterList
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -149,7 +149,7 @@ private fun SharedTransitionScope.ExercisesScreenLayout(
                             }
                         ) {
                             Icon(
-                                imageVector = Icons.Filled.FilterList,
+                                imageVector = Icons.Rounded.FilterList,
                                 contentDescription = stringResource(id = R.string.content_description_filter)
                             )
                         }
@@ -165,7 +165,7 @@ private fun SharedTransitionScope.ExercisesScreenLayout(
                                 }
                             ) {
                                 Icon(
-                                    imageVector = Icons.Filled.Search,
+                                    imageVector = Icons.Rounded.Search,
                                     contentDescription = stringResource(id = R.string.content_description_search),
                                 )
                             }
@@ -176,7 +176,7 @@ private fun SharedTransitionScope.ExercisesScreenLayout(
                                 }
                             ) {
                                 Icon(
-                                    imageVector = Icons.Filled.FilterList,
+                                    imageVector = Icons.Rounded.FilterList,
                                     contentDescription = stringResource(id = R.string.content_description_filter)
                                 )
                             }
@@ -187,7 +187,7 @@ private fun SharedTransitionScope.ExercisesScreenLayout(
                                 }
                             ) {
                                 Icon(
-                                    imageVector = Icons.Filled.Add,
+                                    imageVector = Icons.Rounded.Add,
                                     contentDescription = stringResource(id = R.string.content_description_create_exercise)
                                 )
                             }
@@ -208,7 +208,7 @@ private fun SharedTransitionScope.ExercisesScreenLayout(
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Check,
+                        imageVector = Icons.Rounded.Check,
                         contentDescription = stringResource(id = R.string.content_description_add_exercise_to_workout)
                     )
                 }
@@ -240,7 +240,7 @@ private fun SharedTransitionScope.ExercisesScreenLayout(
                                 selected = true,
                                 trailingIcon = {
                                     Icon(
-                                        imageVector = Icons.Filled.Clear,
+                                        imageVector = Icons.Rounded.Clear,
                                         contentDescription = null,
                                         tint = MaterialTheme.colorScheme.onTertiary,
                                         modifier = Modifier.size(16.dp)

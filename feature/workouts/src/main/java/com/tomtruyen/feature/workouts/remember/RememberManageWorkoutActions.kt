@@ -1,8 +1,8 @@
 package com.tomtruyen.feature.workouts.remember
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -20,7 +20,7 @@ fun rememberWorkoutActions(
         listOf(
             BottomSheetItem(
                 titleRes = R.string.action_edit_workout,
-                icon = Icons.Default.Edit,
+                icon = Icons.Rounded.Edit,
                 onClick = {
                     onAction(
                         WorkoutsUiAction.Edit
@@ -29,7 +29,7 @@ fun rememberWorkoutActions(
             ),
             BottomSheetItem(
                 titleRes = R.string.action_delete_workout,
-                icon = Icons.Default.Close,
+                icon = Icons.Rounded.Close,
                 onClick = {
                     onAction(
                         WorkoutsUiAction.Delete

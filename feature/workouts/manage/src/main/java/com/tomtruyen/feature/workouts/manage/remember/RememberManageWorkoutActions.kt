@@ -1,9 +1,9 @@
 package com.tomtruyen.feature.workouts.manage.remember
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Sync
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -21,14 +21,14 @@ fun rememberExerciseActions(
         listOf(
             BottomSheetItem(
                 titleRes = R.string.action_exercise_replace,
-                icon = Icons.Default.Sync,
+                icon = Icons.Rounded.Sync,
                 onClick = {
                     onAction(ManageWorkoutUiAction.Exercise.OnReplaceClicked)
                 }
             ),
             BottomSheetItem(
                 titleRes = R.string.action_remove_exercise,
-                icon = Icons.Default.Close,
+                icon = Icons.Rounded.Close,
                 onClick = {
                     onAction(ManageWorkoutUiAction.Exercise.Delete)
                 },
@@ -50,7 +50,7 @@ fun rememberSetActions(
         listOf(
             BottomSheetItem(
                 titleRes = R.string.action_remove_set,
-                icon = Icons.Default.Close,
+                icon = Icons.Rounded.Close,
                 onClick = {
                     if (selectedExerciseId != null && selectedSetIndex != null) {
                         onAction(
@@ -77,7 +77,7 @@ fun rememberWorkoutActions(
         listOf(
             BottomSheetItem(
                 titleRes = R.string.action_edit_workout,
-                icon = Icons.Default.Edit,
+                icon = Icons.Rounded.Edit,
                 onClick = {
                     onAction(
                         ManageWorkoutUiAction.Navigate.Workout.Edit
@@ -86,7 +86,7 @@ fun rememberWorkoutActions(
             ),
             BottomSheetItem(
                 titleRes = R.string.action_delete_workout,
-                icon = Icons.Default.Close,
+                icon = Icons.Rounded.Close,
                 onClick = {
                     onAction(
                         ManageWorkoutUiAction.Workout.Delete

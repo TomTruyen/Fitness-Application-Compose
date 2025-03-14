@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -54,7 +54,7 @@ fun ActiveWorkoutBar(
             Buttons.Text(
                 modifier = Modifier.weight(1f),
                 text = stringResource(id = R.string.button_resume),
-                icon = Icons.Default.PlayArrow,
+                icon = Icons.Rounded.PlayArrow,
                 onClick = {
                     onAction(WorkoutsUiAction.ActiveWorkout.Resume)
                 }
@@ -63,7 +63,7 @@ fun ActiveWorkoutBar(
             Buttons.Text(
                 modifier = Modifier.weight(1f),
                 text = stringResource(id = R.string.button_discard),
-                icon = Icons.Default.Close,
+                icon = Icons.Rounded.Close,
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = MaterialTheme.colorScheme.error
                 ),

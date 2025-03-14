@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.rounded.ChevronLeft
+import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -66,7 +66,7 @@ fun SearchToolbar(
                         exit = scaleOut()
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.Clear,
+                            imageVector = Icons.Rounded.Clear,
                             contentDescription = stringResource(id = R.string.content_description_clear),
                             modifier = Modifier
                                 .size(20.dp)
@@ -94,7 +94,7 @@ fun SearchToolbar(
                 onClick = onClose,
             ) {
                 Icon(
-                    imageVector = Icons.Filled.ChevronLeft,
+                    imageVector = Icons.Rounded.ChevronLeft,
                     contentDescription = null
                 )
             }

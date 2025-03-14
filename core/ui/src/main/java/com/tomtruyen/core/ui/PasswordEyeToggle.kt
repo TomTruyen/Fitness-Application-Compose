@@ -1,8 +1,8 @@
 package com.tomtruyen.core.ui
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.rounded.Visibility
+import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -19,7 +19,7 @@ fun PasswordEyeToggle(
         onClick = onToggle,
     ) {
         val icon =
-            if (obscureTextVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+            if (obscureTextVisible) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff
         val contentDescription = if (obscureTextVisible) {
             stringResource(id = R.string.content_description_hide_password)
         } else {

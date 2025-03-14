@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ErrorOutline
+import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,7 +32,7 @@ fun ErrorLabel(message: String?) {
             horizontalArrangement = Arrangement.spacedBy(Dimens.Tiny)
         ) {
             Icon(
-                imageVector = Icons.Filled.ErrorOutline,
+                imageVector = Icons.Rounded.ErrorOutline,
                 tint = MaterialTheme.colorScheme.error,
                 contentDescription = null
             )

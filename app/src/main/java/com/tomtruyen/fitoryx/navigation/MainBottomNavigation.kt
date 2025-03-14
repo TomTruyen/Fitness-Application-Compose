@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FitnessCenter
+import androidx.compose.material.icons.rounded.FitnessCenter
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButtonDefaults
@@ -129,7 +129,7 @@ fun BottomBarItem(
             Icon(
                 imageVector = item.icon,
                 contentDescription = stringResource(id = item.label),
-                modifier = if (item.icon == Icons.Filled.FitnessCenter) {
+                modifier = if (item.icon == Icons.Rounded.FitnessCenter) {
                     Modifier.rotate(-45f)
                 } else {
                     Modifier

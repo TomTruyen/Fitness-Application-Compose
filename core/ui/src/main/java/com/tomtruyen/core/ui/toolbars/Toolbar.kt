@@ -3,7 +3,7 @@ package com.tomtruyen.core.ui.toolbars
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronLeft
+import androidx.compose.material.icons.rounded.ChevronLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -59,7 +59,7 @@ fun Toolbar(
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.ChevronLeft,
+                        imageVector = Icons.Rounded.ChevronLeft,
                         contentDescription = stringResource(id = R.string.content_description_back)
                     )
                 }

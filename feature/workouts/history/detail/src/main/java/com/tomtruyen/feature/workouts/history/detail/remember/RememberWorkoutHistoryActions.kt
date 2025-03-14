@@ -1,8 +1,8 @@
 package com.tomtruyen.feature.workouts.history.detail.remember
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.rounded.ContentCopy
+import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.tomtruyen.core.ui.BottomSheetItem
@@ -17,14 +17,14 @@ fun rememberWorkoutHistoryActions(
         listOf(
             BottomSheetItem(
                 titleRes = R.string.action_save_as_workout,
-                icon = Icons.Default.ContentCopy,
+                icon = Icons.Rounded.ContentCopy,
                 onClick = {
                     onAction(WorkoutHistoryDetailUiAction.Workout.Save)
                 }
             ),
             BottomSheetItem(
                 titleRes = R.string.action_start_workout,
-                icon = Icons.Default.PlayArrow,
+                icon = Icons.Rounded.PlayArrow,
                 onClick = {
                     onAction(WorkoutHistoryDetailUiAction.Workout.Start)
                 },
