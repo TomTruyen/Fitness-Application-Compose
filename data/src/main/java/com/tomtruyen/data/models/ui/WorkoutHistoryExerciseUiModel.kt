@@ -2,6 +2,8 @@ package com.tomtruyen.data.models.ui
 
 import androidx.compose.runtime.Immutable
 import com.tomtruyen.core.common.models.ExerciseType
+import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.entities.WorkoutHistoryExerciseWithSets
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -18,7 +20,8 @@ data class WorkoutHistoryExerciseUiModel(
     val sortOrder: Int = 0,
     val category: String? = null,
     val equipment: String? = null,
-    val sets: List<WorkoutHistoryExerciseSetUiModel> = emptyList()
+    val sets: List<WorkoutHistoryExerciseSetUiModel> = emptyList(),
+    val exercise: ExerciseWithCategoryAndEquipment? = null,
 ) {
     val displayName: String
         get() = buildString {
@@ -42,7 +45,8 @@ data class WorkoutHistoryExerciseUiModel(
             category = entity.workoutHistoryExercise.category,
             equipment = entity.workoutHistoryExercise.equipment,
             sets = entity.sets.map(WorkoutHistoryExerciseSetUiModel::fromEntity)
-                .sortedBy { it.sortOrder }
+                .sortedBy { it.sortOrder },
+            exercise = entity.exercise
         )
     }
 }

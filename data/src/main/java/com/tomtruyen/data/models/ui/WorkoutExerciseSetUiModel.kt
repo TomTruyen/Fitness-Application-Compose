@@ -58,5 +58,15 @@ data class WorkoutExerciseSetUiModel(
             sortOrder = entity.sortOrder,
             changeRecord = entity.changeRecord
         )
+
+        fun fromHistory(entity: WorkoutHistoryExerciseSetUiModel) = WorkoutExerciseSetUiModel(
+            id = entity.id,
+            reps = entity.reps,
+            weight = entity.weight,
+            time = entity.time,
+            completed = false,
+            sortOrder = entity.sortOrder,
+            changeRecord = emptyList()
+        )
     }
 }

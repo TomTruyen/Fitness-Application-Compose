@@ -4,6 +4,7 @@ import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.common.utils.StopwatchTimer
 import com.tomtruyen.data.entities.Workout
+import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.models.ui.copyFromActiveWorkout
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
@@ -26,6 +27,7 @@ import kotlinx.coroutines.launch
 class ManageWorkoutViewModel(
     private val id: String?,
     mode: ManageWorkoutMode,
+    workout: WorkoutUiModel?, // Workout passed from History
     private val userRepository: UserRepository,
     private val workoutRepository: WorkoutRepository,
     private val historyRepository: HistoryRepository,
@@ -33,7 +35,8 @@ class ManageWorkoutViewModel(
 ) : BaseViewModel<ManageWorkoutUiState, ManageWorkoutUiAction, ManageWorkoutUiEvent>(
     initialState = ManageWorkoutUiState(
         workoutId = id,
-        mode = mode
+        mode = mode,
+        workout = workout ?: WorkoutUiModel()
     )
 ) {
     private val workoutStateManager by lazy {

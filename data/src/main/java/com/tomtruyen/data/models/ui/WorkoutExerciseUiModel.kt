@@ -2,6 +2,8 @@ package com.tomtruyen.data.models.ui
 
 import androidx.compose.runtime.Immutable
 import com.tomtruyen.core.common.models.ExerciseType
+import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.entities.WorkoutExercise
 import com.tomtruyen.data.entities.WorkoutExerciseWithSets
 import com.tomtruyen.data.entities.WorkoutHistoryExercise
@@ -85,6 +87,23 @@ data class WorkoutExerciseUiModel(
             category = entity.exercise.category?.let(CategoryUiModel::fromEntity),
             equipment = entity.exercise.equipment?.let(EquipmentUiModel::fromEntity),
             sets = entity.sets.map(WorkoutExerciseSetUiModel::fromEntity).sortedBy { it.sortOrder }
+        )
+
+        fun fromHistory(
+            entity: WorkoutHistoryExerciseUiModel,
+            exercise: ExerciseWithCategoryAndEquipment
+        ) = WorkoutExerciseUiModel(
+            exerciseId = exercise.exercise.id,
+            name = exercise.exercise.name,
+            imageUrl = exercise.exercise.imageUrl,
+            imageDetailUrl = exercise.exercise.imageDetailUrl,
+            type = ExerciseType.fromValue(exercise.exercise.type),
+            steps = exercise.exercise.steps.orEmpty(),
+            notes = entity.notes,
+            sortOrder = entity.sortOrder,
+            category = exercise.category?.let(CategoryUiModel::fromEntity),
+            equipment = exercise.equipment?.let(EquipmentUiModel::fromEntity),
+            sets = entity.sets.map(WorkoutExerciseSetUiModel::fromHistory).sortedBy { it.sortOrder }
         )
     }
 }

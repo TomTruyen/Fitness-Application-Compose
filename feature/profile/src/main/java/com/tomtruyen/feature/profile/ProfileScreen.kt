@@ -21,6 +21,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.ThemeMode
+import com.tomtruyen.core.common.models.GlobalAppState
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.BottomSheetList
@@ -78,6 +80,7 @@ fun ProfileScreen(
             onAction = viewModel::onAction
         ),
         visible = state.showThemeModeSheet,
+        selectedIndex = ThemeMode.entries.indexOf(GlobalAppState.theme.value),
         onDismiss = {
             viewModel.onAction(ProfileUiAction.Sheet.ThemeMode.Dismiss)
         }

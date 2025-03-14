@@ -38,6 +38,7 @@ import com.tomtruyen.feature.workouts.history.detail.R
 fun HistoryExerciseItem(
     exercise: WorkoutHistoryExerciseUiModel,
     unit: UnitType,
+    onExerciseClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -47,9 +48,7 @@ fun HistoryExerciseItem(
         HistoryExerciseItemHeader(
             name = exercise.displayName,
             imageUrl = exercise.imageUrl,
-            onExerciseDetail = {
-                // TODO: Implement
-            }
+            onExerciseDetail = onExerciseClick
         )
 
         // Notes

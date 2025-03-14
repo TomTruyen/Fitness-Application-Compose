@@ -14,7 +14,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.designsystem.Dimens
+import com.tomtruyen.core.ui.BottomSheetList
 import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.toolbars.Toolbar
@@ -32,8 +32,11 @@ import com.tomtruyen.feature.workouts.history.detail.components.Header
 import com.tomtruyen.feature.workouts.history.detail.components.HistoryExerciseItem
 import com.tomtruyen.feature.workouts.history.detail.components.MuscleSplitGraph
 import com.tomtruyen.feature.workouts.history.detail.components.Statistics
+import com.tomtruyen.feature.workouts.history.detail.remember.rememberWorkoutHistoryActions
+import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.SharedTransitionKey
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.serialization.json.Json
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -53,7 +56,18 @@ fun SharedTransitionScope.WorkoutHistoryDetailScreen(
 
     LaunchedEffect(context, viewModel) {
         viewModel.eventFlow.collectLatest { event ->
-            // TODO: Implement Events
+            when(event) {
+                is WorkoutHistoryDetailUiEvent.Navigate.Exercise.Detail -> navController.navigate(
+                    Screen.Exercise.Detail(event.id)
+                )
+
+                is WorkoutHistoryDetailUiEvent.Navigate.Workout -> navController.navigate(
+                    Screen.Workout.Manage(
+                        workout = Json.encodeToString(event.workout),
+                        mode = event.mode
+                    )
+                )
+            }
         }
     }
 
@@ -63,6 +77,16 @@ fun SharedTransitionScope.WorkoutHistoryDetailScreen(
         navController = navController,
         state = state,
         onAction = viewModel::onAction
+    )
+
+    BottomSheetList(
+        items = rememberWorkoutHistoryActions(
+            onAction = viewModel::onAction
+        ),
+        visible = state.showSheet,
+        onDismiss = {
+            viewModel.onAction(WorkoutHistoryDetailUiAction.Sheet.Dismiss)
+        }
     )
 }
 
@@ -90,7 +114,7 @@ private fun SharedTransitionScope.WorkoutHistoryDetailScreenLayout(
                 actions = {
                     IconButton(
                         onClick = {
-                            // TODO: Open sheet
+                            onAction(WorkoutHistoryDetailUiAction.Sheet.Show)
                         }
                     ) {
                         Icon(
@@ -174,6 +198,9 @@ private fun SharedTransitionScope.WorkoutHistoryDetailScreenLayout(
                     HistoryExerciseItem(
                         exercise = exercise,
                         unit = state.history.unit,
+                        onExerciseClick = {
+                            onAction(WorkoutHistoryDetailUiAction.Navigate.Exercise.Detail(exercise.exerciseId))
+                        },
                         modifier = Modifier.padding(bottom = Dimens.Small)
                     )
                 }

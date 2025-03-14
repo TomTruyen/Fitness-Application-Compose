@@ -73,6 +73,7 @@ data class Exercise(
     }
 }
 
+@Serializable
 data class ExerciseWithCategoryAndEquipment(
     @Embedded
     val exercise: Exercise = Exercise(),

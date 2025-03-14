@@ -36,6 +36,19 @@ data class WorkoutHistoryUiModel(
             exercise.sets.size
         }
 
+    fun toWorkoutUiModel() = WorkoutUiModel(
+        name = name,
+        unit = unit,
+        exercises = exercises.filter {
+            it.exercise != null
+        }.map {
+            WorkoutExerciseUiModel.fromHistory(
+                entity = it,
+                exercise = it.exercise!!
+            )
+        }
+    )
+
     companion object {
         fun fromEntity(entity: WorkoutHistoryWithExercises) = WorkoutHistoryUiModel(
             id = entity.workoutHistory.id,

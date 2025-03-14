@@ -2,6 +2,8 @@ package com.tomtruyen.fitoryx.di
 
 import com.tomtruyen.fitoryx.MainViewModel
 import com.tomtruyen.core.common.models.ManageWorkoutMode
+import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
+import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
@@ -20,6 +22,7 @@ import com.tomtruyen.feature.workouts.history.WorkoutHistoryViewModel
 import com.tomtruyen.feature.workouts.history.detail.WorkoutHistoryDetailViewModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel
 import com.tomtruyen.navigation.Screen
+import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -35,10 +38,17 @@ val viewModelModule = module {
 
     viewModelOf(::WorkoutsViewModel)
 
-    viewModel { (id: String?, mode: ManageWorkoutMode) ->
+    viewModel { (id: String?, mode: ManageWorkoutMode, workout: String?) ->
         ManageWorkoutViewModel(
             id = id,
             mode = mode,
+            workout = try {
+                workout?.let {
+                    Json.decodeFromString(workout)
+                }
+            } catch (_: Exception) {
+                null
+            },
             userRepository = get<UserRepository>(),
             workoutRepository = get<WorkoutRepository>(),
             historyRepository = get<HistoryRepository>(),

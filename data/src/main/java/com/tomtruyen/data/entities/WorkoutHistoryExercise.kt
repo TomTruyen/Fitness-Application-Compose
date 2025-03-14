@@ -84,5 +84,11 @@ data class WorkoutHistoryExerciseWithSets(
         entityColumn = "workoutHistoryExerciseId",
         entity = WorkoutHistoryExerciseSet::class
     )
-    val sets: List<WorkoutHistoryExerciseSet> = emptyList()
+    val sets: List<WorkoutHistoryExerciseSet> = emptyList(),
+    @Relation(
+        parentColumn = "exerciseId",
+        entityColumn = "id",
+        entity = Exercise::class,
+    )
+    val exercise: ExerciseWithCategoryAndEquipment? = null,
 )

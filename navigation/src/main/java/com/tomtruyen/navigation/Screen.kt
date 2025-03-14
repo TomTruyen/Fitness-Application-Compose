@@ -2,6 +2,8 @@ package com.tomtruyen.navigation
 
 import androidx.annotation.Keep
 import com.tomtruyen.core.common.models.ManageWorkoutMode
+import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
+import com.tomtruyen.data.models.ui.WorkoutUiModel
 import kotlinx.serialization.Serializable
 
 @Keep
@@ -51,7 +53,11 @@ sealed interface Screen {
         data object Overview : Workout
 
         @Serializable
-        data class Manage(val id: String? = null, val mode: ManageWorkoutMode) : Workout
+        data class Manage(
+            val id: String? = null,
+            val mode: ManageWorkoutMode,
+            val workout: String? = null
+        ) : Workout
     }
 
     sealed interface History : Screen {
