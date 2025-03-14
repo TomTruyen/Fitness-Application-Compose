@@ -31,6 +31,11 @@ data class WorkoutHistoryUiModel(
             }
         }
 
+    val sets: Int
+        get() = exercises.sumOf { exercise ->
+            exercise.sets.size
+        }
+
     companion object {
         fun fromEntity(entity: WorkoutHistoryWithExercises) = WorkoutHistoryUiModel(
             id = entity.workoutHistory.id,

@@ -8,6 +8,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 @Composable
@@ -30,4 +31,10 @@ fun LocalDateTime.toRelativeTimeString(): String {
         yearsBetween == 1L -> stringResource(R.string.relative_time_year_ago)
         else -> stringResource(R.string.relative_time_years_ago, yearsBetween)
     }
+}
+
+fun LocalDateTime.toFormat(format: String): String {
+    val formatter = DateTimeFormatter.ofPattern(format)
+
+    return formatter.format(this.toJavaLocalDateTime())
 }

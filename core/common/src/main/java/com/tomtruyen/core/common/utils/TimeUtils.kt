@@ -1,7 +1,5 @@
 package com.tomtruyen.core.common.utils
 
-import java.text.SimpleDateFormat
-import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 object TimeUtils {

@@ -46,6 +46,7 @@
     <string name="relative_time_years_ago">%1$d years ago</string>
     <string name="label_time">Time</string>
     <string name="label_volume">Volume</string>
+    <string name="label_sets">Sets</string>
     <string name="see_x_more_exercises">See %d more exercises</string>
     <string name="label_x_sets">%dx sets</string>
 </resources>

@@ -1,3 +1,9 @@
 <resources>
-    <string name="title_history_detail">History Detail</string>
+    <string name="title_history_detail">Workout Detail</string>
+    <string name="label_muscle_split">Muscle Split</string>
+    <string name="label_exercises">Exercises</string>
+    <string name="label_set">Set</string>
+    <string name="label_reps">Reps</string>
+    <string name="label_time">Time</string>
+    <string name="placeholder_notes">Notes…</string>
 </resources>

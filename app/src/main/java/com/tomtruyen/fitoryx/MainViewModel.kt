@@ -22,7 +22,7 @@ class MainViewModel(
 
     fun updateHasCheckedLoggedIn() = viewModelScope.launch {
         // Simulate a little delay to allow for navigation to happen
-        delay(25L)
+        delay(50L)
         hasCheckedLoggedIn.set(true)
     }
 }
