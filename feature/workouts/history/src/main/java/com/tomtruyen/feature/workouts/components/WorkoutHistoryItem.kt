@@ -7,9 +7,13 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -71,6 +75,9 @@ fun WorkoutHistoryItem(
             Header(
                 workoutName = history.name,
                 date = history.createdAt,
+                onOpenSheet = {
+                    onAction(WorkoutHistoryUiAction.Sheet.Show(history.id))
+                }
             )
 
             Statistics(
@@ -111,29 +118,42 @@ fun WorkoutHistoryItem(
 private fun Header(
     workoutName: String,
     date: LocalDateTime,
+    onOpenSheet: () -> Unit
 ) {
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth(1f)
-            .padding(horizontal = Dimens.Normal),
-        horizontalAlignment = Alignment.Start
+    Row(
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = workoutName,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.bodyLarge.copy(
-                fontWeight = FontWeight.W500
-            ),
-        )
-
-        Label(
-            label = date.toRelativeTimeString(),
-            style = MaterialTheme.typography.labelMedium.copy(
-                color = MaterialTheme.colorScheme.secondaryTextColor.value,
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = Dimens.Normal),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = workoutName,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontWeight = FontWeight.W500
+                ),
             )
-        )
+
+            Label(
+                label = date.toRelativeTimeString(),
+                style = MaterialTheme.typography.labelMedium.copy(
+                    color = MaterialTheme.colorScheme.secondaryTextColor.value,
+                )
+            )
+        }
+
+        IconButton(
+            onClick = onOpenSheet
+        ) {
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = null
+            )
+        }
     }
 }
 

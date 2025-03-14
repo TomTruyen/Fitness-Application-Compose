@@ -48,8 +48,8 @@ class WorkoutHistoryDetailViewModel(
         )
     }
 
-    private fun toWorkout(mode: ManageWorkoutMode) {
-        val workout = uiState.value.history.toWorkoutUiModel()
+    private fun toWorkout(mode: ManageWorkoutMode) = with(uiState.value) {
+        val workout = history.toWorkoutUiModel()
 
         triggerEvent(
             WorkoutHistoryDetailUiEvent.Navigate.Workout(

@@ -4,44 +4,40 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.designsystem.Dimens
+import com.tomtruyen.core.ui.BottomSheetList
 import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.feature.workouts.components.WorkoutHistoryItem
+import com.tomtruyen.feature.workouts.remember.rememberWorkoutHistoryActions
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.SharedTransitionKey
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.serialization.json.Json
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -61,6 +57,13 @@ fun SharedTransitionScope.WorkoutHistoryScreen(
                 is WorkoutHistoryUiEvent.Navigate.Detail -> navController.navigate(
                     Screen.History.Detail(event.id)
                 )
+
+                is WorkoutHistoryUiEvent.Navigate.Workout -> navController.navigate(
+                    Screen.Workout.Manage(
+                        workout = Json.encodeToString(event.workout),
+                        mode = event.mode
+                    )
+                )
             }
         }
     }
@@ -71,6 +74,16 @@ fun SharedTransitionScope.WorkoutHistoryScreen(
         navController = navController,
         state = state,
         onAction = viewModel::onAction
+    )
+
+    BottomSheetList(
+        items = rememberWorkoutHistoryActions(
+            onAction = viewModel::onAction
+        ),
+        visible = state.showSheet,
+        onDismiss = {
+            viewModel.onAction(WorkoutHistoryUiAction.Sheet.Dismiss)
+        }
     )
 }
 

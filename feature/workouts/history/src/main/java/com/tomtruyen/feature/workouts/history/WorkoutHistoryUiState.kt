@@ -10,6 +10,9 @@ data class WorkoutHistoryUiState(
 
     val page: Int = WorkoutHistory.INITIAL_PAGE,
 
+    val selectedHistoryId: String? = null,
+
+    val showSheet: Boolean = false,
     val loading: Boolean = false,
     val refreshing: Boolean = false
 )

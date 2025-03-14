@@ -1,9 +1,11 @@
 package com.tomtruyen.feature.workouts.history
 
 import com.tomtruyen.core.common.base.BaseViewModel
+import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.data.entities.WorkoutHistory
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.HistoryRepository
+import com.tomtruyen.feature.workouts.history.WorkoutHistoryUiEvent.Navigate.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -83,6 +85,25 @@ class WorkoutHistoryViewModel(
         }
     }
 
+    private fun showSheet(show: Boolean) = updateState {
+        it.copy(
+            showSheet = show
+        )
+    }
+
+    private fun toWorkout(mode: ManageWorkoutMode) = with(uiState.value) {
+        val workout = histories.find { it.id == selectedHistoryId }?.toWorkoutUiModel()
+
+        if(workout != null) {
+            triggerEvent(
+                WorkoutHistoryUiEvent.Navigate.Workout(
+                    workout = workout,
+                    mode = mode
+                )
+            )
+        }
+    }
+
     override fun onAction(action: WorkoutHistoryUiAction) {
         when (action) {
             WorkoutHistoryUiAction.Refresh -> fetchWorkoutHistory(
@@ -95,8 +116,17 @@ class WorkoutHistoryViewModel(
             )
 
             is WorkoutHistoryUiAction.Navigate.Detail -> triggerEvent(
-                WorkoutHistoryUiEvent.Navigate.Detail(action.id)
+                Detail(action.id)
             )
+
+            is WorkoutHistoryUiAction.Sheet.Show -> {
+                updateState { it.copy(selectedHistoryId = action.id) }
+                showSheet(true)
+            }
+            WorkoutHistoryUiAction.Sheet.Dismiss -> showSheet(false)
+
+            WorkoutHistoryUiAction.Workout.Save -> toWorkout(ManageWorkoutMode.CREATE)
+            WorkoutHistoryUiAction.Workout.Start -> toWorkout(ManageWorkoutMode.EXECUTE)
         }
     }
 }
