@@ -53,6 +53,7 @@ import com.tomtruyen.feature.workouts.manage.remember.rememberExerciseActions
 import com.tomtruyen.feature.workouts.manage.remember.rememberSetActions
 import com.tomtruyen.feature.workouts.manage.remember.rememberWorkoutActions
 import com.tomtruyen.navigation.NavResult
+import com.tomtruyen.navigation.ObserveNavResult
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.SharedTransitionKey
 import com.tomtruyen.navigation.handleNavigationResult
@@ -126,8 +127,10 @@ fun SharedTransitionScope.ManageWorkoutScreen(
         }
     }
 
-    LaunchedEffect(navController) {
-        navController.handleNavigationResult<NavResult.ExerciseResult>(NavResult.ExerciseResult.KEY) {
+    ObserveNavResult<NavResult.ExerciseResult>(
+        navController = navController,
+        key = NavResult.ExerciseResult.KEY,
+        onResult = {
             viewModel.onAction(
                 ManageWorkoutUiAction.NavResult.Exercises(
                     mode = it.mode,
@@ -135,13 +138,15 @@ fun SharedTransitionScope.ManageWorkoutScreen(
                 )
             )
         }
-    }
+    )
 
-    LaunchedEffect(navController) {
-        navController.handleNavigationResult<NavResult.ReorderExerciseResult>(NavResult.ReorderExerciseResult.KEY) {
+    ObserveNavResult<NavResult.ReorderExerciseResult>(
+        navController = navController,
+        key = NavResult.ReorderExerciseResult.KEY,
+        onResult = {
             viewModel.onAction(ManageWorkoutUiAction.NavResult.ReorderWorkoutExercises(it.exercises))
         }
-    }
+    )
 
     ManageWorkoutScreenLayout(
         snackbarHost = { viewModel.CreateSnackbarHost() },
