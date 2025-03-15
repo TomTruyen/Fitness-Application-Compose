@@ -115,6 +115,20 @@ fun SharedTransitionScope.WorkoutsScreen(
             confirmText = com.tomtruyen.core.common.R.string.button_discard
         )
     }
+
+    if(state.showDeleteConfirmation) {
+        ConfirmationDialog(
+            title = R.string.title_delete_workout,
+            message = R.string.message_delete_workout,
+            onConfirm = {
+                viewModel.onAction(WorkoutsUiAction.Delete)
+                viewModel.onAction(WorkoutsUiAction.Dialog.Workout.Dismiss)
+            },
+            onDismiss = {
+                viewModel.onAction(WorkoutsUiAction.Dialog.Workout.Dismiss)
+            }
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)

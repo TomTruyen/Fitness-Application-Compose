@@ -11,6 +11,7 @@ import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.HistoryRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
+import com.tomtruyen.feature.workouts.manage.manager.DialogStateManager
 import com.tomtruyen.feature.workouts.manage.manager.ExerciseStateManager
 import com.tomtruyen.feature.workouts.manage.manager.SetStateManager
 import com.tomtruyen.feature.workouts.manage.manager.SheetStateManager
@@ -58,8 +59,15 @@ class ManageWorkoutViewModel(
             updateState = ::updateState
         )
     }
+
     private val sheetStateManager by lazy {
         SheetStateManager(
+            updateState = ::updateState
+        )
+    }
+
+    private val dialogStateManager by lazy {
+        DialogStateManager(
             updateState = ::updateState
         )
     }
@@ -258,6 +266,7 @@ class ManageWorkoutViewModel(
             is ManageWorkoutUiAction.Exercise -> exerciseStateManager.onAction(action)
             is ManageWorkoutUiAction.Set -> setStateManager.onAction(action)
             is ManageWorkoutUiAction.Sheet -> sheetStateManager.onAction(action)
+            is ManageWorkoutUiAction.Dialog -> dialogStateManager.onAction(action)
 
             is ManageWorkoutUiAction.Navigate.Exercise.Detail -> triggerEvent(
                 ManageWorkoutUiEvent.Navigate.Exercise.Detail(action.id)

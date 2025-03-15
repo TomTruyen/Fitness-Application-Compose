@@ -32,7 +32,7 @@ fun rememberWorkoutActions(
                 icon = Icons.Rounded.Close,
                 onClick = {
                     onAction(
-                        WorkoutsUiAction.Delete
+                        WorkoutsUiAction.Dialog.Workout.Show
                     )
                 },
                 color = errorColor

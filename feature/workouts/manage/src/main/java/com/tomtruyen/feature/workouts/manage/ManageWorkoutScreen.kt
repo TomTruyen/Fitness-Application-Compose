@@ -190,6 +190,20 @@ fun SharedTransitionScope.ManageWorkoutScreen(
         workoutName = state.workout.name.ifBlank { "Workout" },
         onDismiss = { viewModel.onAction(ManageWorkoutUiAction.Sheet.Save.Dismiss) }
     )
+
+    if(state.showDeleteConfirmation) {
+        ConfirmationDialog(
+            title = R.string.title_delete_workout,
+            message = R.string.message_delete_workout,
+            onConfirm = {
+                viewModel.onAction(ManageWorkoutUiAction.Workout.Delete)
+                viewModel.onAction(ManageWorkoutUiAction.Dialog.Workout.Dismiss)
+            },
+            onDismiss = {
+                viewModel.onAction(ManageWorkoutUiAction.Dialog.Workout.Dismiss)
+            }
+        )
+    }
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)

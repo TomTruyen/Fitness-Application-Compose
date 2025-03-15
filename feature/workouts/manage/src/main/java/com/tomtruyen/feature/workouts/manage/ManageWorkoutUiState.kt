@@ -26,6 +26,7 @@ data class ManageWorkoutUiState(
     val showExerciseMoreActions: Boolean = false,
     val showSetMoreActions: Boolean = false,
     val showWorkoutMoreActions: Boolean = false,
+    val showDeleteConfirmation: Boolean = false,
     val selectedExerciseId: String? = null,
     val selectedSetIndex: Int? = null
 ) {

@@ -13,6 +13,12 @@ sealed class WorkoutsUiAction {
 
             data object Dismiss : Discard()
         }
+
+        sealed class Workout: Dialog() {
+            data object Show: Workout()
+
+            data object Dismiss: Workout()
+        }
     }
 
     sealed class ActiveWorkout : WorkoutsUiAction() {
