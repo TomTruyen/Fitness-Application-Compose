@@ -27,6 +27,7 @@ import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.BottomSheetList
 import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.LoadingContainer
+import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.feature.workouts.history.detail.components.Header
 import com.tomtruyen.feature.workouts.history.detail.components.HistoryExerciseItem
@@ -67,6 +68,8 @@ fun SharedTransitionScope.WorkoutHistoryDetailScreen(
                         mode = event.mode
                     )
                 )
+
+                WorkoutHistoryDetailUiEvent.Navigate.Back -> navController.popBackStack()
             }
         }
     }
@@ -88,6 +91,20 @@ fun SharedTransitionScope.WorkoutHistoryDetailScreen(
             viewModel.onAction(WorkoutHistoryDetailUiAction.Sheet.Dismiss)
         }
     )
+
+    if(state.showDeleteConfirmation) {
+        ConfirmationDialog(
+            title = R.string.title_delete_workout,
+            message = R.string.message_delete_workout,
+            onConfirm = {
+                viewModel.onAction(WorkoutHistoryDetailUiAction.Delete)
+                viewModel.onAction(WorkoutHistoryDetailUiAction.Dialog.Workout.Dismiss)
+            },
+            onDismiss = {
+                viewModel.onAction(WorkoutHistoryDetailUiAction.Dialog.Workout.Dismiss)
+            }
+        )
+    }
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)

@@ -232,4 +232,17 @@ class HistoryRepositoryImpl : HistoryRepository() {
             workoutHistoryExerciseSetDao.saveAll(sets)
         }
     }
+
+    override suspend fun deleteWorkoutHistory(id: String) {
+        supabase.from(WorkoutHistory.TABLE_NAME)
+            .delete {
+                filter {
+                    WorkoutHistory::id eq id
+                }
+            }
+
+        transaction {
+            dao.deleteById(id)
+        }
+    }
 }

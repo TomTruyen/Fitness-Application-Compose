@@ -42,9 +42,20 @@ class WorkoutHistoryDetailViewModel(
             }
     }
 
+    private fun deleteHistory() = launchLoading {
+        historyRepository.deleteWorkoutHistory(uiState.value.history.id)
+        triggerEvent(WorkoutHistoryDetailUiEvent.Navigate.Back)
+    }
+
     private fun showSheet(show: Boolean) = updateState {
         it.copy(
             showSheet = show
+        )
+    }
+
+    private fun showDeleteDialog(show: Boolean) = updateState {
+        it.copy(
+            showDeleteConfirmation = show
         )
     }
 
@@ -72,6 +83,11 @@ class WorkoutHistoryDetailViewModel(
 
             WorkoutHistoryDetailUiAction.Workout.Save -> toWorkout(ManageWorkoutMode.CREATE)
             WorkoutHistoryDetailUiAction.Workout.Start -> toWorkout(ManageWorkoutMode.EXECUTE)
+
+            WorkoutHistoryDetailUiAction.Delete -> deleteHistory()
+
+            WorkoutHistoryDetailUiAction.Dialog.Workout.Show -> showDeleteDialog(true)
+            WorkoutHistoryDetailUiAction.Dialog.Workout.Dismiss -> showDeleteDialog(false)
         }
     }
 }

@@ -28,4 +28,6 @@ abstract class HistoryRepository : SyncRepository<WorkoutHistoryWithExercises>()
         userId: String,
         workout: WorkoutUiModel,
     ): String
+
+    abstract suspend fun deleteWorkoutHistory(id: String)
 }

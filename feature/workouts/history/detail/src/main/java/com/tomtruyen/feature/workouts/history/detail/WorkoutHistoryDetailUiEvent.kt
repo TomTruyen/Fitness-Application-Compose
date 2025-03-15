@@ -10,5 +10,7 @@ sealed class WorkoutHistoryDetailUiEvent {
         }
 
         data class Workout(val workout: WorkoutUiModel, val mode: ManageWorkoutMode): Navigate()
+
+        data object Back: Navigate()
     }
 }

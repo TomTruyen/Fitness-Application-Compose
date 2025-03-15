@@ -27,6 +27,9 @@ abstract class WorkoutHistoryDao: SyncDao<WorkoutHistoryWithExercises>(WorkoutHi
     @Upsert
     abstract suspend fun saveAll(workoutHistories: List<WorkoutHistory>): List<Long>
 
+    @Query("DELETE FROM ${WorkoutHistory.TABLE_NAME} WHERE id = :id")
+    abstract suspend fun deleteById(id: String): Int
+
     @Query("DELETE FROM ${WorkoutHistory.TABLE_NAME} WHERE synced = :synced")
     abstract suspend fun deleteAll(synced: Boolean = true): Int
 }

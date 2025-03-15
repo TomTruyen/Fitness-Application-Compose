@@ -13,6 +13,7 @@ data class WorkoutHistoryUiState(
     val selectedHistoryId: String? = null,
 
     val showSheet: Boolean = false,
+    val showDeleteConfirmation: Boolean = false,
     val loading: Boolean = false,
     val refreshing: Boolean = false
 )

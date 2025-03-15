@@ -123,6 +123,11 @@ class ManageWorkoutViewModel(
 
     private fun observeWorkout() = with(uiState.value) {
         vmScope.launch {
+            if(mode.isExecute && id == null) {
+                // "Start Empty Workout" -> Start Timer for it
+                startTimer(0L)
+            }
+
             if (mode.isCreate || id == null) return@launch
 
             when(mode) {

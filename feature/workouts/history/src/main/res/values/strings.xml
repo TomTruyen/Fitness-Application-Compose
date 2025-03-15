@@ -4,4 +4,7 @@
     <string name="label_workouts">Workouts</string>
     <string name="action_save_as_workout">Save As Workout</string>
     <string name="action_start_workout">Start Workout</string>
+    <string name="title_delete_workout">Delete Workout</string>
+    <string name="message_delete_workout">Are you sure you want to delete this workout? This action can\'t be undone.</string>
+    <string name="action_delete_workout">Delete Workout</string>
 </resources>

@@ -13,9 +13,19 @@ sealed class WorkoutHistoryDetailUiAction {
         data object Dismiss: Sheet()
     }
 
+    sealed class Dialog: WorkoutHistoryDetailUiAction() {
+        sealed class Workout: Dialog() {
+            data object Show: Workout()
+
+            data object Dismiss: Workout()
+        }
+    }
+
     sealed class Workout: WorkoutHistoryDetailUiAction() {
         data object Start: Workout()
 
         data object Save: Workout()
     }
+
+    data object Delete: WorkoutHistoryDetailUiAction()
 }

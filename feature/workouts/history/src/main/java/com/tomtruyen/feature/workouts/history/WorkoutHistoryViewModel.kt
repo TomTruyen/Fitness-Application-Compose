@@ -85,9 +85,25 @@ class WorkoutHistoryViewModel(
         }
     }
 
+    private fun deleteHistory() = launchLoading {
+        with(uiState.value) {
+            val history = histories.find { it.id == selectedHistoryId }
+
+            if(history != null) {
+                historyRepository.deleteWorkoutHistory(history.id)
+            }
+        }
+    }
+
     private fun showSheet(show: Boolean) = updateState {
         it.copy(
             showSheet = show
+        )
+    }
+
+    private fun showDeleteDialog(show: Boolean) = updateState {
+        it.copy(
+            showDeleteConfirmation = show
         )
     }
 
@@ -127,6 +143,11 @@ class WorkoutHistoryViewModel(
 
             WorkoutHistoryUiAction.Workout.Save -> toWorkout(ManageWorkoutMode.CREATE)
             WorkoutHistoryUiAction.Workout.Start -> toWorkout(ManageWorkoutMode.EXECUTE)
+
+            WorkoutHistoryUiAction.Delete -> deleteHistory()
+
+            WorkoutHistoryUiAction.Dialog.Workout.Show -> showDeleteDialog(true)
+            WorkoutHistoryUiAction.Dialog.Workout.Dismiss -> showDeleteDialog(false)
         }
     }
 }

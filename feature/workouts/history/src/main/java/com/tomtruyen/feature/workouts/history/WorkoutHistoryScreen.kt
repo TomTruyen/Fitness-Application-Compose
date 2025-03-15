@@ -28,6 +28,7 @@ import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.BottomSheetList
 import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.LoadingContainer
+import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.feature.workouts.components.WorkoutHistoryItem
 import com.tomtruyen.feature.workouts.remember.rememberWorkoutHistoryActions
@@ -85,6 +86,20 @@ fun SharedTransitionScope.WorkoutHistoryScreen(
             viewModel.onAction(WorkoutHistoryUiAction.Sheet.Dismiss)
         }
     )
+
+    if(state.showDeleteConfirmation) {
+        ConfirmationDialog(
+            title = R.string.title_delete_workout,
+            message = R.string.message_delete_workout,
+            onConfirm = {
+                viewModel.onAction(WorkoutHistoryUiAction.Delete)
+                viewModel.onAction(WorkoutHistoryUiAction.Dialog.Workout.Dismiss)
+            },
+            onDismiss = {
+                viewModel.onAction(WorkoutHistoryUiAction.Dialog.Workout.Dismiss)
+            }
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class, FlowPreview::class, ExperimentalSharedTransitionApi::class)
