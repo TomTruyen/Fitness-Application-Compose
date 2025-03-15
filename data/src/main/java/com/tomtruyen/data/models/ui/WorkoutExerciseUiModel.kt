@@ -9,6 +9,7 @@ import com.tomtruyen.data.entities.WorkoutExerciseWithSets
 import com.tomtruyen.data.entities.WorkoutHistoryExercise
 import kotlinx.serialization.Serializable
 import java.util.UUID
+import kotlin.text.category
 
 @Serializable
 @Immutable
@@ -105,5 +106,11 @@ data class WorkoutExerciseUiModel(
             equipment = exercise.equipment?.let(EquipmentUiModel::fromEntity),
             sets = entity.sets.map(WorkoutExerciseSetUiModel::fromHistory).sortedBy { it.sortOrder }
         )
+    }
+
+    // Only checking
+    fun isOriginalExercise(other: WorkoutExerciseUiModel): Boolean {
+        return this.sortOrder == other.sortOrder &&
+                this.sets.size == other.sets.size
     }
 }

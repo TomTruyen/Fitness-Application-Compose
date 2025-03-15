@@ -78,6 +78,15 @@ data class WorkoutUiModel(
             duration = entity.workout.duration
         )
     }
+
+    // Equals check that ignores "duration"
+    fun isOriginalWorkout(other: WorkoutUiModel): Boolean {
+        return this.exercises.size == other.exercises.size &&
+                this.exercises.zip(other.exercises).all { (thisExercise, otherExercise) ->
+                    thisExercise.isOriginalExercise(otherExercise)
+                } &&
+                this.sortOrder == other.sortOrder
+    }
 }
 
 // Extensions

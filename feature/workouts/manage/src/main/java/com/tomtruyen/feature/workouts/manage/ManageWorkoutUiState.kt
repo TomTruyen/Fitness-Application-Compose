@@ -40,6 +40,6 @@ data class ManageWorkoutUiState(
     val shouldShowSaveSheet: Boolean
         get() = mode.isExecute
                     && workoutId != null
-                    && initialWorkout.copy(duration = 0) != workout.copy(duration = 0)
+                    && !initialWorkout.isOriginalWorkout(workout)
 }
 
