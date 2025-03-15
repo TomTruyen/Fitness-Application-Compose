@@ -122,6 +122,7 @@ fun SharedTransitionScope.ManageWorkoutScreen(
     }
 
     LaunchedEffect(navController) {
+        // TODO: Handle this somewhere else - This logic should not be here
         navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Pair<Screen.Exercise.Overview.Mode, List<ExerciseUiModel>>?>(
             NavArguments.EXERCISES,
             null

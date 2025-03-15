@@ -38,17 +38,11 @@ val viewModelModule = module {
 
     viewModelOf(::WorkoutsViewModel)
 
-    viewModel { (id: String?, mode: ManageWorkoutMode, workout: String?) ->
+    viewModel { (id: String?, mode: ManageWorkoutMode, workout: WorkoutUiModel?) ->
         ManageWorkoutViewModel(
             id = id,
             mode = mode,
-            workout = try {
-                workout?.let {
-                    Json.decodeFromString(workout)
-                }
-            } catch (_: Exception) {
-                null
-            },
+            workout = workout,
             userRepository = get<UserRepository>(),
             workoutRepository = get<WorkoutRepository>(),
             historyRepository = get<HistoryRepository>(),

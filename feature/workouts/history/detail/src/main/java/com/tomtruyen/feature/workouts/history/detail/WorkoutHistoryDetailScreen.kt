@@ -64,7 +64,7 @@ fun SharedTransitionScope.WorkoutHistoryDetailScreen(
 
                 is WorkoutHistoryDetailUiEvent.Navigate.Workout -> navController.navigate(
                     Screen.Workout.Manage(
-                        workout = Json.encodeToString(event.workout),
+                        workout = event.workout,
                         mode = event.mode
                     )
                 )

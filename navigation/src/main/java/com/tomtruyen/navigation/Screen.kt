@@ -56,7 +56,7 @@ sealed interface Screen {
         data class Manage(
             val id: String? = null,
             val mode: ManageWorkoutMode,
-            val workout: String? = null
+            val workout: WorkoutUiModel = WorkoutUiModel()
         ) : Workout
     }
 

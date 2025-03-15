@@ -29,6 +29,7 @@ import com.tomtruyen.fitoryx.MainViewModel
 import com.tomtruyen.core.common.models.GlobalAppState
 import com.tomtruyen.core.designsystem.theme.FynixTheme
 import com.tomtruyen.core.designsystem.theme.rememberDarkMode
+import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.feature.auth.login.LoginScreen
 import com.tomtruyen.feature.auth.register.RegisterScreen
 import com.tomtruyen.feature.exercises.ExercisesScreen
@@ -43,12 +44,14 @@ import com.tomtruyen.feature.workouts.history.detail.WorkoutHistoryDetailScreen
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutScreen
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel
 import com.tomtruyen.fitoryx.navigation.MainBottomNavigation
+import com.tomtruyen.navigation.CustomNavType
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.screenScopedViewModel
 import org.koin.androidx.compose.KoinAndroidContext
 import org.koin.androidx.compose.koinViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import kotlin.reflect.typeOf
 
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModel()
@@ -153,7 +156,11 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
 
-                                    composable<Screen.Workout.Manage> { backStackEntry ->
+                                    composable<Screen.Workout.Manage>(
+                                        typeMap = mapOf(
+                                            typeOf<WorkoutUiModel>() to CustomNavType.WorkoutType
+                                        )
+                                    ) { backStackEntry ->
                                         val args = backStackEntry.toRoute<Screen.Workout.Manage>()
 
                                         val viewModel = koinViewModel<ManageWorkoutViewModel>(
