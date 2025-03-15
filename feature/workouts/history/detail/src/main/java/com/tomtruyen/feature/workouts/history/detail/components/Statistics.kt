@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.tomtruyen.core.common.R
+import com.tomtruyen.core.common.extensions.rounded
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
@@ -40,7 +41,7 @@ fun Statistics(
 
         StatisticsItem(
             name = stringResource(id = R.string.label_volume),
-            value = "$volume ${unit.value}",
+            value = "${volume.rounded()} ${unit.value}",
         )
 
         StatisticsItem(

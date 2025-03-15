@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.common.R
+import com.tomtruyen.core.common.extensions.rounded
 import com.tomtruyen.core.common.extensions.toRelativeTimeString
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.common.utils.TimeUtils
@@ -180,7 +181,7 @@ private fun Statistics(
 
         StatisticsItem(
             name = stringResource(id = R.string.label_volume),
-            value = "$volume ${unit.value}",
+            value = "${volume.rounded()} ${unit.value}",
         )
 
         // To be replaced with Records once we have that

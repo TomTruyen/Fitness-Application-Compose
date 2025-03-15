@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.tomtruyen.core.common.extensions.rounded
 import com.tomtruyen.core.common.extensions.tryIntString
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.designsystem.Dimens
@@ -40,7 +41,7 @@ fun WorkoutStatistics(
         ) {
             WorkoutStatisticsItem(
                 name = stringResource(id = R.string.label_volume),
-                value = "${volume.tryIntString()} ${unit.value}"
+                value = "${volume.rounded()} ${unit.value}"
             )
 
             WorkoutStatisticsItem(
