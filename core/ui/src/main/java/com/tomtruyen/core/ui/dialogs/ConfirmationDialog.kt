@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.R
 
 @Composable
 fun ConfirmationDialog(
@@ -17,7 +18,7 @@ fun ConfirmationDialog(
     @StringRes message: Int? = null,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
-    @StringRes confirmText: Int,
+    @StringRes confirmText: Int = R.string.delete,
     @StringRes dismissText: Int = android.R.string.cancel,
     confirmButtonColors: ButtonColors = ButtonDefaults.textButtonColors(
         contentColor = MaterialTheme.colorScheme.error

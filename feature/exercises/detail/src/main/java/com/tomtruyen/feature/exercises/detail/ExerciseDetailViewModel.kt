@@ -3,6 +3,7 @@ package com.tomtruyen.feature.exercises.detail
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
+import com.tomtruyen.feature.exercises.detail.ExerciseDetailUiEvent.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -52,10 +53,16 @@ class ExerciseDetailViewModel(
         )
     }
 
+    private fun showDialog(show: Boolean) = updateState {
+        it.copy(
+            showDialog = show
+        )
+    }
+
     override fun onAction(action: ExerciseDetailUiAction) {
         when (action) {
             is ExerciseDetailUiAction.Edit -> triggerEvent(
-                ExerciseDetailUiEvent.NavigateToEdit(id)
+                NavigateToEdit(id)
             )
 
             is ExerciseDetailUiAction.Delete -> delete()
@@ -63,6 +70,10 @@ class ExerciseDetailViewModel(
             ExerciseDetailUiAction.Sheet.Show -> showSheet(true)
 
             ExerciseDetailUiAction.Sheet.Dismiss -> showSheet(false)
+
+            ExerciseDetailUiAction.Dialog.Show -> showDialog(true)
+
+            ExerciseDetailUiAction.Dialog.Dismiss -> showDialog(false)
         }
     }
 }

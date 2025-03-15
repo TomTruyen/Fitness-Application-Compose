@@ -10,4 +10,10 @@ sealed class ExerciseDetailUiAction {
 
         data object Dismiss: Sheet()
     }
+
+    sealed class Dialog: ExerciseDetailUiAction() {
+        data object Show: Dialog()
+
+        data object Dismiss: Dialog()
+    }
 }

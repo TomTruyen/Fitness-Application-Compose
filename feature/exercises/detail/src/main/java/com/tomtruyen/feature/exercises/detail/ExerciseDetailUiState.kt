@@ -8,5 +8,6 @@ data class ExerciseDetailUiState(
     val exercise: ExerciseUiModel = ExerciseUiModel(),
 
     val showSheet: Boolean = false,
+    val showDialog: Boolean = false,
     val loading: Boolean = false,
 )

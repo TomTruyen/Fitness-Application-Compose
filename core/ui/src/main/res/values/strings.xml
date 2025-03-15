@@ -14,4 +14,5 @@
     <string name="label_time_picker_hour">Hour</string>
     <string name="label_time_picker_minute">Min</string>
     <string name="label_time_picker_second">Sec</string>
+    <string name="delete">Delete</string>
 </resources>

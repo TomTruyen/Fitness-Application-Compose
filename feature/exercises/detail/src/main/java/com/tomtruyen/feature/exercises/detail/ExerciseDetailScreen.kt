@@ -42,6 +42,7 @@ import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.BottomSheetList
 import com.tomtruyen.core.ui.Chip
 import com.tomtruyen.core.ui.LoadingContainer
+import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.feature.exercises.detail.remember.rememberExerciseActions
 import com.tomtruyen.navigation.Screen
@@ -97,6 +98,20 @@ fun SharedTransitionScope.ExerciseDetailScreen(
             viewModel.onAction(ExerciseDetailUiAction.Sheet.Dismiss)
         }
     )
+
+    if(state.showDialog) {
+        ConfirmationDialog(
+            title = R.string.title_delete_exercise,
+            message = R.string.message_delete_exercise,
+            onConfirm = {
+                viewModel.onAction(ExerciseDetailUiAction.Delete)
+                viewModel.onAction(ExerciseDetailUiAction.Dialog.Dismiss)
+            },
+            onDismiss = {
+                viewModel.onAction(ExerciseDetailUiAction.Dialog.Dismiss)
+            }
+        )
+    }
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)

@@ -29,7 +29,7 @@ fun rememberExerciseActions(
                 titleRes = R.string.action_delete_exercise,
                 icon = Icons.Rounded.Close,
                 onClick = {
-                    onAction(ExerciseDetailUiAction.Delete)
+                    onAction(ExerciseDetailUiAction.Dialog.Show)
                 },
                 color = errorColor
             ),
