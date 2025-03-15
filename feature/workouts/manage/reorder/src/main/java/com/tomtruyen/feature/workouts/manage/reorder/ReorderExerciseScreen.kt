@@ -16,7 +16,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,13 +27,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.ObserveEvent
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Avatar
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.navigation.NavResult
 import com.tomtruyen.navigation.setNavigationResult
-import kotlinx.coroutines.flow.collectLatest
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 
@@ -45,18 +44,16 @@ fun ReorderExerciseScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(viewModel) {
-        viewModel.eventFlow.collectLatest { event ->
-            when(event) {
-                is ReorderExercisesUiEvent.Navigate.Submit -> {
-                    navController.setNavigationResult(
-                        result = NavResult.ReorderExerciseResult(
-                            exercises = state.exercises
-                        )
+    ObserveEvent(viewModel) { event ->
+        when(event) {
+            is ReorderExercisesUiEvent.Navigate.Submit -> {
+                navController.setNavigationResult(
+                    result = NavResult.ReorderExerciseResult(
+                        exercises = state.exercises
                     )
+                )
 
-                    navController.popBackStack()
-                }
+                navController.popBackStack()
             }
         }
     }

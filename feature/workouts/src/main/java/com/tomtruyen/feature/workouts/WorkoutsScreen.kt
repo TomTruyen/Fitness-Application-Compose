@@ -23,16 +23,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.ObserveEvent
 import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.BottomSheetList
@@ -58,29 +57,25 @@ fun SharedTransitionScope.WorkoutsScreen(
     animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: WorkoutsViewModel = koinViewModel()
 ) {
-    val context = LocalContext.current
-
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(viewModel, context) {
-        viewModel.eventFlow.collectLatest { event ->
-            when (event) {
-                WorkoutsUiEvent.Navigate.Create -> navController.navigate(
-                    Screen.Workout.Manage(mode = WorkoutMode.CREATE)
-                )
+    ObserveEvent(viewModel) { event ->
+        when (event) {
+            WorkoutsUiEvent.Navigate.Create -> navController.navigate(
+                Screen.Workout.Manage(mode = WorkoutMode.CREATE)
+            )
 
-                is WorkoutsUiEvent.Navigate.Edit -> navController.navigate(
-                    Screen.Workout.Manage(event.id, WorkoutMode.EDIT)
-                )
+            is WorkoutsUiEvent.Navigate.Edit -> navController.navigate(
+                Screen.Workout.Manage(event.id, WorkoutMode.EDIT)
+            )
 
-                is WorkoutsUiEvent.Navigate.Detail -> navController.navigate(
-                    Screen.Workout.Manage(event.id, WorkoutMode.VIEW)
-                )
+            is WorkoutsUiEvent.Navigate.Detail -> navController.navigate(
+                Screen.Workout.Manage(event.id, WorkoutMode.VIEW)
+            )
 
-                is WorkoutsUiEvent.Navigate.Execute -> navController.navigate(
-                    Screen.Workout.Manage(event.id, WorkoutMode.EXECUTE)
-                )
-            }
+            is WorkoutsUiEvent.Navigate.Execute -> navController.navigate(
+                Screen.Workout.Manage(event.id, WorkoutMode.EXECUTE)
+            )
         }
     }
 

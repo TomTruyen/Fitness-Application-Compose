@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.ObserveEvent
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.BottomSheetList
 import com.tomtruyen.core.ui.Label
@@ -47,24 +48,20 @@ fun SharedTransitionScope.WorkoutHistoryScreen(
     animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: WorkoutHistoryViewModel = koinViewModel()
 ) {
-    val context = LocalContext.current
-
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(context, viewModel) {
-        viewModel.eventFlow.collectLatest { event ->
-            when(event) {
-                is WorkoutHistoryUiEvent.Navigate.Detail -> navController.navigate(
-                    Screen.History.Detail(event.id)
-                )
+    ObserveEvent(viewModel) { event ->
+        when(event) {
+            is WorkoutHistoryUiEvent.Navigate.Detail -> navController.navigate(
+                Screen.History.Detail(event.id)
+            )
 
-                is WorkoutHistoryUiEvent.Navigate.Workout -> navController.navigate(
-                    Screen.Workout.Manage(
-                        workout = event.workout,
-                        mode = event.mode
-                    )
+            is WorkoutHistoryUiEvent.Navigate.Workout -> navController.navigate(
+                Screen.Workout.Manage(
+                    workout = event.workout,
+                    mode = event.mode
                 )
-            }
+            )
         }
     }
 

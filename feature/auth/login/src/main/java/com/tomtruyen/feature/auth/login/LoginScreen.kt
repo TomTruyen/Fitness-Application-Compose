@@ -14,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -28,6 +27,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.ObserveEvent
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.secondaryTextColor
 import com.tomtruyen.core.ui.Buttons
@@ -47,24 +47,20 @@ fun LoginScreen(
     navController: NavController,
     viewModel: LoginViewModel = koinViewModel()
 ) {
-    val context = LocalContext.current
-
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(viewModel, context) {
-        viewModel.eventFlow.collectLatest { event ->
-            when (event) {
-                LoginUiEvent.NavigateToHome -> {
-                    navController.navigate(Screen.Workout.Graph) {
-                        popUpTo(Screen.Auth.Graph) {
-                            inclusive = true
-                        }
+    ObserveEvent(viewModel) { event ->
+        when(event) {
+            LoginUiEvent.Navigate.Home -> {
+                navController.navigate(Screen.Workout.Graph) {
+                    popUpTo(Screen.Auth.Graph) {
+                        inclusive = true
                     }
                 }
+            }
 
-                LoginUiEvent.NavigateToRegister -> {
-                    navController.navigate(Screen.Auth.Register)
-                }
+            LoginUiEvent.Navigate.Register -> {
+                navController.navigate(Screen.Auth.Register)
             }
         }
     }

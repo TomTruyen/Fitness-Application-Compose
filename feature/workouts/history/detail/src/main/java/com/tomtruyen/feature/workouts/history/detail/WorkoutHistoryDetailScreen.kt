@@ -15,14 +15,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.ObserveEvent
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.BottomSheetList
 import com.tomtruyen.core.ui.Label
@@ -50,26 +49,22 @@ fun SharedTransitionScope.WorkoutHistoryDetailScreen(
         parametersOf(id)
     }
 ) {
-    val context = LocalContext.current
-
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(context, viewModel) {
-        viewModel.eventFlow.collectLatest { event ->
-            when(event) {
-                is WorkoutHistoryDetailUiEvent.Navigate.Exercise.Detail -> navController.navigate(
-                    Screen.Exercise.Detail(event.id)
-                )
+    ObserveEvent(viewModel) { event ->
+        when(event) {
+            is WorkoutHistoryDetailUiEvent.Navigate.Exercise.Detail -> navController.navigate(
+                Screen.Exercise.Detail(event.id)
+            )
 
-                is WorkoutHistoryDetailUiEvent.Navigate.Workout -> navController.navigate(
-                    Screen.Workout.Manage(
-                        workout = event.workout,
-                        mode = event.mode
-                    )
+            is WorkoutHistoryDetailUiEvent.Navigate.Workout -> navController.navigate(
+                Screen.Workout.Manage(
+                    workout = event.workout,
+                    mode = event.mode
                 )
+            )
 
-                WorkoutHistoryDetailUiEvent.Navigate.Back -> navController.popBackStack()
-            }
+            WorkoutHistoryDetailUiEvent.Navigate.Back -> navController.popBackStack()
         }
     }
 

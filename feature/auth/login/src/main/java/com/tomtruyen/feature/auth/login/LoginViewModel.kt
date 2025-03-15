@@ -28,12 +28,12 @@ class LoginViewModel(
             password = uiState.value.password.orEmpty(),
         )
 
-        triggerEvent(LoginUiEvent.NavigateToHome)
+        triggerEvent(LoginUiEvent.Navigate.Home)
     }
 
     private fun loginWithGoogle(idToken: String) = launchLoading {
         userRepository.loginWithGoogle(idToken)
-        triggerEvent(LoginUiEvent.NavigateToHome)
+        triggerEvent(LoginUiEvent.Navigate.Home)
     }
 
     override fun onAction(action: LoginUiAction) {
@@ -58,7 +58,7 @@ class LoginViewModel(
 
             is LoginUiAction.OnGoogleSignInSuccess -> loginWithGoogle(action.idToken)
             LoginUiAction.OnLoginClicked -> login()
-            LoginUiAction.OnRegisterClicked -> triggerEvent(LoginUiEvent.NavigateToRegister)
+            LoginUiAction.OnRegisterClicked -> triggerEvent(LoginUiEvent.Navigate.Register)
         }
     }
 }

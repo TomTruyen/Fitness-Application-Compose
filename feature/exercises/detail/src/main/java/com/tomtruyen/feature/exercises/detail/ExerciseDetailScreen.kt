@@ -24,7 +24,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.tomtruyen.core.common.ObserveEvent
 import com.tomtruyen.core.common.utils.ImageLoader
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.BottomSheetList
@@ -63,20 +63,16 @@ fun SharedTransitionScope.ExerciseDetailScreen(
     ),
     imageLoader: ImageLoader = koinInject()
 ) {
-    val context = LocalContext.current
-
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(viewModel, context) {
-        viewModel.eventFlow.collectLatest { event ->
-            when (event) {
-                is ExerciseDetailUiEvent.NavigateBack -> navController.popBackStack()
-                is ExerciseDetailUiEvent.NavigateToEdit -> navController.navigate(
-                    Screen.Exercise.Manage(
-                        id
-                    )
+    ObserveEvent(viewModel) { event ->
+        when (event) {
+            is ExerciseDetailUiEvent.NavigateBack -> navController.popBackStack()
+            is ExerciseDetailUiEvent.NavigateToEdit -> navController.navigate(
+                Screen.Exercise.Manage(
+                    id
                 )
-            }
+            )
         }
     }
 

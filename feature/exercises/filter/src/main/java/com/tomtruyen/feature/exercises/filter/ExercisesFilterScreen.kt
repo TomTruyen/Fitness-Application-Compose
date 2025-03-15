@@ -16,7 +16,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.ObserveEvent
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.Chip
@@ -41,16 +41,12 @@ fun ExercisesFilterScreen(
     navController: NavController,
     viewModel: ExercisesViewModel
 ) {
-    val context = LocalContext.current
-
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(viewModel, context) {
-        viewModel.eventFlow.collectLatest { navigationType ->
-            when (navigationType) {
-                is ExercisesUiEvent.Navigate.Back -> navController.popBackStack()
-                else -> Unit
-            }
+    ObserveEvent(viewModel) { event ->
+        when (event) {
+            is ExercisesUiEvent.Navigate.Back -> navController.popBackStack()
+            else -> Unit
         }
     }
 

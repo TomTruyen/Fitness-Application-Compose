@@ -32,20 +32,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.ObserveEvent
 import com.tomtruyen.core.common.models.ExerciseMode
 import com.tomtruyen.core.common.models.FilterOption
 import com.tomtruyen.core.designsystem.Dimens
@@ -70,31 +67,28 @@ fun SharedTransitionScope.ExercisesScreen(
     animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: ExercisesViewModel
 ) {
-    val context = LocalContext.current
-
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    LaunchedEffect(viewModel, context) {
-        viewModel.eventFlow.collectLatest { event ->
-            when (event) {
-                ExercisesUiEvent.Navigate.Exercise.Filter -> navController.navigate(Screen.Exercise.Filter)
-                ExercisesUiEvent.Navigate.Exercise.Add -> navController.navigate(Screen.Exercise.Manage())
-                is ExercisesUiEvent.Navigate.Exercise.Detail -> navController.navigate(
-                    Screen.Exercise.Detail(event.id)
+
+    ObserveEvent(viewModel) { event ->
+        when(event) {
+            ExercisesUiEvent.Navigate.Exercise.Filter -> navController.navigate(Screen.Exercise.Filter)
+            ExercisesUiEvent.Navigate.Exercise.Add -> navController.navigate(Screen.Exercise.Manage())
+            is ExercisesUiEvent.Navigate.Exercise.Detail -> navController.navigate(
+                Screen.Exercise.Detail(event.id)
+            )
+
+            is ExercisesUiEvent.Navigate.Workout.Back -> {
+                navController.setNavigationResult(
+                    result = NavResult.ExerciseResult(
+                        mode = state.mode,
+                        exercises = event.exercises
+                    )
                 )
 
-                is ExercisesUiEvent.Navigate.Workout.Back -> {
-                    navController.setNavigationResult(
-                        result = NavResult.ExerciseResult(
-                            mode = state.mode,
-                            exercises = event.exercises
-                        )
-                    )
-
-                    navController.popBackStack()
-                }
-
-                else -> Unit
+                navController.popBackStack()
             }
+
+            else -> Unit
         }
     }
 

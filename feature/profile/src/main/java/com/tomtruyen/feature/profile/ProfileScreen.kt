@@ -14,13 +14,12 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.ObserveEvent
 import com.tomtruyen.core.common.ThemeMode
 import com.tomtruyen.core.common.models.GlobalAppState
 import com.tomtruyen.core.common.models.UnitType
@@ -48,8 +47,6 @@ fun ProfileScreen(
     navController: NavController,
     viewModel: ProfileViewModel = koinViewModel()
 ) {
-    val context = LocalContext.current
-
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     DisposableEffect(Unit) {
@@ -58,12 +55,10 @@ fun ProfileScreen(
         }
     }
 
-    LaunchedEffect(viewModel, context) {
-        viewModel.eventFlow.collectLatest { navigationType ->
-            when (navigationType) {
-                is ProfileUiEvent.Logout -> {
-                    navController.navigate(Screen.Auth.Login)
-                }
+    ObserveEvent(viewModel) { event ->
+        when (event) {
+            is ProfileUiEvent.Logout -> {
+                navController.navigate(Screen.Auth.Login)
             }
         }
     }

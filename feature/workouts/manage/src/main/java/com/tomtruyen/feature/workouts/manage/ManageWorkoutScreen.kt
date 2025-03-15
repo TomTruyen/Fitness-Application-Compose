@@ -21,17 +21,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.ObserveEvent
 import com.tomtruyen.core.common.models.ExerciseMode
 import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.common.utils.TimeUtils
@@ -66,61 +65,57 @@ fun SharedTransitionScope.ManageWorkoutScreen(
     animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: ManageWorkoutViewModel
 ) {
-    val context = LocalContext.current
-
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     val lazyListState = rememberLazyListState()
 
-    LaunchedEffect(viewModel, context) {
-        viewModel.eventFlow.collectLatest { event ->
-            when (event) {
-                is ManageWorkoutUiEvent.Navigate.Back -> navController.popBackStack()
+    ObserveEvent(viewModel) { event ->
+        when (event) {
+            is ManageWorkoutUiEvent.Navigate.Back -> navController.popBackStack()
 
-                is ManageWorkoutUiEvent.Navigate.Exercise.Add -> navController.navigate(
-                    Screen.Exercise.Overview(
-                        ExerciseMode.SELECT
-                    )
+            is ManageWorkoutUiEvent.Navigate.Exercise.Add -> navController.navigate(
+                Screen.Exercise.Overview(
+                    ExerciseMode.SELECT
                 )
+            )
 
-                is ManageWorkoutUiEvent.Navigate.Exercise.Reorder -> navController.navigate(
-                    Screen.Workout.Reorder(event.exercises)
+            is ManageWorkoutUiEvent.Navigate.Exercise.Reorder -> navController.navigate(
+                Screen.Workout.Reorder(event.exercises)
+            )
+
+            is ManageWorkoutUiEvent.Navigate.Exercise.Replace -> navController.navigate(
+                Screen.Exercise.Overview(
+                    ExerciseMode.REPLACE
                 )
+            )
 
-                is ManageWorkoutUiEvent.Navigate.Exercise.Replace -> navController.navigate(
-                    Screen.Exercise.Overview(
-                        ExerciseMode.REPLACE
-                    )
-                )
+            is ManageWorkoutUiEvent.Navigate.Exercise.Detail -> navController.navigate(
+                Screen.Exercise.Detail(event.id)
+            )
 
-                is ManageWorkoutUiEvent.Navigate.Exercise.Detail -> navController.navigate(
-                    Screen.Exercise.Detail(event.id)
-                )
-
-                is ManageWorkoutUiEvent.Navigate.History.Detail -> navController.navigate(
-                    Screen.History.Detail(event.workoutHistoryId)
-                ) {
-                    popUpTo<Screen.Workout.Overview> {
-                        inclusive = false
-                    }
+            is ManageWorkoutUiEvent.Navigate.History.Detail -> navController.navigate(
+                Screen.History.Detail(event.workoutHistoryId)
+            ) {
+                popUpTo<Screen.Workout.Overview> {
+                    inclusive = false
                 }
+            }
 
-                is ManageWorkoutUiEvent.Navigate.Workout.Edit -> navController.navigate(
-                    Screen.Workout.Manage(event.id, WorkoutMode.EDIT),
-                )
+            is ManageWorkoutUiEvent.Navigate.Workout.Edit -> navController.navigate(
+                Screen.Workout.Manage(event.id, WorkoutMode.EDIT),
+            )
 
-                is ManageWorkoutUiEvent.Navigate.Workout.Execute -> navController.navigate(
-                    Screen.Workout.Manage(event.id, WorkoutMode.EXECUTE)
-                )
+            is ManageWorkoutUiEvent.Navigate.Workout.Execute -> navController.navigate(
+                Screen.Workout.Manage(event.id, WorkoutMode.EXECUTE)
+            )
 
-                is ManageWorkoutUiEvent.ScrollToExercise -> {
-                    lazyListState.animateScrollToItem(
-                        event.index.coerceIn(
-                            0,
-                            state.workout.exercises.size - 1
-                        )
+            is ManageWorkoutUiEvent.ScrollToExercise -> {
+                lazyListState.animateScrollToItem(
+                    event.index.coerceIn(
+                        0,
+                        state.workout.exercises.size - 1
                     )
-                }
+                )
             }
         }
     }
