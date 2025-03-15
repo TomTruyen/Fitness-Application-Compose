@@ -58,6 +58,11 @@ sealed interface Screen {
             val mode: ManageWorkoutMode,
             val workout: WorkoutUiModel = WorkoutUiModel()
         ) : Workout
+
+        @Serializable
+        data class Reorder(
+            val exercises: List<WorkoutExerciseUiModel>
+        )
     }
 
     sealed interface History : Screen {
