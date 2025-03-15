@@ -1,5 +1,6 @@
 package com.tomtruyen.feature.workouts.manage
 
+import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 
 sealed class ManageWorkoutUiAction {
@@ -44,7 +45,11 @@ sealed class ManageWorkoutUiAction {
 
         data class Add(val exerciseId: String) : Set()
 
-        data class OnToggleCompleted(val exerciseId: String, val setIndex: Int) : Set()
+        data class OnToggleCompleted(
+            val exerciseId: String,
+            val setIndex: Int,
+            val previousSet: PreviousExerciseSet?
+        ) : Set()
     }
 
     sealed class Sheet : ManageWorkoutUiAction() {

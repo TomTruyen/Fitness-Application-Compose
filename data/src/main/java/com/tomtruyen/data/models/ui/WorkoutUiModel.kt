@@ -7,6 +7,7 @@ import com.tomtruyen.data.entities.ChangeType
 import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.entities.WorkoutHistory
 import com.tomtruyen.data.entities.WorkoutWithExercises
+import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
@@ -168,16 +169,28 @@ fun WorkoutUiModel.copyWithAddSet(id: String) = copy(
     }
 )
 
-fun WorkoutUiModel.copyWithSetCompleted(id: String, setIndex: Int) = copy(
+fun WorkoutUiModel.copyWithSetCompleted(id: String, setIndex: Int, previousSet: PreviousExerciseSet?) = copy(
     exercises = exercises.map { exercise ->
         if (exercise.id == id) {
             exercise.copy(
                 sets = exercise.sets.toMutableList().apply {
                     this[setIndex] = this[setIndex].copy(
                         completed = !this[setIndex].completed,
-                        reps = if (exercise.type == ExerciseType.WEIGHT && this[setIndex].reps == null) 0 else this[setIndex].reps,
-                        weight = if (exercise.type == ExerciseType.WEIGHT && this[setIndex].weight == null) 0.0 else this[setIndex].weight,
-                        time = if (exercise.type == ExerciseType.TIME && this[setIndex].time == null) 0 else this[setIndex].time,
+                        reps = if (exercise.type == ExerciseType.WEIGHT && this[setIndex].reps == null) {
+                            previousSet?.reps ?: 0
+                        } else {
+                            this[setIndex].reps
+                        },
+                        weight = if (exercise.type == ExerciseType.WEIGHT && this[setIndex].weight == null) {
+                            previousSet?.weight ?: 0.0
+                        } else {
+                            this[setIndex].weight
+                        },
+                        time = if (exercise.type == ExerciseType.TIME && this[setIndex].time == null) {
+                            previousSet?.time ?: 0
+                        } else {
+                            this[setIndex].time
+                        },
                         changeRecord = ChangeType.entries
                     )
                 }

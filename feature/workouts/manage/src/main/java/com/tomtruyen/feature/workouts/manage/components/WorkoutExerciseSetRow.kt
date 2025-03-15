@@ -132,7 +132,8 @@ fun WorkoutExerciseSetRow(
                         onAction(
                             ManageWorkoutUiAction.Set.OnToggleCompleted(
                                 exerciseId = workoutExerciseId,
-                                setIndex = setIndex
+                                setIndex = setIndex,
+                                previousSet = previousSet
                             )
                         )
                     },
