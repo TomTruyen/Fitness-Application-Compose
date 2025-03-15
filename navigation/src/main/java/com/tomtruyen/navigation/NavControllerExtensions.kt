@@ -6,13 +6,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 
 fun NavController.shouldShowNavigationIcon(isBottomBarVisible: Boolean): Boolean {
-    return previousBackStackEntry != null
-            && !isBottomBarVisible
+    return previousBackStackEntry != null && !isBottomBarVisible
 }
 
-inline fun <reified T: NavResult> NavController.setNavigationResult(
-    result: T
-) {
+inline fun <reified T: NavResult> NavController.setNavigationResult(result: T) {
     previousBackStackEntry?.savedStateHandle?.set(
         key = result.key,
         value = JsonInstance.encodeToString<T>(result)

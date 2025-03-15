@@ -1,5 +1,6 @@
 package com.tomtruyen.navigation
 
+import com.tomtruyen.core.common.models.ExerciseMode
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 import kotlinx.serialization.Serializable
@@ -10,7 +11,7 @@ sealed class NavResult {
 
     @Serializable
     data class ExerciseResult(
-        val mode: Screen.Exercise.Overview.Mode,
+        val mode: ExerciseMode,
         val exercises: List<ExerciseUiModel>
     ): NavResult() {
         override val key: String

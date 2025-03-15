@@ -46,6 +46,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.models.ExerciseMode
 import com.tomtruyen.core.common.models.FilterOption
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.selectedListItem
@@ -305,7 +306,7 @@ private fun SharedTransitionScope.ExercisesScreenLayout(
                                     title = exercise.displayName,
                                     message = exercise.category?.name.orEmpty(),
                                     selected = state.selectedExercises.contains(exercise),
-                                    showChevron = state.mode == Screen.Exercise.Overview.Mode.VIEW,
+                                    showChevron = state.mode == ExerciseMode.VIEW,
                                     onClick = {
                                         onAction(ExercisesUiAction.OnDetailClicked(exercise))
                                     },

@@ -1,6 +1,7 @@
 package com.tomtruyen.feature.workouts.manage.manager
 
 import com.tomtruyen.core.common.manager.StateManager
+import com.tomtruyen.core.common.models.ExerciseMode
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
@@ -11,15 +12,15 @@ class NavResultStateManager(
     private val updateState: ((ManageWorkoutUiState) -> ManageWorkoutUiState) -> Unit,
     private val onExerciseAction: (ManageWorkoutUiAction.Exercise) -> Unit
 ) : StateManager<ManageWorkoutUiAction.NavResult>{
-    private fun handleExercisesChanged(mode: Screen.Exercise.Overview.Mode, exercises: List<ExerciseUiModel>) {
+    private fun handleExercisesChanged(mode: ExerciseMode, exercises: List<ExerciseUiModel>) {
         when(mode) {
-            Screen.Exercise.Overview.Mode.REPLACE -> {
+            ExerciseMode.REPLACE -> {
                 exercises.firstOrNull()?.let { exercise ->
                     onExerciseAction(ManageWorkoutUiAction.Exercise.Replace(exercise))
                 }
             }
 
-            Screen.Exercise.Overview.Mode.SELECT -> {
+            ExerciseMode.SELECT -> {
                 onExerciseAction(ManageWorkoutUiAction.Exercise.Add(exercises))
             }
 

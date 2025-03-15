@@ -1,6 +1,7 @@
 package com.tomtruyen.feature.exercises
 
 import com.tomtruyen.core.common.base.BaseViewModel
+import com.tomtruyen.core.common.models.ExerciseMode
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ExercisesViewModel(
-    private val mode: Screen.Exercise.Overview.Mode,
+    private val mode: ExerciseMode,
     private val exerciseRepository: ExerciseRepository,
     private val categoryRepository: CategoryRepository,
     private val equipmentRepository: EquipmentRepository,
@@ -84,11 +85,11 @@ class ExercisesViewModel(
 
     private fun handleExerciseClick(exercise: ExerciseUiModel) {
         when (mode) {
-            Screen.Exercise.Overview.Mode.VIEW -> {
+            ExerciseMode.VIEW -> {
                 triggerEvent(ExercisesUiEvent.Navigate.Exercise.Detail(exercise.id))
             }
 
-            Screen.Exercise.Overview.Mode.SELECT -> {
+            ExerciseMode.SELECT -> {
                 updateState {
                     it.copy(
                         selectedExercises = it.selectedExercises.toMutableList().apply {
@@ -102,7 +103,7 @@ class ExercisesViewModel(
                 }
             }
 
-            Screen.Exercise.Overview.Mode.REPLACE -> {
+            ExerciseMode.REPLACE -> {
                 updateState {
                     it.copy(
                         selectedExercises = listOf(exercise)

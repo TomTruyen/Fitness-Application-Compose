@@ -26,6 +26,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.tomtruyen.core.common.controller.SnackbarController
+import com.tomtruyen.core.common.models.ExerciseMode
 import com.tomtruyen.fitoryx.MainViewModel
 import com.tomtruyen.core.common.models.GlobalAppState
 import com.tomtruyen.core.designsystem.theme.FynixTheme
@@ -99,7 +100,7 @@ class MainActivity : ComponentActivity() {
 
                         val isViewMode =
                             if (backStackEntry?.destination?.hasRoute<Screen.Exercise.Overview>() == true) {
-                                backStackEntry?.toRoute<Screen.Exercise.Overview>()?.mode == Screen.Exercise.Overview.Mode.VIEW
+                                backStackEntry?.toRoute<Screen.Exercise.Overview>()?.mode == ExerciseMode.VIEW
                             } else true
 
                         isBottomBarVisible = isRootDestination && isViewMode

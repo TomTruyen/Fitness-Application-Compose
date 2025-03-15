@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.tomtruyen.core.common.models.ExerciseMode
 import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
@@ -81,7 +82,7 @@ fun SharedTransitionScope.ManageWorkoutScreen(
 
                 is ManageWorkoutUiEvent.Navigate.Exercise.Add -> navController.navigate(
                     Screen.Exercise.Overview(
-                        Screen.Exercise.Overview.Mode.SELECT
+                        ExerciseMode.SELECT
                     )
                 )
 
@@ -91,7 +92,7 @@ fun SharedTransitionScope.ManageWorkoutScreen(
 
                 is ManageWorkoutUiEvent.Navigate.Exercise.Replace -> navController.navigate(
                     Screen.Exercise.Overview(
-                        Screen.Exercise.Overview.Mode.REPLACE
+                        ExerciseMode.REPLACE
                     )
                 )
 

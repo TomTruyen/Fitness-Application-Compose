@@ -1,6 +1,7 @@
 package com.tomtruyen.navigation
 
 import androidx.annotation.Keep
+import com.tomtruyen.core.common.models.ExerciseMode
 import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 import com.tomtruyen.data.models.ui.WorkoutUiModel
@@ -27,13 +28,7 @@ sealed interface Screen {
         data object Graph : Exercise
 
         @Serializable
-        data class Overview(val mode: Mode = Mode.VIEW) : Exercise {
-            enum class Mode {
-                VIEW,
-                SELECT,
-                REPLACE
-            }
-        }
+        data class Overview(val mode: ExerciseMode = ExerciseMode.VIEW) : Exercise
 
         @Serializable
         data class Detail(val id: String) : Exercise

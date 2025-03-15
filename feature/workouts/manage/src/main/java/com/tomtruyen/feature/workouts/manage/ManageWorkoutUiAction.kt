@@ -1,5 +1,6 @@
 package com.tomtruyen.feature.workouts.manage
 
+import com.tomtruyen.core.common.models.ExerciseMode
 import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
@@ -112,7 +113,7 @@ sealed class ManageWorkoutUiAction {
 
     sealed class NavResult: ManageWorkoutUiAction() {
         data class Exercises(
-            val mode: Screen.Exercise.Overview.Mode,
+            val mode: ExerciseMode,
             val exercises: List<ExerciseUiModel>
         ): NavResult()
 

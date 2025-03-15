@@ -1,5 +1,6 @@
 package com.tomtruyen.fitoryx.di
 
+import com.tomtruyen.core.common.models.ExerciseMode
 import com.tomtruyen.fitoryx.MainViewModel
 import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
@@ -56,7 +57,7 @@ val viewModelModule = module {
         )
     }
 
-    viewModel { (mode: Screen.Exercise.Overview.Mode) ->
+    viewModel { (mode: ExerciseMode) ->
         ExercisesViewModel(
             mode = mode,
             exerciseRepository = get<ExerciseRepository>(),

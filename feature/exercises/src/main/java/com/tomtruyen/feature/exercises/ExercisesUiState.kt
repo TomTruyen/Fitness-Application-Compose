@@ -1,6 +1,7 @@
 package com.tomtruyen.feature.exercises
 
 import androidx.compose.runtime.Immutable
+import com.tomtruyen.core.common.models.ExerciseMode
 import com.tomtruyen.data.models.ExerciseFilter
 import com.tomtruyen.data.models.ui.CategoryUiModel
 import com.tomtruyen.data.models.ui.EquipmentUiModel
@@ -9,7 +10,7 @@ import com.tomtruyen.navigation.Screen
 
 @Immutable
 data class ExercisesUiState(
-    val mode: Screen.Exercise.Overview.Mode = Screen.Exercise.Overview.Mode.VIEW, // Determines if the user is coming from the workout screen
+    val mode: ExerciseMode = ExerciseMode.VIEW, // Determines if the user is coming from the workout screen
     val search: String = "",
     val searching: Boolean = false,
     val filter: ExerciseFilter = ExerciseFilter(),
