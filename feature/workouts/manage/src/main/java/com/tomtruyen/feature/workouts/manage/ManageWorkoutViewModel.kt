@@ -64,7 +64,7 @@ class ManageWorkoutViewModel(
         )
     }
 
-    private val timer by lazy { StopwatchTimer() }
+    private lateinit var timer: StopwatchTimer
 
     init {
         observeWorkout()
@@ -73,14 +73,14 @@ class ManageWorkoutViewModel(
 
         observeLoading()
         observeSettings()
-
-        startTimer()
     }
 
-    private fun startTimer() {
+    private fun startTimer(initialTime: Long) {
         if (!uiState.value.mode.isExecute) return
 
-        timer.start()
+        timer = StopwatchTimer(initialTime).also {
+            it.start()
+        }
 
         vmScope.launch {
             timer.time.collectLatest { duration ->
@@ -148,6 +148,12 @@ class ManageWorkoutViewModel(
 
                         if(mode.isExecute) {
                             fetchLatestSetsForExercises(workout)
+                        }
+
+                        return@let workout
+                    }.also { workout ->
+                        if(mode.isExecute) {
+                            startTimer(initialTime = workout?.duration ?: 0L)
                         }
                     }
                 }
