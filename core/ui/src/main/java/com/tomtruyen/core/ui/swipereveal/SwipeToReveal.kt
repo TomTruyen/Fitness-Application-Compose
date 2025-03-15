@@ -160,39 +160,46 @@ fun SwipeToRevealAction(
     icon: ImageVector,
     contentColor: Color,
     backgroundColor: Color,
+    outerBackgroundColor: Color,
     onClick: () -> Unit,
     text: String? = null,
     modifier: Modifier = Modifier,
 ) {
-    Row(
+    Box(
         modifier = modifier
             .fillMaxHeight()
-            .clickable(onClick = onClick)
-            .background(
-                color = backgroundColor,
-                shape = RoundedCornerShape(
-                    topStart = Dimens.Small,
-                    bottomStart = Dimens.Small
-                )
-            )
-            .padding(horizontal = Dimens.Small),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(Dimens.Tiny, Alignment.End)
+            .background(outerBackgroundColor)
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = text,
-            tint = contentColor,
-        )
-
-        text?.let {
-            Text(
-                text = it,
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = contentColor,
-                    fontWeight = FontWeight.W500
-                ),
+        Row(
+            modifier = Modifier
+                .fillMaxHeight()
+                .clickable(onClick = onClick)
+                .background(
+                    color = backgroundColor,
+                    shape = RoundedCornerShape(
+                        topStart = Dimens.Small,
+                        bottomStart = Dimens.Small
+                    )
+                )
+                .padding(horizontal = Dimens.Small),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(Dimens.Tiny, Alignment.End)
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = text,
+                tint = contentColor,
             )
+
+            text?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = contentColor,
+                        fontWeight = FontWeight.W500
+                    ),
+                )
+            }
         }
     }
 }

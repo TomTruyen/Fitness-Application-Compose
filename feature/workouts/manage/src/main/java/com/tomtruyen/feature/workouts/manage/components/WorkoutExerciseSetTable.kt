@@ -18,7 +18,6 @@ import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.common.models.ManageWorkoutMode
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.LighterSuccessGreen
 import com.tomtruyen.core.designsystem.theme.success
 import com.tomtruyen.core.ui.swipereveal.SwipeToRevealAction
 import com.tomtruyen.core.ui.swipereveal.SwipeToRevealBox
@@ -82,6 +81,7 @@ fun WorkoutExerciseSetTable(
                         text = stringResource(id = CommonR.string.button_delete),
                         backgroundColor = MaterialTheme.colorScheme.error,
                         contentColor = MaterialTheme.colorScheme.onError,
+                        outerBackgroundColor = backgroundColor,
                         onClick = {
                             onAction(
                                 ManageWorkoutUiAction.Set.Delete(
