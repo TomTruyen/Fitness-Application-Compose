@@ -18,6 +18,7 @@ import com.tomtruyen.feature.workouts.manage.manager.SheetStateManager
 import com.tomtruyen.feature.workouts.manage.manager.WorkoutStateManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -72,6 +73,7 @@ class ManageWorkoutViewModel(
         )
     }
 
+    private var observeActiveWorkoutJob: Job? = null
     private lateinit var timer: StopwatchTimer
 
     init {
@@ -110,15 +112,17 @@ class ManageWorkoutViewModel(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-    private fun observeActiveWorkout() = vmScope.launch {
-        if (!uiState.value.mode.isExecute) return@launch
+    private fun observeActiveWorkout() {
+        observeActiveWorkoutJob = vmScope.launch {
+            if (!uiState.value.mode.isExecute) return@launch
 
-        uiState.mapLatest {
-            it.workout
-        }.distinctUntilChanged().debounce(200) // Debounce as to not spam the Database
-            .collectLatest { workout ->
-                workoutRepository.saveActiveWorkout(workout)
-            }
+            uiState.mapLatest {
+                it.workout
+            }.distinctUntilChanged().debounce(200) // Debounce as to not spam the Database
+                .collectLatest { workout ->
+                    workoutRepository.saveActiveWorkout(workout)
+                }
+        }
     }
 
     private fun observeWorkout() = with(uiState.value) {
@@ -201,6 +205,7 @@ class ManageWorkoutViewModel(
 
     private fun finishWorkout(userId: String, updateExistingWorkout: Boolean) = launchLoading {
         stopTimer()
+        observeActiveWorkoutJob?.cancel()
 
         with(uiState.value) {
             val workout = workout.copy(
