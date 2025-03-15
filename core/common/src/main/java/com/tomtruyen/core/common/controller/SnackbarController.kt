@@ -53,7 +53,7 @@ object SnackbarController {
             lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 withContext(Dispatchers.Main.immediate) {
                     events.collect { event ->
-                        if (event !is SnackbarMessage.Empty && !event.message.isNullOrBlank()) {
+                        if (event !is SnackbarMessage.Empty) {
                             snackbarHostState.currentSnackbarData?.dismiss()
 
                             snackbarMessage = event
@@ -105,13 +105,13 @@ sealed class SnackbarMessage(
 ) {
     data object Empty : SnackbarMessage()
     class Success(
-        override val message: String?,
+        override val message: String,
         override val icon: ImageVector? = Icons.Rounded.Check,
         override val backgroundColor: Color? = Color.Green,
     ) : SnackbarMessage(message, icon, backgroundColor)
 
     class Error(
-        override val message: String?,
+        override val message: String,
         override val icon: ImageVector? = Icons.Rounded.ErrorOutline,
         override val backgroundColor: Color? = Color(0xFFFF5555),
     ) : SnackbarMessage(message, icon, backgroundColor)
