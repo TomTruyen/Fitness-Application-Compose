@@ -70,7 +70,6 @@ fun LoginScreen(
     }
 
     LoginScreenLayout(
-        snackbarHost = { viewModel.CreateSnackbarHost() },
         state = state,
         onAction = viewModel::onAction
     )
@@ -78,7 +77,6 @@ fun LoginScreen(
 
 @Composable
 private fun LoginScreenLayout(
-    snackbarHost: @Composable () -> Unit,
     state: LoginUiState,
     onAction: (LoginUiAction) -> Unit
 ) {
@@ -90,9 +88,7 @@ private fun LoginScreenLayout(
 
     val focusManager = LocalFocusManager.current
 
-    Scaffold(
-        snackbarHost = snackbarHost
-    ) {
+    Scaffold {
         LoadingContainer(
             loading = state.loading,
             scaffoldPadding = it

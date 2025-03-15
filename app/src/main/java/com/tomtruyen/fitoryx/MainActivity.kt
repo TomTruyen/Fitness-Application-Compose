@@ -25,6 +25,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.tomtruyen.core.common.controller.SnackbarController
 import com.tomtruyen.fitoryx.MainViewModel
 import com.tomtruyen.core.common.models.GlobalAppState
 import com.tomtruyen.core.designsystem.theme.FynixTheme
@@ -108,6 +109,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxSize()
                             .animateContentSize(),
+                        snackbarHost = { SnackbarController.GlobalSnackbarHost() },
                         bottomBar = {
                             MainBottomNavigation(
                                 navController = navController,

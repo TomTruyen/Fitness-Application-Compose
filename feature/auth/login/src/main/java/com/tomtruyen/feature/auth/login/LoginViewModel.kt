@@ -1,7 +1,8 @@
 package com.tomtruyen.feature.auth.login
 
 import com.tomtruyen.core.common.base.BaseViewModel
-import com.tomtruyen.core.common.base.SnackbarMessage
+import com.tomtruyen.core.common.controller.SnackbarController
+import com.tomtruyen.core.common.controller.SnackbarMessage
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -51,7 +52,10 @@ class LoginViewModel(
                 )
             }
 
-            is LoginUiAction.OnGoogleSignInFailed -> showSnackbar(SnackbarMessage.Error(action.error))
+            is LoginUiAction.OnGoogleSignInFailed -> SnackbarController.showSnackbar(
+                SnackbarMessage.Error(action.error)
+            )
+
             is LoginUiAction.OnGoogleSignInSuccess -> loginWithGoogle(action.idToken)
             LoginUiAction.OnLoginClicked -> login()
             LoginUiAction.OnRegisterClicked -> triggerEvent(LoginUiEvent.NavigateToRegister)

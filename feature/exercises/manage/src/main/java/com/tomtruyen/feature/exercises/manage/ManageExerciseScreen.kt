@@ -64,7 +64,6 @@ fun ManageExerciseScreen(
     }
 
     ManageExerciseScreenLayout(
-        snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
         onAction = viewModel::onAction,
@@ -73,13 +72,10 @@ fun ManageExerciseScreen(
 
 @Composable
 private fun ManageExerciseScreenLayout(
-    snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: ManageExerciseUiState,
     onAction: (ManageExerciseUiAction) -> Unit,
 ) {
-    val focusManager = LocalFocusManager.current
-
     val isValid by remember(state) {
         derivedStateOf {
             state.nameValidationResult.isValid()
@@ -103,7 +99,6 @@ private fun ManageExerciseScreenLayout(
     BackHandler(enabled = !confirmationDialogVisible, onBack = onNavigateUp)
 
     Scaffold(
-        snackbarHost = snackbarHost,
         topBar = {
             Toolbar(
                 title = stringResource(

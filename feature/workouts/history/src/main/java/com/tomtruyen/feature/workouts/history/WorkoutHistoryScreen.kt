@@ -69,7 +69,6 @@ fun SharedTransitionScope.WorkoutHistoryScreen(
     }
 
     WorkoutHistoryScreenLayout(
-        snackbarHost = { viewModel.CreateSnackbarHost() },
         animatedVisibilityScope = animatedVisibilityScope,
         navController = navController,
         state = state,
@@ -104,7 +103,6 @@ fun SharedTransitionScope.WorkoutHistoryScreen(
 @OptIn(ExperimentalMaterial3Api::class, FlowPreview::class, ExperimentalSharedTransitionApi::class)
 @Composable
 private fun SharedTransitionScope.WorkoutHistoryScreenLayout(
-    snackbarHost: @Composable () -> Unit,
     animatedVisibilityScope: AnimatedVisibilityScope,
     navController: NavController,
     state: WorkoutHistoryUiState,
@@ -130,7 +128,6 @@ private fun SharedTransitionScope.WorkoutHistoryScreenLayout(
     }
 
     Scaffold(
-        snackbarHost = snackbarHost,
         topBar = {
             Toolbar(
                 title = stringResource(id = R.string.title_history),

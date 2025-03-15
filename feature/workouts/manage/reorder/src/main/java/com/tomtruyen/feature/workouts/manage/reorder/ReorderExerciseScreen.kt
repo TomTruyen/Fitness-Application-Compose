@@ -62,7 +62,6 @@ fun ReorderExerciseScreen(
     }
 
     ReorderExercisesScreenLayout(
-        snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
         onAction = viewModel::onAction
@@ -71,7 +70,6 @@ fun ReorderExerciseScreen(
 
 @Composable
 private fun ReorderExercisesScreenLayout(
-    snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: ReorderExercisesUiState,
     onAction: (ReorderExercisesUiAction) -> Unit
@@ -84,7 +82,6 @@ private fun ReorderExercisesScreenLayout(
     }
 
     Scaffold(
-        snackbarHost = snackbarHost,
         topBar = {
             Toolbar(
                 title = stringResource(id = R.string.title_reorder_exercises),

@@ -81,7 +81,6 @@ fun SharedTransitionScope.ExerciseDetailScreen(
     }
 
     ExerciseDetailScreenLayout(
-        snackbarHost = { viewModel.CreateSnackbarHost() },
         animatedVisibilityScope = animatedVisibilityScope,
         navController = navController,
         state = state,
@@ -117,7 +116,6 @@ fun SharedTransitionScope.ExerciseDetailScreen(
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun SharedTransitionScope.ExerciseDetailScreenLayout(
-    snackbarHost: @Composable () -> Unit,
     animatedVisibilityScope: AnimatedVisibilityScope,
     navController: NavController,
     state: ExerciseDetailUiState,
@@ -127,7 +125,6 @@ private fun SharedTransitionScope.ExerciseDetailScreenLayout(
     val context = LocalContext.current
 
     Scaffold(
-        snackbarHost = snackbarHost,
         modifier = Modifier.sharedBounds(
             sharedContentState = rememberSharedContentState(
                 key = SharedTransitionKey.Exercise(state.exercise.id)

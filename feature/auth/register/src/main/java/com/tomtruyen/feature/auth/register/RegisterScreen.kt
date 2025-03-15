@@ -67,7 +67,6 @@ fun RegisterScreen(
     }
 
     RegisterScreenLayout(
-        snackbarHost = { viewModel.CreateSnackbarHost() },
         state = state,
         onAction = viewModel::onAction
     )
@@ -75,7 +74,6 @@ fun RegisterScreen(
 
 @Composable
 private fun RegisterScreenLayout(
-    snackbarHost: @Composable () -> Unit,
     state: RegisterUiState,
     onAction: (RegisterUiAction) -> Unit
 ) {
@@ -87,9 +85,7 @@ private fun RegisterScreenLayout(
         }
     }
 
-    Scaffold(
-        snackbarHost = snackbarHost
-    ) {
+    Scaffold {
         LoadingContainer(
             loading = state.loading,
             scaffoldPadding = it

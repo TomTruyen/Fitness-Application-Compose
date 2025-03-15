@@ -149,7 +149,6 @@ fun SharedTransitionScope.ManageWorkoutScreen(
     )
 
     ManageWorkoutScreenLayout(
-        snackbarHost = { viewModel.CreateSnackbarHost() },
         animatedVisibilityScope = animatedVisibilityScope,
         navController = navController,
         state = state,
@@ -229,7 +228,6 @@ fun SharedTransitionScope.ManageWorkoutScreen(
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun SharedTransitionScope.ManageWorkoutScreenLayout(
-    snackbarHost: @Composable () -> Unit,
     animatedVisibilityScope: AnimatedVisibilityScope,
     navController: NavController,
     state: ManageWorkoutUiState,
@@ -264,7 +262,6 @@ private fun SharedTransitionScope.ManageWorkoutScreenLayout(
     BackHandler(enabled = !confirmationDialogVisible, onBack = onNavigateUp)
 
     Scaffold(
-        snackbarHost = snackbarHost,
         modifier = Modifier.sharedBounds(
             sharedContentState = rememberSharedContentState(
                 key = SharedTransitionKey.Workout(state.workout.id)

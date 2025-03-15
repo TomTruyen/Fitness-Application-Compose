@@ -55,7 +55,6 @@ fun ExercisesFilterScreen(
     }
 
     ExercisesFilterScreenLayout(
-        snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
         onAction = viewModel::onAction
@@ -65,13 +64,11 @@ fun ExercisesFilterScreen(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun ExercisesFilterScreenLayout(
-    snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: ExercisesUiState,
     onAction: (ExercisesUiAction) -> Unit
 ) {
     Scaffold(
-        snackbarHost = snackbarHost,
         topBar = {
             Toolbar(
                 title = stringResource(id = R.string.title_filter),

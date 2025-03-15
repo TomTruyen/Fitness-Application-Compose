@@ -69,7 +69,6 @@ fun ProfileScreen(
     }
 
     ProfileScreenLayout(
-        snackbarHost = { viewModel.CreateSnackbarHost() },
         navController = navController,
         state = state,
         onAction = viewModel::onAction
@@ -113,7 +112,6 @@ fun ProfileScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ProfileScreenLayout(
-    snackbarHost: @Composable () -> Unit,
     navController: NavController,
     state: ProfileUiState,
     onAction: (ProfileUiAction) -> Unit
@@ -121,7 +119,6 @@ private fun ProfileScreenLayout(
     val refreshState = rememberPullToRefreshState()
 
     Scaffold(
-        snackbarHost = snackbarHost,
         topBar = {
             Toolbar(
                 title = stringResource(id = R.string.title_profile),
