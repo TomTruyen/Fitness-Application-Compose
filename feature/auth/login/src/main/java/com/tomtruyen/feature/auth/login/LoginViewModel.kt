@@ -53,7 +53,7 @@ class LoginViewModel(
             }
 
             is LoginUiAction.OnGoogleSignInFailed -> SnackbarController.showSnackbar(
-                SnackbarMessage.Error(action.error)
+                SnackbarMessage.Error(action.error.orEmpty())
             )
 
             is LoginUiAction.OnGoogleSignInSuccess -> loginWithGoogle(action.idToken)

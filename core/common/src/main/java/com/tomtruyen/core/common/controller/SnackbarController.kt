@@ -53,7 +53,7 @@ object SnackbarController {
             lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 withContext(Dispatchers.Main.immediate) {
                     events.collect { event ->
-                        if (event !is SnackbarMessage.Empty) {
+                        if (event !is SnackbarMessage.Empty && !event.message.isNullOrBlank()) {
                             snackbarHostState.currentSnackbarData?.dismiss()
 
                             snackbarMessage = event

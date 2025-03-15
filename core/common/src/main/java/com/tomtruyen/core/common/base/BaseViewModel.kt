@@ -31,7 +31,7 @@ abstract class BaseViewModel<UIState, UIAction, UIEvent>(
             else -> throwable.localizedMessage ?: throwable.message
         }
 
-        SnackbarController.showSnackbar(SnackbarMessage.Error(message))
+        SnackbarController.showSnackbar(SnackbarMessage.Error(message.orEmpty()))
 
         isLoading(false)
         isRefreshing(false)
