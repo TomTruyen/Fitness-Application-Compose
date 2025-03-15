@@ -38,8 +38,6 @@ class ExerciseStateManager(
                 }
             )
         )
-    }.also {
-        triggerEvent(ManageWorkoutUiEvent.ScrollToExercise(to))
     }
 
     private fun replaceExercise(exercise: ExerciseUiModel) {
