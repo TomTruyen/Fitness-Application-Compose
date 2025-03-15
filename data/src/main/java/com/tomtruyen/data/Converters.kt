@@ -1,20 +1,20 @@
 package com.tomtruyen.data
 
 import androidx.room.TypeConverter
+import com.tomtruyen.core.common.JsonInstance
 import com.tomtruyen.data.entities.ChangeType
 import kotlinx.datetime.LocalDateTime
-import kotlinx.serialization.json.Json
 import kotlin.collections.List
 
 class Converters {
     @TypeConverter
     fun fromListToString(list: List<String>): String {
-        return Json.encodeToString(list)
+        return JsonInstance.encodeToString(list)
     }
 
     @TypeConverter
     fun fromStringToList(string: String): List<String> {
-        return Json.decodeFromString(string)
+        return JsonInstance.decodeFromString(string)
     }
 
     @TypeConverter
@@ -29,11 +29,11 @@ class Converters {
 
     @TypeConverter
     fun fromListChangeTypeToString(changeTypes: List<ChangeType>): String {
-        return Json.encodeToString(changeTypes)
+        return JsonInstance.encodeToString(changeTypes)
     }
 
     @TypeConverter
     fun fromStringToListChangeType(changeTypes: String): List<ChangeType> {
-        return Json.decodeFromString(changeTypes)
+        return JsonInstance.decodeFromString(changeTypes)
     }
 }

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_reorder_exercises">Reorder Exercises</string>
+    <string name="button_done">Done</string>
+</resources>

@@ -1,5 +1,35 @@
 package com.tomtruyen.navigation
 
-object NavArguments {
-    const val EXERCISES = "exercises"
+import com.tomtruyen.data.models.ui.ExerciseUiModel
+import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
+import kotlinx.serialization.Serializable
+
+@Serializable
+sealed class NavResult {
+    abstract val key: String
+
+    @Serializable
+    data class ExerciseResult(
+        val mode: Screen.Exercise.Overview.Mode,
+        val exercises: List<ExerciseUiModel>
+    ): NavResult() {
+        override val key: String
+            get() = KEY
+
+        companion object {
+            const val KEY = "exercises"
+        }
+    }
+
+    @Serializable
+    data class ReorderExerciseResult(
+        val exercises: List<WorkoutExerciseUiModel>
+    ): NavResult() {
+        override val key: String
+            get() = KEY
+
+        companion object {
+            const val KEY = "workout_exercises"
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package com.tomtruyen.feature.workouts.manage
 
+import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
+
 sealed class ManageWorkoutUiEvent {
     sealed class Navigate : ManageWorkoutUiEvent() {
         sealed class Workout : Navigate() {
@@ -10,6 +12,8 @@ sealed class ManageWorkoutUiEvent {
 
         sealed class Exercise : Navigate() {
             data object Add : Exercise()
+
+            data class Reorder(val exercises: List<WorkoutExerciseUiModel>): Exercise()
 
             data object Replace : Exercise()
 

@@ -37,7 +37,6 @@ import com.tomtruyen.feature.workouts.history.detail.remember.rememberWorkoutHis
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.SharedTransitionKey
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.serialization.json.Json
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 

@@ -52,9 +52,10 @@ import com.tomtruyen.feature.workouts.manage.components.WorkoutTimer
 import com.tomtruyen.feature.workouts.manage.remember.rememberExerciseActions
 import com.tomtruyen.feature.workouts.manage.remember.rememberSetActions
 import com.tomtruyen.feature.workouts.manage.remember.rememberWorkoutActions
-import com.tomtruyen.navigation.NavArguments
+import com.tomtruyen.navigation.NavResult
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.SharedTransitionKey
+import com.tomtruyen.navigation.handleNavigationResult
 import kotlinx.coroutines.flow.collectLatest
 import java.util.concurrent.TimeUnit
 import com.tomtruyen.core.common.R as CommonR
@@ -81,6 +82,10 @@ fun SharedTransitionScope.ManageWorkoutScreen(
                     Screen.Exercise.Overview(
                         Screen.Exercise.Overview.Mode.SELECT
                     )
+                )
+
+                is ManageWorkoutUiEvent.Navigate.Exercise.Reorder -> navController.navigate(
+                    Screen.Workout.Reorder(event.exercises)
                 )
 
                 is ManageWorkoutUiEvent.Navigate.Exercise.Replace -> navController.navigate(
@@ -122,34 +127,20 @@ fun SharedTransitionScope.ManageWorkoutScreen(
     }
 
     LaunchedEffect(navController) {
-        // TODO: Handle this somewhere else - This logic should not be here
-        navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Pair<Screen.Exercise.Overview.Mode, List<ExerciseUiModel>>?>(
-            NavArguments.EXERCISES,
-            null
-        )
-            ?.collectLatest { result ->
-                if (result != null) {
-                    val (mode, exercises) = result
-
-                    when (mode) {
-                        Screen.Exercise.Overview.Mode.REPLACE -> {
-                            exercises.firstOrNull()?.let { exercise ->
-                                viewModel.onAction(ManageWorkoutUiAction.Exercise.Replace(exercise))
-                            }
-                        }
-
-                        Screen.Exercise.Overview.Mode.SELECT -> {
-                            viewModel.onAction(ManageWorkoutUiAction.Exercise.Add(exercises))
-                        }
-
-                        else -> Unit
-                    }
-                }
-
-                navController.currentBackStackEntry?.savedStateHandle?.remove<Pair<Screen.Exercise.Overview.Mode, List<ExerciseUiModel>>?>(
-                    NavArguments.EXERCISES
+        navController.handleNavigationResult<NavResult.ExerciseResult>(NavResult.ExerciseResult.KEY) {
+            viewModel.onAction(
+                ManageWorkoutUiAction.NavResult.Exercises(
+                    mode = it.mode,
+                    exercises = it.exercises,
                 )
-            }
+            )
+        }
+    }
+
+    LaunchedEffect(navController) {
+        navController.handleNavigationResult<NavResult.ReorderExerciseResult>(NavResult.ReorderExerciseResult.KEY) {
+            viewModel.onAction(ManageWorkoutUiAction.NavResult.ReorderWorkoutExercises(it.exercises))
+        }
     }
 
     ManageWorkoutScreenLayout(

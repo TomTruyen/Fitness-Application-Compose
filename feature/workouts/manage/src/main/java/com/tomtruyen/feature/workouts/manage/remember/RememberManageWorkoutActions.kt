@@ -3,6 +3,7 @@ package com.tomtruyen.feature.workouts.manage.remember
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.material.icons.rounded.Sync
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -19,6 +20,13 @@ fun rememberExerciseActions(
 
     return remember {
         listOf(
+            BottomSheetItem(
+                titleRes = R.string.action_exercise_reorder,
+                icon = Icons.Rounded.SwapVert,
+                onClick = {
+                    onAction(ManageWorkoutUiAction.Exercise.OnReorderClicked)
+                }
+            ),
             BottomSheetItem(
                 titleRes = R.string.action_exercise_replace,
                 icon = Icons.Rounded.Sync,

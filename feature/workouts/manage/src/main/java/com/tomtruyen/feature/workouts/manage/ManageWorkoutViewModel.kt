@@ -13,6 +13,7 @@ import com.tomtruyen.data.repositories.interfaces.HistoryRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.feature.workouts.manage.manager.DialogStateManager
 import com.tomtruyen.feature.workouts.manage.manager.ExerciseStateManager
+import com.tomtruyen.feature.workouts.manage.manager.NavResultStateManager
 import com.tomtruyen.feature.workouts.manage.manager.SetStateManager
 import com.tomtruyen.feature.workouts.manage.manager.SheetStateManager
 import com.tomtruyen.feature.workouts.manage.manager.WorkoutStateManager
@@ -58,6 +59,13 @@ class ManageWorkoutViewModel(
     private val setStateManager by lazy {
         SetStateManager(
             updateState = ::updateState
+        )
+    }
+
+    private val navResultStateManager by lazy {
+        NavResultStateManager(
+            updateState = ::updateState,
+            onExerciseAction = ::onAction
         )
     }
 
@@ -273,10 +281,17 @@ class ManageWorkoutViewModel(
                 else -> workoutStateManager.onAction(action)
             }
 
-            is ManageWorkoutUiAction.Exercise -> exerciseStateManager.onAction(action)
+            is ManageWorkoutUiAction.Exercise -> when(action) {
+                ManageWorkoutUiAction.Exercise.OnReorderClicked -> triggerEvent(
+                    ManageWorkoutUiEvent.Navigate.Exercise.Reorder(uiState.value.workout.exercises)
+                )
+                else -> exerciseStateManager.onAction(action)
+            }
+
             is ManageWorkoutUiAction.Set -> setStateManager.onAction(action)
             is ManageWorkoutUiAction.Sheet -> sheetStateManager.onAction(action)
             is ManageWorkoutUiAction.Dialog -> dialogStateManager.onAction(action)
+            is ManageWorkoutUiAction.NavResult -> navResultStateManager.onAction(action)
 
             is ManageWorkoutUiAction.Navigate.Exercise.Detail -> triggerEvent(
                 ManageWorkoutUiEvent.Navigate.Exercise.Detail(action.id)

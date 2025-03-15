@@ -2,6 +2,8 @@ package com.tomtruyen.feature.workouts.manage
 
 import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.ExerciseUiModel
+import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
+import com.tomtruyen.navigation.Screen
 
 sealed class ManageWorkoutUiAction {
     sealed class Workout : ManageWorkoutUiAction() {
@@ -16,6 +18,8 @@ sealed class ManageWorkoutUiAction {
 
     sealed class Exercise : ManageWorkoutUiAction() {
         data class OnNotesChanged(val id: String, val notes: String) : Exercise()
+
+        data object OnReorderClicked: Exercise()
 
         data object OnReplaceClicked : Exercise()
 
@@ -104,5 +108,14 @@ sealed class ManageWorkoutUiAction {
         }
 
         data object Back: Navigate()
+    }
+
+    sealed class NavResult: ManageWorkoutUiAction() {
+        data class Exercises(
+            val mode: Screen.Exercise.Overview.Mode,
+            val exercises: List<ExerciseUiModel>
+        ): NavResult()
+
+        data class ReorderWorkoutExercises(val exercises: List<WorkoutExerciseUiModel>): NavResult()
     }
 }

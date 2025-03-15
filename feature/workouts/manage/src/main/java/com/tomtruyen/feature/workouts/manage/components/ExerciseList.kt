@@ -55,7 +55,7 @@ fun SharedTransitionScope.ExerciseList(
         listHeader()
 
         items(
-            state.workout.exercises,
+            items = state.workout.exercises,
             key = { it.id }
         ) { exercise ->
             ReorderableItem(

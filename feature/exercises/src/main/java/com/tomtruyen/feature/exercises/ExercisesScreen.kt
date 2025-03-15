@@ -56,9 +56,10 @@ import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.listitems.ListItem
 import com.tomtruyen.core.ui.toolbars.SearchToolbar
 import com.tomtruyen.core.ui.toolbars.Toolbar
-import com.tomtruyen.navigation.NavArguments
+import com.tomtruyen.navigation.NavResult
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.SharedTransitionKey
+import com.tomtruyen.navigation.setNavigationResult
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -81,10 +82,13 @@ fun SharedTransitionScope.ExercisesScreen(
                 )
 
                 is ExercisesUiEvent.Navigate.Workout.Back -> {
-                    navController.previousBackStackEntry?.savedStateHandle?.set(
-                        NavArguments.EXERCISES,
-                        state.mode to event.exercises
+                    navController.setNavigationResult(
+                        result = NavResult.ExerciseResult(
+                            mode = state.mode,
+                            exercises = event.exercises
+                        )
                     )
+
                     navController.popBackStack()
                 }
 

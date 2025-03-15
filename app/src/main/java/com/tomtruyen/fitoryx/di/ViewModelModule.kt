@@ -21,8 +21,8 @@ import com.tomtruyen.feature.workouts.WorkoutsViewModel
 import com.tomtruyen.feature.workouts.history.WorkoutHistoryViewModel
 import com.tomtruyen.feature.workouts.history.detail.WorkoutHistoryDetailViewModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel
+import com.tomtruyen.feature.workouts.manage.reorder.ReorderExercisesViewModel
 import com.tomtruyen.navigation.Screen
-import kotlinx.serialization.json.Json
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -47,6 +47,12 @@ val viewModelModule = module {
             workoutRepository = get<WorkoutRepository>(),
             historyRepository = get<HistoryRepository>(),
             settingsRepository = get<SettingsRepository>(),
+        )
+    }
+
+    viewModel { (exercises: List<WorkoutExerciseUiModel>) ->
+        ReorderExercisesViewModel(
+            exercises = exercises
         )
     }
 

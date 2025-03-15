@@ -29,6 +29,7 @@ import com.tomtruyen.fitoryx.MainViewModel
 import com.tomtruyen.core.common.models.GlobalAppState
 import com.tomtruyen.core.designsystem.theme.FynixTheme
 import com.tomtruyen.core.designsystem.theme.rememberDarkMode
+import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.feature.auth.login.LoginScreen
 import com.tomtruyen.feature.auth.register.RegisterScreen
@@ -43,6 +44,8 @@ import com.tomtruyen.feature.workouts.history.WorkoutHistoryScreen
 import com.tomtruyen.feature.workouts.history.detail.WorkoutHistoryDetailScreen
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutScreen
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel
+import com.tomtruyen.feature.workouts.manage.reorder.ReorderExerciseScreen
+import com.tomtruyen.feature.workouts.manage.reorder.ReorderExercisesViewModel
 import com.tomtruyen.fitoryx.navigation.MainBottomNavigation
 import com.tomtruyen.navigation.CustomNavType
 import com.tomtruyen.navigation.Screen
@@ -171,6 +174,24 @@ class MainActivity : ComponentActivity() {
                                         ManageWorkoutScreen(
                                             navController = navController,
                                             animatedVisibilityScope = this,
+                                            viewModel = viewModel
+                                        )
+                                    }
+
+                                    composable<Screen.Workout.Reorder>(
+                                        typeMap = mapOf(
+                                            typeOf<List<WorkoutExerciseUiModel>>() to CustomNavType.WorkoutExerciseListType
+                                        )
+                                    ) { backStackEntry ->
+                                        val args = backStackEntry.toRoute<Screen.Workout.Reorder>()
+
+                                        val viewModel = koinViewModel<ReorderExercisesViewModel>(
+                                            viewModelStoreOwner = backStackEntry,
+                                            parameters = { parametersOf(args.exercises) }
+                                        )
+
+                                        ReorderExerciseScreen(
+                                            navController = navController,
                                             viewModel = viewModel
                                         )
                                     }

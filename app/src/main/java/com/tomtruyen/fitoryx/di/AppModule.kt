@@ -1,6 +1,7 @@
 package com.tomtruyen.fitoryx.di
 
 import android.content.Context
+import com.tomtruyen.core.common.JsonInstance
 import com.tomtruyen.core.common.ThemePreferences
 import com.tomtruyen.core.common.providers.BuildConfigFieldProvider
 import com.tomtruyen.core.common.providers.CredentialProvider
@@ -18,7 +19,6 @@ import io.github.jan.supabase.postgrest.PropertyConversionMethod
 import io.github.jan.supabase.serializer.KotlinXSerializer
 import io.github.jan.supabase.storage.Storage
 import io.github.jan.supabase.storage.storage
-import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 import kotlin.time.Duration.Companion.seconds
 
@@ -29,10 +29,7 @@ val appModule = module {
             supabaseKey = BuildConfig.SUPABASE_KEY
         ) {
             defaultSerializer = KotlinXSerializer(
-                json = Json {
-                    ignoreUnknownKeys = true
-                    encodeDefaults = true
-                }
+                json = JsonInstance
             )
 
             install(Auth)

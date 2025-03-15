@@ -127,6 +127,8 @@ class ExerciseStateManager(
             )
 
             ManageWorkoutUiAction.Exercise.Delete -> deleteExercise()
+
+            else -> Unit
         }
     }
 }
