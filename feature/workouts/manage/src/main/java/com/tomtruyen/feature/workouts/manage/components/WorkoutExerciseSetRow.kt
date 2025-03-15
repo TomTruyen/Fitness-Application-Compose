@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import com.tomtruyen.core.common.extensions.rounded
 import com.tomtruyen.core.common.extensions.tryIntString
 import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.common.models.ManageWorkoutMode
@@ -159,7 +160,7 @@ private fun PreviousSet(
                 ExerciseType.WEIGHT -> {
                     if(set.reps == null && set.weight == null) return@let null
 
-                    "${set.reps ?: 0}x${set.weight?.tryIntString() ?: 0}"
+                    "${set.reps ?: 0}x${set.weight?.rounded() ?: 0}"
                 }
 
                 ExerciseType.TIME -> {

@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.tomtruyen.core.common.extensions.tryIntString
+import com.tomtruyen.core.common.extensions.rounded
 import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.common.utils.TimeUtils
@@ -261,7 +261,7 @@ private fun RowScope.WeightSet(
         border = false,
         readOnly = true,
         padding = PaddingValues(Dimens.Small),
-        value = (weight ?: 0.0).tryIntString(),
+        value = (weight ?: 0.0).rounded(),
         onValueChange = {},
         textStyle = MaterialTheme.typography.bodyMedium.copy(
             textAlign = TextAlign.Center,
