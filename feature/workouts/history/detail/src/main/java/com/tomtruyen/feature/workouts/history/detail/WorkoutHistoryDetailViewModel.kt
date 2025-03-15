@@ -1,9 +1,7 @@
 package com.tomtruyen.feature.workouts.history.detail
 
 import com.tomtruyen.core.common.base.BaseViewModel
-import com.tomtruyen.core.common.models.ManageWorkoutMode
-import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
-import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
+import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.data.repositories.interfaces.HistoryRepository
 import com.tomtruyen.feature.workouts.history.detail.WorkoutHistoryDetailUiEvent.Navigate.Exercise.*
 import kotlinx.coroutines.flow.collectLatest
@@ -59,7 +57,7 @@ class WorkoutHistoryDetailViewModel(
         )
     }
 
-    private fun toWorkout(mode: ManageWorkoutMode) = with(uiState.value) {
+    private fun toWorkout(mode: WorkoutMode) = with(uiState.value) {
         val workout = history.toWorkoutUiModel()
 
         triggerEvent(
@@ -81,8 +79,8 @@ class WorkoutHistoryDetailViewModel(
             WorkoutHistoryDetailUiAction.Sheet.Show -> showSheet(true)
             WorkoutHistoryDetailUiAction.Sheet.Dismiss -> showSheet(false)
 
-            WorkoutHistoryDetailUiAction.Workout.Save -> toWorkout(ManageWorkoutMode.CREATE)
-            WorkoutHistoryDetailUiAction.Workout.Start -> toWorkout(ManageWorkoutMode.EXECUTE)
+            WorkoutHistoryDetailUiAction.Workout.Save -> toWorkout(WorkoutMode.CREATE)
+            WorkoutHistoryDetailUiAction.Workout.Start -> toWorkout(WorkoutMode.EXECUTE)
 
             WorkoutHistoryDetailUiAction.Delete -> deleteHistory()
 

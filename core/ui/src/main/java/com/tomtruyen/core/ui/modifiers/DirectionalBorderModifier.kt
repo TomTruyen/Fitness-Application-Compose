@@ -20,15 +20,6 @@ enum class BorderSide {
 fun Modifier.directionalBorder(
     width: Dp = 1.dp,
     color: Color = MaterialTheme.colorScheme.outlineVariant,
-    sides: List<BorderSide>
-) = sides.fold(this) { acc, side ->
-    acc.directionalBorder(width, color, side)
-}
-
-@Composable
-fun Modifier.directionalBorder(
-    width: Dp = 1.dp,
-    color: Color = MaterialTheme.colorScheme.outlineVariant,
     side: BorderSide
 ) = drawBehind {
     val strokeWidth = width.value * density

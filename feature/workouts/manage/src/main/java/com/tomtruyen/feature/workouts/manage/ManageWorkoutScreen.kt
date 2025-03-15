@@ -19,7 +19,6 @@ import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.common.models.ExerciseMode
-import com.tomtruyen.core.common.models.ManageWorkoutMode
+import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.BottomSheetList
@@ -45,7 +44,6 @@ import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.ui.toolbars.ToolbarTitle
-import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.feature.workouts.manage.components.ExerciseList
 import com.tomtruyen.feature.workouts.manage.components.WorkoutSaveSheet
 import com.tomtruyen.feature.workouts.manage.components.WorkoutStatistics
@@ -57,7 +55,6 @@ import com.tomtruyen.navigation.NavResult
 import com.tomtruyen.navigation.ObserveNavResult
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.SharedTransitionKey
-import com.tomtruyen.navigation.handleNavigationResult
 import kotlinx.coroutines.flow.collectLatest
 import java.util.concurrent.TimeUnit
 import com.tomtruyen.core.common.R as CommonR
@@ -109,11 +106,11 @@ fun SharedTransitionScope.ManageWorkoutScreen(
                 }
 
                 is ManageWorkoutUiEvent.Navigate.Workout.Edit -> navController.navigate(
-                    Screen.Workout.Manage(event.id, ManageWorkoutMode.EDIT),
+                    Screen.Workout.Manage(event.id, WorkoutMode.EDIT),
                 )
 
                 is ManageWorkoutUiEvent.Navigate.Workout.Execute -> navController.navigate(
-                    Screen.Workout.Manage(event.id, ManageWorkoutMode.EXECUTE)
+                    Screen.Workout.Manage(event.id, WorkoutMode.EXECUTE)
                 )
 
                 is ManageWorkoutUiEvent.ScrollToExercise -> {
@@ -246,11 +243,11 @@ private fun SharedTransitionScope.ManageWorkoutScreenLayout(
 
     val onNavigateUp: () -> Unit = {
         when(state.mode) {
-            ManageWorkoutMode.EXECUTE,
-            ManageWorkoutMode.VIEW -> onAction(ManageWorkoutUiAction.Navigate.Back)
+            WorkoutMode.EXECUTE,
+            WorkoutMode.VIEW -> onAction(ManageWorkoutUiAction.Navigate.Back)
 
-            ManageWorkoutMode.CREATE,
-            ManageWorkoutMode.EDIT -> {
+            WorkoutMode.CREATE,
+            WorkoutMode.EDIT -> {
                 if(state.workout.exercises != state.initialWorkout.exercises) {
                     confirmationDialogVisible = true
                 } else {

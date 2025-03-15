@@ -1,8 +1,6 @@
 package com.tomtruyen.core.common
 
 import android.content.Context
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import androidx.core.content.edit
 import com.tomtruyen.core.common.models.GlobalAppState
 
@@ -30,10 +28,6 @@ class ThemePreferences(
     fun getTheme(): ThemeMode {
         val value = sharedPreferences.getString(KEY_THEME, ThemeMode.SYSTEM.value)
         return ThemeMode.fromValue(value) ?: ThemeMode.SYSTEM
-    }
-
-    fun clear() {
-        sharedPreferences.edit { clear() }
     }
 }
 

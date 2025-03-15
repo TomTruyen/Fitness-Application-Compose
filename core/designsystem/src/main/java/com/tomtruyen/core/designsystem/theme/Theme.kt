@@ -1,15 +1,15 @@
 package com.tomtruyen.core.designsystem.theme
 
-import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tomtruyen.core.common.ThemeMode
 import com.tomtruyen.core.common.models.GlobalAppState
 
@@ -75,5 +75,21 @@ fun FynixTheme(
         typography = Typography,
         content = content
     )
+}
+
+@Composable
+fun rememberDarkMode(): State<Boolean> {
+    val theme by GlobalAppState.theme
+    val isSystemInDarkTheme = isSystemInDarkTheme()
+
+    return remember {
+        derivedStateOf {
+            when (theme) {
+                ThemeMode.DARK -> true
+                ThemeMode.LIGHT -> false
+                ThemeMode.SYSTEM -> isSystemInDarkTheme
+            }
+        }
+    }
 }
 

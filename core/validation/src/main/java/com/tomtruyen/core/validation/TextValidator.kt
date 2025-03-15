@@ -69,28 +69,4 @@ open class TextValidator private constructor(
     fun add(rules: List<TextRule>) {
         this.rules.addAll(rules)
     }
-
-    /**
-     * Removes a rule from the validator.
-     * @param rule the rule that will be removed
-     */
-    fun remove(rule: TextRule) {
-        this.rules.remove(rule)
-    }
-
-    /**
-     * Removes a list of rules from the validator.
-     * @param rules the rules that will be removed
-     */
-    fun remove(rules: List<TextRule>) {
-        this.rules.removeAll(rules)
-    }
-
-    /**
-     * Removes all rules from the validator.
-     */
-    fun clear() {
-        this.rules.clear()
-    }
-
 }

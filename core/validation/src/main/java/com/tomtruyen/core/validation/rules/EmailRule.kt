@@ -1,5 +1,3 @@
-@file:Suppress("UnusedImport") // getKoin is considered unused import by Android Studio...
-
 package com.tomtruyen.core.validation.rules
 
 import android.content.Context

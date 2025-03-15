@@ -4,12 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import com.tomtruyen.core.common.models.ManageWorkoutMode
+import com.tomtruyen.core.common.models.WorkoutMode
 
 @Composable
 fun <T, R> rememberSetInputValue(
     value: T?,
-    mode: ManageWorkoutMode,
+    mode: WorkoutMode,
     didChange: () -> Boolean,
     defaultValue: R,
     transform: (T?) -> R

@@ -1,6 +1,6 @@
 package com.tomtruyen.core.common.models
 
-enum class ManageWorkoutMode {
+enum class WorkoutMode {
     CREATE,
     EDIT,
     EXECUTE,

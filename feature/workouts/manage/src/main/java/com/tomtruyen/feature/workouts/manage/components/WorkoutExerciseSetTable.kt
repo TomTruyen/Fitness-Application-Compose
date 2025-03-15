@@ -1,6 +1,5 @@
 package com.tomtruyen.feature.workouts.manage.components
 
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -13,9 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.tomtruyen.core.common.R
 import com.tomtruyen.core.common.models.ExerciseType
-import com.tomtruyen.core.common.models.ManageWorkoutMode
+import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.success
@@ -34,7 +32,7 @@ fun WorkoutExerciseSetTable(
     sets: List<WorkoutExerciseSetUiModel>,
     previousSets: List<PreviousExerciseSet>?,
     unit: UnitType,
-    mode: ManageWorkoutMode,
+    mode: WorkoutMode,
     onAction: (ManageWorkoutUiAction) -> Unit,
     onSetClick: (id: String, setIndex: Int) -> Unit,
     modifier: Modifier = Modifier

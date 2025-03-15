@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.tomtruyen.core.common.extensions.rounded
 import com.tomtruyen.core.common.extensions.tryIntString
 import com.tomtruyen.core.common.models.ExerciseType
-import com.tomtruyen.core.common.models.ManageWorkoutMode
+import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.placeholder
@@ -47,7 +47,7 @@ fun WorkoutExerciseSetRow(
     setIndex: Int,
     set: WorkoutExerciseSetUiModel,
     previousSet: PreviousExerciseSet?,
-    mode: ManageWorkoutMode,
+    mode: WorkoutMode,
     onAction: (ManageWorkoutUiAction) -> Unit,
     onSetClick: (id: String, setIndex: Int) -> Unit
 ) {
@@ -184,7 +184,7 @@ private fun RowScope.WeightSet(
     weight: Double?,
     reps: Int?,
     changeRecord: List<ChangeType>,
-    mode: ManageWorkoutMode,
+    mode: WorkoutMode,
     completed: Boolean,
     onRepsChanged: (String) -> Unit,
     onWeightChanged: (String) -> Unit
@@ -270,7 +270,7 @@ private fun RowScope.WeightSet(
 private fun RowScope.TimeSet(
     time: Int?,
     changeRecord: List<ChangeType>,
-    mode: ManageWorkoutMode,
+    mode: WorkoutMode,
     completed: Boolean,
     onTimeChanged: (Int) -> Unit
 ) {

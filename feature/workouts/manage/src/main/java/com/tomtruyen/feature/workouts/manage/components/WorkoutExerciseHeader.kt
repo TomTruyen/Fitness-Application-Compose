@@ -11,25 +11,20 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.tomtruyen.core.common.models.ManageWorkoutMode
+import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.ui.Avatar
 
 @Composable
 fun WorkoutExerciseHeader(
     name: String,
     imageUrl: String?,
-    mode: ManageWorkoutMode,
+    mode: WorkoutMode,
     onTitleClick: () -> Unit,
     onActionClick: () -> Unit,
     modifier: Modifier = Modifier

@@ -1,10 +1,9 @@
 package com.tomtruyen.feature.workouts.manage
 
 import com.tomtruyen.core.common.base.BaseViewModel
-import com.tomtruyen.core.common.models.ManageWorkoutMode
+import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.common.utils.StopwatchTimer
 import com.tomtruyen.data.entities.Workout
-import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.models.ui.copyFromActiveWorkout
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
@@ -29,7 +28,7 @@ import kotlinx.coroutines.launch
 
 class ManageWorkoutViewModel(
     private val id: String?,
-    mode: ManageWorkoutMode,
+    mode: WorkoutMode,
     workout: WorkoutUiModel?, // Workout passed from History
     private val userRepository: UserRepository,
     private val workoutRepository: WorkoutRepository,
@@ -143,7 +142,7 @@ class ManageWorkoutViewModel(
             if (mode.isCreate || id == null) return@launch
 
             when(mode) {
-                ManageWorkoutMode.VIEW -> {
+                WorkoutMode.VIEW -> {
                     workoutRepository.findWorkoutByIdAsync(id)
                         .filterNotNull()
                         .distinctUntilChanged()
@@ -255,7 +254,7 @@ class ManageWorkoutViewModel(
         val userId = userRepository.getUser()?.id ?: return
 
         when (uiState.value.mode) {
-            ManageWorkoutMode.EXECUTE -> finishWorkout(userId, updateExistingWorkout)
+            WorkoutMode.EXECUTE -> finishWorkout(userId, updateExistingWorkout)
             else -> saveWorkout(userId)
         }
     }

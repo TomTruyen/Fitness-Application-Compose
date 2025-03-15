@@ -1,7 +1,7 @@
 package com.tomtruyen.feature.workouts.history
 
 import com.tomtruyen.core.common.base.BaseViewModel
-import com.tomtruyen.core.common.models.ManageWorkoutMode
+import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.data.entities.WorkoutHistory
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.HistoryRepository
@@ -107,7 +107,7 @@ class WorkoutHistoryViewModel(
         )
     }
 
-    private fun toWorkout(mode: ManageWorkoutMode) = with(uiState.value) {
+    private fun toWorkout(mode: WorkoutMode) = with(uiState.value) {
         val workout = histories.find { it.id == selectedHistoryId }?.toWorkoutUiModel()
 
         if(workout != null) {
@@ -141,8 +141,8 @@ class WorkoutHistoryViewModel(
             }
             WorkoutHistoryUiAction.Sheet.Dismiss -> showSheet(false)
 
-            WorkoutHistoryUiAction.Workout.Save -> toWorkout(ManageWorkoutMode.CREATE)
-            WorkoutHistoryUiAction.Workout.Start -> toWorkout(ManageWorkoutMode.EXECUTE)
+            WorkoutHistoryUiAction.Workout.Save -> toWorkout(WorkoutMode.CREATE)
+            WorkoutHistoryUiAction.Workout.Start -> toWorkout(WorkoutMode.EXECUTE)
 
             WorkoutHistoryUiAction.Delete -> deleteHistory()
 

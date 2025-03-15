@@ -11,37 +11,25 @@ object TimeUtils {
         alwaysShow: List<TimeUnit> = listOf(TimeUnit.MINUTES, TimeUnit.SECONDS),
         leadingZero: Boolean = true
     ): String {
-        val builder = StringBuilder()
-
         val hours = TimeUnit.SECONDS.toHours(seconds)
-        val minute = TimeUnit.SECONDS.toMinutes(seconds - TimeUnit.HOURS.toSeconds(hours))
-        val second = TimeUnit.SECONDS.toSeconds(
-            seconds - TimeUnit.HOURS.toSeconds(hours) - TimeUnit.MINUTES.toSeconds(minute)
-        )
+        val minutes = TimeUnit.SECONDS.toMinutes(seconds) % 60
+        val secs = seconds % 60
 
-        if (hours > 0 || alwaysShow.contains(TimeUnit.HOURS)) {
-            builder.append(padWithLeadingZeros(hours, leadingZero))
-            builder.append(DEFAULT_DIVIDER)
+        return buildString {
+            if (hours > 0 || alwaysShow.contains(TimeUnit.HOURS)) {
+                append(padWithLeadingZeros(hours, leadingZero)).append(DEFAULT_DIVIDER)
+            }
+            if (minutes > 0 || alwaysShow.contains(TimeUnit.MINUTES)) {
+                append(padWithLeadingZeros(minutes, leadingZero)).append(DEFAULT_DIVIDER)
+            }
+            if (secs > 0 || alwaysShow.contains(TimeUnit.SECONDS)) {
+                append(padWithLeadingZeros(secs, leadingZero))
+            }
         }
-
-        if (minute > 0 || alwaysShow.contains(TimeUnit.MINUTES)) {
-            builder.append(padWithLeadingZeros(minute, leadingZero))
-            builder.append(DEFAULT_DIVIDER)
-        }
-
-        if (second > 0 || alwaysShow.contains(TimeUnit.SECONDS)) {
-            builder.append(padWithLeadingZeros(second, leadingZero))
-        }
-
-        return builder.toString()
     }
 
     private fun padWithLeadingZeros(number: Long, leadingZero: Boolean): String {
-        val str = number.toString()
-
-        if (!leadingZero || str.length >= LEADING_ZERO_WIDTH) return str
-
-        return "0".repeat(LEADING_ZERO_WIDTH - str.length) + str
+        return if (leadingZero) number.toString().padStart(LEADING_ZERO_WIDTH, '0') else number.toString()
     }
 
     fun formatDuration(duration: Long): String {

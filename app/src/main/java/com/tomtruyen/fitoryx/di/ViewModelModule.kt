@@ -2,7 +2,7 @@ package com.tomtruyen.fitoryx.di
 
 import com.tomtruyen.core.common.models.ExerciseMode
 import com.tomtruyen.fitoryx.MainViewModel
-import com.tomtruyen.core.common.models.ManageWorkoutMode
+import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
@@ -23,7 +23,6 @@ import com.tomtruyen.feature.workouts.history.WorkoutHistoryViewModel
 import com.tomtruyen.feature.workouts.history.detail.WorkoutHistoryDetailViewModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel
 import com.tomtruyen.feature.workouts.manage.reorder.ReorderExercisesViewModel
-import com.tomtruyen.navigation.Screen
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -39,7 +38,7 @@ val viewModelModule = module {
 
     viewModelOf(::WorkoutsViewModel)
 
-    viewModel { (id: String?, mode: ManageWorkoutMode, workout: WorkoutUiModel?) ->
+    viewModel { (id: String?, mode: WorkoutMode, workout: WorkoutUiModel?) ->
         ManageWorkoutViewModel(
             id = id,
             mode = mode,
