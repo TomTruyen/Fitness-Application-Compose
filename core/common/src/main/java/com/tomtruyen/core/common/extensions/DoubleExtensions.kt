@@ -7,5 +7,9 @@ fun Double.tryIntString(): String {
 }
 
 fun Double.rounded(decimals: Int = 2): String {
+    val isInt = this % 1 == 0.0
+
+    if(isInt) return this.toInt().toString()
+
     return "%.${decimals}f".format(this).trimEnd('0').trimEnd('.')
 }
