@@ -16,8 +16,10 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MoreVert
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -204,6 +206,27 @@ fun SharedTransitionScope.ManageWorkoutScreen(
             }
         )
     }
+
+    if(state.showFinishConfirmation) {
+        ConfirmationDialog(
+            title = R.string.title_uncompleted_sets,
+            message = R.string.message_uncompleted_sets,
+            confirmText = R.string.button_continue,
+            confirmButtonColors = ButtonDefaults.textButtonColors(),
+            onConfirm = {
+                if (state.shouldShowSaveSheet) {
+                    viewModel.onAction(ManageWorkoutUiAction.Sheet.Save.Show)
+                } else {
+                    viewModel.onAction(ManageWorkoutUiAction.Workout.Save())
+                }
+
+                viewModel.onAction(ManageWorkoutUiAction.Dialog.Finish.Dismiss)
+            },
+            onDismiss = {
+                viewModel.onAction(ManageWorkoutUiAction.Dialog.Finish.Dismiss)
+            }
+        )
+    }
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -306,7 +329,9 @@ private fun SharedTransitionScope.ManageWorkoutScreenLayout(
                         contentPadding = PaddingValues(0.dp),
                         minButtonSize = 36.dp,
                         onClick = {
-                            if(state.shouldShowSaveSheet) {
+                            if(state.shouldShowFinishConfirmation) {
+                                onAction(ManageWorkoutUiAction.Dialog.Finish.Show)
+                            } else if (state.shouldShowSaveSheet) {
                                 onAction(ManageWorkoutUiAction.Sheet.Save.Show)
                             } else {
                                 onAction(ManageWorkoutUiAction.Workout.Save())

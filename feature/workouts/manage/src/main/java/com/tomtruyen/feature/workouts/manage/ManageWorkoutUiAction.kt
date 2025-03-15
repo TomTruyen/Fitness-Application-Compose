@@ -84,6 +84,12 @@ sealed class ManageWorkoutUiAction {
 
             data object Dismiss: Workout()
         }
+
+        sealed class Finish: Dialog() {
+            data object Show: Finish()
+
+            data object Dismiss: Finish()
+        }
     }
 
     sealed class Navigate : ManageWorkoutUiAction() {

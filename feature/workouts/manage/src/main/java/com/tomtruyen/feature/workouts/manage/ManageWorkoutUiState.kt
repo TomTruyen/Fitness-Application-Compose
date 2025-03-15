@@ -27,9 +27,16 @@ data class ManageWorkoutUiState(
     val showSetMoreActions: Boolean = false,
     val showWorkoutMoreActions: Boolean = false,
     val showDeleteConfirmation: Boolean = false,
+    val showFinishConfirmation: Boolean = false,
     val selectedExerciseId: String? = null,
     val selectedSetIndex: Int? = null
 ) {
+    val shouldShowFinishConfirmation: Boolean
+        get() = mode.isExecute
+                && workout.exercises.any { exercise ->
+                    exercise.sets.any { !it.completed }
+                }
+
     val shouldShowSaveSheet: Boolean
         get() = mode.isExecute
                     && workoutId != null
