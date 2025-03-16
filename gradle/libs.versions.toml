@@ -18,7 +18,6 @@ espresso-core = "3.6.1"
 google-identity-googleid = "1.1.1"
 google-ksp = "2.1.10-1.0.31"
 insert-koin-compose = "4.0.2"
-java = "17"
 junit = "4.13.2"
 junit-version = "1.2.1"
 kotlin = "2.1.10"
@@ -28,9 +27,6 @@ kotlinx-serialization-json = "1.8.0"
 ktor = "3.1.1"
 material = "1.12.0"
 reorderable = "2.4.3"
-sdk-compile = "35"
-sdk-min = "26"
-sdk-target = "35"
 secrets-gradle = "2.0.1"
 squareup-leakcanary = "2.14"
 supabase-kt = "3.1.2"
@@ -61,9 +57,9 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx-room" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splashscreen" }
 androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "ui-text-google-fonts" }
-androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidx-work-runtime-ktx" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work-runtime-ktx" }
 coil-kt-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-kt-compose" }
-detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
+detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 google-identity-googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "google-identity-googleid" }
 google-ksp-plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "google-ksp" }
 insert-koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "insert-koin-compose" }
