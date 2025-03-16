@@ -3,7 +3,6 @@ package com.tomtruyen.feature.workouts.history.detail
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.data.repositories.interfaces.HistoryRepository
-import com.tomtruyen.feature.workouts.history.detail.WorkoutHistoryDetailUiEvent.Navigate.Exercise.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -72,7 +71,7 @@ class WorkoutHistoryDetailViewModel(
         when(action) {
             is WorkoutHistoryDetailUiAction.Navigate.Exercise.Detail -> action.id?.let {
                 triggerEvent(
-                    Detail(it)
+                    WorkoutHistoryDetailUiEvent.Navigate.Exercise.Detail(it)
                 )
             }
 

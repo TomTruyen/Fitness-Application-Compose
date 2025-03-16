@@ -45,7 +45,7 @@ internal fun DefaultWheelTimePicker(
   textStyle: TextStyle = MaterialTheme.typography.titleMedium,
   textColor: Color = LocalContentColor.current,
   selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
-  onSnappedTime: (snappedTime: SnappedTime) -> Int? = { _, -> null },
+  onSnappedTime: (snappedDateTime: SnappedDateTime) -> Int? = { _, -> null },
 ) {
   require(selectorProperties.components().value.isNotEmpty()) {
     "TimeComponent list can't be empty"
@@ -112,7 +112,7 @@ internal fun DefaultWheelTimePicker(
 
                 newIndex?.let {
                   onSnappedTime(
-                    SnappedTime.Hour(
+                    SnappedDateTime.Hour(
                       localTime = snappedTime,
                       index = newIndex
                     ),
@@ -167,7 +167,7 @@ internal fun DefaultWheelTimePicker(
 
                   newIndex?.let {
                     onSnappedTime(
-                      SnappedTime.Minute(
+                      SnappedDateTime.Minute(
                         localTime = snappedTime,
                         index = newIndex
                       ),
@@ -227,7 +227,7 @@ internal fun DefaultWheelTimePicker(
 
                     newIndex?.let {
                       onSnappedTime(
-                        SnappedTime.Second(
+                        SnappedDateTime.Second(
                           localTime = snappedTime,
                           index = newIndex
                         ),

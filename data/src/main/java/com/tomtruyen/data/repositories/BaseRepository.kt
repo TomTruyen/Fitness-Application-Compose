@@ -17,8 +17,7 @@ import kotlinx.coroutines.SupervisorJob
 import org.koin.core.component.KoinComponent
 import org.koin.java.KoinJavaComponent.inject
 
-abstract class BaseRepository(
-) : KoinComponent {
+abstract class BaseRepository: KoinComponent {
     abstract val cacheKey: String
 
     val context: Context by inject(Context::class.java)

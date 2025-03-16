@@ -3,7 +3,6 @@ package com.tomtruyen.feature.exercises.detail
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
-import com.tomtruyen.feature.exercises.detail.ExerciseDetailUiEvent.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -62,7 +61,7 @@ class ExerciseDetailViewModel(
     override fun onAction(action: ExerciseDetailUiAction) {
         when (action) {
             is ExerciseDetailUiAction.Edit -> triggerEvent(
-                NavigateToEdit(id)
+                ExerciseDetailUiEvent.NavigateToEdit(id)
             )
 
             is ExerciseDetailUiAction.Delete -> delete()

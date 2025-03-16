@@ -52,7 +52,7 @@ data class WorkoutExerciseUiModel(
             imageUrl = imageUrl,
             type = type.value,
             notes = notes,
-            sortOrder = sortOrder,
+            sortOrder = index,
             exerciseId = exerciseId,
             workoutHistoryId = workoutHistoryId,
             category = category?.name,

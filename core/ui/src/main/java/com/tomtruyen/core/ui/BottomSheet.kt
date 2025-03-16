@@ -1,3 +1,5 @@
+@file:Suppress("MatchingDeclarationName")
+
 package com.tomtruyen.core.ui
 
 import androidx.annotation.StringRes

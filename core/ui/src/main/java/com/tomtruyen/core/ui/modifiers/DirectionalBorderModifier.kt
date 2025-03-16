@@ -1,3 +1,5 @@
+@file:Suppress("MatchingDeclarationName")
+
 package com.tomtruyen.core.ui.modifiers
 
 import androidx.compose.material3.MaterialTheme

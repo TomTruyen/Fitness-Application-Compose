@@ -92,13 +92,21 @@ fun BottomBarItem(
     val animationSpec: AnimationSpec<Color> = tween(100, 0, LinearEasing)
 
     val animatedContentColor by animateColorAsState(
-        targetValue = if (selected) MaterialTheme.colorScheme.navigationItemContentColorActive else MaterialTheme.colorScheme.navigationItemContentColorInactive,
+        targetValue = if (selected) {
+            MaterialTheme.colorScheme.navigationItemContentColorActive
+        } else {
+            MaterialTheme.colorScheme.navigationItemContentColorInactive
+        },
         animationSpec = animationSpec,
         label = ""
     )
 
     val animatedContainerColor by animateColorAsState(
-        targetValue = if (selected) MaterialTheme.colorScheme.navigationItemBackgroundColorActive.value else MaterialTheme.colorScheme.background,
+        targetValue = if (selected) {
+            MaterialTheme.colorScheme.navigationItemBackgroundColorActive.value
+        } else {
+            MaterialTheme.colorScheme.background
+        },
         animationSpec = animationSpec,
         label = ""
     )

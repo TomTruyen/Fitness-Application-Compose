@@ -5,7 +5,6 @@ import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.data.entities.WorkoutHistory
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.HistoryRepository
-import com.tomtruyen.feature.workouts.history.WorkoutHistoryUiEvent.Navigate.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -132,7 +131,7 @@ class WorkoutHistoryViewModel(
             )
 
             is WorkoutHistoryUiAction.Navigate.Detail -> triggerEvent(
-                Detail(action.id)
+                WorkoutHistoryUiEvent.Navigate.Detail(action.id)
             )
 
             is WorkoutHistoryUiAction.Sheet.Show -> {
