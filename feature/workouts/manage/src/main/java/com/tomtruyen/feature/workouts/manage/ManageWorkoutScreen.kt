@@ -1,13 +1,10 @@
 package com.tomtruyen.feature.workouts.manage
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
@@ -15,12 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.layout.requiredWidthIn
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -35,8 +27,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -65,7 +55,6 @@ import com.tomtruyen.navigation.NavResult
 import com.tomtruyen.navigation.ObserveNavResult
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.SharedTransitionKey
-import kotlinx.coroutines.flow.collectLatest
 import java.util.concurrent.TimeUnit
 import com.tomtruyen.core.common.R as CommonR
 
@@ -304,7 +293,7 @@ private fun SharedTransitionScope.ManageWorkoutScreenLayout(
                         time = workoutDuration,
                         modifier = Modifier
                             .height(36.dp)
-                            .requiredWidthIn(min = 120.dp)
+                            .widthIn(min = 120.dp)
                             .padding(end = Dimens.Small)
                     )
                 }
