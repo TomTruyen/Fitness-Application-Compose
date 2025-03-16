@@ -96,7 +96,7 @@ object TextFields {
         }
 
         Column(
-            modifier = modifier,
+            modifier = modifier.animateContentSize(),
             verticalArrangement = Arrangement.spacedBy(Dimens.Tiny)
         ) {
             if (withLabel) {

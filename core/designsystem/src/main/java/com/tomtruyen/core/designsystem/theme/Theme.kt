@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color.Companion.White
 import com.tomtruyen.core.common.ThemeMode
@@ -60,14 +59,14 @@ fun FynixTheme(
     val theme by GlobalAppState.theme
     val systemDarkMode = isSystemInDarkTheme()
 
-    val colorScheme by remember(theme, systemDarkMode) {
-        mutableStateOf(
-            when(theme) {
+    val colorScheme by remember {
+        derivedStateOf {
+            when (theme) {
                 ThemeMode.DARK -> DarkColorScheme
                 ThemeMode.SYSTEM if systemDarkMode -> DarkColorScheme
                 else -> LightColorScheme
             }
-        )
+        }
     }
 
     MaterialTheme(

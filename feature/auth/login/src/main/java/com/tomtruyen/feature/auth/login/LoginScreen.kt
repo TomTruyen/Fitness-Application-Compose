@@ -76,7 +76,7 @@ private fun LoginScreenLayout(
     state: LoginUiState,
     onAction: (LoginUiAction) -> Unit
 ) {
-    val isValid by remember(state) {
+    val isValid by remember {
         derivedStateOf {
             state.emailValidationResult.isValid() && state.passwordValidationResult.isValid()
         }

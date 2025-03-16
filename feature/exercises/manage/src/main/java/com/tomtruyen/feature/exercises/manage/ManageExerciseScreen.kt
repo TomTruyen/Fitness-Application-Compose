@@ -70,7 +70,7 @@ private fun ManageExerciseScreenLayout(
     state: ManageExerciseUiState,
     onAction: (ManageExerciseUiAction) -> Unit,
 ) {
-    val isValid by remember(state) {
+    val isValid by remember {
         derivedStateOf {
             state.nameValidationResult.isValid()
         }

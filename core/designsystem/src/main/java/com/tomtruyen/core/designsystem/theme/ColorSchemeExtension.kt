@@ -3,8 +3,8 @@ package com.tomtruyen.core.designsystem.theme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 
@@ -15,8 +15,10 @@ fun rememberColorSchemeState(
 ): State<Color> {
     val isDarkMode by rememberDarkMode()
 
-    return remember(isDarkMode) {
-        mutableStateOf(if (isDarkMode) darkColor else lightColor)
+    return remember {
+        derivedStateOf {
+            if (isDarkMode) darkColor else lightColor
+        }
     }
 }
 
