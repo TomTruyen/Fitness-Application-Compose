@@ -267,6 +267,7 @@ class ManageWorkoutViewModel(
     }
 
     private fun discard() = vmScope.launch {
+        observeActiveWorkoutJob?.cancel()
         workoutRepository.deleteActiveWorkout()
         triggerEvent(ManageWorkoutUiEvent.Navigate.Back)
     }
