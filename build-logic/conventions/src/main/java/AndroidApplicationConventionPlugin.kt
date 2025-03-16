@@ -2,6 +2,8 @@ import com.android.build.api.dsl.ApplicationExtension
 import com.tomtruyen.buildlogic.configureDetekt
 import com.tomtruyen.buildlogic.configureKoin
 import com.tomtruyen.buildlogic.configureKotlinAndroid
+import com.tomtruyen.buildlogic.getVersionAsInt
+import com.tomtruyen.buildlogic.libs
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -24,7 +26,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             configureDetekt(extensions.getByType<DetektExtension>())
             configureKoin(this)
 
-            defaultConfig.targetSdk = 35
+            defaultConfig.targetSdk = libs.getVersionAsInt("sdk.target")
         }
     }
 }

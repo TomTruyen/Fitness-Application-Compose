@@ -12,10 +12,10 @@ internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension<*, *, *, *, *, *>
 ) {
     commonExtension.apply {
-        compileSdk = 35
+        compileSdk = libs.getVersionAsInt("sdk.compile")
 
         defaultConfig {
-            minSdk = 26
+            minSdk = libs.getVersionAsInt("sdk.min")
         }
 
         buildFeatures {
@@ -23,8 +23,8 @@ internal fun Project.configureKotlinAndroid(
         }
 
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_17
-            targetCompatibility = JavaVersion.VERSION_17
+            sourceCompatibility = JavaVersion.toVersion(libs.getVersionAsInt("java"))
+            targetCompatibility = JavaVersion.toVersion(libs.getVersionAsInt("java"))
             isCoreLibraryDesugaringEnabled = true
         }
 
@@ -38,7 +38,7 @@ internal fun Project.configureKotlinAndroid(
 
     tasks.withType<KotlinCompile>().configureEach {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
+            jvmTarget.set(JvmTarget.fromTarget(libs.getVersionAsInt("java").toString()))
             allWarningsAsErrors.set(false)
 
             freeCompilerArgs.add("-Xwhen-guards")

@@ -10,6 +10,10 @@ import java.util.Properties
 val Project.libs
     get(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
+fun VersionCatalog.getVersionAsInt(key: String): Int {
+    return findVersion(key).orElseThrow().requiredVersion.toInt()
+}
+
 fun Project.getSecret(key: String): String? {
     val secretsFile = rootProject.file("secrets.properties")
     val secretsProperties = Properties()
