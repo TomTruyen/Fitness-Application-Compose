@@ -220,7 +220,7 @@ private fun SharedTransitionScope.WorkoutOverviewScreenLayout(
                     }
 
                     items(
-                        state.workouts,
+                        items = state.workouts,
                         key = { it.id }
                     ) { workout ->
                         ReorderableItem(

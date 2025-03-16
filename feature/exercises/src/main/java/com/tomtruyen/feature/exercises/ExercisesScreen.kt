@@ -36,6 +36,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -264,7 +265,10 @@ private fun SharedTransitionScope.ExercisesScreenLayout(
                     ) {
                         var currentLetter: Char?
 
-                        itemsIndexed(state.exercises) { index, exercise ->
+                        itemsIndexed(
+                            items = state.exercises,
+                            key = { _, exercise -> exercise.id }
+                        ) { index, exercise ->
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
