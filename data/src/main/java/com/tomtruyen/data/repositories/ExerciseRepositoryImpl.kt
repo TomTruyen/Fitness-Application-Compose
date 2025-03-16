@@ -3,11 +3,11 @@ package com.tomtruyen.data.repositories
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.models.ExerciseFilter
 import com.tomtruyen.data.models.network.ExerciseNetworkModel
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
+import com.tomtruyen.data.repositories.interfaces.PreviousSetRepository
 import com.tomtruyen.data.worker.ExerciseSyncWorker
 import com.tomtruyen.data.worker.SyncWorker
 import io.github.jan.supabase.postgrest.from
@@ -15,7 +15,9 @@ import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
 
-class ExerciseRepositoryImpl : ExerciseRepository() {
+class ExerciseRepositoryImpl(
+    private val previousSetRepository: PreviousSetRepository
+) : ExerciseRepository() {
     private val categoryDao = database.categoryDao()
     private val equipmentDao = database.equipmentDao()
 
@@ -75,6 +77,8 @@ class ExerciseRepositoryImpl : ExerciseRepository() {
                     }
                 }
         }
+
+        previousSetRepository.getPreviousSetsForExercises()
     }
 
     override suspend fun saveExercise(

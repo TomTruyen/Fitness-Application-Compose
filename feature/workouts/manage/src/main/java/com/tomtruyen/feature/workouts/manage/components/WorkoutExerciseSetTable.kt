@@ -20,7 +20,7 @@ import com.tomtruyen.core.designsystem.theme.success
 import com.tomtruyen.core.ui.swipereveal.SwipeToRevealAction
 import com.tomtruyen.core.ui.swipereveal.SwipeToRevealBox
 import com.tomtruyen.core.ui.swipereveal.rememberSwipeToRevealState
-import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
+import com.tomtruyen.data.entities.PreviousSet
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.core.common.R as CommonR
@@ -30,12 +30,12 @@ fun WorkoutExerciseSetTable(
     workoutExerciseId: String,
     exerciseType: ExerciseType,
     sets: List<WorkoutExerciseSetUiModel>,
-    previousSets: List<PreviousExerciseSet>?,
+    previousSets: List<PreviousSet>?,
     unit: UnitType,
     mode: WorkoutMode,
     onAction: (ManageWorkoutUiAction) -> Unit,
     onSetClick: (id: String, setIndex: Int) -> Unit,
-    onPreviousSetClick: (id: String, setIndex: Int, previousSet: PreviousExerciseSet) -> Unit,
+    onPreviousSetClick: (id: String, setIndex: Int, previousSet: PreviousSet) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val successBackgroundColor = MaterialTheme.colorScheme.success

@@ -65,8 +65,8 @@ fun SharedTransitionScope.ExerciseList(
             ) { isDragging ->
                 val alpha by animateFloatAsState(if (isDragging) 0.25f else 1f, label = "")
 
-                val previousSets = remember(exercise.exerciseId, state.previousExerciseSets) {
-                    state.previousExerciseSets[exercise.exerciseId]
+                val previousSets = remember(exercise.exerciseId, state.previousSets) {
+                    state.previousSets[exercise.exerciseId]
                 }
 
                 ExerciseListItem(

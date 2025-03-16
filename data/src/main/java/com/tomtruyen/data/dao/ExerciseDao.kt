@@ -23,6 +23,9 @@ abstract class ExerciseDao: SyncDao<Exercise>(Exercise.TABLE_NAME) {
     @Query("DELETE FROM ${Exercise.TABLE_NAME} WHERE id = :id")
     abstract suspend fun deleteById(id: String): Int
 
+    @Query("SELECT id FROM ${Exercise.TABLE_NAME}")
+    abstract suspend fun findAllIds(): List<String>
+
     @Transaction
     @Query("SELECT * FROM ${Exercise.TABLE_NAME} WHERE id = :id")
     abstract suspend fun findById(id: String): ExerciseWithCategoryAndEquipment?

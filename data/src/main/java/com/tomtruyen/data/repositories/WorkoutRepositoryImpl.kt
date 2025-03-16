@@ -8,7 +8,7 @@ import com.tomtruyen.data.entities.WorkoutExercise
 import com.tomtruyen.data.entities.WorkoutExerciseSet
 import com.tomtruyen.data.entities.WorkoutWithExercises
 import com.tomtruyen.data.models.network.WorkoutNetworkModel
-import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
+import com.tomtruyen.data.entities.PreviousSet
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.data.worker.SyncWorker
@@ -212,21 +212,6 @@ class WorkoutRepositoryImpl : WorkoutRepository() {
         dao.saveAll(items)
 
         supabase.from(Workout.TABLE_NAME).upsert(items)
-    }
-
-    override suspend fun getPreviousSetsForExercises(workout: WorkoutUiModel): Map<String, List<PreviousExerciseSet>> {
-        val exerciseIds = workout.exercises.map { JsonPrimitive(it.exerciseId) }.distinct()
-
-        val result = supabase.postgrest.rpc(
-            function = PreviousExerciseSet.RPC_FUNCTION,
-            parameters = JsonObject(
-                mapOf(
-                    PreviousExerciseSet.EXERCISE_ID_PARAM to JsonArray(exerciseIds)
-                )
-            )
-        )
-
-        return result.decodeList<PreviousExerciseSet>().groupBy { it.exerciseId }
     }
 
     override suspend fun sync(item: WorkoutWithExercises) {

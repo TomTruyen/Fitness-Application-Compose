@@ -1,7 +1,7 @@
 package com.tomtruyen.feature.workouts.manage.manager
 
 import com.tomtruyen.core.common.manager.StateManager
-import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
+import com.tomtruyen.data.entities.PreviousSet
 import com.tomtruyen.data.models.ui.copyWithAddSet
 import com.tomtruyen.data.models.ui.copyWithDeleteSet
 import com.tomtruyen.data.models.ui.copyWithPreviousExerciseSet
@@ -62,7 +62,7 @@ class SetStateManager(
         )
     }
 
-    private fun toggleSetCompleted(id: String, setIndex: Int, previousSet: PreviousExerciseSet?) = updateState {
+    private fun toggleSetCompleted(id: String, setIndex: Int, previousSet: PreviousSet?) = updateState {
         it.copy(
             workout = it.workout.copyWithSetCompleted(
                 id = id,
@@ -72,7 +72,7 @@ class SetStateManager(
         )
     }
 
-    private fun fillWithPreviousSet(id: String, setIndex: Int, previousSet: PreviousExerciseSet) = updateState {
+    private fun fillWithPreviousSet(id: String, setIndex: Int, previousSet: PreviousSet) = updateState {
         it.copy(
             workout = it.workout.copyWithPreviousExerciseSet(
                 id = id,

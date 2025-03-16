@@ -7,6 +7,7 @@ import com.tomtruyen.data.dao.SyncCacheDao
 import com.tomtruyen.data.dao.CategoryDao
 import com.tomtruyen.data.dao.EquipmentDao
 import com.tomtruyen.data.dao.ExerciseDao
+import com.tomtruyen.data.dao.PreviousSetDao
 import com.tomtruyen.data.dao.SettingsDao
 import com.tomtruyen.data.dao.WorkoutDao
 import com.tomtruyen.data.dao.WorkoutExerciseDao
@@ -18,6 +19,7 @@ import com.tomtruyen.data.entities.SyncCache
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.data.entities.PreviousSet
 import com.tomtruyen.data.entities.Settings
 import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.entities.WorkoutExercise
@@ -39,6 +41,7 @@ import com.tomtruyen.data.entities.WorkoutHistoryExerciseSet
         WorkoutHistoryExerciseSet::class,
         Settings::class,
         SyncCache::class,
+        PreviousSet::class
     ],
     version = 1,
     exportSchema = false
@@ -55,5 +58,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun workoutHistoryExerciseDao(): WorkoutHistoryExerciseDao
     abstract fun workoutHistoryExerciseSetDao(): WorkoutHistoryExerciseSetDao
     abstract fun settingsDao(): SettingsDao
-    abstract fun cacheTTLDao(): SyncCacheDao
+    abstract fun cacheSyncDao(): SyncCacheDao
+    abstract fun previousSetDao(): PreviousSetDao
 }

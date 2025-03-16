@@ -1,5 +1,6 @@
 package com.tomtruyen.feature.workouts.manage
 
+import android.util.Log
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.common.utils.StopwatchTimer
@@ -9,6 +10,7 @@ import com.tomtruyen.data.models.ui.copyFromActiveWorkout
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.HistoryRepository
+import com.tomtruyen.data.repositories.interfaces.PreviousSetRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.feature.workouts.manage.manager.DialogStateManager
 import com.tomtruyen.feature.workouts.manage.manager.ExerciseStateManager
@@ -33,6 +35,7 @@ class ManageWorkoutViewModel(
     private val userRepository: UserRepository,
     private val workoutRepository: WorkoutRepository,
     private val historyRepository: HistoryRepository,
+    private val previousSetRepository: PreviousSetRepository,
     private val settingsRepository: SettingsRepository
 ) : BaseViewModel<ManageWorkoutUiState, ManageWorkoutUiAction, ManageWorkoutUiEvent>(
     initialState = ManageWorkoutUiState(
@@ -85,8 +88,11 @@ class ManageWorkoutViewModel(
 
     init {
         observeWorkout()
-
         observeActiveWorkout()
+
+        if(mode.isExecute) {
+            fetchLatestSetsForExercises()
+        }
 
         observeLoading()
         observeSettings()
@@ -170,10 +176,6 @@ class ManageWorkoutViewModel(
                             )
                         }
 
-                        if(mode.isExecute) {
-                            fetchLatestSetsForExercises(workout)
-                        }
-
                         return@let workout
                     }.also { workout ->
                         if(mode.isExecute) {
@@ -200,12 +202,14 @@ class ManageWorkoutViewModel(
             }
     }
 
-    private fun fetchLatestSetsForExercises(workout: WorkoutUiModel) = launchLoading {
-        val sets = workoutRepository.getPreviousSetsForExercises(workout)
+    private fun fetchLatestSetsForExercises() = launchLoading {
+        val sets = previousSetRepository.findPreviousSets().groupBy { it.exerciseId }
+
+        Log.d("@@@", "Sets: ${sets.keys}")
 
         updateState {
             it.copy(
-                previousExerciseSets = sets
+                previousSets = sets
             )
         }
     }

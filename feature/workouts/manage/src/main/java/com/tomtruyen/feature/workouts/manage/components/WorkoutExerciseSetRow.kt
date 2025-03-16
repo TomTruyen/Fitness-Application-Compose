@@ -34,7 +34,7 @@ import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.wheeltimepicker.WheelTimerPickerSheet
 import com.tomtruyen.core.ui.wheeltimepicker.core.TimeComponent
 import com.tomtruyen.data.entities.ChangeType
-import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
+import com.tomtruyen.data.entities.PreviousSet
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.feature.workouts.manage.remember.rememberSetInputValue
@@ -46,11 +46,11 @@ fun WorkoutExerciseSetRow(
     workoutExerciseId: String,
     setIndex: Int,
     set: WorkoutExerciseSetUiModel,
-    previousSet: PreviousExerciseSet?,
+    previousSet: PreviousSet?,
     mode: WorkoutMode,
     onAction: (ManageWorkoutUiAction) -> Unit,
     onSetClick: (id: String, setIndex: Int) -> Unit,
-    onPreviousSetClick: (id: String, setIndex: Int, previousSet: PreviousExerciseSet) -> Unit
+    onPreviousSetClick: (id: String, setIndex: Int, previousSet: PreviousSet) -> Unit
 ) {
         Row(
             modifier = modifier,
@@ -159,7 +159,7 @@ fun WorkoutExerciseSetRow(
 
 @Composable
 private fun PreviousSet(
-    previousSet: PreviousExerciseSet?,
+    previousSet: PreviousSet?,
     type: ExerciseType,
     modifier: Modifier = Modifier
 ) {

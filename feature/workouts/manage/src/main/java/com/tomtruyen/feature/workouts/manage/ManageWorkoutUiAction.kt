@@ -1,10 +1,9 @@
 package com.tomtruyen.feature.workouts.manage
 
 import com.tomtruyen.core.common.models.ExerciseMode
-import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
+import com.tomtruyen.data.entities.PreviousSet
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
-import com.tomtruyen.navigation.Screen
 
 sealed class ManageWorkoutUiAction {
     sealed class Workout : ManageWorkoutUiAction() {
@@ -53,13 +52,13 @@ sealed class ManageWorkoutUiAction {
         data class OnToggleCompleted(
             val exerciseId: String,
             val setIndex: Int,
-            val previousSet: PreviousExerciseSet?
+            val previousSet: PreviousSet?
         ) : Set()
 
         data class OnPreviousSetClicked(
             val exerciseId: String,
             val setIndex: Int,
-            val previousSet: PreviousExerciseSet
+            val previousSet: PreviousSet
         ): Set()
     }
 

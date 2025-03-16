@@ -7,7 +7,7 @@ import com.tomtruyen.data.entities.ChangeType
 import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.entities.WorkoutHistory
 import com.tomtruyen.data.entities.WorkoutWithExercises
-import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
+import com.tomtruyen.data.entities.PreviousSet
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
@@ -178,7 +178,7 @@ fun WorkoutUiModel.copyWithAddSet(id: String) = copy(
     }
 )
 
-fun WorkoutUiModel.copyWithSetCompleted(id: String, setIndex: Int, previousSet: PreviousExerciseSet?) = copy(
+fun WorkoutUiModel.copyWithSetCompleted(id: String, setIndex: Int, previousSet: PreviousSet?) = copy(
     exercises = exercises.map { exercise ->
         if (exercise.id == id) {
             exercise.copy(
@@ -208,7 +208,7 @@ fun WorkoutUiModel.copyWithSetCompleted(id: String, setIndex: Int, previousSet: 
     }
 )
 
-fun WorkoutUiModel.copyWithPreviousExerciseSet(id: String, setIndex: Int, previousSet: PreviousExerciseSet) = copy(
+fun WorkoutUiModel.copyWithPreviousExerciseSet(id: String, setIndex: Int, previousSet: PreviousSet) = copy(
     exercises = exercises.map { exercise ->
         if(exercise.id == id) {
             exercise.copy(

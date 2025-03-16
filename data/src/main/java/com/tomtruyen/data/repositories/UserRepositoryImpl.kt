@@ -3,6 +3,7 @@ package com.tomtruyen.data.repositories
 import com.tomtruyen.core.common.utils.GoogleSignInHelper
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
+import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import io.github.jan.supabase.auth.auth
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 class UserRepositoryImpl(
     private val settingsRepository: SettingsRepository,
     private val equipmentRepository: EquipmentRepository,
-    private val categoryRepository: CategoryRepository
+    private val categoryRepository: CategoryRepository,
+    private val exerciseRepository: ExerciseRepository
 ) : UserRepository() {
     private val auth = supabase.auth
 
@@ -58,7 +60,7 @@ class UserRepositoryImpl(
     }
 
     override suspend fun isLoggedIn(): Boolean {
-        auth.awaitInitialization()
+        onAuthenticated()
 
         return auth.currentUserOrNull() != null
     }
@@ -66,11 +68,14 @@ class UserRepositoryImpl(
     override fun getUser() = auth.currentUserOrNull()
 
     override suspend fun onAuthenticated() {
+        auth.awaitInitialization()
+
         coroutineScope {
             val calls = listOf(
                 async { fetchSettings() },
                 async { fetchEquipment() },
-                async { fetchCategories() }
+                async { fetchCategories() },
+                async { fetchExercises() }
             )
 
             calls.awaitAll()
@@ -78,10 +83,17 @@ class UserRepositoryImpl(
     }
 
     private suspend fun fetchSettings() = getUser()?.let { user ->
-        settingsRepository.getSettings(user.id, true)
+        settingsRepository.getSettings(user.id, false)
     }
 
     private suspend fun fetchEquipment() = equipmentRepository.getEquipment()
 
     private suspend fun fetchCategories() = categoryRepository.getCategories()
+
+    private suspend fun fetchExercises() = getUser()?.let { user ->
+        exerciseRepository.getExercises(
+            userId = user.id,
+            refresh = false
+        )
+    }
 }
