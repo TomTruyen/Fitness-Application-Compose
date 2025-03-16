@@ -1,0 +1,75 @@
+name: Supabase Dump
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Downloads Supabase CLI, creates dump and creates PR with dump
+jobs:
+  update-supabase-dump:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Android SDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          server-id: 'github'
+
+      - name: Decode Keystore
+        env:
+          ENCODED_STRING: ${{ secrets.KEY_JKS }}
+        run: echo $ENCODED_STRING | base64 -di > key.jks
+
+      - name: Signing.gradle
+        env:
+          ENCODED_SIGNING_GRADLE: ${{ secrets.SIGNING_GRADLE }}
+        run: echo $ENCODED_SIGNING_GRADLE | base64 -di > signing.gradle
+
+      - name: Add Secrets to local.properties
+        env:
+          GOOGLE_SERVER_CLIENT_ID: ${{ secrets.GOOGLE_SERVER_CLIENT_ID }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          if [ ! -f local.properties ]; then
+            touch local.properties
+          fi
+
+          echo "GOOGLE_SERVER_CLIENT_ID=$GOOGLE_SERVER_CLIENT_ID" >> local.properties
+          echo "SUPABASE_URL=$SUPABASE_URL" >> local.properties
+          echo "SUPABASE_KEY=$SUPABASE_KEY" >> local.properties
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Setup gradle cache
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-cleanup: on-success
+
+      - name: Check dependency updates
+        run: ./gradlew versionCatalogUpdate
+
+      - name: Create Pull Request with Dependency updates
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: chore/update-android-dependencies
+          delete-branch: true
+          commit-message: 'chore: update android dependencies'
+          committer: android-dependency-updater[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          title: '[Chore] Update Android Dependencies'
+          labels: |
+            dependencies
+            automation
