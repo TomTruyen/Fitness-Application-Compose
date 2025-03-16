@@ -31,7 +31,8 @@ fun Avatar(
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
     size: Dp = 40.dp,
-    backgroundColor: Color = MaterialTheme.colorScheme.surface
+    backgroundColor: Color = MaterialTheme.colorScheme.surface,
+    fallbackImageColor: Color = Color.Unspecified
 ) {
     val context = LocalContext.current
     val imageLoader: ImageLoader = koinInject()
@@ -50,7 +51,7 @@ fun Avatar(
             contentScale = ContentScale.Fit,
             colorFilter = if(imageUrl == null) {
                 ColorFilter.tint(
-                    color = MaterialTheme.colorScheme.fallbackImageBackground.value
+                    color = fallbackImageColor
                 )
             } else null
         )

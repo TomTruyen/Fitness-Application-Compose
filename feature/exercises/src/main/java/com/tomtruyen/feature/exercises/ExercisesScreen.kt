@@ -47,6 +47,7 @@ import com.tomtruyen.core.common.ObserveEvent
 import com.tomtruyen.core.common.models.ExerciseMode
 import com.tomtruyen.core.common.models.FilterOption
 import com.tomtruyen.core.designsystem.Dimens
+import com.tomtruyen.core.designsystem.theme.fallbackImageBackground
 import com.tomtruyen.core.designsystem.theme.selectedListItem
 import com.tomtruyen.core.ui.Avatar
 import com.tomtruyen.core.ui.Chip
@@ -316,6 +317,11 @@ private fun SharedTransitionScope.ExercisesScreenLayout(
                                                 MaterialTheme.colorScheme.selectedListItem.value
                                             } else {
                                                 MaterialTheme.colorScheme.surface
+                                            },
+                                            fallbackImageColor = if(state.selectedExercises.contains(exercise)) {
+                                                MaterialTheme.colorScheme.background
+                                            } else {
+                                                MaterialTheme.colorScheme.fallbackImageBackground.value
                                             }
                                         )
                                     }
