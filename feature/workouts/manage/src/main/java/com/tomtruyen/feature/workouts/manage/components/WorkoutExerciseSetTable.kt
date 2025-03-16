@@ -35,6 +35,7 @@ fun WorkoutExerciseSetTable(
     mode: WorkoutMode,
     onAction: (ManageWorkoutUiAction) -> Unit,
     onSetClick: (id: String, setIndex: Int) -> Unit,
+    onPreviousSetClick: (id: String, setIndex: Int, previousSet: PreviousExerciseSet) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val successBackgroundColor = MaterialTheme.colorScheme.success
@@ -108,7 +109,8 @@ fun WorkoutExerciseSetTable(
                     previousSet = previousSet,
                     mode = mode,
                     onAction = onAction,
-                    onSetClick = onSetClick
+                    onSetClick = onSetClick,
+                    onPreviousSetClick = onPreviousSetClick
                 )
             }
         }

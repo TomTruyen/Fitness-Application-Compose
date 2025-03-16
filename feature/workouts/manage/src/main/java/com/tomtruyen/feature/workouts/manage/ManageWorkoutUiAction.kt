@@ -55,6 +55,12 @@ sealed class ManageWorkoutUiAction {
             val setIndex: Int,
             val previousSet: PreviousExerciseSet?
         ) : Set()
+
+        data class OnPreviousSetClicked(
+            val exerciseId: String,
+            val setIndex: Int,
+            val previousSet: PreviousExerciseSet
+        ): Set()
     }
 
     sealed class Sheet : ManageWorkoutUiAction() {

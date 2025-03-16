@@ -208,6 +208,35 @@ fun WorkoutUiModel.copyWithSetCompleted(id: String, setIndex: Int, previousSet: 
     }
 )
 
+fun WorkoutUiModel.copyWithPreviousExerciseSet(id: String, setIndex: Int, previousSet: PreviousExerciseSet) = copy(
+    exercises = exercises.map { exercise ->
+        if(exercise.id == id) {
+            exercise.copy(
+                sets = exercise.sets.toMutableList().apply {
+                    this[setIndex] = this[setIndex].copy(
+                        reps = if (exercise.type == ExerciseType.WEIGHT && previousSet.reps != null) {
+                            previousSet.reps
+                        } else {
+                            this[setIndex].reps
+                        },
+                        weight = if (exercise.type == ExerciseType.WEIGHT && previousSet.weight != null) {
+                            previousSet.weight
+                        } else {
+                            this[setIndex].weight
+                        },
+                        time = if (exercise.type == ExerciseType.TIME && previousSet.time != null) {
+                            previousSet.time
+                        } else {
+                            this[setIndex].time
+                        },
+                        changeRecord = ChangeType.entries
+                    )
+                }
+            )
+        } else exercise
+    }
+)
+
 fun WorkoutUiModel.copyFromActiveWorkout(id: String) = copy(
     id = id,
     exercises = exercises.map { exercise ->

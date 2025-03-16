@@ -95,6 +95,15 @@ fun ExerciseListItem(
                     )
                 )
             },
+            onPreviousSetClick = { id, setIndex, previousSet ->
+                onAction(
+                    ManageWorkoutUiAction.Set.OnPreviousSetClicked(
+                        exerciseId = id,
+                        setIndex = setIndex,
+                        previousSet = previousSet
+                    )
+                )
+            },
             onAction = onAction
         )
 

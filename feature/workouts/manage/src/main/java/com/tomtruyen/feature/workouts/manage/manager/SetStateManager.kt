@@ -4,6 +4,7 @@ import com.tomtruyen.core.common.manager.StateManager
 import com.tomtruyen.data.models.network.rpc.PreviousExerciseSet
 import com.tomtruyen.data.models.ui.copyWithAddSet
 import com.tomtruyen.data.models.ui.copyWithDeleteSet
+import com.tomtruyen.data.models.ui.copyWithPreviousExerciseSet
 import com.tomtruyen.data.models.ui.copyWithRepsChanged
 import com.tomtruyen.data.models.ui.copyWithSetCompleted
 import com.tomtruyen.data.models.ui.copyWithTimeChanged
@@ -71,6 +72,16 @@ class SetStateManager(
         )
     }
 
+    private fun fillWithPreviousSet(id: String, setIndex: Int, previousSet: PreviousExerciseSet) = updateState {
+        it.copy(
+            workout = it.workout.copyWithPreviousExerciseSet(
+                id = id,
+                setIndex = setIndex,
+                previousSet = previousSet
+            )
+        )
+    }
+
     override fun onAction(action: ManageWorkoutUiAction.Set) {
         when (action) {
             is ManageWorkoutUiAction.Set.Add -> addSet(
@@ -101,6 +112,12 @@ class SetStateManager(
             )
 
             is ManageWorkoutUiAction.Set.OnToggleCompleted -> toggleSetCompleted(
+                id = action.exerciseId,
+                setIndex = action.setIndex,
+                previousSet = action.previousSet
+            )
+
+            is ManageWorkoutUiAction.Set.OnPreviousSetClicked -> fillWithPreviousSet(
                 id = action.exerciseId,
                 setIndex = action.setIndex,
                 previousSet = action.previousSet

@@ -49,7 +49,8 @@ fun WorkoutExerciseSetRow(
     previousSet: PreviousExerciseSet?,
     mode: WorkoutMode,
     onAction: (ManageWorkoutUiAction) -> Unit,
-    onSetClick: (id: String, setIndex: Int) -> Unit
+    onSetClick: (id: String, setIndex: Int) -> Unit,
+    onPreviousSetClick: (id: String, setIndex: Int, previousSet: PreviousExerciseSet) -> Unit
 ) {
         Row(
             modifier = modifier,
@@ -76,6 +77,19 @@ fun WorkoutExerciseSetRow(
                     previousSet = previousSet,
                     type = exerciseType,
                     modifier = Modifier.weight(1f)
+                        .clip(MaterialTheme.shapes.small)
+                        .clickable(
+                            enabled = !mode.isView && previousSet != null
+                        ) {
+                            previousSet?.let {
+                                onPreviousSetClick(
+                                    workoutExerciseId,
+                                    setIndex,
+                                    previousSet
+                                )
+                            }
+
+                        }
                 )
 
                 Spacer(modifier = Modifier.width(Dimens.Small))
