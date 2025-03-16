@@ -2,9 +2,9 @@ package com.tomtruyen.feature.workouts.manage.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.Icon
@@ -23,14 +23,13 @@ fun WorkoutTimer(
 ) {
     Row(
         modifier = modifier
-            .wrapContentWidth()
-            .animateContentSize()
             .background(
                 color = MaterialTheme.colorScheme.surface,
                 shape = MaterialTheme.shapes.small
             )
             .padding(Dimens.Small),
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
     ) {
         Icon(
             imageVector = Icons.Outlined.Timer,
