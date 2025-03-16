@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.google.ksp) apply false
+    alias(libs.plugins.detekt) apply false
     // Apply true to enable plugin at this level
     alias(libs.plugins.littlerobots.version.catalog.update) apply true
 }

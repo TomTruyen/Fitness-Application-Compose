@@ -1,9 +1,13 @@
 import com.android.build.gradle.LibraryExtension
+import com.tomtruyen.buildlogic.configureDetekt
 import com.tomtruyen.buildlogic.configureKoin
 import com.tomtruyen.buildlogic.configureKotlinAndroid
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 
 class AndroidLibraryConventionPlugin : Plugin<Project> {
@@ -14,10 +18,12 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             apply("com.google.devtools.ksp")
             apply("org.jetbrains.kotlin.plugin.serialization")
             apply("kotlin-parcelize")
+            apply("io.gitlab.arturbosch.detekt")
         }
 
         extensions.configure<LibraryExtension> {
             configureKotlinAndroid(this)
+            configureDetekt(extensions.getByType<DetektExtension>())
             configureKoin(this)
 
             defaultConfig.targetSdk = 35
