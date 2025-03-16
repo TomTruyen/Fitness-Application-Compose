@@ -11,7 +11,7 @@ concurrency:
 
 # Downloads Supabase CLI, creates dump and creates PR with dump
 jobs:
-  update-supabase-dump:
+  update-android-dependencies:
     runs-on: ubuntu-latest
 
     steps:
