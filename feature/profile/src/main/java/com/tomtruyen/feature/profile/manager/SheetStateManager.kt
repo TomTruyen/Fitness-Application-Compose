@@ -6,7 +6,7 @@ import com.tomtruyen.feature.profile.ProfileUiState
 
 class SheetStateManager(
     private val updateState: ((ProfileUiState) -> ProfileUiState) -> Unit
-): StateManager<ProfileUiAction.Sheet> {
+) : StateManager<ProfileUiAction.Sheet> {
     private fun showWeightUnitSheet(show: Boolean) = updateState {
         it.copy(
             showWeightUnitSheet = show
@@ -26,7 +26,7 @@ class SheetStateManager(
     }
 
     override fun onAction(action: ProfileUiAction.Sheet) {
-        when(action) {
+        when (action) {
             ProfileUiAction.Sheet.ThemeMode.Show -> showThemeModeSheet(true)
 
             ProfileUiAction.Sheet.ThemeMode.Dismiss -> showThemeModeSheet(false)

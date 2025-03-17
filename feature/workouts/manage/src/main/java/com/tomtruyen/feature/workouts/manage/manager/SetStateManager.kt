@@ -62,25 +62,27 @@ class SetStateManager(
         )
     }
 
-    private fun toggleSetCompleted(id: String, setIndex: Int, previousSet: PreviousSet?) = updateState {
-        it.copy(
-            workout = it.workout.copyWithSetCompleted(
-                id = id,
-                setIndex = setIndex,
-                previousSet = previousSet,
+    private fun toggleSetCompleted(id: String, setIndex: Int, previousSet: PreviousSet?) =
+        updateState {
+            it.copy(
+                workout = it.workout.copyWithSetCompleted(
+                    id = id,
+                    setIndex = setIndex,
+                    previousSet = previousSet,
+                )
             )
-        )
-    }
+        }
 
-    private fun fillWithPreviousSet(id: String, setIndex: Int, previousSet: PreviousSet) = updateState {
-        it.copy(
-            workout = it.workout.copyWithPreviousExerciseSet(
-                id = id,
-                setIndex = setIndex,
-                previousSet = previousSet
+    private fun fillWithPreviousSet(id: String, setIndex: Int, previousSet: PreviousSet) =
+        updateState {
+            it.copy(
+                workout = it.workout.copyWithPreviousExerciseSet(
+                    id = id,
+                    setIndex = setIndex,
+                    previousSet = previousSet
+                )
             )
-        )
-    }
+        }
 
     override fun onAction(action: ManageWorkoutUiAction.Set) {
         when (action) {

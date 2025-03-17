@@ -15,7 +15,6 @@ import com.tomtruyen.data.models.mappers.WorkoutHistoryUiModelMapper
 import com.tomtruyen.data.models.mappers.WorkoutUiModelMapper
 import com.tomtruyen.data.models.network.WorkoutHistoryNetworkModel
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
-import com.tomtruyen.data.models.ui.WorkoutHistoryUiModel
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.interfaces.HistoryRepository
 import com.tomtruyen.data.worker.HistorySyncWorker
@@ -26,7 +25,6 @@ import io.github.jan.supabase.postgrest.query.Order
 import io.github.jan.supabase.postgrest.query.filter.FilterOperation
 import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapLatest
 
 class HistoryRepositoryImpl : HistoryRepository() {
@@ -43,9 +41,10 @@ class HistoryRepositoryImpl : HistoryRepository() {
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun findHistoryByIdAsync(id: String) = dao.findHistoryByIdAsync(id).mapLatest { history ->
-        history?.let(WorkoutHistoryUiModelMapper::fromEntity)
-    }
+    override fun findHistoryByIdAsync(id: String) =
+        dao.findHistoryByIdAsync(id).mapLatest { history ->
+            history?.let(WorkoutHistoryUiModelMapper::fromEntity)
+        }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun findHistoriesAsync(page: Int) = dao.findHistoriesAsync(

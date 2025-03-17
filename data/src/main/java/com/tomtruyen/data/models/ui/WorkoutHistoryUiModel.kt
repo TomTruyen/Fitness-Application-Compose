@@ -2,7 +2,6 @@ package com.tomtruyen.data.models.ui
 
 import androidx.compose.runtime.Immutable
 import com.tomtruyen.core.common.models.UnitType
-import com.tomtruyen.data.entities.WorkoutHistoryWithExercises
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone

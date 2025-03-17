@@ -9,6 +9,6 @@ import org.koin.core.component.inject
 internal class ExerciseSyncWorker(
     appContext: Context,
     params: WorkerParameters,
-): SyncWorker<Exercise>(appContext, params) {
+) : SyncWorker<Exercise>(appContext, params) {
     override val repository by inject<ExerciseRepository>()
 }

@@ -5,12 +5,8 @@ import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
 import com.tomtruyen.data.entities.WorkoutExercise
 import com.tomtruyen.data.entities.WorkoutExerciseWithSets
 import com.tomtruyen.data.entities.WorkoutHistoryExercise
-import com.tomtruyen.data.models.ui.CategoryUiModel
-import com.tomtruyen.data.models.ui.EquipmentUiModel
-import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
 import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 import com.tomtruyen.data.models.ui.WorkoutHistoryExerciseUiModel
-import kotlin.collections.orEmpty
 
 object WorkoutExerciseUiModelMapper {
     fun toEntity(
@@ -81,7 +77,8 @@ object WorkoutExerciseUiModelMapper {
             sortOrder = sortOrder,
             category = exercise.category?.let(CategoryUiModelMapper::fromEntity),
             equipment = exercise.equipment?.let(EquipmentUiModelMapper::fromEntity),
-            sets = sets.map(WorkoutExerciseSetUiModelMapper::fromWorkoutHistorySetEntity).sortedBy { it.sortOrder }
+            sets = sets.map(WorkoutExerciseSetUiModelMapper::fromWorkoutHistorySetEntity)
+                .sortedBy { it.sortOrder }
         )
     }
 }

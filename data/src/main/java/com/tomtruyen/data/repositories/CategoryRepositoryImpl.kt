@@ -2,7 +2,6 @@ package com.tomtruyen.data.repositories
 
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.models.mappers.CategoryUiModelMapper
-import com.tomtruyen.data.models.ui.CategoryUiModel
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.ExperimentalCoroutinesApi

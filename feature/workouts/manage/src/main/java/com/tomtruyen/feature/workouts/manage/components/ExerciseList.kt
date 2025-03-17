@@ -111,7 +111,7 @@ fun SharedTransitionScope.ExerciseList(
             }
         }
 
-        if(state.mode.isExecute) {
+        if (state.mode.isExecute) {
             item {
                 Buttons.Text(
                     text = stringResource(id = CommonR.string.button_discard),

@@ -120,7 +120,7 @@ fun BottomBarItem(
         ),
         shape = FloatingActionButtonDefaults.shape,
         onClick = {
-            if(selected) return@Card
+            if (selected) return@Card
 
             navController.navigate(item.screen) {
                 launchSingleTop = true

@@ -16,7 +16,7 @@ class DialogStateManager(
     }
 
     override fun onAction(action: ManageWorkoutUiAction.Dialog) {
-        when(action) {
+        when (action) {
             ManageWorkoutUiAction.Dialog.Workout.Show -> showDeleteDialog(true)
             ManageWorkoutUiAction.Dialog.Workout.Dismiss -> showDeleteDialog(false)
 

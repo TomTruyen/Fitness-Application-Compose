@@ -19,7 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -35,7 +34,6 @@ import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.validation.errorMessage
 import com.tomtruyen.core.validation.isValid
 import com.tomtruyen.navigation.Screen
-import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import com.tomtruyen.core.common.R as CommonR
 

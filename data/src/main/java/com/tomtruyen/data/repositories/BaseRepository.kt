@@ -17,7 +17,7 @@ import kotlinx.coroutines.SupervisorJob
 import org.koin.core.component.KoinComponent
 import org.koin.java.KoinJavaComponent.inject
 
-abstract class BaseRepository: KoinComponent {
+abstract class BaseRepository : KoinComponent {
     abstract val cacheKey: String
 
     val context: Context by inject(Context::class.java)
@@ -55,7 +55,10 @@ abstract class BaseRepository: KoinComponent {
         val isSynced = cacheDao.findById(cacheKey) != null
 
         if (!isSynced || refresh) {
-            Log.i(TAG, "SyncCache entry does not exist or forcefully refreshing, fetching $cacheKey from Supabase")
+            Log.i(
+                TAG,
+                "SyncCache entry does not exist or forcefully refreshing, fetching $cacheKey from Supabase"
+            )
 
             return block()
         }
@@ -79,7 +82,7 @@ abstract class BaseRepository: KoinComponent {
     ) {
         val ids = entitiesToKeep.map { it.id }
 
-        if(ids.isEmpty()) return
+        if (ids.isEmpty()) return
 
         supabase.from(table).delete {
             filter {

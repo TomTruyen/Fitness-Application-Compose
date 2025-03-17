@@ -4,7 +4,6 @@ import androidx.room.TypeConverter
 import com.tomtruyen.core.common.JsonInstance
 import com.tomtruyen.data.entities.ChangeType
 import kotlinx.datetime.LocalDateTime
-import kotlin.collections.List
 
 class Converters {
     @TypeConverter

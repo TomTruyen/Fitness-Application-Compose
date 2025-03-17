@@ -8,7 +8,7 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 
-class PreviousSetRepositoryImpl: PreviousSetRepository() {
+class PreviousSetRepositoryImpl : PreviousSetRepository() {
     private val exerciseDao = database.exerciseDao()
 
     override suspend fun findPreviousSets() = dao.findAllAsync()

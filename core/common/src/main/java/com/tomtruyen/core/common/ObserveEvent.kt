@@ -9,7 +9,7 @@ import com.tomtruyen.core.common.base.BaseViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun <VM: BaseViewModel<*, *, Event>, Event> ObserveEvent(
+fun <VM : BaseViewModel<*, *, Event>, Event> ObserveEvent(
     viewModel: VM,
     onEvent: suspend (Event) -> Unit
 ) {

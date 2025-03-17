@@ -91,7 +91,10 @@ class ExerciseStateManager(
         )
     }
 
-    private fun createWorkoutExercise(exercise: ExerciseUiModel, setCount: Int = 1): WorkoutExerciseUiModel {
+    private fun createWorkoutExercise(
+        exercise: ExerciseUiModel,
+        setCount: Int = 1
+    ): WorkoutExerciseUiModel {
         return WorkoutExerciseUiModel.createFromExerciseModel(
             model = exercise,
             setCount = setCount

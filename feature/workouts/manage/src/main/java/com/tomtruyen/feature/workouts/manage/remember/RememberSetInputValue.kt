@@ -18,7 +18,7 @@ fun <T, R> rememberSetInputValue(
 
     val value = remember(value, mode, didChange) {
         mutableStateOf(
-            if(!mode.isExecute || didChange()) {
+            if (!mode.isExecute || didChange()) {
                 transform(value)
             } else {
                 defaultValue

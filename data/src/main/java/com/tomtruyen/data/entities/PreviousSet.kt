@@ -1,6 +1,5 @@
 package com.tomtruyen.data.entities
 
-import android.util.Log
 import androidx.room.Entity
 import com.tomtruyen.core.common.serializer.SupabaseDateTimeSerializer
 import kotlinx.datetime.Clock
@@ -58,13 +57,14 @@ data class PreviousSet(
             }
         }
 
-        fun fromWorkoutExerciseSet(exerciseId: String, set: WorkoutHistoryExerciseSet) = PreviousSet(
-            exerciseId = exerciseId,
-            sortOrder = set.sortOrder,
-            reps = set.reps,
-            weight = set.weight,
-            time = set.time,
-            createdAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-        )
+        fun fromWorkoutExerciseSet(exerciseId: String, set: WorkoutHistoryExerciseSet) =
+            PreviousSet(
+                exerciseId = exerciseId,
+                sortOrder = set.sortOrder,
+                reps = set.reps,
+                weight = set.weight,
+                time = set.time,
+                createdAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            )
     }
 }

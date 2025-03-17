@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.common.models.GlobalAppState
+import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.listitems.ListItem
 import com.tomtruyen.feature.profile.R

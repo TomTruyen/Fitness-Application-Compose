@@ -19,7 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,7 +37,6 @@ import com.tomtruyen.core.validation.errorMessage
 import com.tomtruyen.core.validation.isValid
 import com.tomtruyen.feature.auth.SocialButtons
 import com.tomtruyen.navigation.Screen
-import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import com.tomtruyen.core.common.R as CommonR
 
@@ -50,7 +48,7 @@ fun LoginScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     ObserveEvent(viewModel) { event ->
-        when(event) {
+        when (event) {
             LoginUiEvent.Navigate.Home -> {
                 navController.navigate(Screen.Workout.Graph) {
                     popUpTo(Screen.Auth.Graph) {

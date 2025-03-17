@@ -9,7 +9,7 @@ import com.tomtruyen.data.entities.WorkoutWithExercises
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class WorkoutDao: SyncDao<WorkoutWithExercises>(Workout.TABLE_NAME) {
+abstract class WorkoutDao : SyncDao<WorkoutWithExercises>(Workout.TABLE_NAME) {
     @Transaction
     @Query("SELECT * FROM ${Workout.TABLE_NAME} ORDER BY sortOrder ASC, createdAt DESC")
     abstract fun findWorkoutsAsync(): Flow<List<WorkoutWithExercises>>

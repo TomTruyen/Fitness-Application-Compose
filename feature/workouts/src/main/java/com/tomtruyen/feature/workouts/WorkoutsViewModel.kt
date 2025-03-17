@@ -1,6 +1,5 @@
 package com.tomtruyen.feature.workouts
 
-import android.util.Log
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.repositories.interfaces.UserRepository

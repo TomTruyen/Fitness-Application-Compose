@@ -9,6 +9,6 @@ import org.koin.core.component.inject
 internal class HistorySyncWorker(
     appContext: Context,
     params: WorkerParameters
-): SyncWorker<WorkoutHistoryWithExercises>(appContext, params) {
+) : SyncWorker<WorkoutHistoryWithExercises>(appContext, params) {
     override val repository by inject<HistoryRepository>()
 }

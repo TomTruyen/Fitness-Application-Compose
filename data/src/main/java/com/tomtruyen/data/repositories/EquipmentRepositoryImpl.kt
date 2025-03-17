@@ -2,7 +2,6 @@ package com.tomtruyen.data.repositories
 
 import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.models.mappers.EquipmentUiModelMapper
-import com.tomtruyen.data.models.ui.EquipmentUiModel
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.ExperimentalCoroutinesApi

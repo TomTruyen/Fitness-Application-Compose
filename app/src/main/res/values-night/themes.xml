@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Theme.Fynix.Splashscreen" parent="Theme.SplashScreen.IconBackground">
         <item name="windowSplashScreenBackground">@color/chineseBlack</item>
         <item name="windowSplashScreenIconBackgroundColor">@color/chineseBlack</item>

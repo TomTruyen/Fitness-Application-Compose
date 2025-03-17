@@ -19,15 +19,16 @@ object WorkoutUiModelMapper {
         )
     }
 
-    fun toWorkoutHistoryEntity(model: WorkoutUiModel, userId: String): WorkoutHistory = with(model) {
-        WorkoutHistory(
-            name = name,
-            unit = unit.value,
-            userId = userId,
-            duration = duration,
-            synced = false,
-        )
-    }
+    fun toWorkoutHistoryEntity(model: WorkoutUiModel, userId: String): WorkoutHistory =
+        with(model) {
+            WorkoutHistory(
+                name = name,
+                unit = unit.value,
+                userId = userId,
+                duration = duration,
+                synced = false,
+            )
+        }
 
     fun fromEntity(entity: WorkoutWithExercises): WorkoutUiModel = with(entity) {
         WorkoutUiModel(

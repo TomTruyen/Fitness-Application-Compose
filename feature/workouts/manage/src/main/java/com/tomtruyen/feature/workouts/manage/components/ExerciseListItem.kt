@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.common.models.UnitType
+import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.TextFields

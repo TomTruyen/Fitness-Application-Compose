@@ -2,7 +2,6 @@ package com.tomtruyen.fitoryx
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -10,7 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class MainViewModel(
     private val userRepository: UserRepository,
-): ViewModel() {
+) : ViewModel() {
     var hasCheckedLoggedIn: AtomicBoolean = AtomicBoolean(false)
         private set
 

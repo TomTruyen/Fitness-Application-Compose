@@ -21,32 +21,32 @@ import kotlinx.datetime.LocalTime
 
 @Composable
 fun WheelTimePicker(
-  modifier: Modifier = Modifier,
-  startTime: LocalTime = LocalTime.now(),
-  minTime: LocalTime = LocalTime.MIN,
-  maxTime: LocalTime = LocalTime.MAX,
-  timeFormatter: TimeFormatter = timeFormatter(Locale.current),
-  size: DpSize = DpSize(128.dp, 128.dp),
-  rowCount: Int = 3,
-  textStyle: TextStyle = MaterialTheme.typography.titleMedium,
-  textColor: Color = LocalContentColor.current,
-  selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
-  onSnappedTime: (snappedTime: LocalTime) -> Unit = {},
+    modifier: Modifier = Modifier,
+    startTime: LocalTime = LocalTime.now(),
+    minTime: LocalTime = LocalTime.MIN,
+    maxTime: LocalTime = LocalTime.MAX,
+    timeFormatter: TimeFormatter = timeFormatter(Locale.current),
+    size: DpSize = DpSize(128.dp, 128.dp),
+    rowCount: Int = 3,
+    textStyle: TextStyle = MaterialTheme.typography.titleMedium,
+    textColor: Color = LocalContentColor.current,
+    selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
+    onSnappedTime: (snappedTime: LocalTime) -> Unit = {},
 ) {
-  DefaultWheelTimePicker(
-    modifier,
-    startTime,
-    minTime,
-    maxTime,
-    timeFormatter,
-    size,
-    rowCount,
-    textStyle,
-    textColor,
-    selectorProperties,
-    onSnappedTime = { snappedTime ->
-      onSnappedTime(snappedTime.snappedLocalTime)
-      snappedTime.snappedIndex
-    }
-  )
+    DefaultWheelTimePicker(
+        modifier,
+        startTime,
+        minTime,
+        maxTime,
+        timeFormatter,
+        size,
+        rowCount,
+        textStyle,
+        textColor,
+        selectorProperties,
+        onSnappedTime = { snappedTime ->
+            onSnappedTime(snappedTime.snappedLocalTime)
+            snappedTime.snappedIndex
+        }
+    )
 }

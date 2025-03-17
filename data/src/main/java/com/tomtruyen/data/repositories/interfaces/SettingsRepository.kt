@@ -1,9 +1,7 @@
 package com.tomtruyen.data.repositories.interfaces
 
-import com.tomtruyen.data.dao.SyncDao
 import com.tomtruyen.data.entities.Settings
 import com.tomtruyen.data.models.ui.SettingsUiModel
-import com.tomtruyen.data.repositories.BaseRepository
 import kotlinx.coroutines.flow.Flow
 
 abstract class SettingsRepository : SyncRepository<Settings>() {

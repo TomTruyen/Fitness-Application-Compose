@@ -14,7 +14,8 @@ import java.time.temporal.ChronoUnit
 @Composable
 fun LocalDateTime.toRelativeTimeString(): String {
     val date = toJavaLocalDateTime()
-    val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).toJavaLocalDateTime()
+    val now =
+        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).toJavaLocalDateTime()
 
     val daysBetween = ChronoUnit.DAYS.between(date, now)
     val monthsBetween = ChronoUnit.MONTHS.between(date, now)

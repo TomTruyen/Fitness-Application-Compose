@@ -7,7 +7,7 @@ import com.tomtruyen.data.entities.Settings
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class SettingsDao: SyncDao<Settings>(Settings.TABLE_NAME) {
+abstract class SettingsDao : SyncDao<Settings>(Settings.TABLE_NAME) {
     @Query("SELECT * FROM ${Settings.TABLE_NAME} LIMIT 1")
     abstract fun findSettings(): Flow<Settings?>
 

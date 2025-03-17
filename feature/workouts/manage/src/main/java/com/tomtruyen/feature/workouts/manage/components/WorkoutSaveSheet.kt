@@ -34,7 +34,7 @@ fun WorkoutSaveSheet(
     val scope = rememberCoroutineScope()
     val state = rememberModalBottomSheetState()
 
-    if(visible) {
+    if (visible) {
         ModalBottomSheet(
             onDismissRequest = onDismiss,
             sheetState = state,

@@ -2,11 +2,11 @@ package com.tomtruyen.core.common.utils
 
 import android.content.Context
 import android.content.Intent
+import androidx.core.net.toUri
 import com.tomtruyen.core.common.R
 import com.tomtruyen.core.common.providers.BuildConfigFieldProvider
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import androidx.core.net.toUri
 
 object EmailUtils : KoinComponent {
     private val buildConfigFieldProvider: BuildConfigFieldProvider by inject()

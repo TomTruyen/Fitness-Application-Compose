@@ -2,14 +2,8 @@ package com.tomtruyen.data.models.ui
 
 import androidx.compose.runtime.Immutable
 import com.tomtruyen.core.common.models.ExerciseType
-import com.tomtruyen.data.entities.Exercise
-import com.tomtruyen.data.entities.ExerciseWithCategoryAndEquipment
-import com.tomtruyen.data.entities.WorkoutExercise
-import com.tomtruyen.data.entities.WorkoutExerciseWithSets
-import com.tomtruyen.data.entities.WorkoutHistoryExercise
 import kotlinx.serialization.Serializable
 import java.util.UUID
-import kotlin.text.category
 
 @Serializable
 @Immutable

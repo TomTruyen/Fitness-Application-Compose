@@ -1,17 +1,16 @@
 package com.tomtruyen.fitoryx.di
 
 import com.tomtruyen.core.common.models.ExerciseMode
-import com.tomtruyen.fitoryx.MainViewModel
 import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
-import com.tomtruyen.data.repositories.interfaces.SettingsRepository
-import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.HistoryRepository
 import com.tomtruyen.data.repositories.interfaces.PreviousSetRepository
+import com.tomtruyen.data.repositories.interfaces.SettingsRepository
+import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.feature.auth.login.LoginViewModel
 import com.tomtruyen.feature.auth.register.RegisterViewModel
@@ -24,6 +23,7 @@ import com.tomtruyen.feature.workouts.history.WorkoutHistoryViewModel
 import com.tomtruyen.feature.workouts.history.detail.WorkoutHistoryDetailViewModel
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutViewModel
 import com.tomtruyen.feature.workouts.manage.reorder.ReorderExercisesViewModel
+import com.tomtruyen.fitoryx.MainViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module

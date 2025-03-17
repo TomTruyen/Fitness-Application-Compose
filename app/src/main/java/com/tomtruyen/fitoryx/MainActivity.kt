@@ -27,7 +27,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.tomtruyen.core.common.controller.SnackbarController
 import com.tomtruyen.core.common.models.ExerciseMode
-import com.tomtruyen.fitoryx.MainViewModel
 import com.tomtruyen.core.common.models.GlobalAppState
 import com.tomtruyen.core.designsystem.theme.FynixTheme
 import com.tomtruyen.core.designsystem.theme.rememberDarkMode
@@ -75,7 +74,7 @@ class MainActivity : ComponentActivity() {
 
                 LaunchedEffect(isDarkTheme) {
                     enableEdgeToEdge(
-                        statusBarStyle = if(isDarkTheme) {
+                        statusBarStyle = if (isDarkTheme) {
                             SystemBarStyle.dark(Color.TRANSPARENT)
                         } else {
                             SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
@@ -131,7 +130,7 @@ class MainActivity : ComponentActivity() {
                                 ) {
                                     composable<Screen.Auth.Login> {
                                         LaunchedEffect(Unit) {
-                                            if(viewModel.isLoggedIn()) {
+                                            if (viewModel.isLoggedIn()) {
                                                 navController.navigate(Screen.Workout.Graph) {
                                                     popUpTo(Screen.Auth.Graph) {
                                                         inclusive = true
@@ -171,7 +170,13 @@ class MainActivity : ComponentActivity() {
 
                                         val viewModel = koinViewModel<ManageWorkoutViewModel>(
                                             viewModelStoreOwner = backStackEntry,
-                                            parameters = { parametersOf(args.id, args.mode, args.workout) }
+                                            parameters = {
+                                                parametersOf(
+                                                    args.id,
+                                                    args.mode,
+                                                    args.workout
+                                                )
+                                            }
                                         )
 
                                         ManageWorkoutScreen(

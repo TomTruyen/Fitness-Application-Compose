@@ -45,7 +45,6 @@ import com.tomtruyen.feature.workouts.components.WorkoutListItem
 import com.tomtruyen.feature.workouts.remember.rememberWorkoutActions
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.SharedTransitionKey
-import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
@@ -108,7 +107,7 @@ fun SharedTransitionScope.WorkoutsScreen(
         )
     }
 
-    if(state.showDeleteConfirmation) {
+    if (state.showDeleteConfirmation) {
         ConfirmationDialog(
             title = R.string.title_delete_workout,
             message = R.string.message_delete_workout,
@@ -228,7 +227,10 @@ private fun SharedTransitionScope.WorkoutOverviewScreenLayout(
                             state = reorderableLazyListState,
                             key = workout.id
                         ) { isDragging ->
-                            val alpha by animateFloatAsState(if (isDragging) 0.25f else 1f, label = "")
+                            val alpha by animateFloatAsState(
+                                if (isDragging) 0.25f else 1f,
+                                label = ""
+                            )
 
                             WorkoutListItem(
                                 workout = workout,

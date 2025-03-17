@@ -38,9 +38,7 @@ import com.tomtruyen.feature.profile.components.UnitSection
 import com.tomtruyen.feature.profile.remember.rememberThemeModeActions
 import com.tomtruyen.feature.profile.remember.rememberUnitActions
 import com.tomtruyen.navigation.Screen
-import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.koinInject
 
 @Composable
 fun ProfileScreen(

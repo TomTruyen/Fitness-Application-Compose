@@ -18,7 +18,7 @@ fun rememberThemeModeActions(
         ThemeMode.entries.map { mode ->
             BottomSheetItem(
                 title = mode.value,
-                icon = when(mode) {
+                icon = when (mode) {
                     ThemeMode.DARK -> Icons.Rounded.DarkMode
                     ThemeMode.LIGHT -> Icons.Rounded.LightMode
                     ThemeMode.SYSTEM -> Icons.Rounded.Android

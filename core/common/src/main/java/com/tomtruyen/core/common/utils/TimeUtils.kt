@@ -29,7 +29,8 @@ object TimeUtils {
     }
 
     private fun padWithLeadingZeros(number: Long, leadingZero: Boolean): String {
-        return if (leadingZero) number.toString().padStart(LEADING_ZERO_WIDTH, '0') else number.toString()
+        return if (leadingZero) number.toString()
+            .padStart(LEADING_ZERO_WIDTH, '0') else number.toString()
     }
 
     fun formatDuration(duration: Long): String {

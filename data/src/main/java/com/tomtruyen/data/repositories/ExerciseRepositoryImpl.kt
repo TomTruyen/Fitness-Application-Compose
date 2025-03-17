@@ -86,7 +86,7 @@ class ExerciseRepositoryImpl(
         userId: String,
         exercise: ExerciseUiModel,
     ) {
-        val newExercise =  ExerciseUiModelMapper.toEntity(
+        val newExercise = ExerciseUiModelMapper.toEntity(
             model = exercise,
             userId = userId
         ).exercise

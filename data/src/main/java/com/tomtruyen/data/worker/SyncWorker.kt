@@ -15,7 +15,7 @@ import org.koin.java.KoinJavaComponent.get
 internal abstract class SyncWorker<T>(
     appContext: Context,
     params: WorkerParameters
-): CoroutineWorker(
+) : CoroutineWorker(
     appContext = appContext,
     params = params
 ), KoinComponent {
@@ -43,7 +43,7 @@ internal abstract class SyncWorker<T>(
     companion object {
         private const val TAG = "SyncWorker"
 
-        inline fun <reified T: SyncWorker<*>> schedule(context: Context = get(Context::class.java)) {
+        inline fun <reified T : SyncWorker<*>> schedule(context: Context = get(Context::class.java)) {
             val request = OneTimeWorkRequestBuilder<T>()
                 .setConstraints(
                     Constraints.Builder()

@@ -7,26 +7,20 @@ import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.entities.WorkoutExercise
 import com.tomtruyen.data.entities.WorkoutExerciseSet
 import com.tomtruyen.data.entities.WorkoutWithExercises
-import com.tomtruyen.data.models.network.WorkoutNetworkModel
-import com.tomtruyen.data.entities.PreviousSet
 import com.tomtruyen.data.models.mappers.WorkoutExerciseSetUiModelMapper
 import com.tomtruyen.data.models.mappers.WorkoutExerciseUiModelMapper
 import com.tomtruyen.data.models.mappers.WorkoutUiModelMapper
-import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
+import com.tomtruyen.data.models.network.WorkoutNetworkModel
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.data.worker.SyncWorker
 import com.tomtruyen.data.worker.WorkoutSyncWorker
 import io.github.jan.supabase.postgrest.from
-import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.filter.FilterOperation
 import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
 import java.util.UUID
 
 class WorkoutRepositoryImpl : WorkoutRepository() {

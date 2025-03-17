@@ -9,7 +9,7 @@ import com.tomtruyen.data.entities.WorkoutHistoryWithExercises
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class WorkoutHistoryDao: SyncDao<WorkoutHistoryWithExercises>(WorkoutHistory.TABLE_NAME) {
+abstract class WorkoutHistoryDao : SyncDao<WorkoutHistoryWithExercises>(WorkoutHistory.TABLE_NAME) {
     @Transaction
     @Query("SELECT * FROM ${WorkoutHistory.TABLE_NAME} WHERE id = :id")
     abstract fun findHistoryByIdAsync(id: String): Flow<WorkoutHistoryWithExercises?>

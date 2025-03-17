@@ -30,14 +30,14 @@ object WorkoutExerciseSetUiModelMapper {
         workoutHistoryExerciseId: String,
         index: Int
     ): WorkoutHistoryExerciseSet = with(model) {
-      WorkoutHistoryExerciseSet(
-          reps = reps,
-          weight = weight,
-          time = time,
-          sortOrder = index,
-          workoutHistoryExerciseId = workoutHistoryExerciseId,
-          synced = false
-      )
+        WorkoutHistoryExerciseSet(
+            reps = reps,
+            weight = weight,
+            time = time,
+            sortOrder = index,
+            workoutHistoryExerciseId = workoutHistoryExerciseId,
+            synced = false
+        )
     }
 
     fun fromEntity(entity: WorkoutExerciseSet): WorkoutExerciseSetUiModel = with(entity) {

@@ -52,107 +52,108 @@ fun WorkoutExerciseSetRow(
     onSetClick: (id: String, setIndex: Int) -> Unit,
     onPreviousSetClick: (id: String, setIndex: Int, previousSet: PreviousSet) -> Unit
 ) {
-        Row(
-            modifier = modifier,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = "${setIndex + 1}",
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    fontWeight = FontWeight.W500,
-                ),
-                textAlign = TextAlign.Center,
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = "${setIndex + 1}",
+            style = MaterialTheme.typography.bodyMedium.copy(
+                fontWeight = FontWeight.W500,
+            ),
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .width(Dimens.MinButtonHeight)
+                .clip(CircleShape)
+                .clickable(
+                    enabled = !mode.isView
+                ) {
+                    onSetClick(workoutExerciseId, setIndex)
+                }
+        )
+
+        if (mode.isExecute) {
+            PreviousSet(
+                previousSet = previousSet,
+                type = exerciseType,
                 modifier = Modifier
-                    .width(Dimens.MinButtonHeight)
-                    .clip(CircleShape)
+                    .weight(1f)
+                    .clip(MaterialTheme.shapes.small)
                     .clickable(
-                        enabled = !mode.isView
+                        enabled = !mode.isView && previousSet != null
                     ) {
-                        onSetClick(workoutExerciseId, setIndex)
+                        previousSet?.let {
+                            onPreviousSetClick(
+                                workoutExerciseId,
+                                setIndex,
+                                previousSet
+                            )
+                        }
+
                     }
             )
 
-            if (mode.isExecute) {
-                PreviousSet(
-                    previousSet = previousSet,
-                    type = exerciseType,
-                    modifier = Modifier.weight(1f)
-                        .clip(MaterialTheme.shapes.small)
-                        .clickable(
-                            enabled = !mode.isView && previousSet != null
-                        ) {
-                            previousSet?.let {
-                                onPreviousSetClick(
-                                    workoutExerciseId,
-                                    setIndex,
-                                    previousSet
-                                )
-                            }
-
-                        }
-                )
-
-                Spacer(modifier = Modifier.width(Dimens.Small))
-            }
+            Spacer(modifier = Modifier.width(Dimens.Small))
+        }
 
 
-            when (exerciseType) {
-                ExerciseType.WEIGHT -> WeightSet(
-                    weight = set.weight,
-                    reps = set.reps,
-                    changeRecord = set.changeRecord,
-                    mode = mode,
-                    completed = set.completed,
-                    onRepsChanged = { reps ->
-                        onAction(
-                            ManageWorkoutUiAction.Set.OnRepsChanged(
-                                exerciseId = workoutExerciseId,
-                                setIndex = setIndex,
-                                reps = reps
-                            )
+        when (exerciseType) {
+            ExerciseType.WEIGHT -> WeightSet(
+                weight = set.weight,
+                reps = set.reps,
+                changeRecord = set.changeRecord,
+                mode = mode,
+                completed = set.completed,
+                onRepsChanged = { reps ->
+                    onAction(
+                        ManageWorkoutUiAction.Set.OnRepsChanged(
+                            exerciseId = workoutExerciseId,
+                            setIndex = setIndex,
+                            reps = reps
                         )
-                    },
-                    onWeightChanged = { weight ->
-                        onAction(
-                            ManageWorkoutUiAction.Set.OnWeightChanged(
-                                exerciseId = workoutExerciseId,
-                                setIndex = setIndex,
-                                weight = weight
-                            )
+                    )
+                },
+                onWeightChanged = { weight ->
+                    onAction(
+                        ManageWorkoutUiAction.Set.OnWeightChanged(
+                            exerciseId = workoutExerciseId,
+                            setIndex = setIndex,
+                            weight = weight
                         )
-                    }
-                )
+                    )
+                }
+            )
 
-                ExerciseType.TIME -> TimeSet(
-                    time = set.time,
-                    changeRecord = set.changeRecord,
-                    mode = mode,
-                    completed = set.completed,
-                    onTimeChanged = { time ->
-                        onAction(
-                            ManageWorkoutUiAction.Set.OnTimeChanged(
-                                exerciseId = workoutExerciseId,
-                                setIndex = setIndex,
-                                time = time
-                            )
+            ExerciseType.TIME -> TimeSet(
+                time = set.time,
+                changeRecord = set.changeRecord,
+                mode = mode,
+                completed = set.completed,
+                onTimeChanged = { time ->
+                    onAction(
+                        ManageWorkoutUiAction.Set.OnTimeChanged(
+                            exerciseId = workoutExerciseId,
+                            setIndex = setIndex,
+                            time = time
                         )
-                    }
-                )
-            }
+                    )
+                }
+            )
+        }
 
-            if (mode.isExecute) {
-                WorkoutCheckbox(
-                    checked = set.completed,
-                    onClick = {
-                        onAction(
-                            ManageWorkoutUiAction.Set.OnToggleCompleted(
-                                exerciseId = workoutExerciseId,
-                                setIndex = setIndex,
-                                previousSet = previousSet
-                            )
+        if (mode.isExecute) {
+            WorkoutCheckbox(
+                checked = set.completed,
+                onClick = {
+                    onAction(
+                        ManageWorkoutUiAction.Set.OnToggleCompleted(
+                            exerciseId = workoutExerciseId,
+                            setIndex = setIndex,
+                            previousSet = previousSet
                         )
-                    },
-                )
+                    )
+                },
+            )
         }
     }
 }
@@ -172,13 +173,13 @@ private fun PreviousSet(
         text = previousSet?.let { set ->
             when (type) {
                 ExerciseType.WEIGHT -> {
-                    if(set.reps == null && set.weight == null) return@let null
+                    if (set.reps == null && set.weight == null) return@let null
 
                     "${set.reps ?: 0}x${set.weight?.rounded() ?: 0}"
                 }
 
                 ExerciseType.TIME -> {
-                    if(set.time == null) return@let null
+                    if (set.time == null) return@let null
 
                     TimeUtils.formatSeconds(set.time?.toLong() ?: 0L)
                 }
@@ -207,7 +208,7 @@ private fun RowScope.WeightSet(
         value = reps,
         defaultValue = "",
         mode = mode,
-        didChange =  {
+        didChange = {
             changeRecord.contains(ChangeType.REP) || completed
         },
         transform = { it?.toString().orEmpty() }

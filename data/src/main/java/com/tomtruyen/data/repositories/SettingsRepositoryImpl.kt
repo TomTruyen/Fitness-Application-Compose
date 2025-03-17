@@ -1,6 +1,5 @@
 package com.tomtruyen.data.repositories
 
-import android.util.Log
 import com.tomtruyen.data.entities.Settings
 import com.tomtruyen.data.models.mappers.SettingsUiModelMapper
 import com.tomtruyen.data.models.ui.SettingsUiModel

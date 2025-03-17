@@ -14,10 +14,10 @@ sealed class WorkoutsUiAction {
             data object Dismiss : Discard()
         }
 
-        sealed class Workout: Dialog() {
-            data object Show: Workout()
+        sealed class Workout : Dialog() {
+            data object Show : Workout()
 
-            data object Dismiss: Workout()
+            data object Dismiss : Workout()
         }
     }
 
@@ -41,5 +41,5 @@ sealed class WorkoutsUiAction {
 
     data object Refresh : WorkoutsUiAction()
 
-    data class Reorder(val from: Int, val to: Int): WorkoutsUiAction()
+    data class Reorder(val from: Int, val to: Int) : WorkoutsUiAction()
 }

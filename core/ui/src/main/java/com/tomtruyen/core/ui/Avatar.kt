@@ -37,7 +37,8 @@ fun Avatar(
     val imageLoader: ImageLoader = koinInject()
 
     Box(
-        modifier = modifier.size(size)
+        modifier = modifier
+            .size(size)
             .aspectRatio(1f)
             .clip(CircleShape)
             .background(backgroundColor)
@@ -48,7 +49,7 @@ fun Avatar(
             fallback = painterResource(id = R.drawable.ic_fallback),
             contentDescription = contentDescription,
             contentScale = ContentScale.Fit,
-            colorFilter = if(imageUrl == null) {
+            colorFilter = if (imageUrl == null) {
                 ColorFilter.tint(
                     color = fallbackImageColor
                 )

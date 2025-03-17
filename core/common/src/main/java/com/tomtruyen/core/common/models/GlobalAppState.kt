@@ -7,7 +7,7 @@ import com.tomtruyen.core.common.ThemePreferences
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object GlobalAppState: KoinComponent {
+object GlobalAppState : KoinComponent {
     private val themePreferences by inject<ThemePreferences>()
 
     val isBottomBarVisible: MutableState<Boolean> = mutableStateOf(false)
