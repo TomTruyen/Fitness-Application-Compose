@@ -20,7 +20,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -36,7 +35,6 @@ import com.tomtruyen.feature.workouts.remember.rememberWorkoutHistoryActions
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.SharedTransitionKey
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.androidx.compose.koinViewModel
@@ -51,7 +49,7 @@ fun SharedTransitionScope.WorkoutHistoryScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     ObserveEvent(viewModel) { event ->
-        when(event) {
+        when (event) {
             is WorkoutHistoryUiEvent.Navigate.Detail -> navController.navigate(
                 Screen.History.Detail(event.id)
             )
@@ -82,7 +80,7 @@ fun SharedTransitionScope.WorkoutHistoryScreen(
         }
     )
 
-    if(state.showDeleteConfirmation) {
+    if (state.showDeleteConfirmation) {
         ConfirmationDialog(
             title = R.string.title_delete_workout,
             message = R.string.message_delete_workout,

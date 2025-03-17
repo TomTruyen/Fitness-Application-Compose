@@ -47,7 +47,6 @@ import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.feature.exercises.detail.remember.rememberExerciseActions
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.SharedTransitionKey
-import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
@@ -94,7 +93,7 @@ fun SharedTransitionScope.ExerciseDetailScreen(
         }
     )
 
-    if(state.showDialog) {
+    if (state.showDialog) {
         ConfirmationDialog(
             title = R.string.title_delete_exercise,
             message = R.string.message_delete_exercise,

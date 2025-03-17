@@ -13,7 +13,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -232,7 +231,12 @@ private fun ExerciseItem(
         )
 
         Text(
-            text = "${stringResource(id = R.string.label_x_sets, exercise.sets.size)} ${exercise.displayName}",
+            text = "${
+                stringResource(
+                    id = R.string.label_x_sets,
+                    exercise.sets.size
+                )
+            } ${exercise.displayName}",
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.bodyMedium

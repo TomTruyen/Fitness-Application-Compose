@@ -7,10 +7,10 @@ import com.tomtruyen.core.common.utils.StopwatchTimer
 import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.models.extensions.copyFromActiveWorkout
 import com.tomtruyen.data.models.ui.WorkoutUiModel
-import com.tomtruyen.data.repositories.interfaces.SettingsRepository
-import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.HistoryRepository
 import com.tomtruyen.data.repositories.interfaces.PreviousSetRepository
+import com.tomtruyen.data.repositories.interfaces.SettingsRepository
+import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.feature.workouts.manage.manager.DialogStateManager
 import com.tomtruyen.feature.workouts.manage.manager.ExerciseStateManager
@@ -90,7 +90,7 @@ class ManageWorkoutViewModel(
         observeWorkout()
         observeActiveWorkout()
 
-        if(mode.isExecute) {
+        if (mode.isExecute) {
             fetchLatestSetsForExercises()
         }
 
@@ -140,14 +140,14 @@ class ManageWorkoutViewModel(
 
     private fun observeWorkout() = with(uiState.value) {
         vmScope.launch {
-            if(mode.isExecute && id == null) {
+            if (mode.isExecute && id == null) {
                 // "Start Empty Workout" -> Start Timer for it
                 startTimer(0L)
             }
 
             if (mode.isCreate || id == null) return@launch
 
-            when(mode) {
+            when (mode) {
                 WorkoutMode.VIEW -> {
                     workoutRepository.findWorkoutByIdAsync(id)
                         .filterNotNull()
@@ -160,7 +160,7 @@ class ManageWorkoutViewModel(
                 }
 
                 else -> {
-                    val workoutId = if(mode.isExecute && id != Workout.ACTIVE_WORKOUT_ID) {
+                    val workoutId = if (mode.isExecute && id != Workout.ACTIVE_WORKOUT_ID) {
                         val workout = workoutRepository.findWorkoutById(id) ?: WorkoutUiModel()
 
                         workoutRepository.saveActiveWorkout(workout)
@@ -178,7 +178,7 @@ class ManageWorkoutViewModel(
 
                         return@let workout
                     }.also { workout ->
-                        if(mode.isExecute) {
+                        if (mode.isExecute) {
                             startTimer(initialTime = workout?.duration ?: 0L)
                         }
                     }
@@ -229,7 +229,7 @@ class ManageWorkoutViewModel(
                 workout = workout,
             )
 
-            if(updateExistingWorkout && workoutId != null) {
+            if (updateExistingWorkout && workoutId != null) {
                 workoutRepository.saveWorkout(
                     userId = userId,
                     workout = workout.copyFromActiveWorkout(workoutId)
@@ -285,10 +285,11 @@ class ManageWorkoutViewModel(
                 else -> workoutStateManager.onAction(action)
             }
 
-            is ManageWorkoutUiAction.Exercise -> when(action) {
+            is ManageWorkoutUiAction.Exercise -> when (action) {
                 ManageWorkoutUiAction.Exercise.OnReorderClicked -> triggerEvent(
                     ManageWorkoutUiEvent.Navigate.Exercise.Reorder(uiState.value.workout.exercises)
                 )
+
                 else -> exerciseStateManager.onAction(action)
             }
 

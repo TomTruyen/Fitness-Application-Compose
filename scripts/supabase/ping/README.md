@@ -9,7 +9,10 @@
 ![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ftravisvn%2Fsupabase-inactive-fix&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)
 [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://img.shields.io/github/sponsors/travisvn)
 
-This project helps prevent Supabase projects from pausing due to inactivity by periodically inserting, monitoring, and deleting entries in the specified tables of multiple Supabase databases. The project uses a configuration file (`config.json`) to define multiple databases and automate the keep-alive actions.
+This project helps prevent Supabase projects from pausing due to inactivity by periodically
+inserting, monitoring, and deleting entries in the specified tables of multiple Supabase databases.
+The project uses a configuration file (`config.json`) to define multiple databases and automate the
+keep-alive actions.
 
 ## Features ⭐️
 
@@ -21,23 +24,22 @@ This project helps prevent Supabase projects from pausing due to inactivity by p
 ## Setup 🚀
 
 1. Clone the repository:
-    
+
     ```bash
     git clone https://github.com/travisvn/supabase-inactive-fix.git
     cd supabase-inactive-fix
     ```
-    
+
 2. Install the required dependencies:
-    
+
     ```bash
     python -m venv venv
     source venv/bin/activate  # On Windows use `venv\Scripts\activate`
     pip install -r requirements.txt
     ```
-    
-3. Create a `config.json` file in the project root. This file defines your Supabase databases. 
 
-   
+3. Create a `config.json` file in the project root. This file defines your Supabase databases.
+
     Example configuration:
     
     ```json
@@ -72,27 +74,27 @@ This project helps prevent Supabase projects from pausing due to inactivity by p
     - `"supabase_key": "your-direct-supabase-key"`: This directly provides the API key within the `config.json` file, which is less secure but simpler for local setups.
 
 4. Set up your environment variables _if you're using them_:
-    
-    Create a `.env` file and store variables there
-    
+
+   Create a `.env` file and store variables there
+
     ```
     SUPABASE_KEY_1="your-supabase-key-1"
     SUPABASE_KEY_2="your-supabase-key-2"
     ```
-    
+
 5. Run the script:
-    
+
     ```bash
     python main.py
     ```
 
 ## Supabase Database Setup 🔧
 
-This project is predicated on accessing a `keep-alive` table in your Postgres database on Supabase. 
+This project is predicated on accessing a `keep-alive` table in your Postgres database on Supabase.
 
-### Sample SQL 
+### Sample SQL
 
-Here's a SQL query for a `keep-alive` table 
+Here's a SQL query for a `keep-alive` table
 
 ```sql
 CREATE TABLE "keep-alive" (
@@ -108,26 +110,25 @@ VALUES
   ('placeholder'),
   ('example');
 ```
-    
 
 ## Cron Job Setup ⏱️
 
-To automate this script, you can create a cron job that runs the script periodically. Below are instructions for setting this up on macOS, Linux, and Windows.
+To automate this script, you can create a cron job that runs the script periodically. Below are
+instructions for setting this up on macOS, Linux, and Windows.
 
 ### macOS/Linux
 
 1. Open your crontab file for editing:
-    
+
     ```bash
     crontab -e
     ```
-    
+
 2. Add a new cron job to run the script every Monday and Thursday at midnight:
-    
+
     ```bash
     0 0 * * 1,4 cd /path/to/your/project && /path/to/your/project/venv/bin/python main.py >> /path/to/your/project/logfile.log 2>&1
     ```
-    
 
 This example cron job will:
 
@@ -146,25 +147,25 @@ For reference, here’s an example used in development:
 Windows does not have cron jobs, but you can achieve similar functionality using Task Scheduler.
 
 1. Open **Task Scheduler** and select **Create Basic Task**.
-    
+
 2. Name the task and set the trigger to run weekly.
-    
+
 3. Set the days (e.g., Monday and Thursday) and time (e.g., midnight) when the script should run.
-    
-4. In the **Action** step, select **Start a Program**, and point it to your Python executable within your virtual environment. For example:
-    
+
+4. In the **Action** step, select **Start a Program**, and point it to your Python executable within
+   your virtual environment. For example:
+
     ```vbnet
     C:\path\to\your\project\venv\Scripts\python.exe
     ```
-    
+
 5. In the **Arguments** field, specify the path to the script:
-    
+
     ```vbnet
     C:\path\to\your\project\main.py
     ```
-    
+
 6. Save the task. The script will now run automatically according to the schedule you specified.
-    
 
 ## Contribution
 

@@ -13,8 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.tomtruyen.core.common.models.ExerciseType
-import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.common.models.UnitType
+import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.success
 import com.tomtruyen.core.ui.swipereveal.SwipeToRevealAction

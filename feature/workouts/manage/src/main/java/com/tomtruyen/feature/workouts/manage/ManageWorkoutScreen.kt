@@ -182,7 +182,7 @@ fun SharedTransitionScope.ManageWorkoutScreen(
         onDismiss = { viewModel.onAction(ManageWorkoutUiAction.Sheet.Save.Dismiss) }
     )
 
-    if(state.showDeleteConfirmation) {
+    if (state.showDeleteConfirmation) {
         ConfirmationDialog(
             title = R.string.title_delete_workout,
             message = R.string.message_delete_workout,
@@ -196,7 +196,7 @@ fun SharedTransitionScope.ManageWorkoutScreen(
         )
     }
 
-    if(state.showFinishConfirmation) {
+    if (state.showFinishConfirmation) {
         ConfirmationDialog(
             title = R.string.title_uncompleted_sets,
             message = R.string.message_uncompleted_sets,
@@ -237,13 +237,13 @@ private fun SharedTransitionScope.ManageWorkoutScreenLayout(
     var confirmationDialogVisible by remember { mutableStateOf(false) }
 
     val onNavigateUp: () -> Unit = {
-        when(state.mode) {
+        when (state.mode) {
             WorkoutMode.EXECUTE,
             WorkoutMode.VIEW -> onAction(ManageWorkoutUiAction.Navigate.Back)
 
             WorkoutMode.CREATE,
             WorkoutMode.EDIT -> {
-                if(state.workout.exercises != state.initialWorkout.exercises) {
+                if (state.workout.exercises != state.initialWorkout.exercises) {
                     confirmationDialogVisible = true
                 } else {
                     onAction(ManageWorkoutUiAction.Navigate.Back)
@@ -317,7 +317,7 @@ private fun SharedTransitionScope.ManageWorkoutScreenLayout(
                         contentPadding = PaddingValues(0.dp),
                         minButtonSize = 36.dp,
                         onClick = {
-                            if(state.shouldShowFinishConfirmation) {
+                            if (state.shouldShowFinishConfirmation) {
                                 onAction(ManageWorkoutUiAction.Dialog.Finish.Show)
                             } else if (state.shouldShowSaveSheet) {
                                 onAction(ManageWorkoutUiAction.Sheet.Save.Show)

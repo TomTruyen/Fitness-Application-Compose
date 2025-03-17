@@ -5,7 +5,7 @@ import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 
 class ReorderExercisesViewModel(
     exercises: List<WorkoutExerciseUiModel>
-): BaseViewModel<ReorderExercisesUiState, ReorderExercisesUiAction, ReorderExercisesUiEvent>(
+) : BaseViewModel<ReorderExercisesUiState, ReorderExercisesUiAction, ReorderExercisesUiEvent>(
     initialState = ReorderExercisesUiState(
         exercises = exercises
     )
@@ -19,7 +19,7 @@ class ReorderExercisesViewModel(
     }
 
     override fun onAction(action: ReorderExercisesUiAction) {
-        when(action) {
+        when (action) {
             is ReorderExercisesUiAction.Reorder -> reorder(
                 from = action.from,
                 to = action.to

@@ -35,7 +35,6 @@ import com.tomtruyen.feature.workouts.history.detail.components.Statistics
 import com.tomtruyen.feature.workouts.history.detail.remember.rememberWorkoutHistoryActions
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.SharedTransitionKey
-import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -52,7 +51,7 @@ fun SharedTransitionScope.WorkoutHistoryDetailScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     ObserveEvent(viewModel) { event ->
-        when(event) {
+        when (event) {
             is WorkoutHistoryDetailUiEvent.Navigate.Exercise.Detail -> navController.navigate(
                 Screen.Exercise.Detail(event.id)
             )
@@ -85,7 +84,7 @@ fun SharedTransitionScope.WorkoutHistoryDetailScreen(
         }
     )
 
-    if(state.showDeleteConfirmation) {
+    if (state.showDeleteConfirmation) {
         ConfirmationDialog(
             title = R.string.title_delete_workout,
             message = R.string.message_delete_workout,

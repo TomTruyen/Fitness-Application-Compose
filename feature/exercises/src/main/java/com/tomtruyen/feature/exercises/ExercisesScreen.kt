@@ -36,7 +36,6 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -60,7 +59,6 @@ import com.tomtruyen.navigation.NavResult
 import com.tomtruyen.navigation.Screen
 import com.tomtruyen.navigation.SharedTransitionKey
 import com.tomtruyen.navigation.setNavigationResult
-import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -72,7 +70,7 @@ fun SharedTransitionScope.ExercisesScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     ObserveEvent(viewModel) { event ->
-        when(event) {
+        when (event) {
             ExercisesUiEvent.Navigate.Exercise.Filter -> navController.navigate(Screen.Exercise.Filter)
             ExercisesUiEvent.Navigate.Exercise.Add -> navController.navigate(Screen.Exercise.Manage())
             is ExercisesUiEvent.Navigate.Exercise.Detail -> navController.navigate(
@@ -313,12 +311,18 @@ private fun SharedTransitionScope.ExercisesScreenLayout(
                                         Avatar(
                                             imageUrl = exercise.imageUrl,
                                             contentDescription = exercise.displayName,
-                                            backgroundColor = if(state.selectedExercises.contains(exercise)) {
+                                            backgroundColor = if (state.selectedExercises.contains(
+                                                    exercise
+                                                )
+                                            ) {
                                                 MaterialTheme.colorScheme.selectedListItem.value
                                             } else {
                                                 MaterialTheme.colorScheme.surface
                                             },
-                                            fallbackImageColor = if(state.selectedExercises.contains(exercise)) {
+                                            fallbackImageColor = if (state.selectedExercises.contains(
+                                                    exercise
+                                                )
+                                            ) {
                                                 MaterialTheme.colorScheme.background
                                             } else {
                                                 MaterialTheme.colorScheme.fallbackImageBackground.value

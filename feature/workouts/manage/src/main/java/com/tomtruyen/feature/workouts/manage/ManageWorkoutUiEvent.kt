@@ -13,7 +13,7 @@ sealed class ManageWorkoutUiEvent {
         sealed class Exercise : Navigate() {
             data object Add : Exercise()
 
-            data class Reorder(val exercises: List<WorkoutExerciseUiModel>): Exercise()
+            data class Reorder(val exercises: List<WorkoutExerciseUiModel>) : Exercise()
 
             data object Replace : Exercise()
 

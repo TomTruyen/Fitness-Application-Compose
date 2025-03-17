@@ -6,7 +6,6 @@ import com.tomtruyen.data.models.ExerciseFilter
 import com.tomtruyen.data.models.ui.CategoryUiModel
 import com.tomtruyen.data.models.ui.EquipmentUiModel
 import com.tomtruyen.data.models.ui.ExerciseUiModel
-import com.tomtruyen.navigation.Screen
 
 @Immutable
 data class ExercisesUiState(

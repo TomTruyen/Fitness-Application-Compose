@@ -36,7 +36,6 @@ import com.tomtruyen.data.models.ui.CategoryUiModel
 import com.tomtruyen.data.models.ui.EquipmentUiModel
 import com.tomtruyen.feature.exercises.create.R
 import com.tomtruyen.feature.exercises.manage.model.ManageExerciseMode
-import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import com.tomtruyen.core.common.R as CommonR

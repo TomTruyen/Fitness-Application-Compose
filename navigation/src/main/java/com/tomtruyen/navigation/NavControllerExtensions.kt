@@ -9,14 +9,14 @@ fun NavController.shouldShowNavigationIcon(isBottomBarVisible: Boolean): Boolean
     return previousBackStackEntry != null && !isBottomBarVisible
 }
 
-inline fun <reified T: NavResult> NavController.setNavigationResult(result: T) {
+inline fun <reified T : NavResult> NavController.setNavigationResult(result: T) {
     previousBackStackEntry?.savedStateHandle?.set(
         key = result.key,
         value = JsonInstance.encodeToString<T>(result)
     )
 }
 
-suspend inline fun <reified T: NavResult> NavController.handleNavigationResult(
+suspend inline fun <reified T : NavResult> NavController.handleNavigationResult(
     key: String,
     crossinline onCollect: suspend (result: T) -> Unit
 ) {

@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -33,7 +32,6 @@ import com.tomtruyen.feature.exercises.ExercisesUiAction
 import com.tomtruyen.feature.exercises.ExercisesUiEvent
 import com.tomtruyen.feature.exercises.ExercisesUiState
 import com.tomtruyen.feature.exercises.ExercisesViewModel
-import kotlinx.coroutines.flow.collectLatest
 import com.tomtruyen.core.common.R as CommonR
 
 @Composable

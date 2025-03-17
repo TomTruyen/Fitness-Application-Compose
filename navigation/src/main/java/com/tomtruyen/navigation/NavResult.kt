@@ -13,7 +13,7 @@ sealed class NavResult {
     data class ExerciseResult(
         val mode: ExerciseMode,
         val exercises: List<ExerciseUiModel>
-    ): NavResult() {
+    ) : NavResult() {
         override val key: String
             get() = KEY
 
@@ -25,7 +25,7 @@ sealed class NavResult {
     @Serializable
     data class ReorderExerciseResult(
         val exercises: List<WorkoutExerciseUiModel>
-    ): NavResult() {
+    ) : NavResult() {
         override val key: String
             get() = KEY
 

@@ -71,7 +71,7 @@ class WorkoutHistoryDetailViewModel(
     }
 
     override fun onAction(action: WorkoutHistoryDetailUiAction) {
-        when(action) {
+        when (action) {
             is WorkoutHistoryDetailUiAction.Navigate.Exercise.Detail -> action.id?.let {
                 triggerEvent(
                     WorkoutHistoryDetailUiEvent.Navigate.Exercise.Detail(it)

@@ -45,7 +45,7 @@ fun ReorderExerciseScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     ObserveEvent(viewModel) { event ->
-        when(event) {
+        when (event) {
             is ReorderExercisesUiEvent.Navigate.Submit -> {
                 navController.setNavigationResult(
                     result = NavResult.ReorderExerciseResult(
@@ -121,11 +121,13 @@ private fun ReorderExercisesScreenLayout(
                     ReorderExerciseItem(
                         name = exercise.displayName,
                         imageUrl = exercise.imageUrl,
-                        modifier = Modifier.longPressDraggableHandle(
-                            onDragStarted = {
-                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            }
-                        ).alpha(alpha)
+                        modifier = Modifier
+                            .longPressDraggableHandle(
+                                onDragStarted = {
+                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                }
+                            )
+                            .alpha(alpha)
                     )
                 }
             }

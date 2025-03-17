@@ -33,12 +33,12 @@ data class ManageWorkoutUiState(
     val shouldShowFinishConfirmation: Boolean
         get() = mode.isExecute
                 && workout.exercises.any { exercise ->
-                    exercise.sets.any { !it.completed }
-                }
+            exercise.sets.any { !it.completed }
+        }
 
     val shouldShowSaveSheet: Boolean
         get() = mode.isExecute
-                    && workoutId != null
-                    && !initialWorkout.isOriginalWorkout(workout)
+                && workoutId != null
+                && !initialWorkout.isOriginalWorkout(workout)
 }
 

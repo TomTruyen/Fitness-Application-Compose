@@ -19,7 +19,7 @@ sealed class ManageWorkoutUiAction {
     sealed class Exercise : ManageWorkoutUiAction() {
         data class OnNotesChanged(val id: String, val notes: String) : Exercise()
 
-        data object OnReorderClicked: Exercise()
+        data object OnReorderClicked : Exercise()
 
         data object OnReplaceClicked : Exercise()
 
@@ -59,7 +59,7 @@ sealed class ManageWorkoutUiAction {
             val exerciseId: String,
             val setIndex: Int,
             val previousSet: PreviousSet
-        ): Set()
+        ) : Set()
     }
 
     sealed class Sheet : ManageWorkoutUiAction() {
@@ -81,24 +81,24 @@ sealed class ManageWorkoutUiAction {
             data object Dismiss : Set()
         }
 
-        sealed class Save: Sheet() {
-            data object Show: Save()
+        sealed class Save : Sheet() {
+            data object Show : Save()
 
-            data object Dismiss: Save()
+            data object Dismiss : Save()
         }
     }
 
-    sealed class Dialog: ManageWorkoutUiAction() {
-        sealed class Workout: Dialog() {
-            data object Show: Workout()
+    sealed class Dialog : ManageWorkoutUiAction() {
+        sealed class Workout : Dialog() {
+            data object Show : Workout()
 
-            data object Dismiss: Workout()
+            data object Dismiss : Workout()
         }
 
-        sealed class Finish: Dialog() {
-            data object Show: Finish()
+        sealed class Finish : Dialog() {
+            data object Show : Finish()
 
-            data object Dismiss: Finish()
+            data object Dismiss : Finish()
         }
     }
 
@@ -113,15 +113,16 @@ sealed class ManageWorkoutUiAction {
             data class Detail(val id: String) : ManageWorkoutUiAction()
         }
 
-        data object Back: Navigate()
+        data object Back : Navigate()
     }
 
-    sealed class NavResult: ManageWorkoutUiAction() {
+    sealed class NavResult : ManageWorkoutUiAction() {
         data class Exercises(
             val mode: ExerciseMode,
             val exercises: List<ExerciseUiModel>
-        ): NavResult()
+        ) : NavResult()
 
-        data class ReorderWorkoutExercises(val exercises: List<WorkoutExerciseUiModel>): NavResult()
+        data class ReorderWorkoutExercises(val exercises: List<WorkoutExerciseUiModel>) :
+            NavResult()
     }
 }

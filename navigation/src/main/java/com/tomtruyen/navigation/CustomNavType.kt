@@ -9,7 +9,8 @@ import com.tomtruyen.data.models.ui.WorkoutUiModel
 
 object CustomNavType {
     val WorkoutType = createNavType<WorkoutUiModel>(isNullableAllowed = true)
-    val WorkoutExerciseListType = createNavType<List<WorkoutExerciseUiModel>>(isNullableAllowed = false)
+    val WorkoutExerciseListType =
+        createNavType<List<WorkoutExerciseUiModel>>(isNullableAllowed = false)
 }
 
 inline fun <reified T> createNavType(isNullableAllowed: Boolean = false): NavType<T> {

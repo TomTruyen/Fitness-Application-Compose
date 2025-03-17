@@ -4,8 +4,8 @@ import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.data.entities.WorkoutHistory
 import com.tomtruyen.data.models.mappers.WorkoutHistoryUiModelMapper
-import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.HistoryRepository
+import com.tomtruyen.data.repositories.interfaces.UserRepository
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -89,7 +89,7 @@ class WorkoutHistoryViewModel(
         with(uiState.value) {
             val history = histories.find { it.id == selectedHistoryId }
 
-            if(history != null) {
+            if (history != null) {
                 historyRepository.deleteWorkoutHistory(history.id)
             }
         }
@@ -114,7 +114,7 @@ class WorkoutHistoryViewModel(
             )
         }
 
-        if(workout != null) {
+        if (workout != null) {
             triggerEvent(
                 WorkoutHistoryUiEvent.Navigate.Workout(
                     workout = workout,
@@ -143,6 +143,7 @@ class WorkoutHistoryViewModel(
                 updateState { it.copy(selectedHistoryId = action.id) }
                 showSheet(true)
             }
+
             WorkoutHistoryUiAction.Sheet.Dismiss -> showSheet(false)
 
             WorkoutHistoryUiAction.Workout.Save -> toWorkout(WorkoutMode.CREATE)
