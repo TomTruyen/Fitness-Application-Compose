@@ -79,7 +79,7 @@ class ExerciseRepositoryImpl(
                 }
         }
 
-        previousSetRepository.getPreviousSetsForExercises()
+        previousSetRepository.getPreviousSetsForExercises(refresh = refresh)
     }
 
     override suspend fun saveExercise(

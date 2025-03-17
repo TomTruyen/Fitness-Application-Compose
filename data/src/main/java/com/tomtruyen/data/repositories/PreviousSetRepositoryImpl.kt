@@ -1,5 +1,6 @@
 package com.tomtruyen.data.repositories
 
+import android.util.Log
 import com.tomtruyen.data.entities.PreviousSet
 import com.tomtruyen.data.entities.SyncCache
 import com.tomtruyen.data.repositories.interfaces.PreviousSetRepository
@@ -13,14 +14,18 @@ class PreviousSetRepositoryImpl : PreviousSetRepository() {
 
     override suspend fun findPreviousSets() = dao.findAllAsync()
 
-    override suspend fun getPreviousSetsForExercises() {
+    override suspend fun getPreviousSetsForExercises(refresh: Boolean) {
+        val cacheKeys = findMissingCacheKeys(refresh)
+
+        if(cacheKeys.isEmpty()) return
+
         val result = supabase.postgrest.rpc(
             function = PreviousSet.RPC_FUNCTION,
             parameters = JsonObject(
                 mapOf(
                     PreviousSet.EXERCISE_ID_PARAM to JsonArray(
-                        content = findMissingCacheKeys().distinct().map { id ->
-                            JsonPrimitive(id)
+                        content = cacheKeys.map { key ->
+                            JsonPrimitive(PreviousSet.extractExerciseId(key))
                         }
                     )
                 )
@@ -33,24 +38,23 @@ class PreviousSetRepositoryImpl : PreviousSetRepository() {
             dao.saveAll(sets)
 
             cacheDao.saveAll(
-                cache = sets.map {
-                    SyncCache(
-                        id = PreviousSet.createCacheKey(it.exerciseId)
-                    )
-                }
+                // Save all CacheKeys even if no sets were returned since we simply know there are none
+                cache = cacheKeys.map(::SyncCache)
             )
         }
     }
 
-    private suspend fun findMissingCacheKeys(): List<String> {
+    private suspend fun findMissingCacheKeys(refresh: Boolean): Set<String> {
         val exerciseIds = exerciseDao.findAllIds()
 
         val cacheKeys = exerciseIds.map(PreviousSet::createCacheKey)
 
+        if(refresh) return cacheKeys.toSet()
+
         val syncCacheKeys = cacheDao.findAll()
 
-        return cacheKeys.filter {
+        return cacheKeys.filter() {
             !syncCacheKeys.contains(it)
-        }.mapNotNull(PreviousSet::extractExerciseId)
+        }.toSet()
     }
 }

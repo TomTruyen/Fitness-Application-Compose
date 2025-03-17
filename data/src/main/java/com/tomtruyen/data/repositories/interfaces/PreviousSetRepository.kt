@@ -11,5 +11,5 @@ abstract class PreviousSetRepository : BaseRepository() {
 
     abstract suspend fun findPreviousSets(): List<PreviousSet>
 
-    abstract suspend fun getPreviousSetsForExercises()
+    abstract suspend fun getPreviousSetsForExercises(refresh: Boolean)
 }
