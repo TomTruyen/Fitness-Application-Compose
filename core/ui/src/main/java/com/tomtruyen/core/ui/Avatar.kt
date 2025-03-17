@@ -1,6 +1,5 @@
 package com.tomtruyen.core.ui
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -32,7 +31,7 @@ fun Avatar(
     contentDescription: String? = null,
     size: Dp = 40.dp,
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
-    fallbackImageColor: Color = Color.Unspecified
+    fallbackImageColor: Color = MaterialTheme.colorScheme.fallbackImageBackground.value
 ) {
     val context = LocalContext.current
     val imageLoader: ImageLoader = koinInject()
