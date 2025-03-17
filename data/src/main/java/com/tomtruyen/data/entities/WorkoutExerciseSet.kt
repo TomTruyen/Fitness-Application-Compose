@@ -41,7 +41,7 @@ data class WorkoutExerciseSet(
     @Transient
     val completed: Boolean = false,
     @Transient
-    val changeRecord: List<ChangeType> = emptyList(),
+    val changeRecord: Set<ChangeType> = emptySet(),
     @Transient
     override val synced: Boolean = false,
 ) : BaseEntity, SyncEntity {

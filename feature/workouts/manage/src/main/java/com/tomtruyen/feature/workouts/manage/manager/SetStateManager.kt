@@ -2,13 +2,13 @@ package com.tomtruyen.feature.workouts.manage.manager
 
 import com.tomtruyen.core.common.manager.StateManager
 import com.tomtruyen.data.entities.PreviousSet
-import com.tomtruyen.data.models.ui.copyWithAddSet
-import com.tomtruyen.data.models.ui.copyWithDeleteSet
-import com.tomtruyen.data.models.ui.copyWithPreviousExerciseSet
-import com.tomtruyen.data.models.ui.copyWithRepsChanged
-import com.tomtruyen.data.models.ui.copyWithSetCompleted
-import com.tomtruyen.data.models.ui.copyWithTimeChanged
-import com.tomtruyen.data.models.ui.copyWithWeightChanged
+import com.tomtruyen.data.models.extensions.copyWithAddSet
+import com.tomtruyen.data.models.extensions.copyWithDeleteSet
+import com.tomtruyen.data.models.extensions.copyWithPreviousExerciseSet
+import com.tomtruyen.data.models.extensions.copyWithRepsChanged
+import com.tomtruyen.data.models.extensions.copyWithSetCompleted
+import com.tomtruyen.data.models.extensions.copyWithTimeChanged
+import com.tomtruyen.data.models.extensions.copyWithWeightChanged
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiState
 

@@ -197,7 +197,7 @@ private fun PreviousSet(
 private fun RowScope.WeightSet(
     weight: Double?,
     reps: Int?,
-    changeRecord: List<ChangeType>,
+    changeRecord: Set<ChangeType>,
     mode: WorkoutMode,
     completed: Boolean,
     onRepsChanged: (String) -> Unit,
@@ -283,7 +283,7 @@ private fun RowScope.WeightSet(
 @Composable
 private fun RowScope.TimeSet(
     time: Int?,
-    changeRecord: List<ChangeType>,
+    changeRecord: Set<ChangeType>,
     mode: WorkoutMode,
     completed: Boolean,
     onTimeChanged: (Int) -> Unit

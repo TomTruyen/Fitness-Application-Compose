@@ -5,8 +5,8 @@ import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.common.utils.StopwatchTimer
 import com.tomtruyen.data.entities.Workout
+import com.tomtruyen.data.models.extensions.copyFromActiveWorkout
 import com.tomtruyen.data.models.ui.WorkoutUiModel
-import com.tomtruyen.data.models.ui.copyFromActiveWorkout
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.HistoryRepository

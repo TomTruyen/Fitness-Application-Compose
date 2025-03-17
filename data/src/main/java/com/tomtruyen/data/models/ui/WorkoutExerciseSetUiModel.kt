@@ -22,7 +22,7 @@ data class WorkoutExerciseSetUiModel(
     val sortOrder: Int = 0,
     val exerciseId: String? = null,
     val completed: Boolean = false,
-    val changeRecord: List<ChangeType> = emptyList(),
+    val changeRecord: Set<ChangeType> = emptySet(),
 ) {
     fun toEntity(workoutExerciseId: String, index: Int, withChangeRecord: Boolean = false) = WorkoutExerciseSet(
         id = id,
@@ -33,7 +33,7 @@ data class WorkoutExerciseSetUiModel(
         sortOrder = index,
         workoutExerciseId = workoutExerciseId,
         synced = false,
-        changeRecord = if(withChangeRecord) changeRecord else emptyList()
+        changeRecord = if(withChangeRecord) changeRecord else emptySet()
     )
 
     fun toWorkoutHistorySetEntity(
@@ -66,7 +66,7 @@ data class WorkoutExerciseSetUiModel(
             time = entity.time,
             completed = false,
             sortOrder = entity.sortOrder,
-            changeRecord = emptyList()
+            changeRecord = emptySet()
         )
     }
 }

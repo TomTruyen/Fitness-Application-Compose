@@ -28,12 +28,12 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromListChangeTypeToString(changeTypes: List<ChangeType>): String {
+    fun fromSetChangeTypeToString(changeTypes: Set<ChangeType>): String {
         return JsonInstance.encodeToString(changeTypes)
     }
 
     @TypeConverter
-    fun fromStringToListChangeType(changeTypes: String): List<ChangeType> {
+    fun fromStringToSetChangeType(changeTypes: String): Set<ChangeType> {
         return JsonInstance.decodeFromString(changeTypes)
     }
 }
