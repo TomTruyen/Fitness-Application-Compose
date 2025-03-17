@@ -37,28 +37,11 @@ data class WorkoutExerciseUiModel(
             }
         }
 
-    fun toEntity(workoutId: String, index: Int) = WorkoutExercise(
-        id = id,
-        exerciseId = exerciseId,
-        workoutId = workoutId,
-        notes = notes,
-        sortOrder = index,
-        synced = false
-    )
-
-    fun toWorkoutHistoryExerciseEntity(workoutHistoryId: String, index: Int) =
-        WorkoutHistoryExercise(
-            name = name,
-            imageUrl = imageUrl,
-            type = type.value,
-            notes = notes,
-            sortOrder = index,
-            exerciseId = exerciseId,
-            workoutHistoryId = workoutHistoryId,
-            category = category?.name,
-            equipment = equipment?.name,
-            synced = false
-        )
+    // Only checking
+    fun isOriginalExercise(other: WorkoutExerciseUiModel): Boolean {
+        return this.sortOrder == other.sortOrder &&
+                this.sets.size == other.sets.size
+    }
 
     companion object {
         fun createFromExerciseModel(model: ExerciseUiModel, setCount: Int) = WorkoutExerciseUiModel(
@@ -74,43 +57,5 @@ data class WorkoutExerciseUiModel(
             equipment = model.equipment,
             sets = List(setCount) { WorkoutExerciseSetUiModel() }
         )
-
-        fun fromEntity(entity: WorkoutExerciseWithSets) = WorkoutExerciseUiModel(
-            id = entity.workoutExercise.id,
-            exerciseId = entity.workoutExercise.exerciseId,
-            name = entity.exercise.exercise.name,
-            imageUrl = entity.exercise.exercise.imageUrl,
-            imageDetailUrl = entity.exercise.exercise.imageDetailUrl,
-            type = ExerciseType.fromValue(entity.exercise.exercise.type),
-            steps = entity.exercise.exercise.steps.orEmpty(),
-            notes = entity.workoutExercise.notes,
-            sortOrder = entity.workoutExercise.sortOrder,
-            category = entity.exercise.category?.let(CategoryUiModel::fromEntity),
-            equipment = entity.exercise.equipment?.let(EquipmentUiModel::fromEntity),
-            sets = entity.sets.map(WorkoutExerciseSetUiModel::fromEntity).sortedBy { it.sortOrder }
-        )
-
-        fun fromHistory(
-            entity: WorkoutHistoryExerciseUiModel,
-            exercise: ExerciseWithCategoryAndEquipment
-        ) = WorkoutExerciseUiModel(
-            exerciseId = exercise.exercise.id,
-            name = exercise.exercise.name,
-            imageUrl = exercise.exercise.imageUrl,
-            imageDetailUrl = exercise.exercise.imageDetailUrl,
-            type = ExerciseType.fromValue(exercise.exercise.type),
-            steps = exercise.exercise.steps.orEmpty(),
-            notes = entity.notes,
-            sortOrder = entity.sortOrder,
-            category = exercise.category?.let(CategoryUiModel::fromEntity),
-            equipment = exercise.equipment?.let(EquipmentUiModel::fromEntity),
-            sets = entity.sets.map(WorkoutExerciseSetUiModel::fromHistory).sortedBy { it.sortOrder }
-        )
-    }
-
-    // Only checking
-    fun isOriginalExercise(other: WorkoutExerciseUiModel): Boolean {
-        return this.sortOrder == other.sortOrder &&
-                this.sets.size == other.sets.size
     }
 }

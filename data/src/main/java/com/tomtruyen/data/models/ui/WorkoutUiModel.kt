@@ -3,11 +3,6 @@ package com.tomtruyen.data.models.ui
 import androidx.compose.runtime.Immutable
 import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.common.models.UnitType
-import com.tomtruyen.data.entities.ChangeType
-import com.tomtruyen.data.entities.Workout
-import com.tomtruyen.data.entities.WorkoutHistory
-import com.tomtruyen.data.entities.WorkoutWithExercises
-import com.tomtruyen.data.entities.PreviousSet
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
@@ -47,37 +42,6 @@ data class WorkoutUiModel(
         get() = weightExercises.sumOf { exercise ->
             exercise.sets.filter(WorkoutExerciseSetUiModel::completed).size
         }
-
-    fun toEntity(userId: String? = null) = Workout(
-        id = id,
-        name = name,
-        unit = unit.value,
-        userId = userId ?: this.userId,
-        sortOrder = sortOrder,
-        synced = false,
-        duration = duration
-    )
-
-    fun toWorkoutHistoryEntity(userId: String) = WorkoutHistory(
-        name = name,
-        unit = unit.value,
-        userId = userId,
-        duration = duration,
-        synced = false,
-    )
-
-    companion object {
-        fun fromEntity(entity: WorkoutWithExercises) = WorkoutUiModel(
-            id = entity.workout.id,
-            name = entity.workout.name,
-            unit = UnitType.fromValue(entity.workout.unit),
-            exercises = entity.exercises.map(WorkoutExerciseUiModel::fromEntity)
-                .sortedBy { it.sortOrder },
-            sortOrder = entity.workout.sortOrder,
-            userId = entity.workout.userId,
-            duration = entity.workout.duration
-        )
-    }
 
     // Equals check that ignores "duration"
     fun isOriginalWorkout(other: WorkoutUiModel): Boolean {

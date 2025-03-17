@@ -4,6 +4,7 @@ import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.entities.Exercise
 import com.tomtruyen.data.models.ExerciseFilter
+import com.tomtruyen.data.models.mappers.ExerciseUiModelMapper
 import com.tomtruyen.data.models.network.ExerciseNetworkModel
 import com.tomtruyen.data.models.ui.ExerciseUiModel
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
@@ -26,15 +27,15 @@ class ExerciseRepositoryImpl(
         query = query,
         filter = filter,
     ).mapLatest { exercises ->
-        exercises.map(ExerciseUiModel::fromEntity)
+        exercises.map(ExerciseUiModelMapper::fromEntity)
     }
 
     override suspend fun findExerciseById(id: String) =
-        dao.findById(id)?.let(ExerciseUiModel::fromEntity)
+        dao.findById(id)?.let(ExerciseUiModelMapper::fromEntity)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun findExerciseByIdAsync(id: String) = dao.findByIdAsync(id).mapLatest { exercise ->
-        exercise?.let(ExerciseUiModel::fromEntity)
+        exercise?.let(ExerciseUiModelMapper::fromEntity)
     }
 
     override suspend fun getExercises(userId: String?, refresh: Boolean) {
@@ -85,7 +86,10 @@ class ExerciseRepositoryImpl(
         userId: String,
         exercise: ExerciseUiModel,
     ) {
-        val newExercise = exercise.toEntity(userId).exercise
+        val newExercise =  ExerciseUiModelMapper.toEntity(
+            model = exercise,
+            userId = userId
+        ).exercise
 
         dao.save(newExercise)
 

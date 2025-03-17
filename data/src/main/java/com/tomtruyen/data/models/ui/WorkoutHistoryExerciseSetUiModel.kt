@@ -13,14 +13,4 @@ data class WorkoutHistoryExerciseSetUiModel(
     val weight: Double? = null,
     val time: Int? = null,
     val sortOrder: Int = 0
-) {
-    companion object {
-        fun fromEntity(entity: WorkoutHistoryExerciseSet) = WorkoutHistoryExerciseSetUiModel(
-            id = entity.id,
-            reps = entity.reps,
-            weight = entity.weight,
-            time = entity.time,
-            sortOrder = entity.sortOrder
-        )
-    }
-}
+)

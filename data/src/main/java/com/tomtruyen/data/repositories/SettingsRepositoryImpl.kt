@@ -2,6 +2,7 @@ package com.tomtruyen.data.repositories
 
 import android.util.Log
 import com.tomtruyen.data.entities.Settings
+import com.tomtruyen.data.models.mappers.SettingsUiModelMapper
 import com.tomtruyen.data.models.ui.SettingsUiModel
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.worker.SettingsSyncWorker
@@ -13,14 +14,16 @@ import kotlinx.coroutines.flow.mapLatest
 class SettingsRepositoryImpl : SettingsRepository() {
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun findSettings() = dao.findSettings().mapLatest { settings ->
-        settings?.let(SettingsUiModel::fromEntity)
+        settings?.let(SettingsUiModelMapper::fromEntity)
     }
 
     override suspend fun saveSettings(
         userId: String,
         settings: SettingsUiModel,
     ) {
-        val newSettings = settings.toEntity().copy(userId = userId)
+        val newSettings = SettingsUiModelMapper.toEntity(
+            model = settings
+        ).copy(userId = userId)
 
         dao.save(newSettings)
 

@@ -35,30 +35,4 @@ data class WorkoutHistoryUiModel(
         get() = exercises.sumOf { exercise ->
             exercise.sets.size
         }
-
-    fun toWorkoutUiModel() = WorkoutUiModel(
-        name = name,
-        unit = unit,
-        exercises = exercises.filter {
-            it.exercise != null
-        }.map {
-            WorkoutExerciseUiModel.fromHistory(
-                entity = it,
-                exercise = it.exercise!!
-            )
-        }
-    )
-
-    companion object {
-        fun fromEntity(entity: WorkoutHistoryWithExercises) = WorkoutHistoryUiModel(
-            id = entity.workoutHistory.id,
-            name = entity.workoutHistory.name,
-            unit = UnitType.fromValue(entity.workoutHistory.unit),
-            duration = entity.workoutHistory.duration,
-            createdAt = entity.workoutHistory.createdAt,
-            page = entity.workoutHistory.page,
-            exercises = entity.exercises.map(WorkoutHistoryExerciseUiModel::fromEntity)
-                .sortedBy { it.sortOrder }
-        )
-    }
 }

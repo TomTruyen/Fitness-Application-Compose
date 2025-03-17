@@ -9,6 +9,10 @@ import com.tomtruyen.data.entities.WorkoutExerciseSet
 import com.tomtruyen.data.entities.WorkoutWithExercises
 import com.tomtruyen.data.models.network.WorkoutNetworkModel
 import com.tomtruyen.data.entities.PreviousSet
+import com.tomtruyen.data.models.mappers.WorkoutExerciseSetUiModelMapper
+import com.tomtruyen.data.models.mappers.WorkoutExerciseUiModelMapper
+import com.tomtruyen.data.models.mappers.WorkoutUiModelMapper
+import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.data.repositories.interfaces.WorkoutRepository
 import com.tomtruyen.data.worker.SyncWorker
@@ -34,18 +38,18 @@ class WorkoutRepositoryImpl : WorkoutRepository() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun findWorkoutsAsync() = dao.findWorkoutsAsync().mapLatest { workouts ->
-        workouts.map(WorkoutUiModel::fromEntity)
+        workouts.map(WorkoutUiModelMapper::fromEntity)
     }
 
-    override suspend fun findWorkouts() = dao.findWorkouts().map(WorkoutUiModel::fromEntity)
+    override suspend fun findWorkouts() = dao.findWorkouts().map(WorkoutUiModelMapper::fromEntity)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun findWorkoutByIdAsync(id: String) = dao.findByIdAsync(id).mapLatest { workout ->
-        workout?.let(WorkoutUiModel::fromEntity)
+        workout?.let(WorkoutUiModelMapper::fromEntity)
     }
 
     override suspend fun findWorkoutById(id: String) =
-        dao.findById(id)?.let(WorkoutUiModel::fromEntity)
+        dao.findById(id)?.let(WorkoutUiModelMapper::fromEntity)
 
     override suspend fun getWorkouts(userId: String, refresh: Boolean) {
         fetch(refresh) {
@@ -116,14 +120,25 @@ class WorkoutRepositoryImpl : WorkoutRepository() {
         userId: String,
         workout: WorkoutUiModel,
     ) {
-        val workoutEntity = workout.toEntity(userId)
+        val workoutEntity = WorkoutUiModelMapper.toEntity(
+            model = workout,
+            userId = userId
+        )
 
         val sets = mutableListOf<WorkoutExerciseSet>()
         val exercises = workout.exercises.mapIndexed { index, exercise ->
-            exercise.toEntity(workoutEntity.id, index).also { workoutExercise ->
+            WorkoutExerciseUiModelMapper.toEntity(
+                model = exercise,
+                workoutId = workoutEntity.id,
+                index = index
+            ).also { workoutExercise ->
                 sets.addAll(
                     exercise.sets.mapIndexed { setIndex, set ->
-                        set.toEntity(workoutExercise.id, setIndex)
+                        WorkoutExerciseSetUiModelMapper.toEntity(
+                            model = set,
+                            workoutExerciseId = workoutExercise.id,
+                            index = setIndex
+                        )
                     }
                 )
             }
@@ -154,7 +169,9 @@ class WorkoutRepositoryImpl : WorkoutRepository() {
     override suspend fun saveActiveWorkout(workout: WorkoutUiModel) {
         val sets = mutableListOf<WorkoutExerciseSet>()
 
-        val workoutEntity = workout.toEntity().copy(
+        val workoutEntity = WorkoutUiModelMapper.toEntity(
+            model = workout,
+        ).copy(
             id = Workout.ACTIVE_WORKOUT_ID,
             synced = true
         )
@@ -163,7 +180,11 @@ class WorkoutRepositoryImpl : WorkoutRepository() {
         // 1. They can't have their old id, since then that object will update causing it to no longer be connected to the original workout (if any)
         // 2. They can't have just some random id, since we don't want to update its id on every save as that causes too much rendering and database changes
         val exercises = workout.exercises.mapIndexed { index, exercise ->
-            exercise.toEntity(workoutEntity.id, index).let { newExercise ->
+            WorkoutExerciseUiModelMapper.toEntity(
+                model = exercise,
+                workoutId = workoutEntity.id,
+                index = index
+            ).let { newExercise ->
                 if (newExercise.id.startsWith(Workout.ACTIVE_WORKOUT_ID)) return@let newExercise
 
                 newExercise.copy(
@@ -173,7 +194,12 @@ class WorkoutRepositoryImpl : WorkoutRepository() {
             }.also { workoutExercise ->
                 sets.addAll(
                     exercise.sets.mapIndexed { setIndex, set ->
-                        set.toEntity(workoutExercise.id, setIndex, withChangeRecord = true).let { newSet ->
+                        WorkoutExerciseSetUiModelMapper.toEntity(
+                            model = set,
+                            workoutExerciseId = workoutExercise.id,
+                            index = setIndex,
+                            withChangeRecord = true
+                        ).let { newSet ->
                             if (newSet.id.startsWith(Workout.ACTIVE_WORKOUT_ID)) return@let newSet
 
                             newSet.copy(
@@ -207,7 +233,7 @@ class WorkoutRepositoryImpl : WorkoutRepository() {
     }
 
     override suspend fun reorderWorkouts(workouts: List<WorkoutUiModel>) {
-        val items = workouts.map(WorkoutUiModel::toEntity)
+        val items = workouts.map(WorkoutUiModelMapper::toEntity)
 
         dao.saveAll(items)
 

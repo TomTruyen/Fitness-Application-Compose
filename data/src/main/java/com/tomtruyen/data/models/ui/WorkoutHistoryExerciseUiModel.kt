@@ -32,21 +32,4 @@ data class WorkoutHistoryExerciseUiModel(
                 append(" ($equipmentName)")
             }
         }
-
-    companion object {
-        fun fromEntity(entity: WorkoutHistoryExerciseWithSets) = WorkoutHistoryExerciseUiModel(
-            id = entity.workoutHistoryExercise.id,
-            exerciseId = entity.workoutHistoryExercise.exerciseId,
-            name = entity.workoutHistoryExercise.name,
-            imageUrl = entity.workoutHistoryExercise.imageUrl,
-            type = ExerciseType.fromValue(entity.workoutHistoryExercise.type),
-            notes = entity.workoutHistoryExercise.notes,
-            sortOrder = entity.workoutHistoryExercise.sortOrder,
-            category = entity.workoutHistoryExercise.category,
-            equipment = entity.workoutHistoryExercise.equipment,
-            sets = entity.sets.map(WorkoutHistoryExerciseSetUiModel::fromEntity)
-                .sortedBy { it.sortOrder },
-            exercise = entity.exercise
-        )
-    }
 }

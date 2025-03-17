@@ -3,6 +3,7 @@ package com.tomtruyen.feature.workouts.history
 import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.data.entities.WorkoutHistory
+import com.tomtruyen.data.models.mappers.WorkoutHistoryUiModelMapper
 import com.tomtruyen.data.repositories.interfaces.UserRepository
 import com.tomtruyen.data.repositories.interfaces.HistoryRepository
 import kotlinx.coroutines.flow.collectLatest
@@ -107,7 +108,11 @@ class WorkoutHistoryViewModel(
     }
 
     private fun toWorkout(mode: WorkoutMode) = with(uiState.value) {
-        val workout = histories.find { it.id == selectedHistoryId }?.toWorkoutUiModel()
+        val workout = histories.find { it.id == selectedHistoryId }?.let {
+            WorkoutHistoryUiModelMapper.toWorkoutUiModel(
+                model = it
+            )
+        }
 
         if(workout != null) {
             triggerEvent(

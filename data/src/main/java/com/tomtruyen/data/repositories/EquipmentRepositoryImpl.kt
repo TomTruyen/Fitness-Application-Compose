@@ -1,6 +1,7 @@
 package com.tomtruyen.data.repositories
 
 import com.tomtruyen.data.entities.Equipment
+import com.tomtruyen.data.models.mappers.EquipmentUiModelMapper
 import com.tomtruyen.data.models.ui.EquipmentUiModel
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
 import io.github.jan.supabase.postgrest.from
@@ -12,7 +13,7 @@ class EquipmentRepositoryImpl : EquipmentRepository() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun findEquipment() = dao.findEquipment().mapLatest { equipment ->
-        equipment.map(EquipmentUiModel::fromEntity)
+        equipment.map(EquipmentUiModelMapper::fromEntity)
     }
 
     override suspend fun getEquipment() {

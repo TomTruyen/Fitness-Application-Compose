@@ -1,6 +1,7 @@
 package com.tomtruyen.data.repositories
 
 import com.tomtruyen.data.entities.Category
+import com.tomtruyen.data.models.mappers.CategoryUiModelMapper
 import com.tomtruyen.data.models.ui.CategoryUiModel
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import io.github.jan.supabase.postgrest.from
@@ -12,7 +13,7 @@ class CategoryRepositoryImpl : CategoryRepository() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun findCategories() = dao.findCategories().mapLatest { categories ->
-        categories.map(CategoryUiModel::fromEntity)
+        categories.map(CategoryUiModelMapper::fromEntity)
     }
 
     override suspend fun getCategories() {
