@@ -205,8 +205,6 @@ class ManageWorkoutViewModel(
     private fun fetchLatestSetsForExercises() = launchLoading {
         val sets = previousSetRepository.findPreviousSets().groupBy { it.exerciseId }
 
-        Log.d("@@@", "Sets: ${sets.keys}")
-
         updateState {
             it.copy(
                 previousSets = sets
@@ -271,6 +269,8 @@ class ManageWorkoutViewModel(
     }
 
     private fun discard() = vmScope.launch {
+        if (!uiState.value.mode.isExecute) return@launch
+        
         observeActiveWorkoutJob?.cancel()
         workoutRepository.deleteActiveWorkout()
         triggerEvent(ManageWorkoutUiEvent.Navigate.Back)
