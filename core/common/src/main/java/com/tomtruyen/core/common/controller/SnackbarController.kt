@@ -7,13 +7,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,7 +40,7 @@ object SnackbarController {
     }
 
     @Composable
-    fun GlobalSnackbarHost() {
+    fun GlobalSnackbarHost(colors: SnackbarColors) {
         val lifecycleOwner = LocalLifecycleOwner.current
 
         val snackbarHostState = remember {
@@ -65,12 +65,22 @@ object SnackbarController {
             }
         }
 
+        val colorScheme by remember {
+            derivedStateOf {
+                when(snackbarMessage) {
+                    SnackbarMessage.Empty -> Color.Transparent to Color.Transparent // We don't show this anyways so who cares
+                    is SnackbarMessage.Error -> colors.error to colors.onError
+                    is SnackbarMessage.Success -> colors.success to colors.onSuccess
+                }
+            }
+        }
+
         SnackbarHost(
             hostState = snackbarHostState,
             modifier = Modifier.padding(bottom = 16.dp)
         ) {
             Snackbar(
-                containerColor = snackbarMessage.backgroundColor ?: MaterialTheme.colorScheme.error,
+                containerColor = colorScheme.first,
                 modifier = Modifier.padding(8.dp),
                 shape = RoundedCornerShape(8.dp)
             ) {
@@ -81,13 +91,13 @@ object SnackbarController {
                         Icon(
                             imageVector = snackbarMessage.icon!!,
                             contentDescription = null,
-                            tint = Color.White
+                            tint = colorScheme.second
                         )
                     }
 
                     Text(
                         text = snackbarMessage.message.orEmpty(),
-                        color = Color.White,
+                        color = colorScheme.second,
                         modifier = Modifier
                             .padding(start = 8.dp)
                             .weight(1f)
@@ -98,21 +108,25 @@ object SnackbarController {
     }
 }
 
+interface SnackbarColors {
+    val error: Color
+    val onError: Color
+    val success: Color
+    val onSuccess: Color
+}
+
 sealed class SnackbarMessage(
     open val message: String? = null,
     open val icon: ImageVector? = null,
-    open val backgroundColor: Color? = null,
 ) {
     data object Empty : SnackbarMessage()
     class Success(
         override val message: String,
         override val icon: ImageVector? = Icons.Rounded.Check,
-        override val backgroundColor: Color? = Color.Green,
-    ) : SnackbarMessage(message, icon, backgroundColor)
+    ) : SnackbarMessage(message, icon)
 
     class Error(
         override val message: String,
         override val icon: ImageVector? = Icons.Rounded.ErrorOutline,
-        override val backgroundColor: Color? = Color(0xFFFF5555),
-    ) : SnackbarMessage(message, icon, backgroundColor)
+    ) : SnackbarMessage(message, icon)
 }

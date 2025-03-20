@@ -55,7 +55,11 @@ fun WorkoutCheckbox(
             modifier = Modifier.size(iconSize),
             imageVector = Icons.Rounded.Check,
             contentDescription = null,
-            tint = Color.White,
+            tint = if(checked) {
+                colorPalette.Base
+            } else {
+                colorPalette.Text
+            },
         )
     }
 }

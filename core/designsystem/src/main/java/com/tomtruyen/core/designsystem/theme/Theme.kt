@@ -8,6 +8,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.tomtruyen.core.common.ThemeMode
 import com.tomtruyen.core.common.models.GlobalAppState
+import com.tomtruyen.core.designsystem.theme.catppuccin.CatppuccinMaterial
+import com.tomtruyen.core.designsystem.theme.catppuccin.CatppuccinPalette
+import com.tomtruyen.core.designsystem.theme.catppuccin.CatppuccinTheme
 
 @Composable
 fun FynixTheme(

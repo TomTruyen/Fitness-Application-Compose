@@ -1,8 +1,10 @@
-package com.tomtruyen.core.designsystem.theme
+package com.tomtruyen.core.designsystem.theme.catppuccin
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Typography
 import androidx.compose.ui.graphics.Color
+import com.tomtruyen.core.designsystem.theme.defaultFontFamily
+import com.tomtruyen.core.designsystem.theme.fontFamily
 
 fun Color.inverse(): Color {
     return Color(

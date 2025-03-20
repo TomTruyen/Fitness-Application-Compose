@@ -1,4 +1,4 @@
-package com.tomtruyen.core.designsystem.theme
+package com.tomtruyen.core.designsystem.theme.catppuccin
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme

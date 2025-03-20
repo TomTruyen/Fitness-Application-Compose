@@ -1,4 +1,4 @@
-package com.tomtruyen.core.designsystem.theme
+package com.tomtruyen.core.designsystem.theme.catppuccin
 
 import androidx.activity.SystemBarStyle
 import androidx.compose.ui.graphics.Color

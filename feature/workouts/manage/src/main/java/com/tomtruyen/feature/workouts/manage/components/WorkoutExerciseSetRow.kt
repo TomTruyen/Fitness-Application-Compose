@@ -304,7 +304,7 @@ private fun RowScope.TimeSet(
             color = if (!mode.isExecute || changeRecord.contains(ChangeType.TIME) || completed) {
                 MaterialTheme.typography.bodyMedium.color
             } else {
-                Color.Unspecified
+                MaterialTheme.typography.labelLarge.color
             },
             fontWeight = FontWeight.W500
         ),
