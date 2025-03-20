@@ -22,7 +22,8 @@ fun Loader(
     ) {
         LinearProgressIndicator(
             modifier = Modifier.fillMaxWidth(),
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.background
         )
     }
 }

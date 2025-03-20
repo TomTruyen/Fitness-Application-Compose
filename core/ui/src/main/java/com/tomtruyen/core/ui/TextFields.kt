@@ -42,7 +42,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.borderColor
 import kotlinx.coroutines.launch
 
 
@@ -64,9 +63,7 @@ object TextFields {
         withLabel: Boolean = false,
         onClick: (() -> Unit)? = null,
         padding: PaddingValues = PaddingValues(Dimens.Normal),
-        textStyle: TextStyle = MaterialTheme.typography.bodyMedium.copy(
-            color = MaterialTheme.colorScheme.primary
-        ),
+        textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
         focusRequester: FocusRequester = remember { FocusRequester() },
         trailingIcon: (@Composable () -> Unit)? = null,
         keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -127,7 +124,7 @@ object TextFields {
                             Modifier.border(
                                 width = 1.dp,
                                 color = if (error.isNullOrBlank()) {
-                                    MaterialTheme.colorScheme.borderColor.value
+                                    MaterialTheme.colorScheme.outlineVariant
                                 } else {
                                     MaterialTheme.colorScheme.error
                                 },
@@ -177,7 +174,9 @@ object TextFields {
                         TextFieldPlaceholder(
                             value = value,
                             placeholder = placeholder,
-                            textStyle = textStyle
+                            textStyle = MaterialTheme.typography.labelLarge.copy(
+                                textAlign = textStyle.textAlign
+                            )
                         )
 
                         innerTextField.invoke()

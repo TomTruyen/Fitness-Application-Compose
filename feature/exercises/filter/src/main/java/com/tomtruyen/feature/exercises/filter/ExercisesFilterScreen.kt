@@ -96,7 +96,7 @@ private fun ExercisesFilterScreenLayout(
             // Muscle Groups (Categories)
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(Dimens.Small)
+                horizontalArrangement = Arrangement.spacedBy(Dimens.Small),
             ) {
                 state.categories.forEach { category ->
                     Chip(category.name, state.filter.categories.contains(category)) {

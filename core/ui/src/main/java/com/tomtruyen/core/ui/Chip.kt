@@ -6,7 +6,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.tomtruyen.core.designsystem.theme.secondaryLabelColor
+import androidx.compose.ui.graphics.Color
 
 
 @Composable
@@ -25,12 +25,28 @@ fun Chip(
         },
         trailingIcon = trailingIcon,
         label = {
-            Text(text = text)
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    color = if(selected) {
+                        MaterialTheme.colorScheme.onPrimary
+                    } else {
+                        MaterialTheme.colorScheme.onBackground
+                    }
+                )
+            )
         },
         colors = FilterChipDefaults.filterChipColors(
-            selectedContainerColor = MaterialTheme.colorScheme.tertiary,
-            selectedLabelColor = MaterialTheme.colorScheme.onTertiary,
-            labelColor = MaterialTheme.colorScheme.secondaryLabelColor.value
+            selectedContainerColor = MaterialTheme.colorScheme.primary,
+            selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+            selectedTrailingIconColor = MaterialTheme.colorScheme.onPrimary,
+            labelColor = MaterialTheme.colorScheme.onBackground
+        ),
+        border = FilterChipDefaults.filterChipBorder(
+            enabled = true,
+            selected = selected,
+            selectedBorderColor = MaterialTheme.colorScheme.primary,
+            borderColor = MaterialTheme.colorScheme.onBackground
         )
     )
 }

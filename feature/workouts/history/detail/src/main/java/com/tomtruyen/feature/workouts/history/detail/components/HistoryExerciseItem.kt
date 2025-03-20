@@ -250,7 +250,6 @@ private fun RowScope.WeightSet(
         textStyle = MaterialTheme.typography.bodyMedium.copy(
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.W500,
-            color = MaterialTheme.colorScheme.primary
         ),
         modifier = Modifier.weight(1f)
     )
@@ -266,7 +265,6 @@ private fun RowScope.WeightSet(
         textStyle = MaterialTheme.typography.bodyMedium.copy(
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.W500,
-            color = MaterialTheme.colorScheme.primary
         ),
         modifier = Modifier.weight(1f)
     )

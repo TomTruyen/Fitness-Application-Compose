@@ -28,7 +28,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.common.ObserveEvent
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.secondaryTextColor
 import com.tomtruyen.core.ui.Buttons
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.TextDivider
@@ -112,7 +111,6 @@ private fun LoginScreenLayout(
                     Text(
                         text = stringResource(id = R.string.subtitle_login),
                         style = MaterialTheme.typography.titleMedium.copy(
-                            color = MaterialTheme.colorScheme.secondaryTextColor.value,
                             fontWeight = FontWeight.Normal
                         ),
                     )

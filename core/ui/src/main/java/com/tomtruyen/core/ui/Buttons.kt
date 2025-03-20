@@ -53,7 +53,8 @@ object Buttons {
             colors = colors,
         ) {
             Text(
-                text = text
+                text = text,
+                color = colors.contentColor
             )
         }
     }
@@ -66,7 +67,7 @@ object Buttons {
         enabled: Boolean = true,
         shape: Shape = MaterialTheme.shapes.small,
         colors: ButtonColors = ButtonDefaults.textButtonColors(
-            contentColor = MaterialTheme.colorScheme.onSurface
+            contentColor = MaterialTheme.colorScheme.onBackground,
         ),
         onClick: () -> Unit,
     ) {
@@ -94,6 +95,7 @@ object Buttons {
 
             Text(
                 modifier = Modifier.padding(vertical = Dimens.Tiny),
+                color = colors.contentColor,
                 text = text
             )
         }

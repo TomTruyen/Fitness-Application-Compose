@@ -36,9 +36,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.navigationItemBackgroundColorActive
-import com.tomtruyen.core.designsystem.theme.navigationItemContentColorActive
-import com.tomtruyen.core.designsystem.theme.navigationItemContentColorInactive
 
 @Composable
 fun MainBottomNavigation(
@@ -93,9 +90,9 @@ fun BottomBarItem(
 
     val animatedContentColor by animateColorAsState(
         targetValue = if (selected) {
-            MaterialTheme.colorScheme.navigationItemContentColorActive
+            MaterialTheme.colorScheme.onPrimary
         } else {
-            MaterialTheme.colorScheme.navigationItemContentColorInactive
+            MaterialTheme.colorScheme.onSurface
         },
         animationSpec = animationSpec,
         label = ""
@@ -103,7 +100,7 @@ fun BottomBarItem(
 
     val animatedContainerColor by animateColorAsState(
         targetValue = if (selected) {
-            MaterialTheme.colorScheme.navigationItemBackgroundColorActive.value
+            MaterialTheme.colorScheme.primary
         } else {
             MaterialTheme.colorScheme.background
         },

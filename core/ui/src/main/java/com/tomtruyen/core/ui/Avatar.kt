@@ -21,7 +21,6 @@ import coil.compose.AsyncImage
 import com.tomtruyen.core.common.R
 import com.tomtruyen.core.common.utils.ImageLoader
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.fallbackImageBackground
 import org.koin.compose.koinInject
 
 @Composable
@@ -31,7 +30,7 @@ fun Avatar(
     contentDescription: String? = null,
     size: Dp = 40.dp,
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
-    fallbackImageColor: Color = MaterialTheme.colorScheme.fallbackImageBackground.value
+    fallbackImageColor: Color = MaterialTheme.colorScheme.onSurface
 ) {
     val context = LocalContext.current
     val imageLoader: ImageLoader = koinInject()

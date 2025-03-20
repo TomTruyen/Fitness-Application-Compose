@@ -32,8 +32,6 @@ import com.tomtruyen.core.common.extensions.toRelativeTimeString
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.secondaryLabelColor
-import com.tomtruyen.core.designsystem.theme.secondaryTextColor
 import com.tomtruyen.core.ui.Avatar
 import com.tomtruyen.core.ui.Label
 import com.tomtruyen.data.models.ui.WorkoutHistoryExerciseUiModel
@@ -108,9 +106,7 @@ fun WorkoutHistoryItem(
                         otherExerciseCount
                     ),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        color = MaterialTheme.colorScheme.secondaryLabelColor.value
-                    )
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
         }
@@ -143,9 +139,7 @@ private fun Header(
 
             Label(
                 label = date.toRelativeTimeString(),
-                style = MaterialTheme.typography.labelMedium.copy(
-                    color = MaterialTheme.colorScheme.secondaryTextColor.value,
-                )
+                style = MaterialTheme.typography.labelMedium
             )
         }
 
@@ -202,9 +196,7 @@ private fun RowScope.StatisticsItem(
     ) {
         Text(
             text = name,
-            style = MaterialTheme.typography.bodySmall.copy(
-                color = MaterialTheme.colorScheme.secondaryTextColor.value
-            ),
+            style = MaterialTheme.typography.bodySmall
         )
 
         Text(

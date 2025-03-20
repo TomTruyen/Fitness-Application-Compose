@@ -13,17 +13,14 @@ private val provider = GoogleFont.Provider(
     certificates = R.array.com_google_android_gms_fonts_certs
 )
 
-private val fontFamily = FontFamily(
+val fontFamily = FontFamily(
     Font(GoogleFont("Inter"), provider, FontWeight.Normal),
     Font(GoogleFont("Inter"), provider, FontWeight.Bold),
     Font(GoogleFont("Inter"), provider, FontWeight.Light)
 )
 
-// Set of Material typography styles to start with
-val Typography = Typography().defaultFontFamily(fontFamily)
 
-
-private fun Typography.defaultFontFamily(fontFamily: FontFamily): Typography {
+fun Typography.defaultFontFamily(fontFamily: FontFamily): Typography {
     return this.copy(
         displayLarge = this.displayLarge.copy(fontFamily = fontFamily),
         displayMedium = this.displayMedium.copy(fontFamily = fontFamily),

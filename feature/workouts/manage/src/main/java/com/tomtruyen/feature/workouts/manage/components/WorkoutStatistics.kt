@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import com.tomtruyen.core.common.extensions.rounded
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.secondaryLabelColor
 import com.tomtruyen.feature.workouts.manage.R
 
 @Composable
@@ -70,9 +69,7 @@ private fun RowScope.WorkoutStatisticsItem(
     ) {
         Text(
             text = name,
-            style = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.secondaryLabelColor.value
-            ),
+            style = MaterialTheme.typography.bodyMedium
         )
 
         Text(

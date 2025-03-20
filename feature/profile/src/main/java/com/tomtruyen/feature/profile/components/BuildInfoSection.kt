@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.tomtruyen.core.common.providers.BuildConfigFieldProvider
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.secondaryLabelColor
 import com.tomtruyen.feature.profile.R
 import org.koin.compose.koinInject
 
@@ -24,9 +23,7 @@ fun ColumnScope.BuildInfoSection() {
             buildConfigFieldProvider.versionName,
             buildConfigFieldProvider.versionCode
         ),
-        style = MaterialTheme.typography.bodySmall.copy(
-            color = MaterialTheme.colorScheme.secondaryLabelColor.value
-        ),
+        style = MaterialTheme.typography.labelMedium,
         modifier = Modifier
             .align(Alignment.CenterHorizontally)
             .padding(top = Dimens.Small)

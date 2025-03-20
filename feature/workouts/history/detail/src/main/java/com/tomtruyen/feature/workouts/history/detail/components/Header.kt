@@ -12,7 +12,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import com.tomtruyen.core.common.extensions.toFormat
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.secondaryTextColor
 import com.tomtruyen.core.ui.Label
 import kotlinx.datetime.LocalDateTime
 
@@ -39,9 +38,7 @@ fun Header(
 
         Label(
             label = date.toFormat("EEEE, d MMMM yyyy"),
-            style = MaterialTheme.typography.labelMedium.copy(
-                color = MaterialTheme.colorScheme.secondaryTextColor.value,
-            )
+            style = MaterialTheme.typography.labelMedium
         )
     }
 }

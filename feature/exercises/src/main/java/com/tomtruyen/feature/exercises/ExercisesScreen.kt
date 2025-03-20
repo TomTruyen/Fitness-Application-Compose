@@ -46,8 +46,6 @@ import com.tomtruyen.core.common.ObserveEvent
 import com.tomtruyen.core.common.models.ExerciseMode
 import com.tomtruyen.core.common.models.FilterOption
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.fallbackImageBackground
-import com.tomtruyen.core.designsystem.theme.selectedListItem
 import com.tomtruyen.core.ui.Avatar
 import com.tomtruyen.core.ui.Chip
 import com.tomtruyen.core.ui.Label
@@ -199,6 +197,8 @@ private fun SharedTransitionScope.ExercisesScreenLayout(
                 exit = scaleOut()
             ) {
                 FloatingActionButton(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
                     onClick = {
                         onAction(ExercisesUiAction.Workout.AddExercise)
                     }
@@ -311,22 +311,6 @@ private fun SharedTransitionScope.ExercisesScreenLayout(
                                         Avatar(
                                             imageUrl = exercise.imageUrl,
                                             contentDescription = exercise.displayName,
-                                            backgroundColor = if (state.selectedExercises.contains(
-                                                    exercise
-                                                )
-                                            ) {
-                                                MaterialTheme.colorScheme.selectedListItem.value
-                                            } else {
-                                                MaterialTheme.colorScheme.surface
-                                            },
-                                            fallbackImageColor = if (state.selectedExercises.contains(
-                                                    exercise
-                                                )
-                                            ) {
-                                                MaterialTheme.colorScheme.background
-                                            } else {
-                                                MaterialTheme.colorScheme.fallbackImageBackground.value
-                                            }
                                         )
                                     }
                                 )

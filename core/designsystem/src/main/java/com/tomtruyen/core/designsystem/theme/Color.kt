@@ -2,6 +2,7 @@ package com.tomtruyen.core.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
+// TODO: Get rid of all these
 // Main Colors
 val ChineseBlack = Color(0xFF111111)
 val ChineseSilver = Color(0xFFCACACA)

@@ -17,7 +17,6 @@ import com.tomtruyen.core.common.extensions.rounded
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.secondaryTextColor
 
 @Composable
 fun Statistics(
@@ -64,9 +63,7 @@ private fun RowScope.StatisticsItem(
     ) {
         Text(
             text = name,
-            style = MaterialTheme.typography.bodySmall.copy(
-                color = MaterialTheme.colorScheme.secondaryTextColor.value
-            ),
+            style = MaterialTheme.typography.bodySmall
         )
 
         Text(

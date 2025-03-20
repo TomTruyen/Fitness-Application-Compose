@@ -11,14 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.secondaryTextColor
 
 @Composable
 fun TextDivider(
     text: String,
     modifier: Modifier = Modifier,
-    dividerColor: Color = MaterialTheme.colorScheme.outlineVariant,
-    textColor: Color = MaterialTheme.colorScheme.secondaryTextColor.value
 ) {
     Row(
         modifier = modifier,
@@ -27,18 +24,16 @@ fun TextDivider(
     ) {
         HorizontalDivider(
             modifier = Modifier.weight(1f),
-            color = dividerColor,
             thickness = 1.dp
         )
 
         Text(
             text = text.uppercase(),
-            color = textColor
+            style = MaterialTheme.typography.labelMedium
         )
 
         HorizontalDivider(
             modifier = Modifier.weight(1f),
-            color = dividerColor,
             thickness = 1.dp
         )
     }

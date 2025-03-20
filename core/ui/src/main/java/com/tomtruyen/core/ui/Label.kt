@@ -8,14 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import com.tomtruyen.core.designsystem.theme.secondaryTextColor
 
 @Composable
 fun Label(
     label: String,
     textAlign: TextAlign = TextAlign.Start,
-    style: TextStyle = MaterialTheme.typography.labelLarge.copy(
-        color = MaterialTheme.colorScheme.secondaryTextColor.value,
+    style: TextStyle = MaterialTheme.typography.bodyMedium.copy(
         textAlign = textAlign,
     ),
     modifier: Modifier = Modifier

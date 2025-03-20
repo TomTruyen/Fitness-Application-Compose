@@ -29,7 +29,7 @@ import com.tomtruyen.core.common.controller.SnackbarController
 import com.tomtruyen.core.common.models.ExerciseMode
 import com.tomtruyen.core.common.models.GlobalAppState
 import com.tomtruyen.core.designsystem.theme.FynixTheme
-import com.tomtruyen.core.designsystem.theme.rememberDarkMode
+import com.tomtruyen.core.designsystem.theme.rememberColorPalette
 import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
 import com.tomtruyen.data.models.ui.WorkoutUiModel
 import com.tomtruyen.feature.auth.login.LoginScreen
@@ -70,15 +70,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             KoinAndroidContext {
-                val isDarkTheme by rememberDarkMode()
+                val palette by rememberColorPalette()
 
-                LaunchedEffect(isDarkTheme) {
+                LaunchedEffect(palette) {
                     enableEdgeToEdge(
-                        statusBarStyle = if (isDarkTheme) {
-                            SystemBarStyle.dark(Color.TRANSPARENT)
-                        } else {
-                            SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
-                        }
+                        statusBarStyle = palette.StatusBarStyle
                     )
                 }
 

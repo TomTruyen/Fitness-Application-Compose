@@ -8,7 +8,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.tomtruyen.core.designsystem.theme.textFieldIcon
 
 @Composable
 fun PasswordEyeToggle(
@@ -29,7 +28,6 @@ fun PasswordEyeToggle(
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
-            tint = MaterialTheme.colorScheme.textFieldIcon.value
         )
     }
 }

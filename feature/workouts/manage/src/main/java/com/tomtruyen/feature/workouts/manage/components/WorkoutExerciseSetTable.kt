@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -16,7 +17,7 @@ import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.success
+import com.tomtruyen.core.designsystem.theme.rememberColorPalette
 import com.tomtruyen.core.ui.swipereveal.SwipeToRevealAction
 import com.tomtruyen.core.ui.swipereveal.SwipeToRevealBox
 import com.tomtruyen.core.ui.swipereveal.rememberSwipeToRevealState
@@ -38,7 +39,9 @@ fun WorkoutExerciseSetTable(
     onPreviousSetClick: (id: String, setIndex: Int, previousSet: PreviousSet) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val successBackgroundColor = MaterialTheme.colorScheme.success
+    val colorPalette by rememberColorPalette()
+
+    val successBackgroundColor = colorPalette.Green.copy(alpha = 0.25f)
     val evenIndexBackgroundColor = MaterialTheme.colorScheme.background
     val oddIndexBackgroundColor = MaterialTheme.colorScheme.surface
 
@@ -61,9 +64,9 @@ fun WorkoutExerciseSetTable(
                 previousSets?.find { it.sortOrder == setIndex }
             }
 
-            val backgroundColor = remember(set.completed, setIndex, successBackgroundColor.value) {
+            val backgroundColor = remember(set.completed, setIndex, successBackgroundColor) {
                 when {
-                    set.completed -> successBackgroundColor.value
+                    set.completed -> successBackgroundColor
                     setIndex % 2 == 0 -> evenIndexBackgroundColor
                     else -> oddIndexBackgroundColor
                 }

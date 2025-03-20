@@ -94,7 +94,7 @@ object SocialButtons {
             ),
             border = BorderStroke(
                 width = 1.dp,
-                color = MauiMist
+                color = MaterialTheme.colorScheme.surface
             )
         ) {
             Image(

@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.FynixTheme
 import com.tomtruyen.core.designsystem.theme.SuccessGreen
+import com.tomtruyen.core.designsystem.theme.rememberColorPalette
 
 @Composable
 fun WorkoutCheckbox(
@@ -29,6 +31,7 @@ fun WorkoutCheckbox(
     size: Dp = 24.dp,
     iconSize: Dp = 16.dp
 ) {
+    val colorPalette by rememberColorPalette()
     val focusManager = LocalFocusManager.current
 
     Box(
@@ -37,9 +40,9 @@ fun WorkoutCheckbox(
             .clip(RoundedCornerShape(Dimens.Small))
             .background(
                 color = if (checked) {
-                    SuccessGreen
+                    colorPalette.Green
                 } else {
-                    Color.LightGray
+                    colorPalette.Surface1
                 },
             )
             .clickable {

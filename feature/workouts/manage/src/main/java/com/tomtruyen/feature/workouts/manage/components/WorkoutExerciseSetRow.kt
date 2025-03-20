@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -29,7 +30,6 @@ import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.common.utils.TimeUtils
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.core.designsystem.theme.placeholder
 import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.wheeltimepicker.WheelTimerPickerSheet
 import com.tomtruyen.core.ui.wheeltimepicker.core.TimeComponent
@@ -185,9 +185,7 @@ private fun PreviousSet(
                 }
             }
         } ?: "-",
-        style = MaterialTheme.typography.bodyMedium.copy(
-            color = MaterialTheme.colorScheme.placeholder.value
-        ),
+        style = MaterialTheme.typography.labelLarge,
         textAlign = TextAlign.Center,
         modifier = modifier,
     )
@@ -245,7 +243,6 @@ private fun RowScope.WeightSet(
         textStyle = MaterialTheme.typography.bodyMedium.copy(
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.W500,
-            color = MaterialTheme.colorScheme.primary
         ),
         modifier = Modifier.weight(1f)
     )
@@ -275,7 +272,6 @@ private fun RowScope.WeightSet(
         textStyle = MaterialTheme.typography.bodyMedium.copy(
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.W500,
-            color = MaterialTheme.colorScheme.primary
         ),
         modifier = Modifier.weight(1f)
     )
@@ -308,7 +304,7 @@ private fun RowScope.TimeSet(
             color = if (!mode.isExecute || changeRecord.contains(ChangeType.TIME) || completed) {
                 MaterialTheme.typography.bodyMedium.color
             } else {
-                MaterialTheme.colorScheme.placeholder.value
+                Color.Unspecified
             },
             fontWeight = FontWeight.W500
         ),
