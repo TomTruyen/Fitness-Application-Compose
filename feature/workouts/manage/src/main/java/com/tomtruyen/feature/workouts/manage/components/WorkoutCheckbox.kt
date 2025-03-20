@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.designsystem.theme.FynixTheme
-import com.tomtruyen.core.designsystem.theme.SuccessGreen
 import com.tomtruyen.core.designsystem.theme.rememberColorPalette
 
 @Composable
