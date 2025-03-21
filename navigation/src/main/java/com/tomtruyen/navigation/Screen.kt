@@ -21,7 +21,7 @@ sealed interface Screen {
     }
 
     @Serializable
-    data object Profile : Screen
+    data object Settings : Screen
 
     sealed interface Exercise : Screen {
         @Serializable

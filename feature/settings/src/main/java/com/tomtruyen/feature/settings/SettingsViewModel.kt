@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.profile
+package com.tomtruyen.feature.settings
 
 import com.tomtruyen.core.common.ThemeMode
 import com.tomtruyen.core.common.ThemePreferences
@@ -6,19 +6,19 @@ import com.tomtruyen.core.common.base.BaseViewModel
 import com.tomtruyen.core.common.providers.KoinReloadProvider
 import com.tomtruyen.data.repositories.interfaces.SettingsRepository
 import com.tomtruyen.data.repositories.interfaces.UserRepository
-import com.tomtruyen.feature.profile.manager.SheetStateManager
+import com.tomtruyen.feature.settings.manager.SheetStateManager
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
-class ProfileViewModel(
+class SettingsViewModel(
     private val userRepository: UserRepository,
     private val settingsRepository: SettingsRepository,
     private val koinReloadProvider: KoinReloadProvider,
     private val themePreferences: ThemePreferences,
-) : BaseViewModel<ProfileUiState, ProfileUiAction, ProfileUiEvent>(
-    initialState = ProfileUiState()
+) : BaseViewModel<SettingsUiState, SettingsUiAction, SettingsUiEvent>(
+    initialState = SettingsUiState()
 ) {
     private val sheetStateManager by lazy {
         SheetStateManager(
@@ -86,38 +86,38 @@ class ProfileViewModel(
 
         koinReloadProvider.reload()
 
-        triggerEvent(ProfileUiEvent.Logout)
+        triggerEvent(SettingsUiEvent.Logout)
     }
 
     private fun updateThemeMode(mode: ThemeMode) = vmScope.launch {
         themePreferences.setTheme(mode)
     }
 
-    override fun onAction(action: ProfileUiAction) {
+    override fun onAction(action: SettingsUiAction) {
         when (action) {
-            is ProfileUiAction.OnUnitChanged -> updateState {
+            is SettingsUiAction.OnUnitChanged -> updateState {
                 it.copy(settings = it.settings.copy(unit = action.value))
             }
 
-            is ProfileUiAction.OnRestChanged -> updateState {
+            is SettingsUiAction.OnRestChanged -> updateState {
                 it.copy(settings = it.settings.copy(rest = action.value))
             }
 
-            is ProfileUiAction.OnRestEnabledChanged -> updateState {
+            is SettingsUiAction.OnRestEnabledChanged -> updateState {
                 it.copy(settings = it.settings.copy(restEnabled = action.value))
             }
 
-            is ProfileUiAction.OnRestVibrationEnabledChanged -> updateState {
+            is SettingsUiAction.OnRestVibrationEnabledChanged -> updateState {
                 it.copy(settings = it.settings.copy(restVibrationEnabled = action.value))
             }
 
-            is ProfileUiAction.Refresh -> fetchSettings(refresh = true)
+            is SettingsUiAction.Refresh -> fetchSettings(refresh = true)
 
-            is ProfileUiAction.Logout -> logout()
+            is SettingsUiAction.Logout -> logout()
 
-            is ProfileUiAction.OnThemeModeChanged -> updateThemeMode(action.mode)
+            is SettingsUiAction.OnThemeModeChanged -> updateThemeMode(action.mode)
 
-            is ProfileUiAction.Sheet -> sheetStateManager.onAction(action)
+            is SettingsUiAction.Sheet -> sheetStateManager.onAction(action)
         }
     }
 

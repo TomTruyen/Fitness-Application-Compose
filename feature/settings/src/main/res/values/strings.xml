@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_profile">Profile</string>
+    <string name="title_settings">Settings</string>
 
     <string name="label_version_and_build">Version: %s - Build: %d</string>
     <string name="label_report_an_issue">Report an issue</string>

@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.profile
+package com.tomtruyen.feature.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -30,20 +30,20 @@ import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.toolbars.Toolbar
 import com.tomtruyen.core.ui.wheeltimepicker.WheelTimerPickerSheet
 import com.tomtruyen.core.ui.wheeltimepicker.core.TimeComponent
-import com.tomtruyen.feature.profile.components.AppearanceSection
-import com.tomtruyen.feature.profile.components.BuildInfoSection
-import com.tomtruyen.feature.profile.components.ContactSection
-import com.tomtruyen.feature.profile.components.RestTimerSection
-import com.tomtruyen.feature.profile.components.UnitSection
-import com.tomtruyen.feature.profile.remember.rememberThemeModeActions
-import com.tomtruyen.feature.profile.remember.rememberUnitActions
+import com.tomtruyen.feature.settings.components.AppearanceSection
+import com.tomtruyen.feature.settings.components.BuildInfoSection
+import com.tomtruyen.feature.settings.components.ContactSection
+import com.tomtruyen.feature.settings.components.RestTimerSection
+import com.tomtruyen.feature.settings.components.UnitSection
+import com.tomtruyen.feature.settings.remember.rememberThemeModeActions
+import com.tomtruyen.feature.settings.remember.rememberUnitActions
 import com.tomtruyen.navigation.Screen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ProfileScreen(
+fun SettingsScreen(
     navController: NavController,
-    viewModel: ProfileViewModel = koinViewModel()
+    viewModel: SettingsViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -55,13 +55,13 @@ fun ProfileScreen(
 
     ObserveEvent(viewModel) { event ->
         when (event) {
-            is ProfileUiEvent.Logout -> {
+            is SettingsUiEvent.Logout -> {
                 navController.navigate(Screen.Auth.Login)
             }
         }
     }
 
-    ProfileScreenLayout(
+    SettingsScreenLayout(
         navController = navController,
         state = state,
         onAction = viewModel::onAction
@@ -74,7 +74,7 @@ fun ProfileScreen(
         visible = state.showThemeModeSheet,
         selectedIndex = ThemeMode.entries.indexOf(GlobalAppState.theme.value),
         onDismiss = {
-            viewModel.onAction(ProfileUiAction.Sheet.ThemeMode.Dismiss)
+            viewModel.onAction(SettingsUiAction.Sheet.ThemeMode.Dismiss)
         }
     )
 
@@ -85,7 +85,7 @@ fun ProfileScreen(
         selectedIndex = UnitType.entries.indexOf(state.settings.unit),
         visible = state.showWeightUnitSheet,
         onDismiss = {
-            viewModel.onAction(ProfileUiAction.Sheet.WeightUnit.Dismiss)
+            viewModel.onAction(SettingsUiAction.Sheet.WeightUnit.Dismiss)
         }
     )
 
@@ -94,27 +94,27 @@ fun ProfileScreen(
         visible = state.showRestTimeSheet,
         components = listOf(TimeComponent.MINUTE, TimeComponent.SECOND),
         onSubmit = {
-            viewModel.onAction(ProfileUiAction.OnRestChanged(it))
+            viewModel.onAction(SettingsUiAction.OnRestChanged(it))
         },
         onDismiss = {
-            viewModel.onAction(ProfileUiAction.Sheet.RestTime.Dismiss)
+            viewModel.onAction(SettingsUiAction.Sheet.RestTime.Dismiss)
         }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ProfileScreenLayout(
+private fun SettingsScreenLayout(
     navController: NavController,
-    state: ProfileUiState,
-    onAction: (ProfileUiAction) -> Unit
+    state: SettingsUiState,
+    onAction: (SettingsUiAction) -> Unit
 ) {
     val refreshState = rememberPullToRefreshState()
 
     Scaffold(
         topBar = {
             Toolbar(
-                title = stringResource(id = R.string.title_profile),
+                title = stringResource(id = R.string.title_settings),
                 navController = navController,
             )
         },
@@ -126,7 +126,7 @@ private fun ProfileScreenLayout(
             PullToRefreshBox(
                 isRefreshing = state.refreshing,
                 onRefresh = {
-                    onAction(ProfileUiAction.Refresh)
+                    onAction(SettingsUiAction.Refresh)
                 },
                 state = refreshState,
             ) {
@@ -138,7 +138,7 @@ private fun ProfileScreenLayout(
                     UnitSection(
                         unit = state.settings.unit,
                         onShowUnitSheet = {
-                            onAction(ProfileUiAction.Sheet.WeightUnit.Show)
+                            onAction(SettingsUiAction.Sheet.WeightUnit.Show)
                         }
                     )
 
@@ -155,7 +155,7 @@ private fun ProfileScreenLayout(
 
                     AppearanceSection(
                         onShowThemeSheet = {
-                            onAction(ProfileUiAction.Sheet.ThemeMode.Show)
+                            onAction(SettingsUiAction.Sheet.ThemeMode.Show)
                         }
                     )
 
@@ -169,7 +169,7 @@ private fun ProfileScreenLayout(
 
                     Buttons.Default(
                         text = stringResource(id = R.string.button_logout),
-                        onClick = { onAction(ProfileUiAction.Logout) },
+                        onClick = { onAction(SettingsUiAction.Logout) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(Dimens.Normal)

@@ -1,9 +1,7 @@
 package com.tomtruyen.fitoryx
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -42,7 +40,7 @@ import com.tomtruyen.feature.exercises.ExercisesViewModel
 import com.tomtruyen.feature.exercises.detail.ExerciseDetailScreen
 import com.tomtruyen.feature.exercises.filter.ExercisesFilterScreen
 import com.tomtruyen.feature.exercises.manage.ManageExerciseScreen
-import com.tomtruyen.feature.profile.ProfileScreen
+import com.tomtruyen.feature.settings.SettingsScreen
 import com.tomtruyen.feature.workouts.WorkoutsScreen
 import com.tomtruyen.feature.workouts.history.WorkoutHistoryScreen
 import com.tomtruyen.feature.workouts.history.detail.WorkoutHistoryDetailScreen
@@ -104,7 +102,7 @@ class MainActivity : ComponentActivity() {
                             Screen.Workout.Overview,
                             Screen.Exercise.Overview(),
                             Screen.History.Overview,
-                            Screen.Profile
+                            Screen.Settings
                         ).any { backStackEntry?.destination?.hasRoute(it::class) == true }
 
                         val isViewMode =
@@ -157,8 +155,8 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
 
-                                composable<Screen.Profile> {
-                                    ProfileScreen(navController)
+                                composable<Screen.Settings> {
+                                    SettingsScreen(navController)
                                 }
 
                                 navigation<Screen.Workout.Graph>(

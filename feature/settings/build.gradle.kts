@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.tomtruyen.feature.profile"
+    namespace = "com.tomtruyen.feature.settings"
 }
 
 dependencies {

@@ -17,7 +17,7 @@ import com.tomtruyen.feature.auth.register.RegisterViewModel
 import com.tomtruyen.feature.exercises.ExercisesViewModel
 import com.tomtruyen.feature.exercises.detail.ExerciseDetailViewModel
 import com.tomtruyen.feature.exercises.manage.ManageExerciseViewModel
-import com.tomtruyen.feature.profile.ProfileViewModel
+import com.tomtruyen.feature.settings.SettingsViewModel
 import com.tomtruyen.feature.workouts.WorkoutsViewModel
 import com.tomtruyen.feature.workouts.history.WorkoutHistoryViewModel
 import com.tomtruyen.feature.workouts.history.detail.WorkoutHistoryDetailViewModel
@@ -35,7 +35,7 @@ val viewModelModule = module {
 
     viewModelOf(::RegisterViewModel)
 
-    viewModelOf(::ProfileViewModel)
+    viewModelOf(::SettingsViewModel)
 
     viewModelOf(::WorkoutsViewModel)
 

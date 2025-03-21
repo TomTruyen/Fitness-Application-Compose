@@ -1,10 +1,10 @@
-package com.tomtruyen.feature.profile
+package com.tomtruyen.feature.settings
 
 import androidx.compose.runtime.Immutable
 import com.tomtruyen.data.models.ui.SettingsUiModel
 
 @Immutable
-data class ProfileUiState(
+data class SettingsUiState(
     val initialSettings: SettingsUiModel? = null,
     val settings: SettingsUiModel = SettingsUiModel(),
 

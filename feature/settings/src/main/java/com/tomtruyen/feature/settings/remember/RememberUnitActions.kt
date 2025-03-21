@@ -1,21 +1,21 @@
-package com.tomtruyen.feature.profile.remember
+package com.tomtruyen.feature.settings.remember
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.ui.BottomSheetItem
-import com.tomtruyen.feature.profile.ProfileUiAction
+import com.tomtruyen.feature.settings.SettingsUiAction
 
 @Composable
 fun rememberUnitActions(
-    onAction: (ProfileUiAction) -> Unit
+    onAction: (SettingsUiAction) -> Unit
 ): List<BottomSheetItem> {
     return remember {
         UnitType.entries.map { unit ->
             BottomSheetItem(
                 title = unit.value,
                 onClick = {
-                    onAction(ProfileUiAction.OnUnitChanged(unit))
+                    onAction(SettingsUiAction.OnUnitChanged(unit))
                 }
             )
         }

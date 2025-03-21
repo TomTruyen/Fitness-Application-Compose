@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.profile.components
+package com.tomtruyen.feature.settings.components
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -11,7 +11,7 @@ import com.tomtruyen.core.common.utils.EmailUtils
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.listitems.ListItem
-import com.tomtruyen.feature.profile.R
+import com.tomtruyen.feature.settings.R
 
 @Composable
 fun ContactSection() {

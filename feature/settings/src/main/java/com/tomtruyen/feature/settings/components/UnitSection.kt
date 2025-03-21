@@ -1,35 +1,32 @@
-package com.tomtruyen.feature.profile.components
+package com.tomtruyen.feature.settings.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.tomtruyen.core.common.models.GlobalAppState
+import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.listitems.ListItem
-import com.tomtruyen.feature.profile.R
+import com.tomtruyen.feature.settings.R
 
 @Composable
-fun AppearanceSection(
-    onShowThemeSheet: () -> Unit,
+fun UnitSection(
+    unit: UnitType,
+    onShowUnitSheet: () -> Unit,
 ) {
-    val theme by GlobalAppState.theme
-
     Label(
-        label = stringResource(id = R.string.label_appearance),
+        label = stringResource(id = R.string.label_units),
         modifier = Modifier.padding(
             start = Dimens.Normal,
             end = Dimens.Normal,
-            top = Dimens.Normal,
             bottom = Dimens.Tiny
         )
     )
 
     ListItem(
-        title = stringResource(id = R.string.label_theme_mode),
-        message = theme.value,
-        onClick = onShowThemeSheet
+        title = stringResource(id = R.string.label_weight_unit),
+        message = unit.value,
+        onClick = onShowUnitSheet
     )
 }

@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.profile.remember
+package com.tomtruyen.feature.settings.remember
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Android
@@ -8,11 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.tomtruyen.core.common.ThemeMode
 import com.tomtruyen.core.ui.BottomSheetItem
-import com.tomtruyen.feature.profile.ProfileUiAction
+import com.tomtruyen.feature.settings.SettingsUiAction
 
 @Composable
 fun rememberThemeModeActions(
-    onAction: (ProfileUiAction) -> Unit
+    onAction: (SettingsUiAction) -> Unit
 ): List<BottomSheetItem> {
     return remember {
         ThemeMode.entries.map { mode ->
@@ -24,7 +24,7 @@ fun rememberThemeModeActions(
                     ThemeMode.SYSTEM -> Icons.Rounded.Android
                 },
                 onClick = {
-                    onAction(ProfileUiAction.OnThemeModeChanged(mode))
+                    onAction(SettingsUiAction.OnThemeModeChanged(mode))
                 }
             )
         }

@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.profile.components
+package com.tomtruyen.feature.settings.components
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.tomtruyen.core.common.providers.BuildConfigFieldProvider
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.feature.profile.R
+import com.tomtruyen.feature.settings.R
 import org.koin.compose.koinInject
 
 @Composable

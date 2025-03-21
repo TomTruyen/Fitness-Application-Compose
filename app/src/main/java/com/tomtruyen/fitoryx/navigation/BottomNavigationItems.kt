@@ -5,7 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.FitnessCenter
 import androidx.compose.material.icons.rounded.History
-import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.tomtruyen.fitoryx.R
 import com.tomtruyen.navigation.Screen
@@ -28,9 +28,9 @@ object BottomNavigation {
             screen = Screen.History.Overview
         ),
         BottomNavigationItem(
-            label = R.string.profile,
-            icon = Icons.Rounded.Person,
-            screen = Screen.Profile
+            label = R.string.settings,
+            icon = Icons.Rounded.Settings,
+            screen = Screen.Settings
         ),
     )
 }

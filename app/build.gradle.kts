@@ -95,8 +95,8 @@ dependencies {
     implementation(project(":feature:auth:login"))
     implementation(project(":feature:auth:register"))
 
-    // Profile
-    implementation(project(":feature:profile"))
+    // Settings
+    implementation(project(":feature:settings"))
 
     // Exercise
     implementation(project(":feature:exercises"))
