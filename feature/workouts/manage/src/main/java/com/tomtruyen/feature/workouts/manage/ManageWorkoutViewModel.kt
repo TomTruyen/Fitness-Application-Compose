@@ -269,10 +269,13 @@ class ManageWorkoutViewModel(
     }
 
     private fun discard() = vmScope.launch {
-        if (!uiState.value.mode.isExecute) return@launch
-        
         observeActiveWorkoutJob?.cancel()
-        workoutRepository.deleteActiveWorkout()
+
+        // Only delete the Active Workout when in Execute Mode - Allows us to edit/create exercises during active workout
+        if(uiState.value.mode.isExecute) {
+            workoutRepository.deleteActiveWorkout()
+        }
+
         triggerEvent(ManageWorkoutUiEvent.Navigate.Back)
     }
 
