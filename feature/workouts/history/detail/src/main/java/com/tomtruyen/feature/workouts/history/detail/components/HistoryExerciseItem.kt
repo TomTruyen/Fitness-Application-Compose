@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -60,7 +61,6 @@ fun HistoryExerciseItem(
             ),
             readOnly = true,
             singleLine = false,
-            border = true,
             padding = PaddingValues(Dimens.Small),
             placeholder = stringResource(id = R.string.placeholder_notes),
             value = exercise.notes,
@@ -242,7 +242,6 @@ private fun RowScope.WeightSet(
     reps: Int?,
 ) {
     TextFields.Default(
-        border = false,
         readOnly = true,
         padding = PaddingValues(Dimens.Small),
         value = (reps ?: 0).toString(),
@@ -251,13 +250,13 @@ private fun RowScope.WeightSet(
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.W500,
         ),
+        containerColor = Color.Transparent,
         modifier = Modifier.weight(1f)
     )
 
     Spacer(modifier = Modifier.width(Dimens.Small))
 
     TextFields.Default(
-        border = false,
         readOnly = true,
         padding = PaddingValues(Dimens.Small),
         value = (weight ?: 0.0).rounded(),
@@ -266,6 +265,7 @@ private fun RowScope.WeightSet(
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.W500,
         ),
+        containerColor = Color.Transparent,
         modifier = Modifier.weight(1f)
     )
 }

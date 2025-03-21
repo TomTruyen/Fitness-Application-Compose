@@ -35,13 +35,6 @@ fun WorkoutListItem(
 ) {
     Card(
         modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
-        ),
-        border = BorderStroke(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.surface
-        ),
         elevation = CardDefaults.cardElevation(0.dp),
         onClick = {
             onAction(WorkoutsUiAction.OnDetailClicked(workout.id))
@@ -60,7 +53,6 @@ fun WorkoutListItem(
                 Text(
                     text = workout.name,
                     style = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.W500
                     ),
                     modifier = Modifier.weight(1f)

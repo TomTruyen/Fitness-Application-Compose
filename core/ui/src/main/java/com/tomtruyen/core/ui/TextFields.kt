@@ -59,7 +59,6 @@ object TextFields {
         readOnly: Boolean = false,
         enabled: Boolean = true,
         singleLine: Boolean = true,
-        border: Boolean = true,
         withLabel: Boolean = false,
         onClick: (() -> Unit)? = null,
         padding: PaddingValues = PaddingValues(Dimens.Normal),
@@ -67,7 +66,7 @@ object TextFields {
         focusRequester: FocusRequester = remember { FocusRequester() },
         trailingIcon: (@Composable () -> Unit)? = null,
         keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-        containerColor: Color = Color.Transparent,
+        containerColor: Color = MaterialTheme.colorScheme.surface,
         shape: Shape = MaterialTheme.shapes.small,
     ) {
         val focusManager = LocalFocusManager.current
@@ -119,21 +118,6 @@ object TextFields {
                 ),
                 modifier = textFieldModifier
                     .fillMaxWidth()
-                    .then(
-                        if (border) {
-                            Modifier.border(
-                                width = 1.dp,
-                                color = if (error.isNullOrBlank()) {
-                                    MaterialTheme.colorScheme.outlineVariant
-                                } else {
-                                    MaterialTheme.colorScheme.error
-                                },
-                                shape = shape
-                            )
-                        } else {
-                            Modifier
-                        }
-                    )
                     .clip(shape)
                     .clickable(
                         enabled = onClick != null

@@ -57,13 +57,6 @@ fun WorkoutHistoryItem(
 
     Card(
         modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
-        ),
-        border = BorderStroke(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.surface
-        ),
         elevation = CardDefaults.cardElevation(0.dp),
         onClick = {
             onAction(WorkoutHistoryUiAction.Navigate.Detail(history.id))

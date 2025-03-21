@@ -65,7 +65,6 @@ fun ExerciseListItem(
             ),
             readOnly = mode.isView,
             singleLine = false,
-            border = true,
             padding = PaddingValues(Dimens.Small),
             placeholder = stringResource(id = R.string.placeholder_notes),
             value = exercise.notes,

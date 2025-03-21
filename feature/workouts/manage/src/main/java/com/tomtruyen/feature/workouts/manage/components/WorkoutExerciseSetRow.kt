@@ -223,7 +223,6 @@ private fun RowScope.WeightSet(
     )
 
     TextFields.Default(
-        border = false,
         readOnly = mode.isView,
         padding = PaddingValues(Dimens.Small),
         placeholder = initialReps?.toString() ?: "-",
@@ -244,13 +243,13 @@ private fun RowScope.WeightSet(
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.W500,
         ),
+        containerColor = Color.Transparent,
         modifier = Modifier.weight(1f)
     )
 
     Spacer(modifier = Modifier.width(Dimens.Small))
 
     TextFields.Default(
-        border = false,
         readOnly = mode.isView,
         padding = PaddingValues(Dimens.Small),
         placeholder = initialWeight?.tryIntString() ?: "-",
@@ -273,6 +272,7 @@ private fun RowScope.WeightSet(
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.W500,
         ),
+        containerColor = Color.Transparent,
         modifier = Modifier.weight(1f)
     )
 }

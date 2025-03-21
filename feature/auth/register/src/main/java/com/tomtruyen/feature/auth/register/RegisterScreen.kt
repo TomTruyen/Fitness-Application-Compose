@@ -100,7 +100,6 @@ private fun RegisterScreenLayout(
                     Text(
                         text = stringResource(id = R.string.title_register),
                         style = MaterialTheme.typography.headlineLarge.copy(
-                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.SemiBold
                         ),
                     )

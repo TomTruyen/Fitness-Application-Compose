@@ -103,7 +103,6 @@ private fun LoginScreenLayout(
                     Text(
                         text = stringResource(id = R.string.title_login),
                         style = MaterialTheme.typography.headlineLarge.copy(
-                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.SemiBold
                         ),
                     )

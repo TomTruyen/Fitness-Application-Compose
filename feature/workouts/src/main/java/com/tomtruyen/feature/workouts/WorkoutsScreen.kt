@@ -200,7 +200,7 @@ private fun SharedTransitionScope.WorkoutOverviewScreenLayout(
                             text = stringResource(id = R.string.button_start_empty_workout),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = MaterialTheme.colorScheme.surface,
-                                contentColor = MaterialTheme.colorScheme.onSurface,
+                                contentColor = MaterialTheme.colorScheme.onBackground,
                             ),
                             onClick = {
                                 onAction(WorkoutsUiAction.ExecuteEmpty)

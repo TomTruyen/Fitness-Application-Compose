@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -88,13 +89,9 @@ object SocialButtons {
                 )
                 .fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.background,
-                contentColor = MaterialTheme.colorScheme.onBackground
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface
             ),
-            border = BorderStroke(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.surface
-            )
         ) {
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_logo_google),
@@ -104,7 +101,12 @@ object SocialButtons {
 
             Spacer(modifier = Modifier.width(Dimens.Small))
 
-            Text(text = text)
+            Text(
+                text = text,
+                style = LocalTextStyle.current.copy(
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            )
         }
     }
 }
