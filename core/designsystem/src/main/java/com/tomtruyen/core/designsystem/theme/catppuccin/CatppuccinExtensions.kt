@@ -41,7 +41,7 @@ fun CatppuccinPalette.colorScheme(
     background: Color = Base,
     onBackground: Color = Text,
     surface: Color = Mantle,
-    onSurface: Color = surface.inverse(),
+    onSurface: Color = Text,
     surfaceVariant: Color = Mantle,
     onSurfaceVariant: Color = surfaceVariant.inverse(),
     surfaceTint: Color = Crust,
