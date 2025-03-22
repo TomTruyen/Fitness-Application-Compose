@@ -3,13 +3,13 @@ package com.tomtruyen.data.entities
 import androidx.room.Entity
 import com.tomtruyen.core.common.models.BaseSet
 import com.tomtruyen.core.common.serializer.SupabaseDateTimeSerializer
+import com.tomtruyen.core.common.utils.CacheKeyHelper
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.util.UUID
 
 @Serializable
 @Entity(
@@ -31,7 +31,7 @@ data class PreviousSet(
     @Serializable(with = SupabaseDateTimeSerializer::class)
     val createdAt: LocalDateTime,
 ): BaseSet {
-    companion object {
+    companion object: CacheKeyHelper(PreviousSet.TABLE_NAME) {
         const val KEY_ID = "id"
         const val KEY_EXERCISE_ID = "exercise_id"
         const val KEY_REPS = "reps"
@@ -44,19 +44,6 @@ data class PreviousSet(
         const val EXERCISE_ID_PARAM = "exercise_ids"
 
         const val TABLE_NAME = "PreviousSet"
-
-        fun createCacheKey(exerciseId: String) = "${TABLE_NAME}_${exerciseId}"
-
-        fun extractExerciseId(cacheKey: String): String? {
-            val exerciseId = cacheKey.removePrefix("${TABLE_NAME}_")
-
-            // Check if exerciseId is a UUID
-            return try {
-                UUID.fromString(exerciseId).toString()
-            } catch (_: IllegalArgumentException) {
-                null
-            }
-        }
 
         fun fromWorkoutExerciseSet(exerciseId: String, set: WorkoutHistoryExerciseSet) =
             PreviousSet(

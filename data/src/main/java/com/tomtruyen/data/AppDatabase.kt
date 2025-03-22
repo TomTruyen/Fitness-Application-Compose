@@ -6,6 +6,7 @@ import androidx.room.TypeConverters
 import com.tomtruyen.data.dao.CategoryDao
 import com.tomtruyen.data.dao.EquipmentDao
 import com.tomtruyen.data.dao.ExerciseDao
+import com.tomtruyen.data.dao.ExerciseRecordDao
 import com.tomtruyen.data.dao.PreviousSetDao
 import com.tomtruyen.data.dao.SettingsDao
 import com.tomtruyen.data.dao.SyncCacheDao
@@ -18,6 +19,7 @@ import com.tomtruyen.data.dao.WorkoutHistoryExerciseSetDao
 import com.tomtruyen.data.entities.Category
 import com.tomtruyen.data.entities.Equipment
 import com.tomtruyen.data.entities.Exercise
+import com.tomtruyen.data.entities.ExerciseRecord
 import com.tomtruyen.data.entities.PreviousSet
 import com.tomtruyen.data.entities.Settings
 import com.tomtruyen.data.entities.SyncCache
@@ -41,7 +43,8 @@ import com.tomtruyen.data.entities.WorkoutHistoryExerciseSet
         WorkoutHistoryExerciseSet::class,
         Settings::class,
         SyncCache::class,
-        PreviousSet::class
+        PreviousSet::class,
+        ExerciseRecord::class
     ],
     version = 1,
     exportSchema = false
@@ -60,4 +63,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun settingsDao(): SettingsDao
     abstract fun cacheSyncDao(): SyncCacheDao
     abstract fun previousSetDao(): PreviousSetDao
+    abstract fun exerciseRecordDao(): ExerciseRecordDao
 }

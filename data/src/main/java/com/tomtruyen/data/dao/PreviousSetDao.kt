@@ -11,5 +11,5 @@ interface PreviousSetDao {
     suspend fun saveAll(sets: List<PreviousSet>)
 
     @Query("SELECT * FROM ${PreviousSet.TABLE_NAME}")
-    suspend fun findAllAsync(): List<PreviousSet>
+    suspend fun findAll(): List<PreviousSet>
 }

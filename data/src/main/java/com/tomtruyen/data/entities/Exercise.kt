@@ -88,5 +88,11 @@ data class ExerciseWithCategoryAndEquipment(
         entityColumn = "id",
         entity = Equipment::class
     )
-    val equipment: Equipment? = null
+    val equipment: Equipment? = null,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "exerciseId",
+        entity = ExerciseRecord::class
+    )
+    val record: ExerciseRecord? = null
 )

@@ -2,6 +2,7 @@ package com.tomtruyen.data.models.ui
 
 import androidx.compose.runtime.Immutable
 import com.tomtruyen.core.common.models.ExerciseType
+import com.tomtruyen.data.entities.ExerciseRecord
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
@@ -16,6 +17,7 @@ data class ExerciseUiModel(
     val steps: List<String> = emptyList(),
     val category: CategoryUiModel? = null,
     val equipment: EquipmentUiModel? = null,
+    val record: ExerciseRecord? = null,
     val userId: String? = null
 ) {
     val displayName

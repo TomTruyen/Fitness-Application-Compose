@@ -2,6 +2,7 @@ package com.tomtruyen.data.di
 
 import com.tomtruyen.data.repositories.CategoryRepositoryImpl
 import com.tomtruyen.data.repositories.EquipmentRepositoryImpl
+import com.tomtruyen.data.repositories.ExerciseRecordRepositoryImpl
 import com.tomtruyen.data.repositories.ExerciseRepositoryImpl
 import com.tomtruyen.data.repositories.HistoryRepositoryImpl
 import com.tomtruyen.data.repositories.PreviousSetRepositoryImpl
@@ -10,6 +11,7 @@ import com.tomtruyen.data.repositories.UserRepositoryImpl
 import com.tomtruyen.data.repositories.WorkoutRepositoryImpl
 import com.tomtruyen.data.repositories.interfaces.CategoryRepository
 import com.tomtruyen.data.repositories.interfaces.EquipmentRepository
+import com.tomtruyen.data.repositories.interfaces.ExerciseRecordRepository
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.HistoryRepository
 import com.tomtruyen.data.repositories.interfaces.PreviousSetRepository
@@ -32,11 +34,14 @@ val repositoryModule = module {
 
     single<ExerciseRepository> {
         ExerciseRepositoryImpl(
-            previousSetRepository = get<PreviousSetRepository>()
+            previousSetRepository = get<PreviousSetRepository>(),
+            exerciseRecordRepository = get<ExerciseRecordRepository>(),
         )
     }
 
     singleOf<PreviousSetRepository>(::PreviousSetRepositoryImpl)
+
+    singleOf<ExerciseRecordRepository>(::ExerciseRecordRepositoryImpl)
 
     singleOf<SettingsRepository>(::SettingsRepositoryImpl)
 

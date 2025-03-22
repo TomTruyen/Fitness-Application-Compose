@@ -26,4 +26,5 @@ val databaseModule = module {
     single { get<AppDatabase>().equipmentDao() }
     single { get<AppDatabase>().categoryDao() }
     single { get<AppDatabase>().previousSetDao() }
+    single { get<AppDatabase>().exerciseRecordDao() }
 }

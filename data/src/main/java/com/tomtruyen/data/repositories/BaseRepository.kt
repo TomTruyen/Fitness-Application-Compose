@@ -94,6 +94,19 @@ abstract class BaseRepository : KoinComponent {
         }
     }
 
+    protected suspend fun findMissingCacheKeys(
+        refresh: Boolean,
+        cacheKeys: List<String>
+    ): Set<String> {
+        if(refresh) return cacheKeys.toSet()
+
+        val syncCacheKeys = cacheDao.findAll()
+
+        return cacheKeys.filter() {
+            !syncCacheKeys.contains(it)
+        }.toSet()
+    }
+
     companion object {
         private const val TAG = "BaseRepository"
     }

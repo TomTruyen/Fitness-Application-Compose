@@ -7,6 +7,7 @@ import com.tomtruyen.data.models.ExerciseFilter
 import com.tomtruyen.data.models.mappers.ExerciseUiModelMapper
 import com.tomtruyen.data.models.network.ExerciseNetworkModel
 import com.tomtruyen.data.models.ui.ExerciseUiModel
+import com.tomtruyen.data.repositories.interfaces.ExerciseRecordRepository
 import com.tomtruyen.data.repositories.interfaces.ExerciseRepository
 import com.tomtruyen.data.repositories.interfaces.PreviousSetRepository
 import com.tomtruyen.data.worker.ExerciseSyncWorker
@@ -14,10 +15,14 @@ import com.tomtruyen.data.worker.SyncWorker
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.mapLatest
 
 class ExerciseRepositoryImpl(
-    private val previousSetRepository: PreviousSetRepository
+    private val previousSetRepository: PreviousSetRepository,
+    private val exerciseRecordRepository: ExerciseRecordRepository
 ) : ExerciseRepository() {
     private val categoryDao = database.categoryDao()
     private val equipmentDao = database.equipmentDao()
@@ -79,7 +84,14 @@ class ExerciseRepositoryImpl(
                 }
         }
 
-        previousSetRepository.getPreviousSetsForExercises(refresh = refresh)
+        coroutineScope {
+            val calls = listOf(
+                async { exerciseRecordRepository.getExerciseRecordsForExercises(refresh = refresh) },
+                async { previousSetRepository.getPreviousSetsForExercises(refresh = refresh) }
+            )
+
+            calls.awaitAll()
+        }
     }
 
     override suspend fun saveExercise(

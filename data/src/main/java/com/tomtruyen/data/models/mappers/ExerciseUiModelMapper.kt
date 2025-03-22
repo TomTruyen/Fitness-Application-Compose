@@ -28,7 +28,8 @@ object ExerciseUiModelMapper {
                     synced = false
                 ),
                 category = category?.let(CategoryUiModelMapper::toEntity),
-                equipment = equipment?.let(EquipmentUiModelMapper::toEntity)
+                equipment = equipment?.let(EquipmentUiModelMapper::toEntity),
+                record = model.record
             )
         }
 
@@ -42,7 +43,8 @@ object ExerciseUiModelMapper {
             steps = exercise.steps.orEmpty(),
             userId = exercise.userId,
             category = category?.let(CategoryUiModelMapper::fromEntity),
-            equipment = equipment?.let(EquipmentUiModelMapper::fromEntity)
+            equipment = equipment?.let(EquipmentUiModelMapper::fromEntity),
+            record = entity.record
         )
     }
 }
