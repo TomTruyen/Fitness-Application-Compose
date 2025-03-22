@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.workouts.manage.components
+package com.tomtruyen.core.ui.workout.set
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -13,7 +13,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.tomtruyen.core.common.models.BaseSet
+import com.tomtruyen.core.common.models.ExerciseSet
 import com.tomtruyen.core.common.models.ExerciseType
+import com.tomtruyen.core.common.models.actions.SetActions
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.designsystem.Dimens
@@ -21,22 +24,18 @@ import com.tomtruyen.core.designsystem.theme.rememberColorPalette
 import com.tomtruyen.core.ui.swipereveal.SwipeToRevealAction
 import com.tomtruyen.core.ui.swipereveal.SwipeToRevealBox
 import com.tomtruyen.core.ui.swipereveal.rememberSwipeToRevealState
-import com.tomtruyen.data.entities.PreviousSet
-import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
-import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.core.common.R as CommonR
 
 @Composable
-fun WorkoutExerciseSetTable(
+fun SetTable(
     workoutExerciseId: String,
     exerciseType: ExerciseType,
-    sets: List<WorkoutExerciseSetUiModel>,
-    previousSets: List<PreviousSet>?,
+    sets: List<ExerciseSet>,
+    previousSets: List<BaseSet>?,
     unit: UnitType,
     mode: WorkoutMode,
-    onAction: (ManageWorkoutUiAction) -> Unit,
+    onAction: SetActions,
     onSetClick: (id: String, setIndex: Int) -> Unit,
-    onPreviousSetClick: (id: String, setIndex: Int, previousSet: PreviousSet) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val colorPalette by rememberColorPalette()
@@ -48,7 +47,7 @@ fun WorkoutExerciseSetTable(
     Column(
         modifier = modifier.animateContentSize(),
     ) {
-        WorkoutExerciseSetHeader(
+        SetHeader(
             exerciseType = exerciseType,
             unit = unit,
             mode = mode,
@@ -85,17 +84,15 @@ fun WorkoutExerciseSetTable(
                         contentColor = MaterialTheme.colorScheme.onError,
                         outerBackgroundColor = backgroundColor,
                         onClick = {
-                            onAction(
-                                ManageWorkoutUiAction.Set.Delete(
-                                    exerciseId = workoutExerciseId,
-                                    setIndex = setIndex
-                                )
+                            onAction.delete(
+                                exerciseId = workoutExerciseId,
+                                setIndex = setIndex
                             )
                         }
                     )
                 }
             ) {
-                WorkoutExerciseSetRow(
+                SetRow(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
@@ -113,7 +110,6 @@ fun WorkoutExerciseSetTable(
                     mode = mode,
                     onAction = onAction,
                     onSetClick = onSetClick,
-                    onPreviousSetClick = onPreviousSetClick
                 )
             }
         }

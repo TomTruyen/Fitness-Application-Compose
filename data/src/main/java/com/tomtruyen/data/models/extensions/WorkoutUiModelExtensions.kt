@@ -1,7 +1,8 @@
 package com.tomtruyen.data.models.extensions
 
+import com.tomtruyen.core.common.models.BaseSet
+import com.tomtruyen.core.common.models.ChangeType
 import com.tomtruyen.core.common.models.ExerciseType
-import com.tomtruyen.data.entities.ChangeType
 import com.tomtruyen.data.entities.PreviousSet
 import com.tomtruyen.data.entities.Workout
 import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
@@ -102,7 +103,7 @@ fun WorkoutUiModel.copyWithAddSet(id: String) = copy(
     }
 )
 
-fun WorkoutUiModel.copyWithSetCompleted(id: String, setIndex: Int, previousSet: PreviousSet?) =
+fun WorkoutUiModel.copyWithSetCompleted(id: String, setIndex: Int, previousSet: BaseSet?) =
     copy(
         exercises = exercises.map { exercise ->
             if (exercise.id == id) {
@@ -138,7 +139,7 @@ fun WorkoutUiModel.copyWithSetCompleted(id: String, setIndex: Int, previousSet: 
 fun WorkoutUiModel.copyWithPreviousExerciseSet(
     id: String,
     setIndex: Int,
-    previousSet: PreviousSet
+    previousSet: BaseSet
 ) = copy(
     exercises = exercises.map { exercise ->
         if (exercise.id == id) {

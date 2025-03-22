@@ -1,6 +1,7 @@
 package com.tomtruyen.data.models.ui
 
 import androidx.compose.runtime.Immutable
+import com.tomtruyen.core.common.models.BaseExercise
 import com.tomtruyen.core.common.models.ExerciseType
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -8,20 +9,20 @@ import java.util.UUID
 @Serializable
 @Immutable
 data class WorkoutExerciseUiModel(
-    val id: String = UUID.randomUUID().toString(),
+    override val id: String = UUID.randomUUID().toString(),
     val exerciseId: String = "",
     val name: String = "",
-    val imageUrl: String? = null,
+    override val imageUrl: String? = null,
     val imageDetailUrl: String? = null,
-    val type: ExerciseType = ExerciseType.WEIGHT,
+    override val type: ExerciseType = ExerciseType.WEIGHT,
     val steps: List<String> = emptyList(),
-    val notes: String? = null,
+    override val notes: String? = null,
     val sortOrder: Int = 0,
     val category: CategoryUiModel? = null,
     val equipment: EquipmentUiModel? = null,
-    val sets: List<WorkoutExerciseSetUiModel> = emptyList()
-) {
-    val displayName
+    override val sets: List<WorkoutExerciseSetUiModel> = emptyList()
+): BaseExercise {
+    override val displayName
         get() = buildString {
             append(name)
 

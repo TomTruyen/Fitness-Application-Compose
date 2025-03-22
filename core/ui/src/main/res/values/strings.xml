@@ -15,4 +15,10 @@
     <string name="label_time_picker_minute">Min</string>
     <string name="label_time_picker_second">Sec</string>
     <string name="delete">Delete</string>
+    <string name="label_set">Set</string>
+    <string name="label_previous">Previous</string>
+    <string name="label_reps">Reps</string>
+    <string name="label_time">Time</string>
+    <string name="placeholder_notes">Notes…</string>
+    <string name="button_add_set">+ Add Set</string>
 </resources>

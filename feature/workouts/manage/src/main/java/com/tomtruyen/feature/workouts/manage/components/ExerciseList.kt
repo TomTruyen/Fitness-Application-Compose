@@ -23,9 +23,12 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.workout.exercise.ExerciseItem
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
 import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiState
 import com.tomtruyen.feature.workouts.manage.R
+import com.tomtruyen.feature.workouts.manage.WorkoutExerciseActions
+import com.tomtruyen.feature.workouts.manage.WorkoutSetActions
 import com.tomtruyen.navigation.SharedTransitionKey
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
@@ -69,7 +72,7 @@ fun SharedTransitionScope.ExerciseList(
                     state.previousSets[exercise.exerciseId]
                 }
 
-                ExerciseListItem(
+                ExerciseItem(
                     modifier = Modifier
                         .fillMaxWidth()
                         .longPressDraggableHandle(
@@ -83,7 +86,12 @@ fun SharedTransitionScope.ExerciseList(
                     previousSets = previousSets,
                     unit = state.settings.unit,
                     mode = state.mode,
-                    onAction = onAction,
+                    onAction = remember {
+                        WorkoutExerciseActions(onAction)
+                    },
+                    onSetAction = remember {
+                        WorkoutSetActions(onAction)
+                    }
                 )
             }
 

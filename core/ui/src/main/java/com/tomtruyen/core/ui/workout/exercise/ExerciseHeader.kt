@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.workouts.manage.components
+package com.tomtruyen.core.ui.workout.exercise
 
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +21,7 @@ import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.ui.Avatar
 
 @Composable
-fun WorkoutExerciseHeader(
+fun ExerciseHeader(
     name: String,
     imageUrl: String?,
     mode: WorkoutMode,

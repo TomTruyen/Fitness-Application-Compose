@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.workouts.manage.components
+package com.tomtruyen.core.ui.workout.set
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,6 +26,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import com.tomtruyen.core.common.extensions.rounded
 import com.tomtruyen.core.common.extensions.tryIntString
+import com.tomtruyen.core.common.models.BaseSet
+import com.tomtruyen.core.common.models.ChangeType
 import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.common.utils.TimeUtils
@@ -33,24 +35,21 @@ import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.TextFields
 import com.tomtruyen.core.ui.wheeltimepicker.WheelTimerPickerSheet
 import com.tomtruyen.core.ui.wheeltimepicker.core.TimeComponent
-import com.tomtruyen.data.entities.ChangeType
-import com.tomtruyen.data.entities.PreviousSet
-import com.tomtruyen.data.models.ui.WorkoutExerciseSetUiModel
-import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
-import com.tomtruyen.feature.workouts.manage.remember.rememberSetInputValue
+import com.tomtruyen.core.common.models.ExerciseSet
+import com.tomtruyen.core.common.models.actions.SetActions
+import com.tomtruyen.core.common.remember.rememberSetInputValue
 
 @Composable
-fun WorkoutExerciseSetRow(
+fun SetRow(
     modifier: Modifier = Modifier,
     exerciseType: ExerciseType,
     workoutExerciseId: String,
     setIndex: Int,
-    set: WorkoutExerciseSetUiModel,
-    previousSet: PreviousSet?,
+    set: ExerciseSet,
+    previousSet: BaseSet?,
     mode: WorkoutMode,
-    onAction: (ManageWorkoutUiAction) -> Unit,
+    onAction: SetActions,
     onSetClick: (id: String, setIndex: Int) -> Unit,
-    onPreviousSetClick: (id: String, setIndex: Int, previousSet: PreviousSet) -> Unit
 ) {
     Row(
         modifier = modifier,
@@ -83,10 +82,10 @@ fun WorkoutExerciseSetRow(
                         enabled = !mode.isView && previousSet != null
                     ) {
                         previousSet?.let {
-                            onPreviousSetClick(
-                                workoutExerciseId,
-                                setIndex,
-                                previousSet
+                            onAction.fillPreviousSet(
+                                id = workoutExerciseId,
+                                setIndex = setIndex,
+                                previousSet = it
                             )
                         }
 
@@ -105,21 +104,17 @@ fun WorkoutExerciseSetRow(
                 mode = mode,
                 completed = set.completed,
                 onRepsChanged = { reps ->
-                    onAction(
-                        ManageWorkoutUiAction.Set.OnRepsChanged(
-                            exerciseId = workoutExerciseId,
-                            setIndex = setIndex,
-                            reps = reps
-                        )
+                    onAction.repsChanged(
+                        exerciseId = workoutExerciseId,
+                        setIndex = setIndex,
+                        reps = reps
                     )
                 },
                 onWeightChanged = { weight ->
-                    onAction(
-                        ManageWorkoutUiAction.Set.OnWeightChanged(
-                            exerciseId = workoutExerciseId,
-                            setIndex = setIndex,
-                            weight = weight
-                        )
+                    onAction.weightChanged(
+                        exerciseId = workoutExerciseId,
+                        setIndex = setIndex,
+                        weight = weight
                     )
                 }
             )
@@ -130,27 +125,23 @@ fun WorkoutExerciseSetRow(
                 mode = mode,
                 completed = set.completed,
                 onTimeChanged = { time ->
-                    onAction(
-                        ManageWorkoutUiAction.Set.OnTimeChanged(
-                            exerciseId = workoutExerciseId,
-                            setIndex = setIndex,
-                            time = time
-                        )
+                    onAction.timeChanged(
+                        exerciseId = workoutExerciseId,
+                        setIndex = setIndex,
+                        time = time
                     )
                 }
             )
         }
 
         if (mode.isExecute) {
-            WorkoutCheckbox(
+            SetCheckbox(
                 checked = set.completed,
                 onClick = {
-                    onAction(
-                        ManageWorkoutUiAction.Set.OnToggleCompleted(
-                            exerciseId = workoutExerciseId,
-                            setIndex = setIndex,
-                            previousSet = previousSet
-                        )
+                    onAction.toggleCompleted(
+                        exerciseId = workoutExerciseId,
+                        setIndex = setIndex,
+                        previousSet = previousSet
                     )
                 },
             )
@@ -160,7 +151,7 @@ fun WorkoutExerciseSetRow(
 
 @Composable
 private fun PreviousSet(
-    previousSet: PreviousSet?,
+    previousSet: BaseSet?,
     type: ExerciseType,
     modifier: Modifier = Modifier
 ) {

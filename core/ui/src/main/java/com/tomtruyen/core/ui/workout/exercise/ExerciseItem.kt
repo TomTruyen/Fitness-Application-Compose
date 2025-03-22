@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.workouts.manage.components
+package com.tomtruyen.core.ui.workout.exercise
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,30 +10,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.tomtruyen.core.common.models.BaseExercise
+import com.tomtruyen.core.common.models.BaseSet
+import com.tomtruyen.core.common.models.actions.SetActions
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.common.models.WorkoutMode
+import com.tomtruyen.core.common.models.actions.ExerciseActions
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.Buttons
+import com.tomtruyen.core.ui.R
 import com.tomtruyen.core.ui.TextFields
-import com.tomtruyen.data.entities.PreviousSet
-import com.tomtruyen.data.models.ui.WorkoutExerciseUiModel
-import com.tomtruyen.feature.workouts.manage.ManageWorkoutUiAction
-import com.tomtruyen.feature.workouts.manage.R
+import com.tomtruyen.core.ui.workout.set.SetTable
 
 @Composable
-fun ExerciseListItem(
-    exercise: WorkoutExerciseUiModel,
-    previousSets: List<PreviousSet>?,
+fun ExerciseItem(
+    exercise: BaseExercise,
+    previousSets: List<BaseSet>?,
     unit: UnitType,
     mode: WorkoutMode,
-    onAction: (ManageWorkoutUiAction) -> Unit,
+    onAction: ExerciseActions,
+    onSetAction: SetActions,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
     ) {
         // Header
-        WorkoutExerciseHeader(
+        ExerciseHeader(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(Dimens.Normal),
@@ -41,18 +44,10 @@ fun ExerciseListItem(
             imageUrl = exercise.imageUrl,
             mode = mode,
             onTitleClick = {
-                onAction(
-                    ManageWorkoutUiAction.Navigate.Exercise.Detail(
-                        id = exercise.exerciseId
-                    )
-                )
+                onAction.navigateDetail(exercise.id)
             },
             onActionClick = {
-                onAction(
-                    ManageWorkoutUiAction.Sheet.Exercise.Show(
-                        id = exercise.id
-                    )
-                )
+                onAction.showSheet(exercise.id)
             },
         )
 
@@ -69,17 +64,15 @@ fun ExerciseListItem(
             placeholder = stringResource(id = R.string.placeholder_notes),
             value = exercise.notes,
             onValueChange = { notes ->
-                onAction(
-                    ManageWorkoutUiAction.Exercise.OnNotesChanged(
-                        id = exercise.id,
-                        notes = notes
-                    )
+                onAction.notesChanged(
+                    id = exercise.id,
+                    notes = notes
                 )
             }
         )
 
         // Sets
-        WorkoutExerciseSetTable(
+        SetTable(
             workoutExerciseId = exercise.id,
             exerciseType = exercise.type,
             sets = exercise.sets,
@@ -87,23 +80,12 @@ fun ExerciseListItem(
             unit = unit,
             mode = mode,
             onSetClick = { id, setIndex ->
-                onAction(
-                    ManageWorkoutUiAction.Sheet.Set.Show(
-                        exerciseId = id,
-                        setIndex = setIndex
-                    )
+                onSetAction.showSheet(
+                    exerciseId = id,
+                    setIndex = setIndex
                 )
             },
-            onPreviousSetClick = { id, setIndex, previousSet ->
-                onAction(
-                    ManageWorkoutUiAction.Set.OnPreviousSetClicked(
-                        exerciseId = id,
-                        setIndex = setIndex,
-                        previousSet = previousSet
-                    )
-                )
-            },
-            onAction = onAction
+            onAction = onSetAction
         )
 
         if (!mode.isView) {
@@ -120,7 +102,7 @@ fun ExerciseListItem(
                     contentColor = MaterialTheme.colorScheme.onSurface
                 ),
                 onClick = {
-                    onAction(ManageWorkoutUiAction.Set.Add(exercise.id))
+                    onSetAction.add(exercise.id)
                 }
             )
         }

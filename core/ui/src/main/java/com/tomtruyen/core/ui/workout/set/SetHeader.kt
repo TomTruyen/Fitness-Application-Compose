@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.workouts.manage.components
+package com.tomtruyen.core.ui.workout.set
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -22,10 +22,10 @@ import com.tomtruyen.core.common.models.ExerciseType
 import com.tomtruyen.core.common.models.UnitType
 import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.designsystem.Dimens
-import com.tomtruyen.feature.workouts.manage.R
+import com.tomtruyen.core.ui.R
 
 @Composable
-fun WorkoutExerciseSetHeader(
+fun SetHeader(
     exerciseType: ExerciseType,
     mode: WorkoutMode,
     unit: UnitType,

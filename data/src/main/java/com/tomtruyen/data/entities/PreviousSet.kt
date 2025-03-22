@@ -1,6 +1,7 @@
 package com.tomtruyen.data.entities
 
 import androidx.room.Entity
+import com.tomtruyen.core.common.models.BaseSet
 import com.tomtruyen.core.common.serializer.SupabaseDateTimeSerializer
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
@@ -19,17 +20,17 @@ data class PreviousSet(
     @SerialName(KEY_EXERCISE_ID)
     val exerciseId: String,
     @SerialName(KEY_SORT_ORDER)
-    val sortOrder: Int,
+    override val sortOrder: Int,
     @SerialName(KEY_REPS)
-    val reps: Int?,
+    override val reps: Int?,
     @SerialName(KEY_WEIGHT)
-    val weight: Double?,
+    override val weight: Double?,
     @SerialName(KEY_TIME)
-    val time: Int?,
+    override val time: Int?,
     @SerialName(KEY_CREATED_AT)
     @Serializable(with = SupabaseDateTimeSerializer::class)
     val createdAt: LocalDateTime,
-) {
+): BaseSet {
     companion object {
         const val KEY_ID = "id"
         const val KEY_EXERCISE_ID = "exercise_id"

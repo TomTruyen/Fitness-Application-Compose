@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.workouts.manage.components
+package com.tomtruyen.core.ui.workout.set
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -23,7 +22,7 @@ import com.tomtruyen.core.designsystem.theme.FynixTheme
 import com.tomtruyen.core.designsystem.theme.rememberColorPalette
 
 @Composable
-fun WorkoutCheckbox(
+fun SetCheckbox(
     checked: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -67,7 +66,7 @@ fun WorkoutCheckbox(
 @Composable
 fun WorkoutCheckboxPreview() {
     FynixTheme {
-        WorkoutCheckbox(
+        SetCheckbox(
             checked = false,
             onClick = {}
         )

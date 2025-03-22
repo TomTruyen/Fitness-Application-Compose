@@ -2,7 +2,7 @@ package com.tomtruyen.data
 
 import androidx.room.TypeConverter
 import com.tomtruyen.core.common.JsonInstance
-import com.tomtruyen.data.entities.ChangeType
+import com.tomtruyen.core.common.models.ChangeType
 import kotlinx.datetime.LocalDateTime
 
 class Converters {

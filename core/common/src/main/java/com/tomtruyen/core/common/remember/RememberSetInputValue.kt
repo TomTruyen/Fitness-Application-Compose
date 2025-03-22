@@ -1,4 +1,4 @@
-package com.tomtruyen.feature.workouts.manage.remember
+package com.tomtruyen.core.common.remember
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState

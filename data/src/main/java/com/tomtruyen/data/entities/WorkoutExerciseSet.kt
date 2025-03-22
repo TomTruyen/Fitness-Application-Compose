@@ -3,6 +3,8 @@ package com.tomtruyen.data.entities
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.tomtruyen.core.common.models.BaseSet
+import com.tomtruyen.core.common.models.ChangeType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -31,20 +33,20 @@ data class WorkoutExerciseSet(
     @SerialName(KEY_WORKOUT_EXERCISE_ID)
     val workoutExerciseId: String = "",
     @SerialName(KEY_REPS)
-    val reps: Int? = null,
+    override val reps: Int? = null,
     @SerialName(KEY_WEIGHT)
-    val weight: Double? = null,
+    override val weight: Double? = null,
     @SerialName(KEY_TIME)
-    val time: Int? = null,
+    override val time: Int? = null,
     @SerialName(KEY_SORT_ORDER)
-    val sortOrder: Int = 0,
+    override val sortOrder: Int = 0,
     @Transient
     val completed: Boolean = false,
     @Transient
     val changeRecord: Set<ChangeType> = emptySet(),
     @Transient
     override val synced: Boolean = false,
-) : BaseEntity, SyncEntity {
+) : BaseEntity, SyncEntity, BaseSet {
     companion object {
         const val TABLE_NAME = "WorkoutExerciseSet"
 
@@ -55,13 +57,4 @@ data class WorkoutExerciseSet(
         const val KEY_TIME = "time"
         const val KEY_SORT_ORDER = "sort_order"
     }
-}
-
-// Used to determine if an input has changed in value in the UI
-// Also present here to store for ActiveWorkout
-@Serializable
-enum class ChangeType {
-    REP,
-    WEIGHT,
-    TIME;
 }
