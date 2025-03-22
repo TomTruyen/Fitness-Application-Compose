@@ -292,8 +292,6 @@ private fun SharedTransitionScope.ManageWorkoutScreenLayout(
                     WorkoutTimer(
                         time = workoutDuration,
                         modifier = Modifier
-                            .height(36.dp)
-                            .widthIn(min = 120.dp)
                             .padding(end = Dimens.Small)
                     )
                 }
