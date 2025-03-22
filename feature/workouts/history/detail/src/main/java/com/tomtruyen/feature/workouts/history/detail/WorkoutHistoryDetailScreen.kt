@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.HorizontalDivider
@@ -16,20 +17,22 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.tomtruyen.core.common.ObserveEvent
+import com.tomtruyen.core.common.models.WorkoutMode
 import com.tomtruyen.core.designsystem.Dimens
 import com.tomtruyen.core.ui.BottomSheetList
 import com.tomtruyen.core.ui.Label
 import com.tomtruyen.core.ui.LoadingContainer
 import com.tomtruyen.core.ui.dialogs.ConfirmationDialog
 import com.tomtruyen.core.ui.toolbars.Toolbar
+import com.tomtruyen.core.ui.workout.exercise.ExerciseItem
 import com.tomtruyen.feature.workouts.history.detail.components.Header
-import com.tomtruyen.feature.workouts.history.detail.components.HistoryExerciseItem
 import com.tomtruyen.feature.workouts.history.detail.components.MuscleSplitGraph
 import com.tomtruyen.feature.workouts.history.detail.components.Statistics
 import com.tomtruyen.feature.workouts.history.detail.remember.rememberWorkoutHistoryActions
@@ -198,17 +201,19 @@ private fun SharedTransitionScope.WorkoutHistoryDetailScreenLayout(
                     )
                 }
 
-                items(
+                itemsIndexed(
                     items = state.history.exercises,
-                    key = { it.id }
-                ) { exercise ->
-                    HistoryExerciseItem(
+                    key = { _, exercise -> exercise.id }
+                ) { index, exercise ->
+                    ExerciseItem(
+                        modifier = if(index == 0) Modifier else Modifier.padding(top = Dimens.Normal),
                         exercise = exercise,
                         unit = state.history.unit,
-                        onExerciseClick = {
-                            onAction(WorkoutHistoryDetailUiAction.Navigate.Exercise.Detail(exercise.exerciseId))
+                        mode = WorkoutMode.VIEW,
+                        onAction = remember {
+                            WorkoutHistoryExerciseActions(onAction)
                         },
-                        modifier = Modifier.padding(bottom = Dimens.Small)
+                        onSetAction = null
                     )
                 }
             }

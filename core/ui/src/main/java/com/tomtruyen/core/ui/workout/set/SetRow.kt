@@ -48,7 +48,7 @@ fun SetRow(
     set: ExerciseSet,
     previousSet: BaseSet?,
     mode: WorkoutMode,
-    onAction: SetActions,
+    onAction: SetActions?,
     onSetClick: (id: String, setIndex: Int) -> Unit,
 ) {
     Row(
@@ -82,7 +82,7 @@ fun SetRow(
                         enabled = !mode.isView && previousSet != null
                     ) {
                         previousSet?.let {
-                            onAction.fillPreviousSet(
+                            onAction?.fillPreviousSet(
                                 id = workoutExerciseId,
                                 setIndex = setIndex,
                                 previousSet = it
@@ -104,14 +104,14 @@ fun SetRow(
                 mode = mode,
                 completed = set.completed,
                 onRepsChanged = { reps ->
-                    onAction.repsChanged(
+                    onAction?.repsChanged(
                         exerciseId = workoutExerciseId,
                         setIndex = setIndex,
                         reps = reps
                     )
                 },
                 onWeightChanged = { weight ->
-                    onAction.weightChanged(
+                    onAction?.weightChanged(
                         exerciseId = workoutExerciseId,
                         setIndex = setIndex,
                         weight = weight
@@ -125,7 +125,7 @@ fun SetRow(
                 mode = mode,
                 completed = set.completed,
                 onTimeChanged = { time ->
-                    onAction.timeChanged(
+                    onAction?.timeChanged(
                         exerciseId = workoutExerciseId,
                         setIndex = setIndex,
                         time = time
@@ -138,7 +138,7 @@ fun SetRow(
             SetCheckbox(
                 checked = set.completed,
                 onClick = {
-                    onAction.toggleCompleted(
+                    onAction?.toggleCompleted(
                         exerciseId = workoutExerciseId,
                         setIndex = setIndex,
                         previousSet = previousSet

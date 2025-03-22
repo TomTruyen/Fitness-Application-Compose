@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,6 +12,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -53,14 +56,15 @@ fun SharedTransitionScope.ExerciseList(
 
     LazyColumn(
         state = lazyListState,
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(Dimens.Normal)
     ) {
         listHeader()
 
-        items(
+        itemsIndexed(
             items = state.workout.exercises,
-            key = { it.id }
-        ) { exercise ->
+            key = { _, exercise -> exercise.id }
+        ) { index, exercise ->
             ReorderableItem(
                 state = reorderableLazyListState,
                 key = exercise.id,
@@ -74,6 +78,9 @@ fun SharedTransitionScope.ExerciseList(
 
                 ExerciseItem(
                     modifier = Modifier
+                        .then(
+                            if(index == 0) Modifier else Modifier.padding(top = Dimens.Normal)
+                        )
                         .fillMaxWidth()
                         .longPressDraggableHandle(
                             enabled = !state.mode.isView,
@@ -103,10 +110,7 @@ fun SharedTransitionScope.ExerciseList(
                     text = stringResource(id = R.string.button_add_exercise),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            horizontal = Dimens.Normal,
-                            vertical = Dimens.Small
-                        )
+                        .padding(horizontal = Dimens.Normal)
                         .sharedBounds(
                             sharedContentState = rememberSharedContentState(
                                 key = SharedTransitionKey.Exercise.KEY_WORKOUT_ADD_EXERCISE

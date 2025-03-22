@@ -34,7 +34,7 @@ fun SetTable(
     previousSets: List<BaseSet>?,
     unit: UnitType,
     mode: WorkoutMode,
-    onAction: SetActions,
+    onAction: SetActions?,
     onSetClick: (id: String, setIndex: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -65,7 +65,7 @@ fun SetTable(
 
             val backgroundColor = remember(set.completed, setIndex, successBackgroundColor) {
                 when {
-                    set.completed -> successBackgroundColor
+                    set.completed && !mode.isView -> successBackgroundColor
                     setIndex % 2 == 0 -> evenIndexBackgroundColor
                     else -> oddIndexBackgroundColor
                 }
@@ -84,7 +84,7 @@ fun SetTable(
                         contentColor = MaterialTheme.colorScheme.onError,
                         outerBackgroundColor = backgroundColor,
                         onClick = {
-                            onAction.delete(
+                            onAction?.delete(
                                 exerciseId = workoutExerciseId,
                                 setIndex = setIndex
                             )

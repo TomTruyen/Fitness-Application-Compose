@@ -1,5 +1,6 @@
 package com.tomtruyen.core.ui.workout.exercise
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,21 +26,22 @@ import com.tomtruyen.core.ui.workout.set.SetTable
 @Composable
 fun ExerciseItem(
     exercise: BaseExercise,
-    previousSets: List<BaseSet>?,
     unit: UnitType,
     mode: WorkoutMode,
     onAction: ExerciseActions,
-    onSetAction: SetActions,
+    onSetAction: SetActions?,
     modifier: Modifier = Modifier,
+    previousSets: List<BaseSet>? = null,
 ) {
     Column(
         modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(Dimens.Normal)
     ) {
         // Header
         ExerciseHeader(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Dimens.Normal),
+                .padding(horizontal = Dimens.Normal),
             name = exercise.displayName,
             imageUrl = exercise.imageUrl,
             mode = mode,
@@ -53,11 +55,7 @@ fun ExerciseItem(
 
         // Notes
         TextFields.Default(
-            modifier = Modifier.padding(
-                start = Dimens.Normal,
-                end = Dimens.Normal,
-                bottom = Dimens.Small
-            ),
+            modifier = Modifier.padding(horizontal = Dimens.Normal),
             readOnly = mode.isView,
             singleLine = false,
             padding = PaddingValues(Dimens.Small),
@@ -80,7 +78,7 @@ fun ExerciseItem(
             unit = unit,
             mode = mode,
             onSetClick = { id, setIndex ->
-                onSetAction.showSheet(
+                onSetAction?.showSheet(
                     exerciseId = id,
                     setIndex = setIndex
                 )
@@ -94,7 +92,7 @@ fun ExerciseItem(
                 text = stringResource(id = R.string.button_add_set),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(Dimens.Normal),
+                    .padding(horizontal = Dimens.Normal),
                 minButtonSize = 0.dp,
                 contentPadding = PaddingValues(Dimens.Small),
                 colors = ButtonDefaults.buttonColors(
@@ -102,7 +100,7 @@ fun ExerciseItem(
                     contentColor = MaterialTheme.colorScheme.onSurface
                 ),
                 onClick = {
-                    onSetAction.add(exercise.id)
+                    onSetAction?.add(exercise.id)
                 }
             )
         }
