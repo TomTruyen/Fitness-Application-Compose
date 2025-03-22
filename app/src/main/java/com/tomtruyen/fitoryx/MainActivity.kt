@@ -63,9 +63,9 @@ class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalSharedTransitionApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
-        val splashScreen = installSplashScreen()
-
         super.onCreate(savedInstanceState)
+
+        val splashScreen = installSplashScreen()
 
         splashScreen.setKeepOnScreenCondition { !viewModel.hasCheckedLoggedIn.get() }
 

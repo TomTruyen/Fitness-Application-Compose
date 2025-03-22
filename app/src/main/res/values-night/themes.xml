@@ -2,10 +2,9 @@
 <resources>
 
     <style name="Theme.Fynix.Splashscreen" parent="Theme.SplashScreen.IconBackground">
-        <item name="windowSplashScreenBackground">@color/chineseBlack</item>
-        <item name="windowSplashScreenIconBackgroundColor">@color/chineseBlack</item>
+        <item name="windowSplashScreenBackground">@color/ic_launcher_background</item>
 
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splashscreen_icon</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
 
         <item name="postSplashScreenTheme">@style/Theme.Fynix</item>
     </style>
